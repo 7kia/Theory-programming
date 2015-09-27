@@ -138,7 +138,6 @@ void render(RenderWindow &window, Sprite &mapSprite, Sprite *buttons,
 	window.draw(buttons[0]);
 	window.draw(buttons[1]);
 
-
 	window.display();
 }
 
