@@ -198,24 +198,27 @@ void startGame()
 	Game game;
 	initializeGame(game);
 
-	RenderWindow window(VideoMode(game.widthMainWindow, game.heightMainWindow), "MainGame v1.0.3");
+	RenderWindow window(VideoMode(game.widthMainWindow, game.heightMainWindow), "MainGame v1.0.4");
 
 	Time timeSinceLastUpdate = Time::Zero;
 
+
+	MainPerson &mainPerson = *game.mainPerson;
 	while (window.isOpen())
 	{
 		timeSinceLastUpdate += game.clock->restart();
-		printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());
+		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());
 		while (timeSinceLastUpdate > TIME_PER_FRAME)
 		{
 
 			timeSinceLastUpdate -= TIME_PER_FRAME;
 			processEvents(window, game);
 
-			game.mainPerson->update(TIME_PER_FRAME, *game.databaseSound);
-			game.mainPerson->interactionWithMap(*game.field, TIME_PER_FRAME);
+			mainPerson.update(TIME_PER_FRAME, *game.databaseSound);
+			mainPerson.interactionWithMap(*game.field, TIME_PER_FRAME);
+			mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
-			window.setView(*game.mainPerson->view);
+			window.setView(*mainPerson.view);
 
 			//printf("Angle %f \n", game.Entity.rotation);//смотрим на градусы в консольке	
 		}

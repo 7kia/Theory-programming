@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Sound.h"
-#include "Entity.h"
+//#include "Entity.h"
+#include "MainPerson.h"
 
 #include <math.h>
 
@@ -9,7 +10,8 @@ using namespace sf;
 
 struct Game
 {
-	Entity *mainPerson;//Entity.h
+	Entity *entitys;//Остальные сущности
+	MainPerson *mainPerson;//MainPerson.h
 	Field *field;//Map.h
 	Clock *clock;
 	dataSound *databaseSound;

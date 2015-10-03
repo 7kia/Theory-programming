@@ -8,14 +8,35 @@
 
 typedef enum
 {
+	NONE,
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+	UP_LEFT,
+	UP_RIGHT,
+	DOWN_LEFT,
+	DOWN_RIGHT
+} Direction;
+
+typedef enum
+{
 	unknow,
 	air,
 	grass,
 	dirt,
+	sand,
 	water,
 	wood,
 	stone,
+	stoneBrick,
 	woodBoard,
 	woodLadder,
 	amountKnowBlocks
 } idBlocks;
+
+typedef enum
+{
+	pine,
+	oak
+} idUnlifeObject;

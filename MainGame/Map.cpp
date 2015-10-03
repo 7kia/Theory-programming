@@ -49,17 +49,27 @@ void Field::dataBlocks()
 	coordinateBloks[idBlocks::stone][0] = 0;
 	coordinateBloks[idBlocks::stone][1] = BLOCK_SIZE * 2;
 
-	charBlocks[idBlocks::water] = u'\x013';
+	charBlocks[idBlocks::sand] = u'\x013';
+	coordinateBloks[idBlocks::sand][0] = 0;
+	coordinateBloks[idBlocks::sand][1] = BLOCK_SIZE * 3;
+
+	charBlocks[idBlocks::water] = u'\x014';
 	coordinateBloks[idBlocks::water][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::water][1] = 0;
 
-	charBlocks[idBlocks::woodBoard] = u'\x014';
+	charBlocks[idBlocks::woodBoard] = u'\x015';
 	coordinateBloks[idBlocks::woodBoard][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::woodBoard][1] = 0;
+
+	charBlocks[idBlocks::stoneBrick] = u'\x016';
+	coordinateBloks[idBlocks::stoneBrick][0] = BLOCK_SIZE;
+	coordinateBloks[idBlocks::stoneBrick][1] = BLOCK_SIZE * 2;
+
 
 	charBlocks[idBlocks::woodLadder] = u'\x021';
 	coordinateBloks[idBlocks::woodLadder][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::woodLadder][1] = BLOCK_SIZE;
+
 
 
 	coordinateBloks[idBlocks::unknow][0] = BLOCK_SIZE * 7;
@@ -83,11 +93,14 @@ void Field::setTypeSprite(int personLevelFloor, int l, int i, int j)
 
 void Field::setSprite(Sprite *sprite, int l, int i, int j)
 {
-	for (size_t id = 2; id < idBlocks::amountKnowBlocks; id++)
+	int id(2);
+	for (id = 2; id < idBlocks::amountKnowBlocks; id++)
 	{
 		if (dataMap[l][i][j] == charBlocks[id])
 		{
 			sprite->setTextureRect(IntRect(coordinateBloks[id][0], coordinateBloks[id][1], BLOCK_SIZE, BLOCK_SIZE));
+			id = 0;
+			break;
 		}
 	}
 
@@ -95,6 +108,10 @@ void Field::setSprite(Sprite *sprite, int l, int i, int j)
 	if(dataMap[l][i][j] == charBlocks[idBlocks::air])
 	{
 		sprite->setTextureRect(IntRect(0, 0, 0, 0));
+	}
+	else if(id == idBlocks::amountKnowBlocks)
+	{
+		sprite->setTextureRect(IntRect(coordinateBloks[idBlocks::unknow][0], coordinateBloks[idBlocks::unknow][1], BLOCK_SIZE, BLOCK_SIZE));
 	}
 
 

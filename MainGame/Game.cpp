@@ -5,11 +5,12 @@ void initializeGame(Game & game)
 	game.databaseSound = new dataSound;
 	game.clock = new Clock;
 	game.field = new Field;
-	game.mainPerson = new Entity;
+	game.mainPerson = new MainPerson;
 
 	initializeSound(game.databaseSound);// На будущее
 	initializeField(*game.field);
-	initializeEntity(*game.mainPerson, *game.databaseSound);
+	initializeMainPerson(*game.mainPerson, *game.databaseSound);
+	//initializeEntity(*game.mainPerson, *game.databaseSound);
 	initializeClock(*game.clock);
 }
 
