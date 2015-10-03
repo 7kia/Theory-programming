@@ -4,7 +4,6 @@ void initializeField(Field & field)
 {
 	field.BLOCK_SIZE = sizeTile;
 
-	field.currentFloorLevel = 0;
 	////////////////////////////////////////////
 	// Загрузка карты
 	field.dataMap = new wchar_t[HeightMap][LongMap][WidthMap];
@@ -32,12 +31,12 @@ void initializeField(Field & field)
 	field.wallSprite->setTexture(*field.wallTexture);
 }
 
-
-
 //////////////////////////////////////////////////////////////////////
 // Данные блоков
 void Field::dataBlocks()
 {
+	charBlocks[idBlocks::air] = u'\x020';
+
 	charBlocks[idBlocks::grass] = u'\x010';
 	coordinateBloks[idBlocks::grass][0] = 0;
 	coordinateBloks[idBlocks::grass][1] = 0;
@@ -57,50 +56,55 @@ void Field::dataBlocks()
 	charBlocks[idBlocks::woodBoard] = u'\x014';
 	coordinateBloks[idBlocks::woodBoard][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::woodBoard][1] = 0;
+
+	charBlocks[idBlocks::woodLadder] = u'\x021';
+	coordinateBloks[idBlocks::woodLadder][0] = BLOCK_SIZE * 2;
+	coordinateBloks[idBlocks::woodLadder][1] = BLOCK_SIZE;
+
+
+	coordinateBloks[idBlocks::unknow][0] = BLOCK_SIZE * 7;
+	coordinateBloks[idBlocks::unknow][1] = BLOCK_SIZE * 7;
+
 }
 //////////////////////////////////////////////////////////////////////
 
-void Field::setTypeSprite(int &l, int &i, int &j)
+void Field::setTypeSprite(int personLevelFloor, int l, int i, int j)
 {
-	if (l == currentFloorLevel)
+	if (l == personLevelFloor)
 	{
 		setSprite(floorSprite, l, i, j);
 	}
-	else
+	else if (l == personLevelFloor + 1)
 	{
 		setSprite(wallSprite, l, i, j);
 	}
 
 }
 
-void Field::setSprite(Sprite *sprite, int &l, int &i, int &j)
+void Field::setSprite(Sprite *sprite, int l, int i, int j)
 {
-	if (dataMap[l][i][j] == charBlocks[idBlocks::grass])
+	for (size_t id = 2; id < idBlocks::amountKnowBlocks; id++)
 	{
-		sprite->setTextureRect(IntRect(coordinateBloks[idBlocks::grass][0], coordinateBloks[idBlocks::grass][1], BLOCK_SIZE, BLOCK_SIZE));
+		if (dataMap[l][i][j] == charBlocks[id])
+		{
+			sprite->setTextureRect(IntRect(coordinateBloks[id][0], coordinateBloks[id][1], BLOCK_SIZE, BLOCK_SIZE));
+		}
 	}
-	else if (dataMap[l][i][j] == charBlocks[idBlocks::dirt])
-	{
-		sprite->setTextureRect(IntRect(coordinateBloks[idBlocks::dirt][0], coordinateBloks[idBlocks::dirt][1], BLOCK_SIZE, BLOCK_SIZE));
-	}
-	else if (dataMap[l][i][j] == charBlocks[idBlocks::stone])
-	{
-		sprite->setTextureRect(IntRect(coordinateBloks[idBlocks::stone][0], coordinateBloks[idBlocks::stone][1], BLOCK_SIZE, BLOCK_SIZE));
-	}
-	else if (dataMap[l][i][j] == charBlocks[idBlocks::water])
-	{
-		sprite->setTextureRect(IntRect(coordinateBloks[idBlocks::water][0], coordinateBloks[idBlocks::water][1], BLOCK_SIZE, BLOCK_SIZE));
-	}
-	else if (dataMap[l][i][j] == charBlocks[idBlocks::woodBoard])
-	{
-		sprite->setTextureRect(IntRect(coordinateBloks[idBlocks::woodBoard][0], coordinateBloks[idBlocks::woodBoard][1], BLOCK_SIZE, BLOCK_SIZE));
-	}
-	else
+
+	// Воздух отдельно обрабатывакм
+	if(dataMap[l][i][j] == charBlocks[idBlocks::air])
 	{
 		sprite->setTextureRect(IntRect(0, 0, 0, 0));
 	}
 
+
 	sprite->setPosition(j * BLOCK_SIZE, i * BLOCK_SIZE);
+}
+
+void Field::resetSprites()
+{
+	floorSprite->setTextureRect(IntRect(0, 0, 0, 0));
+	wallSprite->setTextureRect(IntRect(0, 0, 0, 0));
 }
 
 void readMap(wchar_t(*dataMap)[LongMap][WidthMap], const char *fileName)

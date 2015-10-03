@@ -1,32 +1,16 @@
 #include <SFML\Graphics.hpp>
 
-#define border1 1
-#define LongMap 25//размер карты высота
-#define WidthMap 40 + border1//размер карты ширина 
-#define HeightMap 2
-#define sizeTile 32
+#include "GlobalVar.h"
 
 using namespace sf;
 
-typedef enum
-{
-	grass,
-	dirt,
-	water,
-	wood,
-	stone,
-	woodBoard
-} idBlocks;
-
 struct Field
 {
-	int BLOCK_SIZE;
+	int BLOCK_SIZE = sizeTile;
 
 	wchar_t (*dataMap)[LongMap][WidthMap];
 	wchar_t charBlocks[256];
 	int coordinateBloks[256][2];
-
-	int currentFloorLevel;// Начиная с какого мы рисуем
 
 	Sprite *floorSprite;
 	Texture *floorTexture;
@@ -35,8 +19,9 @@ struct Field
 	Texture *wallTexture;
 
 	void dataBlocks();// Данные блоков
-	void setSprite(Sprite *sprite, int &l, int &i, int &j);// Окраска спрайта
-	void setTypeSprite(int &l, int &i, int &j);// Красим пол или стены?
+	void setSprite(Sprite *sprite, int l, int i, int j);// Окраска спрайта
+	void setTypeSprite(int personLevelFloor, int l, int i, int j);// Красим пол или стены?
+	void resetSprites();
 };
 
 void initializeField(Field & field);
