@@ -189,7 +189,22 @@ void render(RenderWindow & window, Game & game)
 		l++;
 	}
 	//////////////////////////////////////////////
-	window.draw(*game.mainPerson->spriteObject);
+	window.draw(*game.mainPerson->spriteEntity);
+
+	////////////////////////////////////////////////////////
+	// Рисуем неживые объекты
+	for (int i = 0; i < game.unlifeObjects->countObjects; i++)
+	{
+		//UnlifeObject &unlifeObject = *game.unlifeObjects->unlifeObject[i];
+		//window.draw(unlifeObjects[i].spriteObject);
+		if (game.unlifeObjects->unlifeObject[i].currentLevel == game.mainPerson->currentLevel)
+		{
+			window.draw(*game.unlifeObjects->unlifeObject[i].spriteObject);
+		}
+		
+	}
+	////////////////////////////////////////////////////////
+
 	window.display();
 }
 
@@ -198,7 +213,7 @@ void startGame()
 	Game game;
 	initializeGame(game);
 
-	RenderWindow window(VideoMode(game.widthMainWindow, game.heightMainWindow), "MainGame v1.0.4");
+	RenderWindow window(VideoMode(game.widthMainWindow, game.heightMainWindow), "MainGame v1.0.5");
 
 	Time timeSinceLastUpdate = Time::Zero;
 
@@ -216,6 +231,7 @@ void startGame()
 
 			mainPerson.update(TIME_PER_FRAME, *game.databaseSound);
 			mainPerson.interactionWithMap(*game.field, TIME_PER_FRAME);
+			mainPerson.interactionWitnUnlifeObject(*game.unlifeObjects, TIME_PER_FRAME);
 			mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
 			window.setView(*mainPerson.view);

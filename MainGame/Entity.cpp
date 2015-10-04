@@ -46,7 +46,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 		
 
-		spriteObject->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
 		break;
 		/*
 	case DOWN_LEFT:
@@ -60,7 +60,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 
 
-		spriteObject->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
 		break;
 	case DOWN_RIGHT:
 		movement.y = stepCurrent;
@@ -73,7 +73,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 
 
-		spriteObject->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
 		break;
 		*/
 	case DOWN:
@@ -86,7 +86,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 
 
-		spriteObject->setTextureRect(IntRect((int)timeAnimation * width, 0, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation * width, 0, width, height));
 		break;
 	case LEFT:
 		movement.x = -stepCurrent;
@@ -98,7 +98,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 
 
-		spriteObject->setTextureRect(IntRect((int)timeAnimation *   width, height, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, height, width, height));
 		break;
 	case RIGHT:
 		movement.x = stepCurrent;
@@ -110,7 +110,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 
 
-		spriteObject->setTextureRect(IntRect(((int)timeAnimation + 1) *   width, height, -width, height));
+		spriteEntity->setTextureRect(IntRect(((int)timeAnimation + 1) *   width, height, -width, height));
 		break;
 	default:
 		break;
@@ -142,12 +142,12 @@ void Entity::resetTimeAnimation(float &time, float &reset)
 // Вспомагательные функции
 float Entity::getXPos()
 {
-	return spriteObject->getPosition().x;
+	return spriteEntity->getPosition().x;
 }
 
 float Entity::getYPos()
 {
-	return spriteObject->getPosition().y;
+	return spriteEntity->getPosition().y;
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -256,6 +256,64 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 		y = (int)getYPos();
 	}
 
-	spriteObject->setPosition(x, y);
+	spriteEntity->setPosition(x, y);
+	movement = { 0.f, 0.f };
+}
+
+void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Time & deltaTime)
+{
+	float dx(movement.x);
+	float dy(movement.y);
+
+	float x;
+	float y;
+	x = getXPos() + dx * deltaTime.asSeconds();
+	y = getYPos() + dy * deltaTime.asSeconds();
+
+	// Проверка на выход за карту
+	if (((x < sizeTile * LongMap) && (x > 0))
+		&& ((y < sizeTile * (WidthMap - 1)) && (y > 0)))
+	{
+		for (size_t i = 0; i < unlifeObjects.countObjects; i++)
+		{
+			//*game.unlifeObjects->unlifeObject[i].spriteObject
+
+			Sprite *spriteObject = unlifeObjects.unlifeObject[i].spriteObject;
+			//Vector2f position = spriteEntity->getPosition();
+			FloatRect objectBound = spriteObject->getGlobalBounds();
+			FloatRect entityBound = spriteEntity->getGlobalBounds();
+
+			
+			if (spriteObject->getGlobalBounds().contains( getXPos(), getYPos() ))
+			{
+				printf("is interaction1111\n");
+				switch (direction)
+				{
+				case UP:
+					y += objectBound.top + objectBound.height - entityBound.top - height / 2;
+					break;
+					/*/
+				case DOWN:
+					y -= pacmanBound.top + pacmanBound.height - blockBound.top;
+					break;
+				case LEFT:
+					x += blockBound.left + blockBound.width - pacmanBound.left;
+					break;
+				case RIGHT:
+					x -= pacmanBound.left + pacmanBound.width - blockBound.left;
+					break;
+					*/
+				}
+				break;
+			}
+		}
+	}
+	else
+	{
+		x = (int)getXPos();
+		y = (int)getYPos();
+	}
+
+	spriteEntity->setPosition(x, y);
 	movement = { 0.f, 0.f };
 }

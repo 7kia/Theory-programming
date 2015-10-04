@@ -4,7 +4,7 @@
 // ќбъ€вление персонажа
 void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 {
-	mainPerson.spriteObject = new Sprite;
+	mainPerson.spriteEntity = new Sprite;
 	mainPerson.textureEntity = new Texture;
 
 	// «адание размера
@@ -24,9 +24,9 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 	mainPerson.view->setCenter(posX, posY);
 
 	// “екстура
-	mainPerson.textureEntity->loadFromFile("recourses\\images\\mainPerson.png");
-	mainPerson.spriteObject->setTexture(*mainPerson.textureEntity);
-	mainPerson.spriteObject->setTextureRect(IntRect(0, 0, mainPerson.width, mainPerson.height));
+	mainPerson.textureEntity->loadFromFile(pathMainPerson);
+	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
+	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.width, mainPerson.height));
 
 	// «вуки 
 	mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
@@ -39,8 +39,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 	mainPerson.currentLevelFloor = 0;
 	mainPerson.currentLevel = 1;
 	mainPerson.currenMode = idModeEntity::build;
-	mainPerson.spriteObject->setOrigin(mainPerson.width / 2, mainPerson.height / 2);
-	mainPerson.spriteObject->setPosition(posX, posY);
+	mainPerson.spriteEntity->setOrigin(mainPerson.width / 2, mainPerson.height / 2);
+	mainPerson.spriteEntity->setPosition(posX, posY);
 	mainPerson.direction = NONE;
 }
 ////////////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ void MainPerson::actionMain(Field &field, int x, int y)
 		{
 			currentLevelFloor += 1;
 			currentLevel += 1;
-			spriteObject->setPosition(x * sizeTile, y * sizeTile);
+			spriteEntity->setPosition(x * sizeTile, y * sizeTile);
 		}
 
 	}
@@ -166,7 +166,7 @@ void MainPerson::actionAlternative(Field &field, int x, int y)
 			currentLevelFloor -= 1;
 			currentLevel -= 1;
 
-			spriteObject->setPosition(x * sizeTile, (y + 1) * sizeTile);
+			spriteEntity->setPosition(x * sizeTile, (y + 1) * sizeTile);
 		}
 
 	}
@@ -179,8 +179,8 @@ void MainPerson::computeAngle(RenderWindow &window)
 	Vector2i pixelPos = Mouse::getPosition(window);//забираем коорд курсора
 	Vector2f pos = window.mapPixelToCoords(pixelPos);//переводим их в игровые (уходим от коорд окна)
 
-	float dX = pos.x - spriteObject->getPosition().x - width / 2;//вектор , колинеарный пр€мой, котора€ пересекает спрайт и курсор
-	float dY = pos.y - spriteObject->getPosition().y - height / 2;//он же, координата y
+	float dX = pos.x - spriteEntity->getPosition().x - width / 2;//вектор , колинеарный пр€мой, котора€ пересекает спрайт и курсор
+	float dY = pos.y - spriteEntity->getPosition().y - height / 2;//он же, координата y
 	rotation = (atan2(dY, dX)) * 180 / 3.14159265;//получаем угол в радианах и переводим его в градусы
 }
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Sound.h"
-//#include "Entity.h"
 #include "MainPerson.h"
+#include "UnlifeObject.h"
 
 #include <math.h>
 
@@ -12,9 +12,14 @@ struct Game
 {
 	Entity *entitys;//Остальные сущности
 	MainPerson *mainPerson;//MainPerson.h
+
+	UnlifeObjects *unlifeObjects;
+
 	Field *field;//Map.h
 	Clock *clock;
 	dataSound *databaseSound;
+
+	int countUnlifeObject = 0;
 
 	unsigned int widthMainWindow = 800;
 	unsigned int heightMainWindow = 600;

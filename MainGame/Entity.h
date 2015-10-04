@@ -2,6 +2,7 @@
 #include <SFML\Audio.hpp>
 
 #include "GlobalVar.h"
+#include "UnlifeObject.h"
 #include "Map.h"
 #include "Sound.h"
 
@@ -14,7 +15,7 @@ class Entity
 {
 public:
 	// Текструра
-	Sprite *spriteObject;
+	Sprite *spriteEntity;
 	Texture *textureEntity;
 	
 	// Для движения
@@ -27,6 +28,7 @@ public:
 	// Для взаимодействия с миром
 	int currentLevelFloor;
 	int currentLevel;
+
 	// Ссылки на звуки
 	Sound *soundsEntity[sizeBuffer];
 
@@ -43,6 +45,7 @@ public:
 	
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, const Time & deltaTime);
+	void interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Time & deltaTime);
 	
 	//Вспомагательные функции
 	float getXPos();

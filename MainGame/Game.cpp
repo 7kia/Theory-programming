@@ -6,10 +6,12 @@ void initializeGame(Game & game)
 	game.clock = new Clock;
 	game.field = new Field;
 	game.mainPerson = new MainPerson;
+	game.unlifeObjects = new UnlifeObjects;
 
 	initializeSound(game.databaseSound);// На будущее
 	initializeField(*game.field);
 	initializeMainPerson(*game.mainPerson, *game.databaseSound);
+	initializeUnlifeObjects(game.unlifeObjects, *game.databaseSound);
 	//initializeEntity(*game.mainPerson, *game.databaseSound);
 	initializeClock(*game.clock);
 }
@@ -27,6 +29,8 @@ void destroyGame(Game & game)
 
 	// Часы
 	delete game.clock;
+
+	delete game.unlifeObjects;
 
 	/*
 	delete[] game.field.floorSprite;

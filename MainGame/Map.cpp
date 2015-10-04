@@ -22,12 +22,12 @@ void initializeField(Field & field)
 
 	field.floorSprite = new Sprite;
 	field.floorTexture = new Texture;
-	field.floorTexture->loadFromFile("recourses\\images\\mapFloor.png");
+	field.floorTexture->loadFromFile(pathFloor);
 	field.floorSprite->setTexture(*field.floorTexture);
 
 	field.wallSprite = new Sprite;
 	field.wallTexture = new Texture;
-	field.wallTexture->loadFromFile("recourses\\images\\mapWall.png");
+	field.wallTexture->loadFromFile(pathWall);
 	field.wallSprite->setTexture(*field.wallTexture);
 }
 
