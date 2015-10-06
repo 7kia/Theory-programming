@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+using namespace sf;
+
 ////////////////////////////////////////////////////////////////////
 // Передвижение. Его анимация и озвучка
 void Entity::update(const Time & deltaTime, dataSound &databaseSound)
@@ -7,7 +9,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	float pauseStep = 5, resetAnimation = 2;
 	switch (direction)
 	{
-	/*
+	///*
 	case UP_LEFT:
 		movement.y = -stepCurrent;
 		movement.x = -stepCurrent;
@@ -17,9 +19,9 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-		getCoordinateForView(getXPos(), getYPos());
+		//getCoordinateForView(getXPos(), getYPos());
 
-		spriteObject->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
 		break;
 	case UP_RIGHT:
 		movement.y = -stepCurrent;
@@ -31,15 +33,15 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
 		//getCoordinateForView(spriteObject->getPosition().x, spriteObject->getPosition().y);
-		getCoordinateForView(getXPos(), getYPos());
+		//getCoordinateForView(getXPos(), getYPos());
 
-		spriteObject->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
 		break;
-		*/
+		//*/
 	case UP:
 		movement.y = -stepCurrent;
 
-		this->playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
@@ -48,7 +50,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
 		break;
-		/*
+		///*
 	case DOWN_LEFT:
 		movement.y = stepCurrent;
 		movement.x = -stepCurrent;
@@ -75,7 +77,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
 		break;
-		*/
+		//*/
 	case DOWN:
 		movement.y = stepCurrent;
 
@@ -115,10 +117,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	default:
 		break;
 	}
-
-	//spriteObject->move(movement * deltaTime.asSeconds());
-
-	//movement = { 0.f, 0.f };
 }
 
 void Entity::playSound(float time, float start, const int idSound)
@@ -161,11 +159,24 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 
 	float x;
 	float y;
-	x = getXPos() + dx * deltaTime.asSeconds();
-	y = getYPos() + dy * deltaTime.asSeconds();
+
+	bool isCollision(false);
+
+	if (direction >= Direction::UP_LEFT)
+	{
+		// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
+		x = getXPos() + 0.6 * dx * deltaTime.asSeconds();
+		y = getYPos() + 0.6 * dy * deltaTime.asSeconds();
+	}
+	else
+	{
+		x = getXPos() + dx * deltaTime.asSeconds();
+		y = getYPos() + dy * deltaTime.asSeconds();
+	}
+
 	// Проверка на выход за карту
-	if ( ((x < sizeTile * LongMap) && (x > 0))
-		&& ((y < sizeTile * (WidthMap - 1)) && (y > 0)) )
+	if ( ((x < (sizeTile * WidthMap)) && (x > 0))
+		&& (y < (sizeTile * (LongMap - 1)) && (y > 0)) )
 	{
 		wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LongMap][WidthMap] = field.dataMap;
@@ -190,29 +201,15 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 
 		/////////////////////////////////////////////
 		// Проверяем окружающие объекты
-		for (int i = y / sizeTile; i < (y + height / 2) / sizeTile; i++)
+		for (int i = y / sizeTile; i < (y + height) / sizeTile; i++)
 		{
-			for (int j = x / sizeTile; j < (x + width / 2) / sizeTile; j++)
+			for (int j = x / sizeTile; j < (x + width) / sizeTile; j++)
 			{
 				if (map[currentLevelFloor + 1][i][j] != charBlocks[idBlocks::air])
 				{
-					if (dy > 0)//если мы шли вниз,
-					{
-
-						y = i * sizeTile - height / 2;
-					}
-					if (dy < 0)
-					{
-						y = i * sizeTile + sizeTile;
-					}
-					if (dx > 0)
-					{
-						x = j * sizeTile - width / 2;
-					}
-					if (dx < 0)
-					{
-						x = j * sizeTile + sizeTile;//аналогично идем влево
-					}
+					x = getXPos();
+					y = getYPos();
+					break;
 				}
 
 			}
@@ -221,29 +218,15 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 
 		/////////////////////////////////////////////
 		// Проверяем пол
-		for (int i = y / sizeTile; i < (y + height / 2) / sizeTile; i++)
+		for (int i = y / sizeTile; i < (y + height) / sizeTile; i++)
 		{
-			for (int j = x / sizeTile; j < (x + width / 2) / sizeTile; j++)
+			for (int j = x / sizeTile; j < (x + width) / sizeTile; j++)
 			{
 				if (map[currentLevelFloor][i][j] == charBlocks[idBlocks::air])
 				{
-					if (dy > 0)//если мы шли вниз,
-					{
-
-						y = i * sizeTile - height / 2;
-					}
-					if (dy < 0)
-					{
-						y = i * sizeTile + sizeTile;
-					}
-					if (dx > 0)
-					{
-						x = j * sizeTile - width / 2;
-					}
-					if (dx < 0)
-					{
-						x = j * sizeTile + sizeTile;//аналогично идем влево
-					}
+					x = getXPos();
+					y = getYPos();
+					break;
 				}
 
 			}
@@ -252,12 +235,12 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 	}
 	else
 	{
-		x = (int)getXPos();
-		y = (int)getYPos();
+		x = getXPos();
+		y = getYPos();
 	}
 
 	spriteEntity->setPosition(x, y);
-	movement = { 0.f, 0.f };
+	//movement = { 0.f, 0.f };
 }
 
 void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Time & deltaTime)
@@ -267,43 +250,75 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 
 	float x;
 	float y;
-	x = getXPos() + dx * deltaTime.asSeconds();
-	y = getYPos() + dy * deltaTime.asSeconds();
+	x = getXPos();// +dx * deltaTime.asSeconds();
+	y = getYPos();// +dy * deltaTime.asSeconds();
 
 	// Проверка на выход за карту
-	if (((x < sizeTile * LongMap) && (x > 0))
-		&& ((y < sizeTile * (WidthMap - 1)) && (y > 0)))
+	if (((x < (sizeTile * WidthMap)) && (x >  0))
+		&& (y < (sizeTile * (LongMap - 1)) && (y >  0)))
 	{
-		for (size_t i = 0; i < unlifeObjects.countObjects; i++)
+		for (size_t i = 0; i < unlifeObjects.countObject; i++)
 		{
-			//*game.unlifeObjects->unlifeObject[i].spriteObject
+			
+
+			int levelUnlifeObject = unlifeObjects.unlifeObject[i].currentLevel;
 
 			Sprite *spriteObject = unlifeObjects.unlifeObject[i].spriteObject;
-			//Vector2f position = spriteEntity->getPosition();
 			FloatRect objectBound = spriteObject->getGlobalBounds();
 			FloatRect entityBound = spriteEntity->getGlobalBounds();
 
-			
-			if (spriteObject->getGlobalBounds().contains( getXPos(), getYPos() ))
+			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1) )
 			{
-				printf("is interaction1111\n");
+				/*
 				switch (direction)
 				{
-				case UP:
-					y += objectBound.top + objectBound.height - entityBound.top - height / 2;
+				///*
+				case UP_LEFT:
+					y += objectBound.top + objectBound.height - entityBound.top;
+					x += objectBound.left + objectBound.width - entityBound.left;
 					break;
-					/*/
+				case UP_RIGHT:
+					y += objectBound.top + objectBound.height - entityBound.top;
+					x -= objectBound.left + objectBound.width - entityBound.left;
+					break;
+				case DOWN_LEFT:
+					y -= objectBound.top + objectBound.height - entityBound.top;
+					x += objectBound.left + objectBound.width - entityBound.left;
+					break;
+				case DOWN_RIGHT:
+					y -= objectBound.top + objectBound.height - entityBound.top;
+					x -= objectBound.left + objectBound.width - entityBound.left;
+					break;
+
+				case UP:
+					y += objectBound.top + objectBound.height - entityBound.top;
+					break;
 				case DOWN:
-					y -= pacmanBound.top + pacmanBound.height - blockBound.top;
+					y -= entityBound.top + entityBound.height - objectBound.top;
 					break;
 				case LEFT:
-					x += blockBound.left + blockBound.width - pacmanBound.left;
+					x += objectBound.left + objectBound.width - entityBound.left;
 					break;
 				case RIGHT:
-					x -= pacmanBound.left + pacmanBound.width - blockBound.left;
+					x -= entityBound.left + entityBound.width - objectBound.left;
 					break;
-					*/
+
+				///
+
 				}
+				//*/
+				if (direction >= Direction::UP_LEFT)
+				{
+					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
+					x -=  0.6 * dx * deltaTime.asSeconds();
+					y -=  0.6 * dy * deltaTime.asSeconds();
+				}
+				else
+				{
+					x -=  dx * deltaTime.asSeconds();
+					y -=  dy * deltaTime.asSeconds();
+				}
+				direction = Direction::NONE;
 				break;
 			}
 		}
@@ -317,3 +332,67 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 	spriteEntity->setPosition(x, y);
 	movement = { 0.f, 0.f };
 }
+
+Vector2i  Entity::isEmptyFloor(Field &field, int Level)
+{
+	int x = getXPos() / sizeTile;
+	int y = getYPos() / sizeTile;
+
+	wchar_t *charBlocks = field.charBlocks;
+	wchar_t(*map)[LongMap][WidthMap] = field.dataMap;
+
+	for (int i = -1; i < 2; i++)
+	{
+		for (int j = -1; j < 2; j++)
+		{
+			// Если над лестницей стена не переходим
+			if (i == 0 && j == 0)
+			{// Если спускаемся блок лестницы не проверяем
+				if (isExitFromBorder(x, y) == false && Level != currentLevelFloor)
+				{
+					if (map[Level][y][x] != charBlocks[idBlocks::air])
+					{
+						return{ -1, -1 };
+					}
+				}
+			}
+			else
+			{
+				if (isExitFromBorder(x + i, y + j) == false)
+				{
+					// Проверка стены
+					if (Level != currentLevelFloor)
+					{
+						// Проверяем пол и стену над ним
+						if (map[Level][y + j][x + i] != charBlocks[idBlocks::air]
+							&& map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air])
+						{
+							return{ x + i, y + j };
+						}
+					}
+					else
+					{// Проверяем пол
+						if (map[Level][y + j][x + i] == charBlocks[idBlocks::air])
+						{
+							return{ x + i, y + j };
+						}
+					}
+				}
+			}
+		}
+
+	}
+	return{ -1, -1 };
+}
+
+bool Entity::isExitFromBorder(int x, int y)
+{
+
+	if (((x < (sizeTile * WidthMap)) && (x > 0))
+		&& (y < (sizeTile * (LongMap - 1)) && (y > 0)))
+	{
+		return false;
+	}
+	return true;
+}
+////////////////////////////////////////////////////////////////////

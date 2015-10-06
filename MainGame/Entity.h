@@ -27,7 +27,6 @@ public:
 
 	// Для взаимодействия с миром
 	int currentLevelFloor;
-	int currentLevel;
 
 	// Ссылки на звуки
 	Sound *soundsEntity[sizeBuffer];
@@ -47,6 +46,8 @@ public:
 	void interactionWithMap(Field &field, const Time & deltaTime);
 	void interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Time & deltaTime);
 	
+	Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
+	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
 	//Вспомагательные функции
 	float getXPos();
 	float getYPos();

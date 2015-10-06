@@ -5,16 +5,16 @@ class MainPerson : public Entity
 {
 public:
 	// режимы персонажа
-	void modeProcess(Field &field, Event &eventPerson, int x, int y);
+	void modeProcess(Field &field, sf::Event &eventPerson, int x, int y);
 	// Камера
-	View *view;
+	sf::View *view;
 	void getCoordinateForView(float x, float y);
 	void viewmap(float time);
 	void changeview();
 
 	// Для направления взгляда
 	float rotation;
-	void computeAngle(RenderWindow &window);
+	void computeAngle(sf::RenderWindow &window);
 
 	// Для взаимодействия с миром
 	int currenMode;

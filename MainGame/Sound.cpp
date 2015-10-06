@@ -1,5 +1,7 @@
 #include "Sound.h"
 
+using namespace sf;
+
 void initializeSound(dataSound *soundBuffer)
 {
 	soundBuffer->soundBuffer = new SoundBuffer[sizeBuffer];

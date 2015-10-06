@@ -1,5 +1,7 @@
 #include "Map.h"
 
+using namespace sf;
+
 void initializeField(Field & field)
 {
 	field.BLOCK_SIZE = sizeTile;

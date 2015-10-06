@@ -5,24 +5,13 @@
 #include "GlobalVar.h"
 #include "Sound.h"
 
-// Размеры объектов
-
-
 using namespace sf;
 
-class UnlifeObject
+struct TypeUnlifeObject
 {
 public:
 	// Текструра
-	Sprite *spriteObject;
-	Texture *textureObject;
-
-	// Для анимации
-	Direction direction;
-	float timeAnimation;
-
-	// Текущий уровень размещения
-	int currentLevel;
+	sf::Texture *textureObject;
 
 	// Ссылки на звуки
 	//Sound *soundsEntity[sizeBuffer];
@@ -30,8 +19,8 @@ public:
 	// Для отрисовки
 	int width;
 	int height;
-	int pixelX;
-	int pixelY;
+	int pixelPosX;
+	int pixelPosY;
 
 	int widthAlternative;
 	int heightAlternative;
@@ -41,30 +30,52 @@ public:
 	// Тип объекта
 	char typeObject[20];
 
+	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
+	void Init(const char *filenameTexture, char *typeName, int w, int h, int pixelX, int pixelY);
+
+};
+
+class UnlifeObject
+{
+public:
+	sf::Sprite *spriteObject;
+
+	// Текущий уровень размещения
+	int currentLevel;
+
+	// Для анимации
+	Direction direction;
+	float timeAnimation;
+
 	// Передвижение. Его анимация и озвучка
 	void update(const Time & deltaTime, dataSound &databaseSound);
 	void playSound(float time, float start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 
-	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
-	void Init(const char *filenameTexture, int w, int h, int pixelX, int pixelY);
-	void setPosition(float xPos, float yPos, int Level);
+	void setType(TypeUnlifeObject &type);
+	void setPosition(float x, float y, int Level);
 
-	//Вспомагательные функции
+	// Вспомагательные функции
 	float getXPos();
 	float getYPos();
-
-	//private:
+private:
 
 };
 
 
+struct TypesUnlifeObject
+{
+	TypeUnlifeObject *typeUnlifeObject;
+	int countTypeObjects = 0;
+	int maxTypeObject = 256;
+};
 
 struct UnlifeObjects
 {
 	UnlifeObject *unlifeObject;
-	int countObjects = 0;
 	int maxObject = 256;
+	int countObject = 0;
 };
 
-void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, dataSound &databaseSound);
+void initializeTypeUnlifeObjects(TypesUnlifeObject *unlifeObjects, dataSound &databaseSound);
+void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, TypesUnlifeObject *typesUnlifeObjects);

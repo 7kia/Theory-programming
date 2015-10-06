@@ -1,17 +1,52 @@
 #include "UnlifeObject.h"
 
-void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, dataSound &databaseSound)
+using namespace sf;
+
+void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
+{
+	typesUnlifeObjects->typeUnlifeObject = new TypeUnlifeObject[maxUnlifeObject];
+	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].Init(pathTrees, "Oak", 136, 208, 0, 0);
+	typesUnlifeObjects->countTypeObjects += 1;
+}
+
+void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, TypesUnlifeObject *typesUnlifeObjects)
 {
 	unlifeObjects->unlifeObject = new UnlifeObject[maxUnlifeObject];
-	unlifeObjects->unlifeObject[0].Init(pathTrees, 136, 208, 0, 0);
+
+	unlifeObjects->unlifeObject[0].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
 	unlifeObjects->unlifeObject[0].setPosition(200.f, 200.f, 1);
-	unlifeObjects->countObjects += 1;
+	unlifeObjects->countObject += 1;
 
-	unlifeObjects->unlifeObject[unlifeObjects->countObjects].Init(pathTrees, 136, 208, 0, 0);
-	unlifeObjects->unlifeObject[unlifeObjects->countObjects].setPosition(400.f, 300.f, 1);
-	unlifeObjects->countObjects += 1;
-
+	unlifeObjects->unlifeObject[1].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
+	unlifeObjects->unlifeObject[1].setPosition(500.f, 300.f, 1);
+	unlifeObjects->countObject += 1;
 }
+
+////////////////////////////////////////////////////////////////////
+// Виды объектов
+void TypeUnlifeObject::Init(const char * filenameTexture, char *typeName, int w, int h, int pixelX, int pixelY)
+{
+	textureObject = new Texture;
+
+	// Задание размера
+	height = h;
+	width = w;
+
+	pixelPosX = pixelX;
+	pixelPosY = pixelY;
+
+	// Текстура
+	textureObject->loadFromFile(filenameTexture);
+
+	// Звуки 
+	//mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
+	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
+};
+////////////////////////////////////////////////////////////////////
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////
 // Анимация и озвучка объектов НЕРАБОТАЕТ пока
@@ -50,31 +85,20 @@ float UnlifeObject::getYPos()
 }
 ////////////////////////////////////////////////////////////////////
 
-void UnlifeObject::Init(const char * filenameTexture, int w, int h, int pixelX, int pixelY)
+void UnlifeObject::setType(TypeUnlifeObject &type)
 {
 	spriteObject = new Sprite;
-	textureObject = new Texture;
 
-	// Задание размера
+	spriteObject->setTexture(*type.textureObject);
+	spriteObject->setTextureRect(IntRect(type.pixelPosX, type.pixelPosY, type.width, type.height));
 
-	height = h;
-	width = w;
-
-	// Текстура
-	textureObject->loadFromFile(filenameTexture);
-	spriteObject->setTexture(*textureObject);
-	spriteObject->setTextureRect(IntRect(pixelX, pixelY, width, height));
-
-	// Звуки 
-	//mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
-	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
-};
+	spriteObject->setOrigin(type.width / 2, type.height / 2);
+}
 
 void UnlifeObject::setPosition(float xPos, float yPos, int Level)
 {
 	// Позиция и направление
 	currentLevel = Level;
-	spriteObject->setOrigin(width / 2, height / 2);
 	spriteObject->setPosition(xPos, yPos);
 	direction = NONE;
 }

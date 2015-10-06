@@ -1,5 +1,7 @@
 #include "MainPerson.h"
 
+using namespace sf;
+
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
 void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
@@ -9,7 +11,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 
 	// Задание размера
 
-	mainPerson.height = 42;
+	mainPerson.height = 22;
 	mainPerson.width = 22;
 
 	// Скорость ходьбы
@@ -37,9 +39,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 
 	// Позиция и направление
 	mainPerson.currentLevelFloor = 0;
-	mainPerson.currentLevel = 1;
 	mainPerson.currenMode = idModeEntity::build;
-	mainPerson.spriteEntity->setOrigin(mainPerson.width / 2, mainPerson.height / 2);
 	mainPerson.spriteEntity->setPosition(posX, posY);
 	mainPerson.direction = NONE;
 }
@@ -57,8 +57,8 @@ void MainPerson::modeProcess(Field &field, Event &eventPerson, int x, int y)
 
 	int radiusUse = 1;
 
-	bool checkX = ((getXPos() / sizeTile) + radiusUse > x) && ((getXPos() / sizeTile) - (radiusUse + 1) <= x);
-	bool checkY = ((getYPos() / sizeTile) + radiusUse > y) && ((getYPos() / sizeTile) - (radiusUse + 1) <= y);
+	bool checkX = (( (getXPos() + width / 2) / sizeTile) + radiusUse > x) && (( (getXPos() + width / 2) / sizeTile) - (radiusUse + 1) <= x);
+	bool checkY = (( (getYPos() + height / 2) / sizeTile) + radiusUse > y) && (((getYPos() + height / 2) / sizeTile) - (radiusUse + 1) <= y);
 
 	if (checkX && checkY)
 	{
@@ -142,14 +142,19 @@ void MainPerson::modeProcess(Field &field, Event &eventPerson, int x, int y)
 void MainPerson::actionMain(Field &field, int x, int y)
 {
 	if ((currentLevelFloor >= 0 && currentLevelFloor < HeightMap - 1)
-		&& (currentLevel >= 1 && currentLevel <= HeightMap - 1))
+		&& (currentLevelFloor + 1 >= 1 && currentLevelFloor + 1 <= HeightMap - 1))
 	{
 
 		if (field.dataMap[currentLevelFloor + 1][y][x] == field.charBlocks[idBlocks::woodLadder])
 		{
-			currentLevelFloor += 1;
-			currentLevel += 1;
-			spriteEntity->setPosition(x * sizeTile, y * sizeTile);
+			Vector2i noPos = { -1, -1 };
+			Vector2i emptyPos = isEmptyFloor(field, currentLevelFloor + 1);
+			printf("%d %d\n", emptyPos.x, emptyPos.y);
+			if (emptyPos != noPos)
+			{
+				currentLevelFloor += 1;
+				spriteEntity->setPosition(emptyPos.x * sizeTile, emptyPos.y * sizeTile);
+			}
 		}
 
 	}
@@ -158,15 +163,19 @@ void MainPerson::actionMain(Field &field, int x, int y)
 void MainPerson::actionAlternative(Field &field, int x, int y)
 {
 	if ((currentLevelFloor > 0 && currentLevelFloor <= HeightMap - 1)
-		&& (currentLevel > 1 && currentLevel <= HeightMap - 1))
+		&& (currentLevelFloor + 1 > 1 && currentLevelFloor + 1 <= HeightMap - 1))
 	{
 
 		if (field.dataMap[currentLevelFloor][y][x] == field.charBlocks[idBlocks::woodLadder])
 		{
-			currentLevelFloor -= 1;
-			currentLevel -= 1;
-
-			spriteEntity->setPosition(x * sizeTile, (y + 1) * sizeTile);
+			Vector2i noPos = { -1, -1 };
+			Vector2i emptyPos = isEmptyFloor(field, currentLevelFloor);
+			//printf("%d %d\n", emptyPos.x, emptyPos.y);
+			if (emptyPos != noPos)
+			{
+				currentLevelFloor -= 1;
+				spriteEntity->setPosition(emptyPos.x * sizeTile, emptyPos.y * sizeTile);
+			}
 		}
 
 	}

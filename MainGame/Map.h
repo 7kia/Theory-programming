@@ -2,8 +2,6 @@
 
 #include "GlobalVar.h"
 
-using namespace sf;
-
 struct Field
 {
 	int BLOCK_SIZE = sizeTile;
@@ -12,14 +10,14 @@ struct Field
 	wchar_t charBlocks[256];
 	int coordinateBloks[256][2];
 
-	Sprite *floorSprite;
-	Texture *floorTexture;
+	sf::Sprite *floorSprite;
+	sf::Texture *floorTexture;
 
-	Sprite *wallSprite;
-	Texture *wallTexture;
+	sf::Sprite *wallSprite;
+	sf::Texture *wallTexture;
 
 	void dataBlocks();// Данные блоков
-	void setSprite(Sprite *sprite, int l, int i, int j);// Окраска спрайта
+	void setSprite(sf::Sprite *sprite, int l, int i, int j);// Окраска спрайта
 	void setTypeSprite(int personLevelFloor, int l, int i, int j);// Красим пол или стены?
 	void resetSprites();
 };

@@ -6,17 +6,16 @@
 
 #include <math.h>
 
-using namespace sf;
-
 struct Game
 {
 	Entity *entitys;//Остальные сущности
 	MainPerson *mainPerson;//MainPerson.h
 
+	TypesUnlifeObject *typesUnlifeObject;
 	UnlifeObjects *unlifeObjects;
 
 	Field *field;//Map.h
-	Clock *clock;
+	sf::Clock *clock;
 	dataSound *databaseSound;
 
 	int countUnlifeObject = 0;

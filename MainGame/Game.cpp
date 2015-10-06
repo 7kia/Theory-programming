@@ -7,18 +7,24 @@ void initializeGame(Game & game)
 	game.field = new Field;
 	game.mainPerson = new MainPerson;
 	game.unlifeObjects = new UnlifeObjects;
+	game.typesUnlifeObject = new TypesUnlifeObject;
 
 	initializeSound(game.databaseSound);// На будущее
 	initializeField(*game.field);
+
 	initializeMainPerson(*game.mainPerson, *game.databaseSound);
-	initializeUnlifeObjects(game.unlifeObjects, *game.databaseSound);
+
+	initializeTypeUnlifeObjects(game.typesUnlifeObject, *game.databaseSound);
+	initializeUnlifeObjects(game.unlifeObjects, game.typesUnlifeObject);
+
 	//initializeEntity(*game.mainPerson, *game.databaseSound);
 	initializeClock(*game.clock);
 }
 
 void destroyGame(Game & game)
 {
-	// Главный герой
+	
+// Главный герой
 	delete game.mainPerson;
 
 	// Звуки
@@ -32,7 +38,12 @@ void destroyGame(Game & game)
 
 	delete game.unlifeObjects;
 
-	/*
+	delete game.typesUnlifeObject;
+
+	delete game.entitys;
+
+	//delete *game;
+/*
 	delete[] game.field.floorSprite;
 	//delete[] game.field.wallSprite;
 

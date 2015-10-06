@@ -2,8 +2,6 @@
 
 #include <SFML\Graphics.hpp>
 
-using namespace sf;
-
 #define border1 1
 #define border10 10
 #define LongMap 25//размер карты высота
@@ -21,7 +19,20 @@ using namespace sf;
 #define pathGrass1 "recourses\\sounds\\step\\grass1.ogg"
 #define pathStone1 "recourses\\sounds\\step\\stone1.ogg")
 
+/*
+typedef enum
+{
+	mainPerson,
+	mapFloor
+} idPath;
 
+
+String path[] =
+{
+	"recourses\\images\\mainPerson.png",
+	"recourses\\images\\mapFloor.png"
+};
+//*/
 
 typedef enum
 {
@@ -54,6 +65,6 @@ typedef enum
 
 typedef enum
 {
-	pine,
-	oak
+	oak,
+	pine
 } idUnlifeObject;

@@ -2,8 +2,6 @@
 #include <SFML/Audio.hpp>
 #include "GlobalVar.h"
 
-using namespace sf;
-
 #define sizeBuffer sizeof(idSoundEntity)
 
 typedef enum
@@ -23,8 +21,8 @@ typedef enum
 struct dataSound
 {
 	float *startSounds;
-	Sound *sounds;
-	SoundBuffer *soundBuffer;
+	sf::Sound *sounds;
+	sf::SoundBuffer *soundBuffer;
 };
 
 void initializeSound(dataSound *soundBuffer);
