@@ -2,37 +2,44 @@
 
 #include <SFML\Graphics.hpp>
 
-#define border1 1
-#define border10 10
-#define LongMap 25//размер карты высота
-#define WidthMap 40 + border1//размер карты ширина 
-#define HeightMap 4
-#define sizeTile 32
+const int border1 = 1;
+const int border10 = 10;
+const int LongMap = 25;//размер карты высота
+const int WidthMap = 40 + border1;//размер карты ширина 
+const int HeightMap = 4;
+const int sizeTile = 32;
 
-#define maxUnlifeObject 256
+const int maxUnlifeObject = 256;
 
 // PATHs
-#define pathMainPerson "recourses\\images\\mainPerson.png"
-#define pathFloor "recourses\\images\\mapFloor.png"
-#define pathWall "recourses\\images\\mapWall.png"
-#define pathTrees "recourses\\images\\Trees.png"
-#define pathGrass1 "recourses\\sounds\\step\\grass1.ogg"
-#define pathStone1 "recourses\\sounds\\step\\stone1.ogg")
 
-/*
-typedef enum
-{
+typedef enum {
 	mainPerson,
-	mapFloor
-} idPath;
+	mapFloor,
+	mapWall,
+	Trees,
+	amountTexturePaths
+} idTexturePaths;
 
+typedef enum {
+	stepGrass1,
+	stepStone1,
+	amountSoundPaths
+} idSoundPaths;
 
-String path[] =
+const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 {
 	"recourses\\images\\mainPerson.png",
-	"recourses\\images\\mapFloor.png"
+	"recourses\\images\\mapFloor.png",
+	"recourses\\images\\mapWall.png",
+	"recourses\\images\\Trees.png"
 };
-//*/
+
+const sf::String soundPaths[idSoundPaths::amountSoundPaths] =
+{
+	"recourses\\sounds\\step\\grass1.ogg",
+	"recourses\\sounds\\step\\stone1.ogg"
+};
 
 typedef enum
 {
@@ -65,6 +72,5 @@ typedef enum
 
 typedef enum
 {
-	oak,
-	pine
+	oak
 } idUnlifeObject;

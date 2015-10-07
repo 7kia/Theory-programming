@@ -20,22 +20,22 @@ void initializeField(Field & field)
 	}
 	////////////////////////////////////////////
 
-	field.dataBlocks();
+	field.initializeDataBlocks();
 
 	field.floorSprite = new Sprite;
 	field.floorTexture = new Texture;
-	field.floorTexture->loadFromFile(pathFloor);
+	field.floorTexture->loadFromFile(texturePaths[idTexturePaths::mapFloor]);
 	field.floorSprite->setTexture(*field.floorTexture);
 
 	field.wallSprite = new Sprite;
 	field.wallTexture = new Texture;
-	field.wallTexture->loadFromFile(pathWall);
+	field.wallTexture->loadFromFile(texturePaths[idTexturePaths::mapWall]);
 	field.wallSprite->setTexture(*field.wallTexture);
 }
 
 //////////////////////////////////////////////////////////////////////
 // Данные блоков
-void Field::dataBlocks()
+void Field::initializeDataBlocks()
 {
 	charBlocks[idBlocks::air] = u'\x020';
 
@@ -73,7 +73,6 @@ void Field::dataBlocks()
 	coordinateBloks[idBlocks::woodLadder][1] = BLOCK_SIZE;
 
 
-
 	coordinateBloks[idBlocks::unknow][0] = BLOCK_SIZE * 7;
 	coordinateBloks[idBlocks::unknow][1] = BLOCK_SIZE * 7;
 
@@ -95,7 +94,8 @@ void Field::setTypeSprite(int personLevelFloor, int l, int i, int j)
 
 void Field::setSprite(Sprite *sprite, int l, int i, int j)
 {
-	int id(2);
+	// Обработка блоков
+	int id(2);// потому-что 0 - unknow, 1 - air
 	for (id = 2; id < idBlocks::amountKnowBlocks; id++)
 	{
 		if (dataMap[l][i][j] == charBlocks[id])
@@ -106,24 +106,19 @@ void Field::setSprite(Sprite *sprite, int l, int i, int j)
 		}
 	}
 
-	// Воздух отдельно обрабатывакм
+	// Неизвестные блоки и воздух обрабатываем отдельно
 	if(dataMap[l][i][j] == charBlocks[idBlocks::air])
 	{
 		sprite->setTextureRect(IntRect(0, 0, 0, 0));
 	}
 	else if(id == idBlocks::amountKnowBlocks)
 	{
-		sprite->setTextureRect(IntRect(coordinateBloks[idBlocks::unknow][0], coordinateBloks[idBlocks::unknow][1], BLOCK_SIZE, BLOCK_SIZE));
+		int unknowXPos = coordinateBloks[idBlocks::unknow][0];
+		int unknowYpos = coordinateBloks[idBlocks::unknow][1];
+		sprite->setTextureRect(IntRect(unknowXPos, unknowYpos, BLOCK_SIZE, BLOCK_SIZE));
 	}
 
-
 	sprite->setPosition(j * BLOCK_SIZE, i * BLOCK_SIZE);
-}
-
-void Field::resetSprites()
-{
-	floorSprite->setTextureRect(IntRect(0, 0, 0, 0));
-	wallSprite->setTextureRect(IntRect(0, 0, 0, 0));
 }
 
 void readMap(wchar_t(*dataMap)[LongMap][WidthMap], const char *fileName)
@@ -131,10 +126,11 @@ void readMap(wchar_t(*dataMap)[LongMap][WidthMap], const char *fileName)
 	FILE *pMapFile;
 	errno_t eMapFile = fopen_s(&pMapFile, fileName, "r");
 
-	//const int size(50);
-	wchar_t buff[4];
+	const int amountHelpSymblos = 4;
+	wchar_t buff[amountHelpSymblos];
 	int countLevel;
 
+	// Если файл открыт
 	if (pMapFile)
 	{
 		for (size_t i = 0; i < HeightMap; i++)
@@ -143,11 +139,10 @@ void readMap(wchar_t(*dataMap)[LongMap][WidthMap], const char *fileName)
 			while (!feof(pMapFile) && countLevel < LongMap)
 			{
 				fgetws(dataMap[i][countLevel], WidthMap, pMapFile);
-				fgetws(buff, 3, pMapFile);//Пропускаем остальную часть строки
+				fgetws(buff, amountHelpSymblos, pMapFile);//Пропускаем остальную часть строки
 				countLevel++;
 			}
-			fgetws(buff, 4, pMapFile);//Пропускаем строку
-
+			fgetws(buff, amountHelpSymblos, pMapFile);//Пропускаем строку
 		}
 
 	}

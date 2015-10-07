@@ -2,12 +2,6 @@
 
 using namespace sf;
 
-void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
-{
-	typesUnlifeObjects->typeUnlifeObject = new TypeUnlifeObject[maxUnlifeObject];
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].Init(pathTrees, "Oak", 136, 208, 0, 0);
-	typesUnlifeObjects->countTypeObjects += 1;
-}
 
 void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, TypesUnlifeObject *typesUnlifeObjects)
 {
@@ -21,32 +15,6 @@ void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, TypesUnlifeObject *ty
 	unlifeObjects->unlifeObject[1].setPosition(500.f, 300.f, 1);
 	unlifeObjects->countObject += 1;
 }
-
-////////////////////////////////////////////////////////////////////
-// Виды объектов
-void TypeUnlifeObject::Init(const char * filenameTexture, char *typeName, int w, int h, int pixelX, int pixelY)
-{
-	textureObject = new Texture;
-
-	// Задание размера
-	height = h;
-	width = w;
-
-	pixelPosX = pixelX;
-	pixelPosY = pixelY;
-
-	// Текстура
-	textureObject->loadFromFile(filenameTexture);
-
-	// Звуки 
-	//mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
-	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
-};
-////////////////////////////////////////////////////////////////////
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////
 // Анимация и озвучка объектов НЕРАБОТАЕТ пока

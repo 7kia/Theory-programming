@@ -168,17 +168,12 @@ void render(RenderWindow & window, Game & game)
 
 	//////////////////////////////////////////////
 	// Отрисовка карты
-	//int BLOCK_SIZE = game.field.BLOCK_SIZE;
 	Field &field = *game.field;
 	bool isEmpty(false);
-
-	window.clear();
 	
 	int l = 0;
 	while (l < HeightMap)
 	{
-		//printf("%f %f\n", game.mainPerson->currentLevelFloor,
-		//	game.mainPerson->currentLevelFloor );
 		// Рисуем только текущий уровень
 		if (l == game.mainPerson->currentLevelFloor
 			|| l == game.mainPerson->currentLevelFloor + 1)
@@ -191,8 +186,6 @@ void render(RenderWindow & window, Game & game)
 
 					window.draw(*field.floorSprite);
 					window.draw(*field.wallSprite);
-
-					//field.resetSprites();
 				}
 			}
 		}
@@ -200,14 +193,12 @@ void render(RenderWindow & window, Game & game)
 		l++;
 	}
 	//////////////////////////////////////////////
+	// Отрислвка главного персонажа
 	window.draw(*game.mainPerson->spriteEntity);
-
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
 	for (int i = 0; i < game.unlifeObjects->countObject; i++)
 	{
-		//UnlifeObject &unlifeObject = *game.unlifeObjects->unlifeObject[i];
-		//window.draw(unlifeObjects[i].spriteObject);
 		if (game.unlifeObjects->unlifeObject[i].currentLevel == game.mainPerson->currentLevelFloor + 1)
 		{
 			window.draw(*game.unlifeObjects->unlifeObject[i].spriteObject);
@@ -224,10 +215,9 @@ void startGame()
 	Game *game = new Game();
 	initializeGame(*game);
 
-	RenderWindow window(VideoMode(game->widthMainWindow, game->heightMainWindow), "MainGame v1.0.6");
+	RenderWindow window(VideoMode(game->widthMainWindow, game->heightMainWindow), "MainGame v1.0.8");
 
 	Time timeSinceLastUpdate = Time::Zero;
-
 
 	MainPerson &mainPerson = *game->mainPerson;
 	while (window.isOpen())
@@ -247,7 +237,7 @@ void startGame()
 
 			window.setView(*mainPerson.view);
 
-			//printf("Angle %f \n", game.Entity.rotation);//смотрим на градусы в консольке	
+			//printf("Angle %f \n", game->mainPerson->rotation);//смотрим на градусы в консоли	
 		}
 		render(window, *game);
 	}

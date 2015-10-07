@@ -26,7 +26,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 	mainPerson.view->setCenter(posX, posY);
 
 	// Текстура
-	mainPerson.textureEntity->loadFromFile(pathMainPerson);
+	mainPerson.textureEntity->loadFromFile(texturePaths[idTexturePaths::mainPerson]);
 	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
 	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.width, mainPerson.height));
 

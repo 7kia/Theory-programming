@@ -4,36 +4,10 @@
 
 #include "GlobalVar.h"
 #include "Sound.h"
+#include "TypeUnlifeObject.h"
 
 using namespace sf;
 
-struct TypeUnlifeObject
-{
-public:
-	// Текструра
-	sf::Texture *textureObject;
-
-	// Ссылки на звуки
-	//Sound *soundsEntity[sizeBuffer];
-
-	// Для отрисовки
-	int width;
-	int height;
-	int pixelPosX;
-	int pixelPosY;
-
-	int widthAlternative;
-	int heightAlternative;
-	int pixelXAlternative;
-	int pixelYAlternative;
-
-	// Тип объекта
-	char typeObject[20];
-
-	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
-	void Init(const char *filenameTexture, char *typeName, int w, int h, int pixelX, int pixelY);
-
-};
 
 class UnlifeObject
 {
@@ -62,14 +36,6 @@ private:
 
 };
 
-
-struct TypesUnlifeObject
-{
-	TypeUnlifeObject *typeUnlifeObject;
-	int countTypeObjects = 0;
-	int maxTypeObject = 256;
-};
-
 struct UnlifeObjects
 {
 	UnlifeObject *unlifeObject;
@@ -77,5 +43,4 @@ struct UnlifeObjects
 	int countObject = 0;
 };
 
-void initializeTypeUnlifeObjects(TypesUnlifeObject *unlifeObjects, dataSound &databaseSound);
 void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, TypesUnlifeObject *typesUnlifeObjects);
