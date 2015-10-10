@@ -5,15 +5,21 @@ using namespace sf;
 
 void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, TypesUnlifeObject *typesUnlifeObjects)
 {
-	unlifeObjects->unlifeObject = new UnlifeObject[maxUnlifeObject];
+	unlifeObjects->unlifeObject = new UnlifeObject[MAX_UNLIFE_OBJECT];
+
+	int &countObject = unlifeObjects->countObject;
 
 	unlifeObjects->unlifeObject[0].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
-	unlifeObjects->unlifeObject[0].setPosition(200.f, 200.f, 1);
-	unlifeObjects->countObject += 1;
+	unlifeObjects->unlifeObject[0].setPosition(4, 12, 1);
+	countObject += 1;
 
-	unlifeObjects->unlifeObject[1].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
-	unlifeObjects->unlifeObject[1].setPosition(500.f, 300.f, 1);
-	unlifeObjects->countObject += 1;
+	unlifeObjects->unlifeObject[countObject].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
+	unlifeObjects->unlifeObject[countObject].setPosition(12, 12, 1);
+	countObject += 1;
+
+	unlifeObjects->unlifeObject[countObject].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
+	unlifeObjects->unlifeObject[countObject].setPosition(8, 8, 1);
+	countObject += 1;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -56,17 +62,36 @@ float UnlifeObject::getYPos()
 void UnlifeObject::setType(TypeUnlifeObject &type)
 {
 	spriteObject = new Sprite;
+	transparentSpiteObject = new Sprite;
+
+	typeObject = &type;
+	isDestroy = type.isDestroy;
+
+	//width = type.width;
+	//height = type.height;
 
 	spriteObject->setTexture(*type.textureObject);
 	spriteObject->setTextureRect(IntRect(type.pixelPosX, type.pixelPosY, type.width, type.height));
 
+	transparentSpiteObject->setTexture(*type.textureObject);
+	transparentSpiteObject->setTextureRect(IntRect(type.pixelXTransparent, type.pixelXTransparent, type.widthTransparent, type.heightTransparent));
+
 	spriteObject->setOrigin(type.width / 2, type.height / 2);
+	transparentSpiteObject->setOrigin(type.widthTransparent / 2, type.heightTransparent / 2);
+
+	// Прочность 
+	currentToughness = type.toughnessObject;
 }
 
-void UnlifeObject::setPosition(float xPos, float yPos, int Level)
+void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 {
+	float numberX = xPos * SIZE_BLOCK - SIZE_BLOCK / 2;
+	float numberY = yPos * SIZE_BLOCK - SIZE_BLOCK / 2;
+
 	// Позиция и направление
 	currentLevel = Level;
-	spriteObject->setPosition(xPos, yPos);
+	spriteObject->setPosition(numberX, numberY);
+	transparentSpiteObject->setPosition(numberX, numberY - typeObject->heightTransparent / 2 + typeObject->height / 2);
+
 	direction = NONE;
 }

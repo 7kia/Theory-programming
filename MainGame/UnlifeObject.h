@@ -13,6 +13,17 @@ class UnlifeObject
 {
 public:
 	sf::Sprite *spriteObject;
+	sf::Sprite *transparentSpiteObject;
+
+	//int width;
+	//int height;
+
+	TypeUnlifeObject *typeObject;// Пренадлежность типу
+
+	// Прочность
+	int currentToughness;
+	// Разрушаемый или перетаскиваемый
+	bool isDestroy;
 
 	// Текущий уровень размещения
 	int currentLevel;
@@ -27,7 +38,7 @@ public:
 	void resetTimeAnimation(float &time, float &reset);
 
 	void setType(TypeUnlifeObject &type);
-	void setPosition(float x, float y, int Level);
+	void setPosition(int x, int y, int Level);
 
 	// Вспомагательные функции
 	float getXPos();

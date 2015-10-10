@@ -1,19 +1,23 @@
 #include "Map.h"
 
 using namespace sf;
+using namespace std;
 
 void initializeField(Field & field)
 {
-	field.BLOCK_SIZE = sizeTile;
+	field.charBlocks = new wchar_t[NUMBER_TYPE_BLOCKS];
+	field.coordinateBloks = new int[NUMBER_TYPE_BLOCKS][NUMBER_COORDINATES];
+
+	field.BLOCK_SIZE = SIZE_BLOCK;
 
 	////////////////////////////////////////////
 	// Загрузка карты
-	field.dataMap = new wchar_t[HeightMap][LongMap][WidthMap];
+	field.dataMap = new wchar_t[HEIGHT_MAP][LONG_MAP][WIDTH_MAP];
 
 	readMap(field.dataMap, "file.map");
-	for (size_t i = 0; i < HeightMap; i++)
+	for (size_t i = 0; i < HEIGHT_MAP; i++)
 	{
-		for (size_t j = 0; j < LongMap; j++)
+		for (size_t j = 0; j < LONG_MAP; j++)
 		{
 			printf("%ws\n", field.dataMap[i][j]);
 		}
@@ -42,6 +46,7 @@ void Field::initializeDataBlocks()
 	charBlocks[idBlocks::grass] = u'\x010';
 	coordinateBloks[idBlocks::grass][0] = 0;
 	coordinateBloks[idBlocks::grass][1] = 0;
+
 
 	charBlocks[idBlocks::dirt] = u'\x011';
 	coordinateBloks[idBlocks::dirt][0] = 0;
@@ -72,7 +77,6 @@ void Field::initializeDataBlocks()
 	coordinateBloks[idBlocks::woodLadder][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::woodLadder][1] = BLOCK_SIZE;
 
-
 	coordinateBloks[idBlocks::unknow][0] = BLOCK_SIZE * 7;
 	coordinateBloks[idBlocks::unknow][1] = BLOCK_SIZE * 7;
 
@@ -90,6 +94,52 @@ void Field::setTypeSprite(int personLevelFloor, int l, int i, int j)
 		setSprite(wallSprite, l, i, j);
 	}
 
+};
+
+String Field::findCharBlocks(char block)
+{
+	for (int i = 1; i < idBlocks::amountKnowBlocks; i++) {
+		if (block == charBlocks[i]) {
+			return namesBlocks[i];
+		}
+		
+	}
+	return namesBlocks[idBlocks::unknow];
+};
+
+bool Field::isObject(float x, float y, UnlifeObjects *unlifeObjects, UnlifeObject *&findObject, int currentLevel)
+{
+	for (int i = 0; i < unlifeObjects->countObject; i++) {
+
+		int levelObject = unlifeObjects->unlifeObject[i].currentLevel;
+
+		Sprite *spriteObject = unlifeObjects->unlifeObject[i].spriteObject;
+		FloatRect objectBound = spriteObject->getGlobalBounds();
+
+		if (objectBound.contains(x, y) && levelObject == currentLevel) {
+			if (levelObject == currentLevel){
+				findObject = &unlifeObjects->unlifeObject[i];
+				return true;
+			}
+		}
+
+	}
+	/*
+	for (int i = 1; i < unlifeObjects->countObject; i++) {
+
+		int levelUnlifeObject = unlifeObjects->unlifeObject[i].currentLevel;
+
+		Sprite &spriteObject = *unlifeObjects->unlifeObject[i].spriteObject;
+		FloatRect objectBound = spriteObject.getGlobalBounds();
+
+		if (objectBound.contains(x ,y) && levelUnlifeObject == currentLevel)
+		{
+			findObject = &unlifeObjects->unlifeObject[i];
+			return true;
+		}
+
+	}*/
+	return false;
 }
 
 void Field::setSprite(Sprite *sprite, int l, int i, int j)
@@ -121,7 +171,7 @@ void Field::setSprite(Sprite *sprite, int l, int i, int j)
 	sprite->setPosition(j * BLOCK_SIZE, i * BLOCK_SIZE);
 }
 
-void readMap(wchar_t(*dataMap)[LongMap][WidthMap], const char *fileName)
+void readMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP], const char *fileName)
 {
 	FILE *pMapFile;
 	errno_t eMapFile = fopen_s(&pMapFile, fileName, "r");
@@ -133,12 +183,12 @@ void readMap(wchar_t(*dataMap)[LongMap][WidthMap], const char *fileName)
 	// Если файл открыт
 	if (pMapFile)
 	{
-		for (size_t i = 0; i < HeightMap; i++)
+		for (size_t i = 0; i < HEIGHT_MAP; i++)
 		{
 			countLevel = 0;
-			while (!feof(pMapFile) && countLevel < LongMap)
+			while (!feof(pMapFile) && countLevel < LONG_MAP)
 			{
-				fgetws(dataMap[i][countLevel], WidthMap, pMapFile);
+				fgetws(dataMap[i][countLevel], WIDTH_MAP, pMapFile);
 				fgetws(buff, amountHelpSymblos, pMapFile);//Пропускаем остальную часть строки
 				countLevel++;
 			}

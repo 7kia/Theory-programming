@@ -7,151 +7,177 @@ const Time TIME_PER_FRAME = seconds(1.f / 60.f);
 using namespace sf;
 using namespace std;
 
-void processEvents(RenderWindow & window, Game &game)
+void processEvents(Game &game)
 {
 	Event event;
+	RenderWindow &window = *game.window;
 	while (window.pollEvent(event))
 	{
+
+		MainPerson &mainPerson = *game.mainPerson;
+
 		Vector2i mousePos = Mouse::getPosition(window);
 		Vector2f pos = window.mapPixelToCoords(mousePos);
 
-		int numberY(pos.y / sizeTile);
-		int numberX(pos.x / sizeTile);
+		informationAboutSelect(game, pos.x, pos.y);
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Проверяем случаи нажатия нескольких стрелок
 
 		if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::A))
 		{
-			game.mainPerson->direction = Direction::UP_LEFT;
+			mainPerson.direction = Direction::UP_LEFT;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D))
 		{
-			game.mainPerson->direction = Direction::UP_RIGHT;
+			mainPerson.direction = Direction::UP_RIGHT;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::A))
 		{
-			game.mainPerson->direction = Direction::DOWN_LEFT;
+			mainPerson.direction = Direction::DOWN_LEFT;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::D))
 		{
-			game.mainPerson->direction = Direction::DOWN_RIGHT;
+			mainPerson.direction = Direction::DOWN_RIGHT;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Проверяем одну стрелку
 		else if (Keyboard::isKeyPressed(Keyboard::W))
 		{
-			game.mainPerson->direction = UP;
+			mainPerson.direction = UP;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::S))
 		{
-			game.mainPerson->direction = DOWN;
+			mainPerson.direction = DOWN;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::A))
 		{
-			game.mainPerson->direction = LEFT;
+			mainPerson.direction = LEFT;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::D))
 		{
-			game.mainPerson->direction = RIGHT;
+			mainPerson.direction = RIGHT;
 		}
 		else
 		{
-			game.mainPerson->direction = NONE;
+			mainPerson.direction = NONE;
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Переключение режимов
 		if (Keyboard::isKeyPressed(Keyboard::G))
 		{
-			game.mainPerson->currenMode = idModeEntity::build;
+			mainPerson.currenMode = idModeEntity::build;
 			printf("build mode\n");
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::F))
 		{
-			game.mainPerson->currenMode = idModeEntity::fight;
+			mainPerson.currenMode = idModeEntity::fight;
 			printf("fight mode\n");
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// кнопка "Дествие" и "Другое действие"
-		else if (Keyboard::isKeyPressed(Keyboard::Q))
+		int numberY(pos.y / SIZE_BLOCK);
+		int numberX(pos.x / SIZE_BLOCK);
+
+		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
-			game.mainPerson->actionAlternative(*game.field, numberX, numberY);
-			printf("Alternative action\n");
+			mainPerson.actionAlternate(*game.field, numberX, numberY);
+			printf("Transparent action\n");
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::E))
 		{
-			game.mainPerson->actionMain(*game.field, numberX, numberY);
+			mainPerson.actionMain(*game.field, numberX, numberY);
 			printf("Main action\n");
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 		else if (Keyboard::isKeyPressed(Keyboard::LShift))
 		{
-			if (game.mainPerson->stepCurrent > game.mainPerson->stepFirst)
+			if (mainPerson.stepCurrent > mainPerson.stepFirst)
 			{
-				game.mainPerson->stepCurrent -= 350.f;
+				mainPerson.stepCurrent -= 350.f;
 			}
 			else
 			{
-				game.mainPerson->stepCurrent += 350.f;
-			}
-			
+				mainPerson.stepCurrent += 350.f;
+			}	
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Обработка 0 - 9
 		else if (Keyboard::isKeyPressed(Keyboard::Num0))
 		{
-			game.mainPerson->idSelectItem = 0;
+			mainPerson.idSelectItem = 0;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num1))
 		{
-			game.mainPerson->idSelectItem = 1;
+			mainPerson.idSelectItem = 1;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num2))
 		{
-			game.mainPerson->idSelectItem = 2;
+			mainPerson.idSelectItem = 2;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num3))
 		{
-			game.mainPerson->idSelectItem = 3;
+			mainPerson.idSelectItem = 3;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num4))
 		{
-			game.mainPerson->idSelectItem = 4;
+			mainPerson.idSelectItem = 4;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num5))
 		{
-			game.mainPerson->idSelectItem = 5;
+			mainPerson.idSelectItem = 5;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num6))
 		{
-			game.mainPerson->idSelectItem = 6;
+			mainPerson.idSelectItem = 6;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num7))
 		{
-			game.mainPerson->idSelectItem = 7;
+			mainPerson.idSelectItem = 7;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num8))
 		{
-			game.mainPerson->idSelectItem = 8;
+			mainPerson.idSelectItem = 8;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num9))
 		{
-			game.mainPerson->idSelectItem = 9;
+			mainPerson.idSelectItem = 9;
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////////////////////////////
 		// Оюработка щелчка мыши
-		if (event.type == Event::MouseButtonPressed)//если нажата клавиша мыши
+		if (event.type == Event::MouseButtonPressed)
 		{
-			game.mainPerson->modeProcess(*game.field, event, numberX, numberY);
+			mainPerson.modeProcess(*game.field, game.unlifeObjects , event, pos.x, pos.y);
+		}
+		else if (event.type == Event::MouseMoved) {
+			// Передвижение предмета
+			if (mainPerson.isMoveItem) {
+				
+				
+				if (mainPerson.isInUseField(pos.x, pos.y)) {
+
+					Sprite &spriteObject = *mainPerson.findObject->spriteObject;
+					Vector2f position = { pos.x - mainPerson.dMoveItemX, pos.y - mainPerson.dMoveItemY };
+
+					// Объект должен находиться в центре клетки
+					// position = { (float)( (int)position.x/ SIZE_BLOCK) * SIZE_BLOCK - SIZE_BLOCK / 2,
+					//	(float)( (int)position.y/ SIZE_BLOCK)* SIZE_BLOCK - SIZE_BLOCK / 2 };
+
+					spriteObject.setPosition(position);
+				}
+			}
+		}
+		else if (event.type == Event::MouseButtonReleased) {
+			mainPerson.isMoveItem = false;
 		}
 		//////////////////////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Для направление взгляда
-		game.mainPerson->computeAngle(window);
+		mainPerson.computeAngle(window);
 		/////////////////////////////////////////////////////////////////////////////////////////
 
 		// Окно закрыли
@@ -162,27 +188,44 @@ void processEvents(RenderWindow & window, Game &game)
 	}
 }
 
-void render(RenderWindow & window, Game & game)
+void render(Game & game)
 {
+	RenderWindow &window = *game.window;
+
+	/////////////////////////////////////////////////////////////
+	// Для обновления окна
+	Vector2u currentSizeWindow = { game.widthMainWindow, game.heightMainWindow };
+
+	if ( window.getSize() != currentSizeWindow) {
+
+		int width = window.getSize().x;
+		int height = window.getSize().y;
+
+		window.create(VideoMode(width, height), titleGame );
+		game.widthMainWindow = width;
+		game.heightMainWindow = height;
+	};
+	/////////////////////////////////////////////////////////////
 	window.clear();
 
 	//////////////////////////////////////////////
 	// Отрисовка карты
+	MainPerson &mainPerson = *game.mainPerson;
 	Field &field = *game.field;
 	bool isEmpty(false);
 	
 	int l = 0;
-	while (l < HeightMap)
+	while (l < HEIGHT_MAP)
 	{
 		// Рисуем только текущий уровень
-		if (l == game.mainPerson->currentLevelFloor
-			|| l == game.mainPerson->currentLevelFloor + 1)
+		if (l == mainPerson.currentLevelFloor
+			|| l == mainPerson.currentLevelFloor + 1)
 		{
-			for (int i = 0; i < LongMap; i++)
+			for (int i = 0; i < LONG_MAP; i++)
 			{
-				for (int j = 0; j < WidthMap - border1; j++)
+				for (int j = 0; j < WIDTH_MAP - BORDER1; j++)
 				{
-					field.setTypeSprite(game.mainPerson->currentLevelFloor, l, i, j);
+					field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
 					window.draw(*field.floorSprite);
 					window.draw(*field.wallSprite);
@@ -194,18 +237,31 @@ void render(RenderWindow & window, Game & game)
 	}
 	//////////////////////////////////////////////
 	// Отрислвка главного персонажа
-	window.draw(*game.mainPerson->spriteEntity);
+	window.draw(*mainPerson.spriteEntity);
+
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
 	for (int i = 0; i < game.unlifeObjects->countObject; i++)
 	{
 		if (game.unlifeObjects->unlifeObject[i].currentLevel == game.mainPerson->currentLevelFloor + 1)
 		{
+
 			window.draw(*game.unlifeObjects->unlifeObject[i].spriteObject);
+			window.draw(*game.unlifeObjects->unlifeObject[i].transparentSpiteObject);
 		}
 		
 	}
 	////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////
+	// GUI
+	game.gui->setPositionGui(window, *game.textGame);
+	window.draw(*game.gui->infoSelectBlockSprite);
+	//////////////////////////////////////////////
+	// Текст
+	for (size_t i = 0; i < 3; i++) {
+		window.draw(game.textGame->texts[i]);
+	}
 
 	window.display();
 }
@@ -215,7 +271,7 @@ void startGame()
 	Game *game = new Game();
 	initializeGame(*game);
 
-	RenderWindow window(VideoMode(game->widthMainWindow, game->heightMainWindow), "MainGame v1.0.8");
+	RenderWindow &window = *game->window;
 
 	Time timeSinceLastUpdate = Time::Zero;
 
@@ -228,7 +284,7 @@ void startGame()
 		{
 
 			timeSinceLastUpdate -= TIME_PER_FRAME;
-			processEvents(window, *game);
+			processEvents(*game);
 
 			mainPerson.update(TIME_PER_FRAME, *game->databaseSound);
 			mainPerson.interactionWithMap(*game->field, TIME_PER_FRAME);
@@ -239,7 +295,7 @@ void startGame()
 
 			//printf("Angle %f \n", game->mainPerson->rotation);//смотрим на градусы в консоли	
 		}
-		render(window, *game);
+		render(*game);
 	}
 	destroyGame(*game);
 }

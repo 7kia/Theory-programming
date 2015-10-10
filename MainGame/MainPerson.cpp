@@ -10,9 +10,10 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 	mainPerson.textureEntity = new Texture;
 
 	// Задание размера
-
 	mainPerson.height = 22;
 	mainPerson.width = 22;
+
+	mainPerson.radiusUse = 1;
 
 	// Скорость ходьбы
 	mainPerson.stepFirst = 150.f;
@@ -47,50 +48,42 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 
 
 
-void MainPerson::modeProcess(Field &field, Event &eventPerson, int x, int y)
+void MainPerson::modeProcess(Field &field, UnlifeObjects *unlifeObjects, Event &eventPerson, float x, float y)
 {
 	Keyboard::Key pressKey = eventPerson.key.code;
 
 	int isFloor;
 
-	printf("%f %f\n", getXPos(), getYPos());
+	//printf("%f %f\n", getXPos(), getYPos());
 
-	int radiusUse = 1;
+	int xPosBlock = x / SIZE_BLOCK;
+	int yPosBlock = y / SIZE_BLOCK;
 
-	bool checkX = (( (getXPos() + width / 2) / sizeTile) + radiusUse > x) && (( (getXPos() + width / 2) / sizeTile) - (radiusUse + 1) <= x);
-	bool checkY = (( (getYPos() + height / 2) / sizeTile) + radiusUse > y) && (((getYPos() + height / 2) / sizeTile) - (radiusUse + 1) <= y);
-
-	if (checkX && checkY)
+	if (isInUseField(x, y))
 	{
-		switch (currenMode)
-		{
-			////////////////////////////////////////////////////////	
-			// Строительный режим
+
+		switch (currenMode) {
+		////////////////////////////////////////////////////////////////////////////////////////////////	
+		// Строительный режим
 		case idModeEntity::build:
 			///////////////////////////////////////////////////
 			// Установка стены
-			if (pressKey == Mouse::Left)
-			{
+			if (pressKey == Mouse::Left) {
 				isFloor = 1;
 			}
 			// Установка пола
-			else if (pressKey == Mouse::Right)
-			{
+			else if (pressKey == Mouse::Right) {
 				isFloor = 0;
 			}
 			//
-			else
-			{
+			else {
 				isFloor = -1;
 			}
 			///////////////////////////////////////////////////
-
-			if (isFloor >= 0)
-			{
-				printf("%d %d\n", x, y);
+			if (isFloor >= 0) {
+				//printf("%d %d\n", numberX, numberY);
 				wchar_t currentBlock(u'\x00');
-				switch (idSelectItem)
-				{
+				switch (idSelectItem) {
 				case 0:
 					currentBlock = field.charBlocks[idBlocks::air];
 					break;
@@ -118,19 +111,73 @@ void MainPerson::modeProcess(Field &field, Event &eventPerson, int x, int y)
 				default:
 					break;
 				}
-				if (currentBlock != u'\x00')
-				{
-					field.dataMap[currentLevelFloor + isFloor][y][x] = currentBlock;
+				if (currentBlock != u'\x00') {
+					field.dataMap[currentLevelFloor + isFloor][yPosBlock][xPosBlock] = currentBlock;
 				}
 			}
-
-
 			break;
-			////////////////////////////////////////////////////////
-			// Боевой режим
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		// Боевой режим
 		case idModeEntity::fight:
+				// Основное действие - атака, разрушение блока или объекта
+				if (pressKey == Mouse::Left) {
+
+					for (int l = 0; l < HEIGHT_MAP; l++) {
+						//////////////////////////////////////////////////////////////
+						// Ищем только на текущем уровне
+						if (l == currentLevelFloor + 1) {
+							///////////////////////////////////////////////////////////
+							// Находим объект
+							if (field.isObject(x, y, unlifeObjects, findObject, l)) {
+
+								//////////////////////////////////
+								// Если объект уничтожаемый то ...
+								if (findObject->isDestroy) {
+
+									printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
+
+									// уменьшаем прочность
+									if (findObject->currentToughness > 0) {
+										findObject->currentToughness -= 1;
+									}
+
+									// уничтожаем если прочность = 0
+									if (findObject->currentToughness == 0) {
+										printf("%s destroy \n", findObject->typeObject->nameType);
+										//delete findObject;
+									}
+
+								}
+								//////////////////////////////////
+								// иначе просто перетаскиваем
+								else {
+									Sprite &spriteObject = *findObject->spriteObject;
+									if (spriteObject.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
+									{
+										printf("isClicked!\n");//выводим в консоль сообщение об этом
+
+										//spriteObject.setPosition(x, y);
+										dMoveItemX = x - spriteObject.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
+										dMoveItemY = y - spriteObject.getPosition().y;//тоже самое по игреку
+										isMoveItem = true;//можем двигать спрайт							
+									}
+								}
+								//////////////////////////////////
+							}
+							///////////////////////////////////////////////////////////						
+						}
+						//////////////////////////////////////////////////////////////
+					}
+				}
+				// 
+				else if (pressKey == Mouse::Right) {
+				}
+				else {
+				}
+
 			break;
-			////////////////////////////////////////////////////////
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		default:
 			break;
 		}
@@ -141,29 +188,31 @@ void MainPerson::modeProcess(Field &field, Event &eventPerson, int x, int y)
 // Взаимодействие с лестницами
 void MainPerson::actionMain(Field &field, int x, int y)
 {
-	if ((currentLevelFloor >= 0 && currentLevelFloor < HeightMap - 1)
-		&& (currentLevelFloor + 1 >= 1 && currentLevelFloor + 1 <= HeightMap - 1))
+	if ((currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1)
+		&& (currentLevelFloor + 1 >= 1 && currentLevelFloor + 1 <= HEIGHT_MAP - 1))
 	{
 
 		if (field.dataMap[currentLevelFloor + 1][y][x] == field.charBlocks[idBlocks::woodLadder])
 		{
 			Vector2i noPos = { -1, -1 };
 			Vector2i emptyPos = isEmptyFloor(field, currentLevelFloor + 1);
-			printf("%d %d\n", emptyPos.x, emptyPos.y);
+			//printf("%d %d\n", emptyPos.x, emptyPos.y);
 			if (emptyPos != noPos)
 			{
 				currentLevelFloor += 1;
-				spriteEntity->setPosition(emptyPos.x * sizeTile, emptyPos.y * sizeTile);
+				spriteEntity->setPosition(emptyPos.x * SIZE_BLOCK, emptyPos.y * SIZE_BLOCK);
 			}
 		}
 
 	}
 }
 
-void MainPerson::actionAlternative(Field &field, int x, int y)
+void MainPerson::actionAlternate(Field &field, int x, int y)
 {
-	if ((currentLevelFloor > 0 && currentLevelFloor <= HeightMap - 1)
-		&& (currentLevelFloor + 1 > 1 && currentLevelFloor + 1 <= HeightMap - 1))
+
+
+	if ((currentLevelFloor > 0 && currentLevelFloor <= HEIGHT_MAP - 1)
+		&& (currentLevelFloor + 1 > 1 && currentLevelFloor + 1 <= HEIGHT_MAP - 1))
 	{
 
 		if (field.dataMap[currentLevelFloor][y][x] == field.charBlocks[idBlocks::woodLadder])
@@ -174,7 +223,7 @@ void MainPerson::actionAlternative(Field &field, int x, int y)
 			if (emptyPos != noPos)
 			{
 				currentLevelFloor -= 1;
-				spriteEntity->setPosition(emptyPos.x * sizeTile, emptyPos.y * sizeTile);
+				spriteEntity->setPosition(emptyPos.x * SIZE_BLOCK, emptyPos.y * SIZE_BLOCK);
 			}
 		}
 
@@ -190,7 +239,7 @@ void MainPerson::computeAngle(RenderWindow &window)
 
 	float dX = pos.x - spriteEntity->getPosition().x - width / 2;//вектор , колинеарный прямой, которая пересекает спрайт и курсор
 	float dY = pos.y - spriteEntity->getPosition().y - height / 2;//он же, координата y
-	rotation = (atan2(dY, dX)) * 180 / 3.14159265;//получаем угол в радианах и переводим его в градусы
+	rotation = (atan2(dY, dX)) * 180 / PI;//получаем угол в радианах и переводим его в градусы
 }
 
 ////////////////////////////////////////////////////////////////////

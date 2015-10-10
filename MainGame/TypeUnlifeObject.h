@@ -8,7 +8,7 @@
 struct TypeUnlifeObject {
 public:
 	// Текструра
-	sf::Texture *textureObject;
+	sf::Texture* textureObject;
 
 	// Ссылки на звуки
 	//Sound *soundsEntity[sizeBuffer];
@@ -19,17 +19,22 @@ public:
 	int pixelPosX;
 	int pixelPosY;
 	// Для отрисовки в другом состоянии
-	int widthAlternative;
-	int heightAlternative;
-	int pixelXAlternative;
-	int pixelYAlternative;
+	int widthTransparent;
+	int heightTransparent;
+	int pixelXTransparent;
+	int pixelYTransparent;
 
 	// Тип объекта
-	char typeObject[20];
+	sf::String nameType;
+
+	// Разрушаемый или перетаскиваемый
+	bool isDestroy;
+	// Прочность(в условных единицах
+	int toughnessObject;
 
 	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
-	void Init(sf::String filenameTexture, char *typeName, int w, int h, int pixelX, int pixelY);
-	void InitAlternate(int w, int h, int pixelX, int pixelY);
+	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY);
+	void InitTransparent(int w, int h, int pixelX, int pixelY);
 };
 
 struct TypesUnlifeObject {

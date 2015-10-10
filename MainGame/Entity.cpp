@@ -165,8 +165,8 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 	if (direction >= Direction::UP_LEFT)
 	{
 		// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-		x = getXPos() + 0.6 * dx * deltaTime.asSeconds();
-		y = getYPos() + 0.6 * dy * deltaTime.asSeconds();
+		x = getXPos() + diagonalScaleSpeed * dx * deltaTime.asSeconds();
+		y = getYPos() + diagonalScaleSpeed * dy * deltaTime.asSeconds();
 	}
 	else
 	{
@@ -175,11 +175,11 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 	}
 
 	// Проверка на выход за карту
-	if ( ((x < (sizeTile * WidthMap)) && (x > 0))
-		&& (y < (sizeTile * (LongMap - 1)) && (y > 0)) )
+	if ( ((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
+		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0)) )
 	{
 		wchar_t *charBlocks = field.charBlocks;
-		wchar_t(*map)[LongMap][WidthMap] = field.dataMap;
+		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
 		/*
 		//////////////////////////////////////////////
@@ -201,9 +201,9 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 
 		/////////////////////////////////////////////
 		// Проверяем окружающие объекты
-		for (int i = y / sizeTile; i < (y + height) / sizeTile; i++)
+		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++)
 		{
-			for (int j = x / sizeTile; j < (x + width) / sizeTile; j++)
+			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++)
 			{
 				if (map[currentLevelFloor + 1][i][j] != charBlocks[idBlocks::air])
 				{
@@ -218,9 +218,9 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 
 		/////////////////////////////////////////////
 		// Проверяем пол
-		for (int i = y / sizeTile; i < (y + height) / sizeTile; i++)
+		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++)
 		{
-			for (int j = x / sizeTile; j < (x + width) / sizeTile; j++)
+			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++)
 			{
 				if (map[currentLevelFloor][i][j] == charBlocks[idBlocks::air])
 				{
@@ -254,8 +254,8 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 	y = getYPos();// +dy * deltaTime.asSeconds();
 
 	// Проверка на выход за карту
-	if (((x < (sizeTile * WidthMap)) && (x >  0))
-		&& (y < (sizeTile * (LongMap - 1)) && (y >  0)))
+	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x >  0))
+		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y >  0)))
 	{
 		for (size_t i = 0; i < unlifeObjects.countObject; i++)
 		{
@@ -265,6 +265,9 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 
 			Sprite *spriteObject = unlifeObjects.unlifeObject[i].spriteObject;
 			FloatRect objectBound = spriteObject->getGlobalBounds();
+
+			Sprite *transparentSpiteObject = unlifeObjects.unlifeObject[i].transparentSpiteObject;
+			FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 			FloatRect entityBound = spriteEntity->getGlobalBounds();
 
 			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1) )
@@ -310,8 +313,8 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 				if (direction >= Direction::UP_LEFT)
 				{
 					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-					x -=  0.6 * dx * deltaTime.asSeconds();
-					y -=  0.6 * dy * deltaTime.asSeconds();
+					x -= diagonalScaleSpeed * dx * deltaTime.asSeconds();
+					y -= diagonalScaleSpeed * dy * deltaTime.asSeconds();
 				}
 				else
 				{
@@ -321,6 +324,15 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 				direction = Direction::NONE;
 				break;
 			}
+			else if(entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1))
+			{
+				transparentSpiteObject->setColor(Color(255, 255, 255, 127) );
+			}
+			else
+			{
+				transparentSpiteObject->setColor(Color(255, 255, 255, 255));
+			}
+
 		}
 	}
 	else
@@ -333,13 +345,32 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 	movement = { 0.f, 0.f };
 }
 
+bool Entity::isInUseField(float x, float y)
+{
+	int xPosBlock = x / SIZE_BLOCK;
+	int yPosBlock = y / SIZE_BLOCK;
+
+	bool checkX = (((getXPos() + width / 2) / SIZE_BLOCK) + radiusUse > xPosBlock)
+		&& (((getXPos() + width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= xPosBlock);
+
+	bool checkY = (((getYPos() + height / 2) / SIZE_BLOCK) + radiusUse > yPosBlock)
+		&& (((getYPos() + height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= yPosBlock);
+
+	bool checkUnderPerson = xPosBlock != ( (int)getXPos() / SIZE_BLOCK)
+		|| yPosBlock != ((int)getYPos() / SIZE_BLOCK);
+
+	if (checkX && checkY && checkUnderPerson) return true;
+
+	return false;
+}
+
 Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 {
-	int x = getXPos() / sizeTile;
-	int y = getYPos() / sizeTile;
+	int x = getXPos() / SIZE_BLOCK;
+	int y = getYPos() / SIZE_BLOCK;
 
 	wchar_t *charBlocks = field.charBlocks;
-	wchar_t(*map)[LongMap][WidthMap] = field.dataMap;
+	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
 	for (int i = -1; i < 2; i++)
 	{
@@ -365,14 +396,16 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 					{
 						// Проверяем пол и стену над ним
 						if (map[Level][y + j][x + i] != charBlocks[idBlocks::air]
-							&& map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air])
+							&& (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air]
+							||	map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]))// ИСПРАВЬ
 						{
 							return{ x + i, y + j };
 						}
 					}
 					else
 					{// Проверяем пол
-						if (map[Level][y + j][x + i] == charBlocks[idBlocks::air])
+						if (map[Level][y + j][x + i] == charBlocks[idBlocks::air]
+								|| map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder])// ИСПРАВЬ
 						{
 							return{ x + i, y + j };
 						}
@@ -388,8 +421,8 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 bool Entity::isExitFromBorder(int x, int y)
 {
 
-	if (((x < (sizeTile * WidthMap)) && (x > 0))
-		&& (y < (sizeTile * (LongMap - 1)) && (y > 0)))
+	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
+		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0)))
 	{
 		return false;
 	}

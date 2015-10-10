@@ -5,7 +5,7 @@ class MainPerson : public Entity
 {
 public:
 	// режимы персонажа
-	void modeProcess(Field &field, sf::Event &eventPerson, int x, int y);
+	void modeProcess(Field &field, UnlifeObjects *unlifeObjects, sf::Event &eventPerson, float x, float y);
 	// Камера
 	sf::View *view;
 	void getCoordinateForView(float x, float y);
@@ -20,11 +20,17 @@ public:
 	int currenMode;
 	const int amountActiveSlots = 10;
 	int idSelectItem;
+
+	// Для передвижения предмета
+	UnlifeObject *findObject;
+	bool isMoveItem;
+	float dMoveItemX, dMoveItemY;
+
 	// кнопка "Дествие" и "Другое действие"
 	void actionMain(Field &field, int x, int y);
-	void actionAlternative(Field &field, int x, int y);
+	void actionAlternate(Field &field, int x, int y);
 private:
 
 };
 
-void initializeMainPerson(MainPerson & Entity, dataSound &databaseSound);
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound);

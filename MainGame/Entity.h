@@ -1,3 +1,6 @@
+#ifndef ENTITY_H
+#define ENTITY_H
+
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
@@ -6,30 +9,28 @@
 #include "Map.h"
 #include "Sound.h"
 
-#define speedEntity 150.f
-
-using namespace sf;
-
+const float speedEntity = 150.f;
 
 class Entity 
 {
 public:
 	// Текструра
-	Sprite *spriteEntity;
-	Texture *textureEntity;
+	sf::Sprite *spriteEntity;
+	sf::Texture *textureEntity;
 	
 	// Для движения
 	Direction direction;
-	int stepFirst;
-	int stepCurrent;
+	float stepFirst;
+	float stepCurrent;
 	float timeAnimation;
-	Vector2f movement;
+	sf::Vector2f movement;
 
 	// Для взаимодействия с миром
+	int radiusUse;
 	int currentLevelFloor;
 
 	// Ссылки на звуки
-	Sound *soundsEntity[sizeBuffer];
+	sf::Sound *soundsEntity[sizeBuffer];
 
 	// Для отрисовки
 	int width;
@@ -45,8 +46,9 @@ public:
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, const Time & deltaTime);
 	void interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Time & deltaTime);
+	bool isInUseField(float x, float y);
 	
-	Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
+	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
 	//Вспомагательные функции
 	float getXPos();
@@ -58,3 +60,5 @@ public:
 
 // Объявление персонажа
 void initializeEntity(Entity & Entity, dataSound &databaseSound);
+
+#endif ENTITY_H

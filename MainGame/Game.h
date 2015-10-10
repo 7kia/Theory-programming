@@ -1,20 +1,30 @@
 #pragma once
+#ifndef GAME_H
+#define GAME_H
+
 
 #include "Sound.h"
 #include "MainPerson.h"
 #include "UnlifeObject.h"
+#include "Font.h"
+#include "GUI.h"
 
 #include <math.h>
 
 struct Game
 {
-	Entity *entitys;//Остальные сущности
-	MainPerson *mainPerson;//MainPerson.h
+	RenderWindow *window;
+
+	GUI *gui;
+	TextGame *textGame;
+
+	Entity *entitys;
+	MainPerson *mainPerson;
 
 	TypesUnlifeObject *typesUnlifeObject;
 	UnlifeObjects *unlifeObjects;
 
-	Field *field;//Map.h
+	Field *field;
 	sf::Clock *clock;
 	dataSound *databaseSound;
 
@@ -22,12 +32,12 @@ struct Game
 
 	unsigned int widthMainWindow = 800;
 	unsigned int heightMainWindow = 600;
-
-	//SoundBuffer soundBuffer[globalSizeSoundBuffer];
-	//Sound sounds[globalAmountSounds];
-	//Vector2f iso = { sqrt(2.f) / 2, sqrt(2.f) / 2 };
 };
 
 void initializeGame(Game & game);
 void destroyGame(Game & game);
 void initializeClock(Clock &clock);
+void informationAboutSelect(Game &game, float x, float y);
+
+
+#endif GAME_H

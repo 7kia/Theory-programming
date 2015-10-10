@@ -2,8 +2,6 @@
 #include <SFML/Audio.hpp>
 #include "GlobalVar.h"
 
-#define sizeBuffer sizeof(idSoundEntity)
-
 typedef enum
 {
 	stepGrass,
@@ -11,6 +9,7 @@ typedef enum
 	stepWood,
 	stepWool
 } idSoundEntity;
+const int sizeBuffer = sizeof(idSoundEntity);
 
 typedef enum
 {

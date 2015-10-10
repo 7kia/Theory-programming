@@ -1,15 +1,29 @@
 #pragma once
 
+#include <string.h>
+
 #include <SFML\Graphics.hpp>
 
-const int border1 = 1;
-const int border10 = 10;
-const int LongMap = 25;//размер карты высота
-const int WidthMap = 40 + border1;//размер карты ширина 
-const int HeightMap = 4;
-const int sizeTile = 32;
+const sf::String  titleGame= "MainGame v1.1.0";
 
-const int maxUnlifeObject = 256;
+const int BORDER1 = 1;
+const int BORDER10 = 10;
+const int LONG_MAP = 25;
+const int WIDTH_MAP = 40 + BORDER1;
+const int HEIGHT_MAP = 4;
+const int SIZE_BLOCK = 32;
+
+const int NUMBER_TYPE_BLOCKS = 256;
+const int SIZE_NAME_BLOCKS = 20;
+const int NUMBER_COORDINATES = 2;
+
+const int MAX_UNLIFE_OBJECT = 256;
+const int AMOUNT_TYPES_UNLIFE_OBJECT = 15;
+
+const int NUMBER_TEXT_STRING = 15;
+
+const float diagonalScaleSpeed = 0.7;
+const float PI = 3.14159265;
 
 // PATHs
 
@@ -18,6 +32,8 @@ typedef enum {
 	mapFloor,
 	mapWall,
 	Trees,
+	infoSelectBlock,
+	items,
 	amountTexturePaths
 } idTexturePaths;
 
@@ -32,7 +48,9 @@ const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 	"recourses\\images\\mainPerson.png",
 	"recourses\\images\\mapFloor.png",
 	"recourses\\images\\mapWall.png",
-	"recourses\\images\\Trees.png"
+	"recourses\\images\\Trees.png",
+	"recourses\\images\\InfoWindow.png",
+	"recourses\\images\\Items.png"
 };
 
 const sf::String soundPaths[idSoundPaths::amountSoundPaths] =
@@ -72,5 +90,6 @@ typedef enum
 
 typedef enum
 {
-	oak
+	oak,
+	smallStone// камешек
 } idUnlifeObject;

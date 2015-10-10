@@ -3,20 +3,23 @@
 using namespace sf;
 
 void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSound &databaseSound) {
-	typesUnlifeObjects->typeUnlifeObject = new TypeUnlifeObject[maxUnlifeObject];
+	typesUnlifeObjects->typeUnlifeObject = new TypeUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
 
-	for (size_t i = 0; i < sizeof(idUnlifeObject); i++) {
-		 
-	}
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].Init(texturePaths[idTexturePaths::Trees], "Oak", 47, 30, 0, 208);
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].InitAlternate(136, 208, 0, 0);
+	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].Init(texturePaths[idTexturePaths::Trees], "Oak", true, 2,  47, 30, 0, 208);
+	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].InitTransparent(136, 208, 0, 0);
+	typesUnlifeObjects->countTypeObjects += 1;
+
+	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].Init(texturePaths[idTexturePaths::items], "SmallStone", false, 0, 31, 24, 0, 0);
+	//typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].InitTransparent(136, 208, 0, 0);
 	typesUnlifeObjects->countTypeObjects += 1;
 }
 
 ////////////////////////////////////////////////////////////////////
 // Виды объектов
-void TypeUnlifeObject::Init(String filenameTexture, char *typeName, int w, int h, int pixelX, int pixelY) {
+void TypeUnlifeObject::Init(String filenameTexture, String typeName, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY) {
 	textureObject = new Texture;
+
+	nameType = typeName;
 
 	// Задание размера
 	height = h;
@@ -24,6 +27,12 @@ void TypeUnlifeObject::Init(String filenameTexture, char *typeName, int w, int h
 
 	pixelPosX = pixelX;
 	pixelPosY = pixelY;
+
+
+	// Разрушаемый или перетаскиваемый
+	isDestroy = canDestroy;
+	// Прочность 
+	toughnessObject = toughness;
 
 	// Текстура
 	textureObject->loadFromFile(filenameTexture);
@@ -33,12 +42,12 @@ void TypeUnlifeObject::Init(String filenameTexture, char *typeName, int w, int h
 	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 };
 
-void TypeUnlifeObject::InitAlternate(int w, int h, int pixelX, int pixelY) {
+void TypeUnlifeObject::InitTransparent(int w, int h, int pixelX, int pixelY) {
 	// Задание размера
-	heightAlternative = h;
-	widthAlternative = w;
+	heightTransparent = h;
+	widthTransparent = w;
 
-	pixelXAlternative = pixelX;
-	pixelYAlternative = pixelY;
+	pixelXTransparent = pixelX;
+	pixelYTransparent = pixelY;
 }
 ////////////////////////////////////////////////////////////////////
