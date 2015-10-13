@@ -7,9 +7,12 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	gui.infoSelectBlockSprite = new Sprite;
 	gui.infoSelectBlockTexture = new Texture;
 
-	gui.textGui[idTextGui::infoWindowBlockGui] = &textGame.texts[idText::infoWindowBlock];
-	gui.textGui[idTextGui::infoWindowFloorGui] = &textGame.texts[idText::infoWindowFloor];
+	// »—œ–¿¬‹
+	// Õ≈–¿¡Œ“¿≈“
+	//gui.textGui[idTextGui::infoWindowBlockGui] = &textGame.texts[idText::infoWindowBlock];
+	//gui.textGui[idTextGui::infoWindowFloorGui] = &textGame.texts[idText::infoWindowFloor];
 	//gui.textGui[idTextGui::infoWindowUnlifeObjectGui] = &textGame.texts[idText::infoWindowUnlifeObject];
+	//gui.textGui[idTextGui::infoWindowItemGui] = &textGame.texts[idText::infoWindowItemGui];
 
 	gui.widthInfo = 188;
 	gui.heightInfo = 100;
@@ -51,5 +54,8 @@ void GUI::setPositionGui(RenderWindow &window, TextGame &textGame)
 
 	pos.y += textGame.texts[idText::infoWindowUnlifeObject].getCharacterSize();
 	textGame.texts[idText::infoWindowUnlifeObject].setPosition(pos);
+
+	pos.y += textGame.texts[idText::infoWindowItem].getCharacterSize();
+	textGame.texts[idText::infoWindowItem].setPosition(pos);
 	////////////////////////////////////////////////////////////////////////
 }

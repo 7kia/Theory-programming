@@ -10,6 +10,7 @@ typedef enum {
 	infoWindowBlockGui,
 	infoWindowFloorGui,
 	infoWindowUnlifeObjectGui,
+	infoWindowItemGui,
 	amountTextsGui
 } idTextGui;
 
@@ -18,6 +19,7 @@ typedef enum {
 	infoWindowBlock,
 	infoWindowFloor,
 	infoWindowUnlifeObject,
+	infoWindowItem,
 	amountTexts
 } idText;
 

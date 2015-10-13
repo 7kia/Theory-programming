@@ -107,23 +107,27 @@ String Field::findCharBlocks(char block)
 	return namesBlocks[idBlocks::unknow];
 };
 
-bool Field::isObject(float x, float y, UnlifeObjects *unlifeObjects, UnlifeObject *&findObject, int currentLevel)
+bool Field::isObject(float x, float y, list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList,  int currentLevel)
 {
-	for (int i = 0; i < unlifeObjects->countObject; i++) {
+	//////////////////////////////////////////////////////
+	// Ищем объект
+	for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
 
-		int levelObject = unlifeObjects->unlifeObject[i].currentLevel;
+		int levelObject = it->currentLevel;
 
-		Sprite *spriteObject = unlifeObjects->unlifeObject[i].spriteObject;
+		Sprite *spriteObject = it->spriteObject;
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) && levelObject == currentLevel) {
 			if (levelObject == currentLevel){
-				findObject = &unlifeObjects->unlifeObject[i];
+				findObject = &*it;
+				findObjectFromList = it;
 				return true;
 			}
 		}
 
 	}
+
 	/*
 	for (int i = 1; i < unlifeObjects->countObject; i++) {
 
@@ -139,8 +143,37 @@ bool Field::isObject(float x, float y, UnlifeObjects *unlifeObjects, UnlifeObjec
 		}
 
 	}*/
+
+
 	return false;
 }
+
+bool Field::isItem(float x, float y, list<Item> *items, Item *&findItem, list<Item>::iterator &findItemFromList, int currentLevel)
+{
+
+	//////////////////////////////////////////////////////
+	// Ищем предмет
+	for (std::list<Item>::iterator it = items->begin(); it != items->end(); ++it) {
+
+		int levelItem = it->currentLevel;
+
+		Sprite *spriteItem = it->mainSprite;
+		FloatRect objectItem = spriteItem->getGlobalBounds();
+
+		if (objectItem.contains(x, y) && levelItem == currentLevel) {
+			if (levelItem == currentLevel) {
+				findItem = &*it;
+				findItemFromList = it;// ИСПРАВЬ
+				return true;
+			}
+		}
+
+	}
+	//////////////////////////////////////////////////////
+
+	return false;
+}
+
 
 void Field::setSprite(Sprite *sprite, int l, int i, int j)
 {

@@ -4,8 +4,11 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
+
+
 #include "GlobalVar.h"
 #include "UnlifeObject.h"
+#include "Items.h"
 #include "Map.h"
 #include "Sound.h"
 
@@ -45,7 +48,7 @@ public:
 	
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, const Time & deltaTime);
-	void interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Time & deltaTime);
+	void interactionWitnUnlifeObject(std::list<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 	bool isInUseField(float x, float y);
 	
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки

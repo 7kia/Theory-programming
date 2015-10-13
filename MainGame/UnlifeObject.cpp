@@ -1,25 +1,27 @@
 #include "UnlifeObject.h"
 
 using namespace sf;
+using namespace std;
 
-
-void initializeUnlifeObjects(UnlifeObjects *unlifeObjects, TypesUnlifeObject *typesUnlifeObjects)
+void initializeUnlifeObjects(list<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects)
 {
-	unlifeObjects->unlifeObject = new UnlifeObject[MAX_UNLIFE_OBJECT];
+	//unlifeObjects->unlifeObject = new UnlifeObject[MAX_UNLIFE_OBJECT];
 
-	int &countObject = unlifeObjects->countObject;
+	//int &countObject = unlifeObjects->countObject;
 
-	unlifeObjects->unlifeObject[0].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
-	unlifeObjects->unlifeObject[0].setPosition(4, 12, 1);
-	countObject += 1;
+	UnlifeObject addObject;
 
-	unlifeObjects->unlifeObject[countObject].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
-	unlifeObjects->unlifeObject[countObject].setPosition(12, 12, 1);
-	countObject += 1;
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
+	addObject.setPosition(4, 12, 1);
+	unlifeObjects.push_back(addObject);
 
-	unlifeObjects->unlifeObject[countObject].setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
-	unlifeObjects->unlifeObject[countObject].setPosition(8, 8, 1);
-	countObject += 1;
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
+	addObject.setPosition(12, 12, 1);
+	unlifeObjects.push_back(addObject);
+
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
+	addObject.setPosition(8, 8, 1);
+	unlifeObjects.push_back(addObject);
 }
 
 ////////////////////////////////////////////////////////////////////

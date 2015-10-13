@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 using namespace sf;
+using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // ѕередвижение. ≈го анимаци€ и озвучка
@@ -243,7 +244,7 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 	//movement = { 0.f, 0.f };
 }
 
-void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Time & deltaTime)
+void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, const Time & deltaTime)
 {
 	float dx(movement.x);
 	float dy(movement.y);
@@ -257,59 +258,21 @@ void Entity::interactionWitnUnlifeObject(UnlifeObjects &unlifeObjects, const Tim
 	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x >  0))
 		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y >  0)))
 	{
-		for (size_t i = 0; i < unlifeObjects.countObject; i++)
+		for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it)
 		{
 			
 
-			int levelUnlifeObject = unlifeObjects.unlifeObject[i].currentLevel;
+			int levelUnlifeObject = it->currentLevel;
 
-			Sprite *spriteObject = unlifeObjects.unlifeObject[i].spriteObject;
+			Sprite *spriteObject = it->spriteObject;
 			FloatRect objectBound = spriteObject->getGlobalBounds();
 
-			Sprite *transparentSpiteObject = unlifeObjects.unlifeObject[i].transparentSpiteObject;
+			Sprite *transparentSpiteObject = it->transparentSpiteObject;
 			FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 			FloatRect entityBound = spriteEntity->getGlobalBounds();
 
 			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1) )
 			{
-				/*
-				switch (direction)
-				{
-				///*
-				case UP_LEFT:
-					y += objectBound.top + objectBound.height - entityBound.top;
-					x += objectBound.left + objectBound.width - entityBound.left;
-					break;
-				case UP_RIGHT:
-					y += objectBound.top + objectBound.height - entityBound.top;
-					x -= objectBound.left + objectBound.width - entityBound.left;
-					break;
-				case DOWN_LEFT:
-					y -= objectBound.top + objectBound.height - entityBound.top;
-					x += objectBound.left + objectBound.width - entityBound.left;
-					break;
-				case DOWN_RIGHT:
-					y -= objectBound.top + objectBound.height - entityBound.top;
-					x -= objectBound.left + objectBound.width - entityBound.left;
-					break;
-
-				case UP:
-					y += objectBound.top + objectBound.height - entityBound.top;
-					break;
-				case DOWN:
-					y -= entityBound.top + entityBound.height - objectBound.top;
-					break;
-				case LEFT:
-					x += objectBound.left + objectBound.width - entityBound.left;
-					break;
-				case RIGHT:
-					x -= entityBound.left + entityBound.width - objectBound.left;
-					break;
-
-				///
-
-				}
-				//*/
 				if (direction >= Direction::UP_LEFT)
 				{
 					// „тобы скорость по диагонали была равной скорости по вертикали и горизонтали

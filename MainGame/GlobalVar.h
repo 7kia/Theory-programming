@@ -4,7 +4,7 @@
 
 #include <SFML\Graphics.hpp>
 
-const sf::String  titleGame= "MainGame v1.1.0";
+const sf::String  titleGame= "MainGame v1.2.1";
 
 const int BORDER1 = 1;
 const int BORDER10 = 10;
@@ -19,6 +19,9 @@ const int NUMBER_COORDINATES = 2;
 
 const int MAX_UNLIFE_OBJECT = 256;
 const int AMOUNT_TYPES_UNLIFE_OBJECT = 15;
+
+const int MAX_ITEMS = 256;
+const int AMOUNT_TYPES_ITEM = 15;
 
 const int NUMBER_TEXT_STRING = 15;
 
@@ -93,3 +96,10 @@ typedef enum
 	oak,
 	smallStone// камешек
 } idUnlifeObject;
+
+typedef enum
+{
+	smallStoneItem// камешек
+} idItem;
+
+const sf::Vector2f scaleItems = { 0.5f, 0.5f };

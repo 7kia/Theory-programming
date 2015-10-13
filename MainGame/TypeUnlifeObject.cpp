@@ -31,8 +31,15 @@ void TypeUnlifeObject::Init(String filenameTexture, String typeName, bool canDes
 
 	// Разрушаемый или перетаскиваемый
 	isDestroy = canDestroy;
+
 	// Прочность 
 	toughnessObject = toughness;
+
+	// У разрушаемых предметов недолжно быть прочности
+	if (isDestroy == false) {
+		toughness = 0;
+	}
+
 
 	// Текстура
 	textureObject->loadFromFile(filenameTexture);

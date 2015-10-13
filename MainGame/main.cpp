@@ -83,7 +83,7 @@ void processEvents(Game &game)
 		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
 			mainPerson.actionAlternate(*game.field, numberX, numberY);
-			printf("Transparent action\n");
+			printf("Alternative action\n");
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::E))
 		{
@@ -148,9 +148,13 @@ void processEvents(Game &game)
 
 		//////////////////////////////////////////////////////////////////////////////////
 		// Оюработка щелчка мыши
+		UnlifeObject* emptyObject = NULL;
+		Item* emptyItem = NULL;
 		if (event.type == Event::MouseButtonPressed)
 		{
-			mainPerson.modeProcess(*game.field, game.unlifeObjects , event, pos.x, pos.y);
+			mainPerson.findObject = emptyObject;
+			mainPerson.findItem = emptyItem;
+			mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);
 		}
 		else if (event.type == Event::MouseMoved) {
 			// Передвижение предмета
@@ -158,15 +162,23 @@ void processEvents(Game &game)
 				
 				
 				if (mainPerson.isInUseField(pos.x, pos.y)) {
-
-					Sprite &spriteObject = *mainPerson.findObject->spriteObject;
 					Vector2f position = { pos.x - mainPerson.dMoveItemX, pos.y - mainPerson.dMoveItemY };
+					if (mainPerson.findObject != emptyObject) {
+						Sprite &spriteObject = *mainPerson.findObject->spriteObject;
+						spriteObject.setPosition(position);
+					}
+					else if (mainPerson.findItem != emptyItem) {
+						Sprite &spriteItem = *mainPerson.findItem->mainSprite;
+						spriteItem.setPosition(position);
+					}
+
 
 					// Объект должен находиться в центре клетки
 					// position = { (float)( (int)position.x/ SIZE_BLOCK) * SIZE_BLOCK - SIZE_BLOCK / 2,
 					//	(float)( (int)position.y/ SIZE_BLOCK)* SIZE_BLOCK - SIZE_BLOCK / 2 };
 
-					spriteObject.setPosition(position);
+					
+					
 				}
 			}
 		}
@@ -235,19 +247,31 @@ void render(Game & game)
 		
 		l++;
 	}
+
 	//////////////////////////////////////////////
-	// Отрислвка главного персонажа
+	// Отрислвка предметов
+	for (std::list<Item>::iterator it = game.items->begin(); it != game.items->end(); ++it) {
+		if (it->currentLevel == game.mainPerson->currentLevelFloor + 1) {
+
+			window.draw(*it->mainSprite);
+			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
+		}
+
+	}
+
+	//////////////////////////////////////////////
+	// Отрисовка главного персонажа
 	window.draw(*mainPerson.spriteEntity);
 
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
-	for (int i = 0; i < game.unlifeObjects->countObject; i++)
+	for (std::list<UnlifeObject>::iterator it = game.unlifeObjects->begin(); it != game.unlifeObjects->end(); ++it)
 	{
-		if (game.unlifeObjects->unlifeObject[i].currentLevel == game.mainPerson->currentLevelFloor + 1)
+		if (it->currentLevel == game.mainPerson->currentLevelFloor + 1)
 		{
 
-			window.draw(*game.unlifeObjects->unlifeObject[i].spriteObject);
-			window.draw(*game.unlifeObjects->unlifeObject[i].transparentSpiteObject);
+			window.draw(*it->spriteObject);
+			window.draw(*it->transparentSpiteObject);
 		}
 		
 	}
@@ -258,8 +282,8 @@ void render(Game & game)
 	game.gui->setPositionGui(window, *game.textGame);
 	window.draw(*game.gui->infoSelectBlockSprite);
 	//////////////////////////////////////////////
-	// Текст
-	for (size_t i = 0; i < 3; i++) {
+	// Текст GUI
+	for (size_t i = 0; i < idTextGui::amountTextsGui; i++) {
 		window.draw(game.textGame->texts[i]);
 	}
 
@@ -288,7 +312,7 @@ void startGame()
 
 			mainPerson.update(TIME_PER_FRAME, *game->databaseSound);
 			mainPerson.interactionWithMap(*game->field, TIME_PER_FRAME);
-			mainPerson.interactionWitnUnlifeObject(*game->unlifeObjects, TIME_PER_FRAME);
+			mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
 			mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
 			window.setView(*mainPerson.view);

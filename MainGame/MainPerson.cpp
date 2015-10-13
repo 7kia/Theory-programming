@@ -1,6 +1,7 @@
 #include "MainPerson.h"
 
 using namespace sf;
+using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
@@ -48,7 +49,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 
 
 
-void MainPerson::modeProcess(Field &field, UnlifeObjects *unlifeObjects, Event &eventPerson, float x, float y)
+void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, Event &eventPerson, float x, float y)
 {
 	Keyboard::Key pressKey = eventPerson.key.code;
 
@@ -59,12 +60,11 @@ void MainPerson::modeProcess(Field &field, UnlifeObjects *unlifeObjects, Event &
 	int xPosBlock = x / SIZE_BLOCK;
 	int yPosBlock = y / SIZE_BLOCK;
 
-	if (isInUseField(x, y))
-	{
+	if (isInUseField(x, y)) {
 
 		switch (currenMode) {
-		////////////////////////////////////////////////////////////////////////////////////////////////	
-		// Строительный режим
+			////////////////////////////////////////////////////////////////////////////////////////////////
+			// Строительный режим
 		case idModeEntity::build:
 			///////////////////////////////////////////////////
 			// Установка стены
@@ -116,74 +116,111 @@ void MainPerson::modeProcess(Field &field, UnlifeObjects *unlifeObjects, Event &
 				}
 			}
 			break;
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		// Боевой режим
+			////////////////////////////////////////////////////////////////////////////////////////////////
+			// Боевой режим
 		case idModeEntity::fight:
-				// Основное действие - атака, разрушение блока или объекта
-				if (pressKey == Mouse::Left) {
-
-					for (int l = 0; l < HEIGHT_MAP; l++) {
-						//////////////////////////////////////////////////////////////
-						// Ищем только на текущем уровне
-						if (l == currentLevelFloor + 1) {
-							///////////////////////////////////////////////////////////
-							// Находим объект
-							if (field.isObject(x, y, unlifeObjects, findObject, l)) {
-
-								//////////////////////////////////
-								// Если объект уничтожаемый то ...
-								if (findObject->isDestroy) {
-
-									printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
-
-									// уменьшаем прочность
-									if (findObject->currentToughness > 0) {
-										findObject->currentToughness -= 1;
-									}
-
-									// уничтожаем если прочность = 0
-									if (findObject->currentToughness == 0) {
-										printf("%s destroy \n", findObject->typeObject->nameType);
-										//delete findObject;
-									}
-
-								}
-								//////////////////////////////////
-								// иначе просто перетаскиваем
-								else {
-									Sprite &spriteObject = *findObject->spriteObject;
-									if (spriteObject.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
-									{
-										printf("isClicked!\n");//выводим в консоль сообщение об этом
-
-										//spriteObject.setPosition(x, y);
-										dMoveItemX = x - spriteObject.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
-										dMoveItemY = y - spriteObject.getPosition().y;//тоже самое по игреку
-										isMoveItem = true;//можем двигать спрайт							
-									}
-								}
-								//////////////////////////////////
+			// Основное действие - атака, разрушение блока или объекта
+			if (pressKey == Mouse::Left) {
+				for (int l = 0; l < HEIGHT_MAP; l++) {
+					////////////////////////////////////////////////////////////////////////
+					// Ищем только на текущем уровне
+					// Находим объект или предмет
+					if (l == currentLevelFloor + 1) {
+						//////////////////////////////////////////////
+						// Предмет
+						if (field.isItem(x, y, items, findItem, findItemFromList, l)) {
+							//////////////////////////////////
+							// Если предмет уничтожаемый то ...
+							if (findItem->isDestroy) {
 							}
-							///////////////////////////////////////////////////////////						
+							//////////////////////////////////
+							// иначе просто перетаскиваем
+							else {
+								Sprite &mainSprite = *findItem->mainSprite;
+								if (mainSprite.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
+								{
+									printf("isClicked!\n");//выводим в консоль сообщение об этом
+
+																				 //spriteObject.setPosition(x, y);
+									dMoveItemX = x - mainSprite.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
+									dMoveItemY = y - mainSprite.getPosition().y;//тоже самое по игреку
+									isMoveItem = true;//можем двигать спрайт							
+								}
+							}
+							//////////////////////////////////
 						}
-						//////////////////////////////////////////////////////////////
+						//////////////////////////////////////////////
+						// Объект
+						else if (field.isObject(x, y, unlifeObjects, findObject, findObjectFromList, l)) {
+							
+
+							//////////////////////////////////
+							// Если объект уничтожаемый то ...
+							if (findObject->isDestroy) {
+
+								printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
+
+								// уменьшаем прочность
+								if (findObject->currentToughness > 0) {
+									findObject->currentToughness -= 1;
+								}
+
+								// уничтожаем если прочность = 0
+								if (findObject->currentToughness == 0) 
+								{
+									//printf("%s destroy \n", findObject->typeObject->nameType);
+									//////////////////////////////////////////
+									// Удаление
+									for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
+
+										//if (&findElement != NULL) {
+										if (it == findObjectFromList) {// ИСПРАВЬ
+											unlifeObjects->erase(it);
+											break;
+										}
+
+									}
+
+								}
+							//////////////////////////////////
+							}
+							//////////////////////////////////
+							// иначе просто перетаскиваем
+							else {
+								Sprite &spriteObject = *findObject->spriteObject;
+								if (spriteObject.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
+								{
+									printf("isClicked!\n");//выводим в консоль сообщение об этом
+
+																				 //spriteObject.setPosition(x, y);
+									dMoveItemX = x - spriteObject.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
+									dMoveItemY = y - spriteObject.getPosition().y;//тоже самое по игреку
+									isMoveItem = true;//можем двигать спрайт							
+								}
+							}
+						///////////////////////////////////////////////////////////
+						}
+						///////////////////////////////////////////////////////////
 					}
+					////////////////////////////////////////////////////////////////////////		
 				}
-				// 
-				else if (pressKey == Mouse::Right) {
-				}
-				else {
-				}
-
+				//////////////////////////////////////////////////////////////
+			}
+			// 
+			else if (pressKey == Mouse::Right) {
+			}
+			else {
+			};
 			break;
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////
 		default:
 			break;
 		}
-	}
 
+	}
 }
+
+
 
 // Взаимодействие с лестницами
 void MainPerson::actionMain(Field &field, int x, int y)

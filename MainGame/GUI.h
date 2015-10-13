@@ -3,7 +3,8 @@
 #include "GlobalVar.h"
 #include "Font.h"
 
-const int numberTextReference = 4;
+const int numberTextReference = 8;
+const int AMOUNT_TEXT_GUI = 4;
 
 struct GUI
 {

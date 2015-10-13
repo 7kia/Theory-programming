@@ -1,48 +1,44 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
-
 
 // Для динамических списков
 #include <list>     // подключаем заголовок списка
 #include <iterator> // заголовок итераторов
 
 #include "GlobalVar.h"
-#include "Sound.h"
-#include "TypeUnlifeObject.h"
+#include "TypeItems.h"
 
-using namespace sf;
-
-
-class UnlifeObject
+struct Item 
 {
-public:
-	sf::Sprite *spriteObject;
-	sf::Sprite *transparentSpiteObject;
+	sf::Sprite *mainSprite;
+	sf::Sprite *spriteForUse;
+
+	sf::String nameItem;
+
 
 	//int width;
 	//int height;
 
-	TypeUnlifeObject *typeObject;// Пренадлежность типу
+	TypeItem *typeItem;// Пренадлежность типу
 
-	// Прочность
+															 // Прочность
 	int currentToughness;
-	// Разрушаемый или перетаскиваемый
+	// Разрушаемый или нет
 	bool isDestroy;
 
 	// Текущий уровень размещения
 	int currentLevel;
 
 	// Для анимации
-	Direction direction;
+	//Direction direction;
 	float timeAnimation;
 
 	// Передвижение. Его анимация и озвучка
-	void update(const Time & deltaTime, dataSound &databaseSound);
+	void update(const sf::Time & deltaTime, dataSound &databaseSound);
 	void playSound(float time, float start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 
-	void setType(TypeUnlifeObject &type);
+	void setType(TypeItem &type);
 	void setPosition(int x, int y, int Level);
 
 	// Вспомагательные функции
@@ -52,15 +48,14 @@ private:
 
 };
 
-
 /*
-struct UnlifeObjects
+struct Items
 {
-	UnlifeObject *unlifeObject;
-	int maxObject = 256;
-	int countObject = 0;
+	Item *item;
+	int maxItem = 256;
+	int countItem = 0;
 };
 */
 
 
-void initializeUnlifeObjects(std::list<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects);
+void initializeItems(std::list<Item> &items, TypesItem *typesItem);

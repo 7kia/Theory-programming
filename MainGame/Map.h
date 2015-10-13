@@ -5,7 +5,7 @@
 
 #include "GlobalVar.h"
 #include "UnlifeObject.h"
-
+#include "Items.h"
 
 const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 {
@@ -42,7 +42,8 @@ struct Field
 	void setSprite(sf::Sprite *sprite, int l, int i, int j);// Окраска спрайта
 	void setTypeSprite(int personLevelFloor, int l, int i, int j);// Красим пол или стены?
 	sf::String findCharBlocks(char block);
-	bool isObject(float x, float y, UnlifeObjects *unlifeObjects, UnlifeObject *&findObject, int currentLevel);
+	bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, int currentLevel);
+	bool isItem(float x, float y, std::list<Item> *items, Item *&findItem, std::list<Item>::iterator &findItemFromList, int currentLevel);
 };
 
 void initializeField(Field & field);

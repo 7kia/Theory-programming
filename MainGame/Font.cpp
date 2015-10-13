@@ -25,4 +25,8 @@ void initializeTexts(TextGame &textGame)
 	textGame.texts[idText::infoWindowUnlifeObject].setFont(*textGame.font);
 	textGame.texts[idText::infoWindowUnlifeObject].setCharacterSize(SIZE_NORMAL_TEXT);
 
+	textGame.texts[idText::infoWindowItem].setColor(Color::Black);
+	textGame.texts[idText::infoWindowItem].setStyle(Text::Regular | Text::Underlined);
+	textGame.texts[idText::infoWindowItem].setFont(*textGame.font);
+	textGame.texts[idText::infoWindowItem].setCharacterSize(SIZE_NORMAL_TEXT);
 }

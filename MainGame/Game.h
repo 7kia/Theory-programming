@@ -1,11 +1,16 @@
 #pragma once
-#ifndef GAME_H
-#define GAME_H
+//#ifndef GAME_H
+//#define GAME_H
+
+// Для динамических списков
+#include <list>     // подключаем заголовок списка
+#include <iterator> // заголовок итераторов
 
 
 #include "Sound.h"
 #include "MainPerson.h"
 #include "UnlifeObject.h"
+#include "Items.h"
 #include "Font.h"
 #include "GUI.h"
 
@@ -18,14 +23,22 @@ struct Game
 	GUI *gui;
 	TextGame *textGame;
 
-	Entity *entitys;
+	Entity *entitys;// ИСПРАВЬ
 	MainPerson *mainPerson;
 
 	TypesUnlifeObject *typesUnlifeObject;
-	UnlifeObjects *unlifeObjects;
+	std::list<UnlifeObject>* unlifeObjects;
+
+
+
+	TypesItem *typesItem;
+	std::list<Item>* items;
+	
+	//Items *items;
 
 	Field *field;
 	sf::Clock *clock;
+
 	dataSound *databaseSound;
 
 	int countUnlifeObject = 0;
@@ -40,4 +53,4 @@ void initializeClock(Clock &clock);
 void informationAboutSelect(Game &game, float x, float y);
 
 
-#endif GAME_H
+//#endif GAME_H
