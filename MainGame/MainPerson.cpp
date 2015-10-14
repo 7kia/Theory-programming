@@ -37,7 +37,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 	mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 
 	// Текущий выбранный тип блока
-	mainPerson.idSelectItem = 0;
+	mainPerson.idSelectItem = 1;
 
 	// Позиция и направление
 	mainPerson.currentLevelFloor = 0;

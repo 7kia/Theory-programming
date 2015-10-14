@@ -106,7 +106,7 @@ void processEvents(Game &game)
 		// Обработка 0 - 9
 		else if (Keyboard::isKeyPressed(Keyboard::Num0))
 		{
-			mainPerson.idSelectItem = 0;
+			mainPerson.idSelectItem = 10;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num1))
 		{
@@ -279,8 +279,10 @@ void render(Game & game)
 
 	//////////////////////////////////////////////
 	// GUI
-	game.gui->setPositionGui(window, *game.textGame);
+	game.gui->setPositionGui(window, *game.mainPerson, *game.textGame);
 	window.draw(*game.gui->infoSelectBlockSprite);
+	window.draw(*game.gui->panelQuickAccess);
+	window.draw(*game.gui->selectInPanelQuickAccess);
 	//////////////////////////////////////////////
 	// Текст GUI
 	for (size_t i = 0; i < idTextGui::amountTextsGui; i++) {

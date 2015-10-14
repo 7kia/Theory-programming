@@ -4,8 +4,28 @@ using namespace sf;
 
 void initializeGUI(GUI &gui, TextGame &textGame)
 {
-	gui.infoSelectBlockSprite = new Sprite;
+	// Информация о выделеном блоке
 	gui.infoSelectBlockTexture = new Texture;
+	gui.infoSelectBlockSprite = new Sprite;
+
+	gui.infoSelectBlockTexture->loadFromFile(texturePaths[idTexturePaths::infoSelectBlock]);
+	gui.infoSelectBlockSprite->setTexture(*gui.infoSelectBlockTexture);
+	gui.infoSelectBlockSprite->setOrigin(widthInfo / 2, heightInfo / 2);
+	gui.infoSelectBlockSprite->setTextureRect(IntRect(0, 0, widthInfo, heightInfo));
+
+	// Панель быстрого доступа
+	gui.widgetsTexture = new Texture;
+	gui.panelQuickAccess = new Sprite;
+	gui.selectInPanelQuickAccess = new Sprite;
+
+	gui.widgetsTexture->loadFromFile(texturePaths[idTexturePaths::widgets]);
+	gui.panelQuickAccess->setTexture(*gui.widgetsTexture);
+	gui.panelQuickAccess->setOrigin(widthPanelQuickAccess / 2, heightPanelQuickAccess / 2);// ИСПРАВЬ
+	gui.panelQuickAccess->setTextureRect(IntRect(0, 0, widthPanelQuickAccess, heightPanelQuickAccess));
+
+	gui.selectInPanelQuickAccess->setTexture(*gui.widgetsTexture);
+	gui.selectInPanelQuickAccess->setOrigin(0, heightSelectInPanelQuickAccess / 2);// ИСПРАВЬ
+	gui.selectInPanelQuickAccess->setTextureRect(IntRect(shiftXSelectInPanelQuickAccess, shiftYSelectInPanelQuickAccess, widthSelectInPanelQuickAccess, heightSelectInPanelQuickAccess));
 
 	// ИСПРАВЬ
 	// НЕРАБОТАЕТ
@@ -13,25 +33,16 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	//gui.textGui[idTextGui::infoWindowFloorGui] = &textGame.texts[idText::infoWindowFloor];
 	//gui.textGui[idTextGui::infoWindowUnlifeObjectGui] = &textGame.texts[idText::infoWindowUnlifeObject];
 	//gui.textGui[idTextGui::infoWindowItemGui] = &textGame.texts[idText::infoWindowItemGui];
-
-	gui.widthInfo = 188;
-	gui.heightInfo = 100;
-
-	// Текстура
-	gui.infoSelectBlockTexture->loadFromFile(texturePaths[idTexturePaths::infoSelectBlock]);
-	gui.infoSelectBlockSprite->setTexture(*gui.infoSelectBlockTexture);
-	gui.infoSelectBlockSprite->setOrigin(gui.widthInfo / 2, gui.heightInfo / 2);
-	gui.infoSelectBlockSprite->setTextureRect(IntRect(0, 0, gui.widthInfo, gui.heightInfo));
-
 }
 
-void GUI::setPositionGui(RenderWindow &window, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame &textGame)
 {
+
+	Vector2f centerWindow = window.getView().getCenter();
 	////////////////////////////////////////////////////////////////////////
 	// Окошко с информацией об указанном мышкой объекте
 
 	// Определение позиции окошка
-	Vector2f centerWindow = window.getView().getCenter();
 	Vector2u sizeWindow = window.getSize();
 	Vector2f pos = { centerWindow.x + sizeWindow.x / 2 - widthInfo , centerWindow.y + sizeWindow.y / 2 - heightInfo};
 
@@ -58,4 +69,17 @@ void GUI::setPositionGui(RenderWindow &window, TextGame &textGame)
 	pos.y += textGame.texts[idText::infoWindowItem].getCharacterSize();
 	textGame.texts[idText::infoWindowItem].setPosition(pos);
 	////////////////////////////////////////////////////////////////////////
+	// Панель быстрого доступа
+	pos = { centerWindow.x, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess * 2 };// ИСПРАВЬ
+	panelQuickAccess->setPosition(pos);
+
+	// Выбранный предмет
+	int amountSlots = mainPerson.amountActiveSlots;
+	int &idSelectItem = mainPerson.idSelectItem;
+	int startPosition = widthPanelQuickAccess / 2;
+	int shift = shiftSelect * (idSelectItem - 1);
+	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess * 2 };// ИСПРАВЬ
+	selectInPanelQuickAccess->setPosition(pos);
+	////////////////////////////////////////////////////////////////////////
+
 }
