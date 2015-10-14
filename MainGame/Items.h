@@ -21,10 +21,9 @@ struct Item
 
 	TypeItem *typeItem;// Пренадлежность типу
 
-															 // Прочность
-	int currentToughness;
 	// Разрушаемый или нет
 	bool isDestroy;
+	int currentToughness;// Прочность
 
 	// Текущий уровень размещения
 	int currentLevel;
@@ -58,4 +57,4 @@ struct Items
 */
 
 
-void initializeItems(std::list<Item> &items, TypesItem *typesItem);
+void initializeItems(std::list<Item> &items, TypesItem *typesItem, Item &emptyItem);

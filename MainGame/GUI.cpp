@@ -74,11 +74,16 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	panelQuickAccess->setPosition(pos);
 
 	// Выбранный предмет
-	int amountSlots = mainPerson.amountActiveSlots;
 	int &idSelectItem = mainPerson.idSelectItem;
 	int startPosition = widthPanelQuickAccess / 2;
 	int shift = shiftSelect * (idSelectItem - 1);
 	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess * 2 };// ИСПРАВЬ
+
+	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
+		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->nameType != "Empty") {
+			mainPerson.itemFromPanelQuickAccess[i].mainSprite->setPosition(pos);
+		}
+	}
 	selectInPanelQuickAccess->setPosition(pos);
 	////////////////////////////////////////////////////////////////////////
 

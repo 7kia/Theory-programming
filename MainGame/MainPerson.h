@@ -1,7 +1,11 @@
 #pragma once
 #include "Entity.h"
+#include "Items.h"
+#include "UnlifeObject.h"
 
 using namespace std;
+
+const int AMOUNT_ACTIVE_SLOTS = 10;
 
 class MainPerson : public Entity
 {
@@ -18,10 +22,15 @@ public:
 	float rotation;
 	void computeAngle(sf::RenderWindow &window);
 
+	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
 	int currenMode;
-	const int amountActiveSlots = 10;
+	Item *itemFromPanelQuickAccess;
+	Item *emptyItem;// ИСПРАВЬ
 	int idSelectItem;
+
+	bool isEmptySlot();
+	int emptySlot;
 
 	// Для передвижения объекта
 	UnlifeObject *findObject;
@@ -32,12 +41,13 @@ public:
 
 	bool isMoveItem;
 	float dMoveItemX, dMoveItemY;
+	//////////////////////////////////////////////////
 
 	// кнопка "Дествие" и "Другое действие"
-	void actionMain(Field &field, int x, int y);
-	void actionAlternate(Field &field, int x, int y);
+	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, int x, int y);
+	void actionAlternate(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, int x, int y);
 private:
 
 };
 
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound);
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem);

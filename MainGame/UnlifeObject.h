@@ -2,7 +2,6 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
-
 // Для динамических списков
 #include <list>     // подключаем заголовок списка
 #include <iterator> // заголовок итераторов
@@ -12,7 +11,6 @@
 #include "TypeUnlifeObject.h"
 
 using namespace sf;
-
 
 class UnlifeObject
 {

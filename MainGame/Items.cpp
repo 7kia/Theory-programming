@@ -3,17 +3,23 @@
 using namespace sf;
 using namespace std;
 
-void initializeItems(list<Item> &items, TypesItem *typesItem)
+void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 {
 
-	Item addItem;
+	Item* addItem = new Item[3];
 
+	// Ïóñòîé ïðåäìåò
+	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ÈÑÏÐÀÂÜ
 
-	addItem.setType(typesItem->typesItem[idItem::smallStoneItem]);
-	addItem.setPosition(3, 3, 1);
-	items.push_back(addItem);
+	addItem[0].setType(typesItem->typesItem[idItem::smallStoneItem]);
+	addItem[0].setPosition(3, 3, 1);
+	items.push_front(addItem[0]);
 
+	addItem[1].setType(typesItem->typesItem[idItem::mushroom]);// ÈÑÏÐÀÂÜ
+	addItem[1].setPosition(2, 3, 1);
+	items.push_front(addItem[1]);
 
+	delete[] addItem;
 };
 
 

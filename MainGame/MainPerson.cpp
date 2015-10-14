@@ -5,7 +5,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem)
 {
 	mainPerson.spriteEntity = new Sprite;
 	mainPerson.textureEntity = new Texture;
@@ -37,7 +37,12 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound)
 	mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 
 	// Текущий выбранный тип блока
+	mainPerson.emptyItem = &emptyItem;
 	mainPerson.idSelectItem = 1;
+	mainPerson.itemFromPanelQuickAccess = new Item[AMOUNT_ACTIVE_SLOTS];
+	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
+		mainPerson.itemFromPanelQuickAccess[i].typeItem = emptyItem.typeItem;
+	}
 
 	// Позиция и направление
 	mainPerson.currentLevelFloor = 0;
@@ -89,6 +94,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 					break;
 				case 1:
 					currentBlock = field.charBlocks[idBlocks::stone];
+					//itemFromPanelQuickAccess[1].// ИСПРАВЬ
 					break;
 				case 2:
 					currentBlock = field.charBlocks[idBlocks::stoneBrick];
@@ -158,7 +164,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 							// Если объект уничтожаемый то ...
 							if (findObject->isDestroy) {
 
-								printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
+								//printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
 
 								// уменьшаем прочность
 								if (findObject->currentToughness > 0) {
@@ -206,8 +212,31 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 				}
 				//////////////////////////////////////////////////////////////
 			}
-			// 
+			// Использование предмета или подбор
 			else if (pressKey == Mouse::Right) {
+				//////////////////////////////////////////////////////////////////////////////////////////////////////
+				// Если есть место
+				if (isEmptySlot()) {
+
+					for (std::list<Item>::iterator it = items->begin(); it != items->end(); ++it) {
+
+						int level = it->currentLevel;
+						////////////////////////////////////////////////////////////////////
+						// Если нашли предмет
+						if (field.isItem(x, y, items, findItem, findItemFromList, level)) {
+							// Перемещаем в инвентарь
+							printf("added!1\n");
+							itemFromPanelQuickAccess[emptySlot] = *it;
+							itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
+							// Удаляем из мира
+							items->erase(it);
+							break;
+						}
+						////////////////////////////////////////////////////////////////////
+					}
+				
+				}
+				//////////////////////////////////////////////////////////////////////////////////////////////////////
 			}
 			else {
 			};
@@ -220,11 +249,24 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 	}
 }
 
-
+bool MainPerson::isEmptySlot()
+{
+	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) 
+	{
+		if (itemFromPanelQuickAccess[i].typeItem == emptyItem->typeItem) {
+			emptySlot = i;
+			return true;
+		}
+	}
+	emptySlot = -1;
+	return false;
+}
 
 // Взаимодействие с лестницами
-void MainPerson::actionMain(Field &field, int x, int y)
+void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, int x, int y)
 {
+	/////////////////////////////////////////////////////////////////////////////
+	// Взаимодейстиве с блоками
 	if ((currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1)
 		&& (currentLevelFloor + 1 >= 1 && currentLevelFloor + 1 <= HEIGHT_MAP - 1))
 	{
@@ -242,12 +284,17 @@ void MainPerson::actionMain(Field &field, int x, int y)
 		}
 
 	}
+	/////////////////////////////////////////////////////////////////////////////
+	// Взаимодейстиве с предметами
+
+	/////////////////////////////////////////////////////////////////////////////
+
 }
 
-void MainPerson::actionAlternate(Field &field, int x, int y)
+void MainPerson::actionAlternate(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, int x, int y)
 {
-
-
+	/////////////////////////////////////////////////////////////////////////////
+	// Взаимодейстиве с блоками
 	if ((currentLevelFloor > 0 && currentLevelFloor <= HEIGHT_MAP - 1)
 		&& (currentLevelFloor + 1 > 1 && currentLevelFloor + 1 <= HEIGHT_MAP - 1))
 	{
@@ -265,9 +312,14 @@ void MainPerson::actionAlternate(Field &field, int x, int y)
 		}
 
 	}
-}
-////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	// Взаимодейстиве с предметами
 
+	/////////////////////////////////////////////////////////////////////////////
+}
+
+
+////////////////////////////////////////////////////////////////////
 // Использую потом (не ВКЛЮЧЕНА)
 void MainPerson::computeAngle(RenderWindow &window)
 {
@@ -278,7 +330,6 @@ void MainPerson::computeAngle(RenderWindow &window)
 	float dY = pos.y - spriteEntity->getPosition().y - height / 2;//он же, координата y
 	rotation = (atan2(dY, dX)) * 180 / PI;//получаем угол в радианах и переводим его в градусы
 }
-
 ////////////////////////////////////////////////////////////////////
 // View
 void MainPerson::getCoordinateForView(float x, float y)//функция для считывания координат игрока

@@ -6,7 +6,6 @@
 #include <list>     // подключаем заголовок списка
 #include <iterator> // заголовок итераторов
 
-
 #include "Sound.h"
 #include "MainPerson.h"
 #include "UnlifeObject.h"
@@ -29,7 +28,7 @@ struct Game
 	TypesUnlifeObject *typesUnlifeObject;
 	std::list<UnlifeObject>* unlifeObjects;
 
-
+	Item* emptyItem;
 
 	TypesItem *typesItem;
 	std::list<Item>* items;

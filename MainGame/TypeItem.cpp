@@ -4,12 +4,17 @@ using namespace sf;
 
 void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 {
-	typesItem.typesItem = new TypeItem;
+	typesItem.typesItem = new TypeItem[AMOUNT_TYPES_ITEM];
 
-	typesItem.typesItem[idItem::smallStoneItem].Init(texturePaths[idTexturePaths::items], "Small stone", false, 0, 31, 24, 0, 0);
+	typesItem.typesItem[idItem::smallStoneItem].Init(texturePaths[idTexturePaths::items], "Small stone", false, 0, WIDTH_SMALL_STONE, HEIGHT_SMALL_STONE, 0, 0);
 	//typesItem.typesItem[idUnlifeObject::oak].InitForUse(texturePaths[idTexturePaths::items], 0, 0, 0, 0);
 	typesItem.countTypeItem += 1;
 
+	typesItem.typesItem[idItem::mushroom].Init(texturePaths[idTexturePaths::items], "Mushroom", true, 0, WIDTH_MUSHROOM, HEIGHT_MUSHROOM, PIXEL_X_MUSHROOM, PIXEL_Y_MUSHROOM);
+	typesItem.countTypeItem += 1;
+
+	typesItem.typesItem[idItem::emptyItem].Init(texturePaths[idTexturePaths::items], "Empty", true, 0, 0, 0, 0, 0);
+	typesItem.countTypeItem += 1;
 
 }
 

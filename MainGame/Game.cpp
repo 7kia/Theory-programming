@@ -14,6 +14,7 @@ void initializeGame(Game & game)
 
 	game.typesItem = new TypesItem;
 	game.items = new list<Item>;
+	game.emptyItem = new Item;
 	//game.items = new list<Item>;
 	//game.ite
 
@@ -27,16 +28,16 @@ void initializeGame(Game & game)
 	initializeSound(game.databaseSound);// На будущее
 	initializeField(*game.field);
 
+	// Предметы
+	initializeTypesItem(*game.typesItem, *game.databaseSound);
+	initializeItems(*game.items, game.typesItem, *game.emptyItem);
+
 	// Основной персонаж
-	initializeMainPerson(*game.mainPerson, *game.databaseSound);
+	initializeMainPerson(*game.mainPerson, *game.databaseSound, *game.emptyItem);
 
 	// Неживые объекты
 	initializeTypeUnlifeObjects(game.typesUnlifeObject, *game.databaseSound);
 	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject);
-
-	// Предметы
-	initializeTypesItem(*game.typesItem, *game.databaseSound);
-	initializeItems(*game.items, game.typesItem);
 
 	// GUI
 	initializeGUI(*game.gui, *game.textGame);
@@ -105,6 +106,8 @@ void informationAboutSelect(Game &game, float x, float y)
 			if (level == game.mainPerson->currentLevelFloor + 1) {
 				String nameType = it->typeObject->nameType;
 				if (nameType != "") {
+
+					game.mainPerson->findObjectFromList = it;
 					textGame.texts[idText::infoWindowUnlifeObject].setString("UnlifeObject : " + nameType);
 				}
 			}
@@ -130,6 +133,7 @@ void informationAboutSelect(Game &game, float x, float y)
 			if (level == game.mainPerson->currentLevelFloor + 1) {
 				String nameType = it->typeItem->nameType;
 				if (nameType != "") {
+					game.mainPerson->findItemFromList = it;
 					textGame.texts[idText::infoWindowItem].setString("Item : " + nameType);
 				}
 			}

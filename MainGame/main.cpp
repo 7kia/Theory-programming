@@ -23,7 +23,6 @@ void processEvents(Game &game)
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Проверяем случаи нажатия нескольких стрелок
-
 		if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::A))
 		{
 			mainPerson.direction = Direction::UP_LEFT;
@@ -82,12 +81,12 @@ void processEvents(Game &game)
 
 		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
-			mainPerson.actionAlternate(*game.field, numberX, numberY);
+			mainPerson.actionAlternate(*game.field, game.unlifeObjects, game.items, numberX, numberY);
 			printf("Alternative action\n");
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::E))
 		{
-			mainPerson.actionMain(*game.field, numberX, numberY);
+			mainPerson.actionMain(*game.field, game.unlifeObjects, game.items, numberX, numberY);
 			printf("Main action\n");
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -249,7 +248,7 @@ void render(Game & game)
 	}
 
 	//////////////////////////////////////////////
-	// Отрислвка предметов
+	// Отрисовка предметов
 	for (std::list<Item>::iterator it = game.items->begin(); it != game.items->end(); ++it) {
 		if (it->currentLevel == game.mainPerson->currentLevelFloor + 1) {
 
@@ -282,6 +281,17 @@ void render(Game & game)
 	game.gui->setPositionGui(window, *game.mainPerson, *game.textGame);
 	window.draw(*game.gui->infoSelectBlockSprite);
 	window.draw(*game.gui->panelQuickAccess);
+
+	if (mainPerson.emptySlot > -1) {
+		for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
+			// если есть предмет
+			if (game.mainPerson->itemFromPanelQuickAccess[i].typeItem != game.mainPerson->emptyItem->typeItem) {
+				window.draw(*game.mainPerson->itemFromPanelQuickAccess[i].mainSprite);
+			}
+
+		}
+	}
+
 	window.draw(*game.gui->selectInPanelQuickAccess);
 	//////////////////////////////////////////////
 	// Текст GUI
