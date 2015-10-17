@@ -5,7 +5,7 @@ const int MAX_ITEMS = 256;
 const int AMOUNT_TYPES_ITEM = 15;
 
 const sf::Vector2f scaleItems = { 0.5f, 0.5f };
-const sf::Vector2f normalSize = { 1.f, 1.f };
+const sf::Vector2f normalSize = { 2.f, 2.f };
 //
 // smallStoneItem - камешек
 const int WIDTH_SMALL_STONE = 34;

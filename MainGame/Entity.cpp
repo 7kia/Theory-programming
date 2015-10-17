@@ -166,8 +166,8 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 	if (direction >= Direction::UP_LEFT)
 	{
 		// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-		x = getXPos() + diagonalScaleSpeed * dx * deltaTime.asSeconds();
-		y = getYPos() + diagonalScaleSpeed * dy * deltaTime.asSeconds();
+		x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
+		y = getYPos() + DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
 	}
 	else
 	{
@@ -276,8 +276,8 @@ void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, cons
 				if (direction >= Direction::UP_LEFT)
 				{
 					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-					x -= diagonalScaleSpeed * dx * deltaTime.asSeconds();
-					y -= diagonalScaleSpeed * dy * deltaTime.asSeconds();
+					x -= DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
+					y -= DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
 				}
 				else
 				{

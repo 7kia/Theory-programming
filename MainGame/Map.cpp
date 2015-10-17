@@ -107,26 +107,20 @@ String Field::findCharBlocks(char block)
 	return namesBlocks[idBlocks::unknow];
 };
 
-bool Field::isObject(float x, float y, list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList,  int currentLevel)
+bool Field::isObject(float x, float y, list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList, list<UnlifeObject>::iterator &current, int currentLevel)
 {
 	//////////////////////////////////////////////////////
 	// Ищем объект
-	for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
+		int levelObject = current->currentLevel;
 
-		int levelObject = it->currentLevel;
-
-		Sprite *spriteObject = it->spriteObject;
+		Sprite *spriteObject = current->spriteObject;
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) && levelObject == currentLevel) {
-			if (levelObject == currentLevel){
-				findObject = &*it;
-				findObjectFromList = it;
-				return true;
-			}
+			findObject = &*current;
+			findObjectFromList = current;
+			return true;
 		}
-
-	}
 
 	/*
 	for (int i = 1; i < unlifeObjects->countObject; i++) {
@@ -148,27 +142,22 @@ bool Field::isObject(float x, float y, list<UnlifeObject> *unlifeObjects, Unlife
 	return false;
 }
 
-bool Field::isItem(float x, float y, list<Item> *items, Item *&findItem, list<Item>::iterator &findItemFromList, int currentLevel)
+bool Field::isItem(float x, float y, list<Item> *items, Item *&findItem, list<Item>::iterator &findItemFromList, list<Item>::iterator &current, int currentLevel)
 {
 
 	//////////////////////////////////////////////////////
 	// Ищем предмет
-	for (std::list<Item>::iterator it = items->begin(); it != items->end(); ++it) {
+		int levelItem = current->currentLevel;
 
-		int levelItem = it->currentLevel;
-
-		Sprite *spriteItem = it->mainSprite;
+		Sprite *spriteItem = current->mainSprite;
 		FloatRect objectItem = spriteItem->getGlobalBounds();
 
 		if (objectItem.contains(x, y) && levelItem == currentLevel) {
-			if (levelItem == currentLevel) {
-				findItem = &*it;
-				findItemFromList = it;// ИСПРАВЬ
+				findItem = &*current;
+				findItemFromList = current;// ИСПРАВЬ
 				return true;
-			}
 		}
 
-	}
 	//////////////////////////////////////////////////////
 
 	return false;

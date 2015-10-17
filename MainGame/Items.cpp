@@ -6,20 +6,24 @@ using namespace std;
 void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 {
 
-	Item* addItem = new Item[3];
+	Item* addItem = new Item;
 
 	// Ïóñòîé ïðåäìåò
 	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ÈÑÏÐÀÂÜ
 
-	addItem[0].setType(typesItem->typesItem[idItem::smallStoneItem]);
-	addItem[0].setPosition(3, 3, 1);
-	items.push_front(addItem[0]);
+	addItem->setType(typesItem->typesItem[idItem::smallStoneItem]);
+	addItem->setPosition(3, 3, 1);
+	items.push_front(*addItem);
 
-	addItem[1].setType(typesItem->typesItem[idItem::mushroom]);// ÈÑÏÐÀÂÜ
-	addItem[1].setPosition(2, 3, 1);
-	items.push_front(addItem[1]);
+	addItem->setType(typesItem->typesItem[idItem::mushroom]);// ÈÑÏÐÀÂÜ
+	addItem->setPosition(2, 3, 1);
+	items.push_front(*addItem);
 
-	delete[] addItem;
+	addItem->setType(typesItem->typesItem[idItem::mushroom]);// ÈÑÏÐÀÂÜ
+	addItem->setPosition(4, 3, 1);
+	items.push_front(*addItem);
+
+	delete addItem;
 };
 
 

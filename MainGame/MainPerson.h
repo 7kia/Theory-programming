@@ -14,6 +14,8 @@ public:
 	void modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, sf::Event &eventPerson, float x, float y);
 	// Камера
 	sf::View *view;
+	void updateView(RenderWindow & window);
+
 	void getCoordinateForView(float x, float y);
 	void viewmap(float time);
 	void changeview();

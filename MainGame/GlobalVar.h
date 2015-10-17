@@ -6,7 +6,7 @@
 #include "BlocksVar.h"
 #include "UnlifeObjectVar.h"
 
-const sf::String  titleGame= "MainGame v1.2.1";
+const sf::String TITLE_PROGRAM = "MainGame v1.2.1";
 
 const int BORDER1 = 1;
 const int BORDER10 = 10;
@@ -18,7 +18,7 @@ const int NUMBER_COORDINATES = 2;
 
 const int NUMBER_TEXT_STRING = 15;
 
-const float diagonalScaleSpeed = 0.7;
+const float DIAGONAL_SCALE_SPEED = 0.7;
 const float PI = 3.14159265;
 
 typedef enum

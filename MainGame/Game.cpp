@@ -22,7 +22,7 @@ void initializeGame(Game & game)
 	game.gui = new GUI;
 	game.textGame = new TextGame;
 
-	game.window = new RenderWindow(VideoMode(game.widthMainWindow, game.heightMainWindow), titleGame);
+	game.window = new RenderWindow(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
 
 	initializeSound(game.databaseSound);// На будущее

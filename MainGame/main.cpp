@@ -191,6 +191,25 @@ void processEvents(Game &game)
 		mainPerson.computeAngle(window);
 		/////////////////////////////////////////////////////////////////////////////////////////
 
+		/////////////////////////////////////////////////////////////
+		// Для обновления окна
+		// получение размера окна
+		unsigned int width = window.getSize().x;
+		unsigned int height = window.getSize().y;
+		game.widthMainWindow = width;
+		game.heightMainWindow = height;
+
+		if (event.type == sf::Event::Resized) {
+			unsigned int width = window.getSize().x;
+			unsigned int height = window.getSize().y;
+			Vector2u centerWindow = { width / 2, height / 2 };
+			game.widthMainWindow = width;// ИСПРАВЬ
+			game.heightMainWindow = height;
+			window.create(VideoMode(width, height), TITLE_PROGRAM);
+		}
+		/////////////////////////////////////////////////////////////
+
+
 		// Окно закрыли
 		if (event.type == Event::Closed)
 		{
@@ -202,21 +221,6 @@ void processEvents(Game &game)
 void render(Game & game)
 {
 	RenderWindow &window = *game.window;
-
-	/////////////////////////////////////////////////////////////
-	// Для обновления окна
-	Vector2u currentSizeWindow = { game.widthMainWindow, game.heightMainWindow };
-
-	if ( window.getSize() != currentSizeWindow) {
-
-		int width = window.getSize().x;
-		int height = window.getSize().y;
-
-		window.create(VideoMode(width, height), titleGame );
-		game.widthMainWindow = width;
-		game.heightMainWindow = height;
-	};
-	/////////////////////////////////////////////////////////////
 	window.clear();
 
 	//////////////////////////////////////////////
@@ -327,6 +331,7 @@ void startGame()
 			mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
 			mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
+			mainPerson.updateView(*game->window);
 			window.setView(*mainPerson.view);
 
 			//printf("Angle %f \n", game->mainPerson->rotation);//смотрим на градусы в консоли	

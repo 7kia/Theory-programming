@@ -9,24 +9,27 @@ void initializeTexts(TextGame &textGame)
 
 	textGame.font->loadFromFile("recourses\\font\\CyrilicOld.ttf");
 
-	textGame.texts[idText::infoWindowBlock].setColor(Color::Black);
-	textGame.texts[idText::infoWindowBlock].setStyle(Text::Regular | Text::Underlined);
-	textGame.texts[idText::infoWindowBlock].setFont(*textGame.font);
-	textGame.texts[idText::infoWindowBlock].setCharacterSize(SIZE_NORMAL_TEXT);
+	Text* currentText = &textGame.texts[idText::infoWindowBlock];
+	currentText->setColor(Color::Black);
+	currentText->setStyle(Text::Regular | Text::Underlined);
+	currentText->setFont(*textGame.font);
+	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 
+	currentText = &textGame.texts[idText::infoWindowFloor];
+	currentText->setColor(Color::Black);
+	currentText->setStyle(Text::Regular | Text::Underlined);
+	currentText->setFont(*textGame.font);
+	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 
-	textGame.texts[idText::infoWindowFloor].setColor(Color::Black);
-	textGame.texts[idText::infoWindowFloor].setStyle(Text::Regular | Text::Underlined);
-	textGame.texts[idText::infoWindowFloor].setFont(*textGame.font);
-	textGame.texts[idText::infoWindowFloor].setCharacterSize(SIZE_NORMAL_TEXT);
+	currentText = &textGame.texts[idText::infoWindowUnlifeObject];
+	currentText->setColor(Color::Black);
+	currentText->setStyle(Text::Regular | Text::Underlined);
+	currentText->setFont(*textGame.font);
+	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 
-	textGame.texts[idText::infoWindowUnlifeObject].setColor(Color::Black);
-	textGame.texts[idText::infoWindowUnlifeObject].setStyle(Text::Regular | Text::Underlined);
-	textGame.texts[idText::infoWindowUnlifeObject].setFont(*textGame.font);
-	textGame.texts[idText::infoWindowUnlifeObject].setCharacterSize(SIZE_NORMAL_TEXT);
-
-	textGame.texts[idText::infoWindowItem].setColor(Color::Black);
-	textGame.texts[idText::infoWindowItem].setStyle(Text::Regular | Text::Underlined);
-	textGame.texts[idText::infoWindowItem].setFont(*textGame.font);
-	textGame.texts[idText::infoWindowItem].setCharacterSize(SIZE_NORMAL_TEXT);
+	currentText = &textGame.texts[idText::infoWindowItem];
+	currentText->setColor(Color::Black);
+	currentText->setStyle(Text::Regular | Text::Underlined);
+	currentText->setFont(*textGame.font);
+	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 }

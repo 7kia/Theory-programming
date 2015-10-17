@@ -52,7 +52,15 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 }
 ////////////////////////////////////////////////////////////////////
 
-
+////////////////////////////////////////////////////////////////////
+// Обновление камеры
+void MainPerson::updateView(RenderWindow & window)
+{
+	Vector2u sizeWindow = window.getSize();
+	view->setSize((Vector2f)sizeWindow);
+	view->setCenter(getXPos(), getYPos());
+}
+////////////////////////////////////////////////////////////////////
 
 void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, Event &eventPerson, float x, float y)
 {
@@ -134,78 +142,85 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 					if (l == currentLevelFloor + 1) {
 						//////////////////////////////////////////////
 						// Предмет
-						if (field.isItem(x, y, items, findItem, findItemFromList, l)) {
-							//////////////////////////////////
-							// Если предмет уничтожаемый то ...
-							if (findItem->isDestroy) {
-							}
-							//////////////////////////////////
-							// иначе просто перетаскиваем
-							else {
-								Sprite &mainSprite = *findItem->mainSprite;
-								if (mainSprite.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
-								{
-									printf("isClicked!\n");//выводим в консоль сообщение об этом
+						for (std::list<Item>::iterator it = items->begin(); it != items->end(); ++it) {
 
-																				 //spriteObject.setPosition(x, y);
-									dMoveItemX = x - mainSprite.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
-									dMoveItemY = y - mainSprite.getPosition().y;//тоже самое по игреку
-									isMoveItem = true;//можем двигать спрайт							
+							if (field.isItem(x, y, items, findItem, findItemFromList, it, l)) {
+								//////////////////////////////////
+								// Если предмет уничтожаемый то ...
+								if (findItem->isDestroy) {
 								}
+								//////////////////////////////////
+								// иначе просто перетаскиваем
+								else {
+									Sprite &mainSprite = *findItem->mainSprite;
+									if (mainSprite.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
+									{
+										printf("isClicked!\n");//выводим в консоль сообщение об этом
+
+																					 //spriteObject.setPosition(x, y);
+										dMoveItemX = x - mainSprite.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
+										dMoveItemY = y - mainSprite.getPosition().y;//тоже самое по игреку
+										isMoveItem = true;//можем двигать спрайт							
+									}
+								}
+								//////////////////////////////////
+								break;
 							}
-							//////////////////////////////////
+
 						}
 						//////////////////////////////////////////////
 						// Объект
-						else if (field.isObject(x, y, unlifeObjects, findObject, findObjectFromList, l)) {
-							
+						for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
+							if (field.isObject(x, y, unlifeObjects, findObject, findObjectFromList, it, l)) {
 
-							//////////////////////////////////
-							// Если объект уничтожаемый то ...
-							if (findObject->isDestroy) {
 
-								//printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
+								//////////////////////////////////
+								// Если объект уничтожаемый то ...
+								if (findObject->isDestroy) {
 
-								// уменьшаем прочность
-								if (findObject->currentToughness > 0) {
-									findObject->currentToughness -= 1;
-								}
+									//printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
 
-								// уничтожаем если прочность = 0
-								if (findObject->currentToughness == 0) 
-								{
-									//printf("%s destroy \n", findObject->typeObject->nameType);
-									//////////////////////////////////////////
-									// Удаление
-									for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
+									// уменьшаем прочность
+									if (findObject->currentToughness > 0) {
+										findObject->currentToughness -= 1;
+									}
 
-										//if (&findElement != NULL) {
-										if (it == findObjectFromList) {// ИСПРАВЬ
-											unlifeObjects->erase(it);
-											break;
+									// уничтожаем если прочность = 0
+									if (findObject->currentToughness == 0) {
+										//printf("%s destroy \n", findObject->typeObject->nameType);
+										//////////////////////////////////////////
+										// Удаление
+										for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
+
+											//if (&findElement != NULL) {
+											if (it == findObjectFromList) {// ИСПРАВЬ
+												unlifeObjects->erase(it);
+												break;
+											}
+
 										}
 
 									}
-
+									//////////////////////////////////
 								}
-							//////////////////////////////////
-							}
-							//////////////////////////////////
-							// иначе просто перетаскиваем
-							else {
-								Sprite &spriteObject = *findObject->spriteObject;
-								if (spriteObject.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
-								{
-									printf("isClicked!\n");//выводим в консоль сообщение об этом
+								//////////////////////////////////
+								// иначе просто перетаскиваем
+								else {
+									Sprite &spriteObject = *findObject->spriteObject;
+									if (spriteObject.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
+									{
+										printf("isClicked!\n");//выводим в консоль сообщение об этом
 
-																				 //spriteObject.setPosition(x, y);
-									dMoveItemX = x - spriteObject.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
-									dMoveItemY = y - spriteObject.getPosition().y;//тоже самое по игреку
-									isMoveItem = true;//можем двигать спрайт							
+																					 //spriteObject.setPosition(x, y);
+										dMoveItemX = x - spriteObject.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
+										dMoveItemY = y - spriteObject.getPosition().y;//тоже самое по игреку
+										isMoveItem = true;//можем двигать спрайт							
+									}
 								}
+								///////////////////////////////////////////////////////////
 							}
-						///////////////////////////////////////////////////////////
 						}
+
 						///////////////////////////////////////////////////////////
 					}
 					////////////////////////////////////////////////////////////////////////		
@@ -223,7 +238,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 						int level = it->currentLevel;
 						////////////////////////////////////////////////////////////////////
 						// Если нашли предмет
-						if (field.isItem(x, y, items, findItem, findItemFromList, level)) {
+						if (field.isItem(x, y, items, findItem, findItemFromList, it, level)) {
 							// Перемещаем в инвентарь
 							printf("added!1\n");
 							itemFromPanelQuickAccess[emptySlot] = *it;

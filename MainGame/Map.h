@@ -42,8 +42,8 @@ struct Field
 	void setSprite(sf::Sprite *sprite, int l, int i, int j);// Окраска спрайта
 	void setTypeSprite(int personLevelFloor, int l, int i, int j);// Красим пол или стены?
 	sf::String findCharBlocks(char block);
-	bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, int currentLevel);
-	bool isItem(float x, float y, std::list<Item> *items, Item *&findItem, std::list<Item>::iterator &findItemFromList, int currentLevel);
+	bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, std::list<UnlifeObject>::iterator &current,int currentLevel);
+	bool isItem(float x, float y, std::list<Item> *items, Item *&findItem, std::list<Item>::iterator &findItemFromList, std::list<Item>::iterator &current, int currentLevel);
 };
 
 void initializeField(Field & field);

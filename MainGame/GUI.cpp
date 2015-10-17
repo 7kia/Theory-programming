@@ -10,7 +10,7 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 
 	gui.infoSelectBlockTexture->loadFromFile(texturePaths[idTexturePaths::infoSelectBlock]);
 	gui.infoSelectBlockSprite->setTexture(*gui.infoSelectBlockTexture);
-	gui.infoSelectBlockSprite->setOrigin(widthInfo / 2, heightInfo / 2);
+	//gui.infoSelectBlockSprite->setOrigin(widthInfo / 2, heightInfo / 2);
 	gui.infoSelectBlockSprite->setTextureRect(IntRect(0, 0, widthInfo, heightInfo));
 
 	// Панель быстрого доступа
@@ -38,7 +38,7 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame &textGame)
 {
 
-	Vector2f centerWindow = window.getView().getCenter();
+	Vector2f centerWindow = mainPerson.view->getCenter();
 	////////////////////////////////////////////////////////////////////////
 	// Окошко с информацией об указанном мышкой объекте
 
@@ -50,8 +50,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	infoSelectBlockSprite->setPosition(pos);
 
 	// Сдвиг текста
-	const int shiftX = 8 - widthInfo / 2;
-	const int shiftY = 8 - heightInfo / 2;
+	const int shiftX = 8 ;
+	const int shiftY = 8 ;
 
 	// Размещение текста
 	pos = { pos.x + shiftX, pos.y + shiftY };
@@ -59,32 +59,37 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	textGame.texts[idText::infoWindowBlock].setPosition(pos);
 
 	//pos.y += textGui[idTextGui::infoWindowFloorGui]->getCharacterSize();
-	pos.y += textGame.texts[idText::infoWindowFloor].getCharacterSize();
+	pos.y += textGame.texts[idText::infoWindowBlock].getCharacterSize();
 	textGame.texts[idText::infoWindowFloor].setPosition(pos);
 	//textGui[idTextGui::infoWindowFloorGui]->setPosition(pos);
 
-	pos.y += textGame.texts[idText::infoWindowUnlifeObject].getCharacterSize();
+	pos.y += textGame.texts[idText::infoWindowFloor].getCharacterSize();
 	textGame.texts[idText::infoWindowUnlifeObject].setPosition(pos);
 
-	pos.y += textGame.texts[idText::infoWindowItem].getCharacterSize();
+	pos.y += textGame.texts[idText::infoWindowUnlifeObject].getCharacterSize();
 	textGame.texts[idText::infoWindowItem].setPosition(pos);
 	////////////////////////////////////////////////////////////////////////
 	// Панель быстрого доступа
-	pos = { centerWindow.x, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess * 2 };// ИСПРАВЬ
+	pos = { centerWindow.x , centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
 	panelQuickAccess->setPosition(pos);
 
 	// Выбранный предмет
 	int &idSelectItem = mainPerson.idSelectItem;
 	int startPosition = widthPanelQuickAccess / 2;
 	int shift = shiftSelect * (idSelectItem - 1);
-	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess * 2 };// ИСПРАВЬ
+	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
+
+	selectInPanelQuickAccess->setPosition(pos);
+
 
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->nameType != "Empty") {
+			int shift = shiftSelect * (i);
+			int widthItem = mainPerson.itemFromPanelQuickAccess[i].typeItem->width;
+			pos = { centerWindow.x - startPosition + shift + widthItem, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
 			mainPerson.itemFromPanelQuickAccess[i].mainSprite->setPosition(pos);
 		}
 	}
-	selectInPanelQuickAccess->setPosition(pos);
 	////////////////////////////////////////////////////////////////////////
 
 }
