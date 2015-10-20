@@ -9,7 +9,7 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSoun
 	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].InitTransparent(136, 208, 0, 0);
 	typesUnlifeObjects->countTypeObjects += 1;
 
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].Init(texturePaths[idTexturePaths::items], "SmallStone", false, 0, 31, 24, 0, 0);
+	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].Init(texturePaths[idTexturePaths::items], "SmallStone", false, 0, SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
 	//typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].InitTransparent(136, 208, 0, 0);
 	typesUnlifeObjects->countTypeObjects += 1;
 }
@@ -19,7 +19,7 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSoun
 void TypeUnlifeObject::Init(String filenameTexture, String typeName, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY) {
 	textureObject = new Texture;
 
-	nameType = typeName;
+	name = typeName;
 
 	// Задание размера
 	height = h;

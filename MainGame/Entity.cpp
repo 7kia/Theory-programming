@@ -10,7 +10,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	float pauseStep = 5, resetAnimation = 2;
 	switch (direction)
 	{
-	///*
 	case UP_LEFT:
 		movement.y = -stepCurrent;
 		movement.x = -stepCurrent;
@@ -20,7 +19,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-		//getCoordinateForView(getXPos(), getYPos());
 
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
 		break;
@@ -33,12 +31,8 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-		//getCoordinateForView(spriteObject->getPosition().x, spriteObject->getPosition().y);
-		//getCoordinateForView(getXPos(), getYPos());
-
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
 		break;
-		//*/
 	case UP:
 		movement.y = -stepCurrent;
 
@@ -47,11 +41,8 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-		
-
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
 		break;
-		///*
 	case DOWN_LEFT:
 		movement.y = stepCurrent;
 		movement.x = -stepCurrent;
@@ -74,11 +65,8 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-
-
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
 		break;
-		//*/
 	case DOWN:
 		movement.y = stepCurrent;
 
@@ -86,8 +74,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
-
-
 
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation * width, 0, width, height));
 		break;
@@ -99,8 +85,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-
-
 		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, height, width, height));
 		break;
 	case RIGHT:
@@ -110,8 +94,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
-
-
 
 		spriteEntity->setTextureRect(IntRect(((int)timeAnimation + 1) *   width, height, -width, height));
 		break;
@@ -182,24 +164,6 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 		wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
-		/*
-		//////////////////////////////////////////////
-		// проходимся по всей карте, то есть по всем квадратикам размера
-		// икс делим на 32, тем самым получаем левый квадратик, с которым
-		// персонаж соприкасается. (он ведь больше размера 32*32, поэтому может
-		//	одновременно стоять на нескольких квадратах). А j<(x + w) / 32
-		//	- условие ограничения координат по иксу. то есть координата самого 
-		//	правого квадрата, который соприкасается с персонажем. таким образом
-		//	идем в цикле слева направо по иксу, проходя по от левого квадрата 
-		//	(соприкасающегося с героем), до правого квадрата (соприкасающегося с героем)
-		//
-		///
-		// то стопорим координату игрек персонажа. сначала получаем координату 
-		//нашего квадратика на карте(стены) и затем вычитаем из высоты спрайта персонажа.
-		//////////////////////////////////////////////
-		*/
-
-
 		/////////////////////////////////////////////
 		// Проверяем окружающие объекты
 		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++)
@@ -241,18 +205,17 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 	}
 
 	spriteEntity->setPosition(x, y);
-	//movement = { 0.f, 0.f };
 }
 
-void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, const Time & deltaTime)
+void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, const Time & deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
 	float dx(movement.x);
 	float dy(movement.y);
 
 	float x;
 	float y;
-	x = getXPos();// +dx * deltaTime.asSeconds();
-	y = getYPos();// +dy * deltaTime.asSeconds();
+	x = getXPos();
+	y = getYPos();
 
 	// Проверка на выход за карту
 	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x >  0))
@@ -260,8 +223,6 @@ void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, cons
 	{
 		for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it)
 		{
-			
-
 			int levelUnlifeObject = it->currentLevel;
 
 			Sprite *spriteObject = it->spriteObject;
@@ -289,11 +250,11 @@ void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, cons
 			}
 			else if(entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1))
 			{
-				transparentSpiteObject->setColor(Color(255, 255, 255, 127) );
+				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
 			}
 			else
 			{
-				transparentSpiteObject->setColor(Color(255, 255, 255, 255));
+				transparentSpiteObject->setColor(NORMAL_COLOR);
 			}
 
 		}
@@ -307,6 +268,41 @@ void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, cons
 	spriteEntity->setPosition(x, y);
 	movement = { 0.f, 0.f };
 }
+
+
+//////////////////////////////////////////////////////
+// Поиск неживого объекта
+bool isObject(float x, float y, list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList, list<UnlifeObject>::iterator &current, int currentLevel)
+{
+	int levelObject = current->currentLevel;
+
+	Sprite *spriteObject = current->spriteObject;
+	FloatRect objectBound = spriteObject->getGlobalBounds();
+
+	if (objectBound.contains(x, y) && levelObject == currentLevel) {
+		findObject = &*current;
+		findObjectFromList = current;
+		return true;
+	}
+	return false;
+}
+//////////////////////////////////////////////////////
+// Поиск предмета
+bool isItem(float x, float y, list<Item> &items, Item *&findItem, list<Item>::iterator &findItemFromList, list<Item>::iterator &current, int currentLevel)
+{
+	int levelItem = current->currentLevel;
+
+	Sprite *spriteItem = current->mainSprite;
+	FloatRect objectItem = spriteItem->getGlobalBounds();
+
+	if (objectItem.contains(x, y) && levelItem == currentLevel) {
+		findItem = &*current;
+		findItemFromList = current;// ИСПРАВЬ
+		return true;
+	}
+	return false;
+}
+//////////////////////////////////////////////////////
 
 bool Entity::isInUseField(float x, float y)
 {

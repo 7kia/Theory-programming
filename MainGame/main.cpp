@@ -66,12 +66,12 @@ void processEvents(Game &game)
 		// Переключение режимов
 		if (Keyboard::isKeyPressed(Keyboard::G))
 		{
-			mainPerson.currenMode = idModeEntity::build;
+			mainPerson.currenMode = idModeEntity::build;// ИСПРАВЬ
 			printf("build mode\n");
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::F))
 		{
-			mainPerson.currenMode = idModeEntity::fight;
+			mainPerson.currenMode = idModeEntity::fight;// ИСПРАВЬ
 			printf("fight mode\n");
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -79,69 +79,80 @@ void processEvents(Game &game)
 		int numberY(pos.y / SIZE_BLOCK);
 		int numberX(pos.x / SIZE_BLOCK);
 
+		// Использование предмета
+		if (mainPerson.isInUseField(pos.x, pos.y)) {
+			mainPerson.useItem(*game.field, event, numberX, numberY);
+		}
+
+
 		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
 			mainPerson.actionAlternate(*game.field, game.unlifeObjects, game.items, numberX, numberY);
+			mainPerson.throwItem(*game.field, *game.items);
 			printf("Alternative action\n");
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::E))
 		{
-			mainPerson.actionMain(*game.field, game.unlifeObjects, game.items, numberX, numberY);
+			mainPerson.actionMain(*game.field, game.unlifeObjects, game.items, numberX, numberY);// ИСПРАВЬ
 			printf("Main action\n");
 		}
+		else if (Keyboard::isKeyPressed(Keyboard::R)) {
+			mainPerson.takeItem(*game.field, *game.items, pos.x, pos.y);
+		}
 		/////////////////////////////////////////////////////////////////////////////////////////
+		// Бег
 		else if (Keyboard::isKeyPressed(Keyboard::LShift))
 		{
 			if (mainPerson.stepCurrent > mainPerson.stepFirst)
 			{
-				mainPerson.stepCurrent -= 350.f;
+				mainPerson.stepCurrent -= 450.f;
 			}
 			else
 			{
-				mainPerson.stepCurrent += 350.f;
+				mainPerson.stepCurrent += 450.f;
 			}	
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
-		// Обработка 0 - 9
+		// Обработка 0 - 9. Панель быстрого доступа
 		else if (Keyboard::isKeyPressed(Keyboard::Num0))
 		{
-			mainPerson.idSelectItem = 10;
+			mainPerson.idSelectItem = 9;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num1))
 		{
-			mainPerson.idSelectItem = 1;
+			mainPerson.idSelectItem = 0;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num2))
 		{
-			mainPerson.idSelectItem = 2;
+			mainPerson.idSelectItem = 1;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num3))
 		{
-			mainPerson.idSelectItem = 3;
+			mainPerson.idSelectItem = 2;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num4))
 		{
-			mainPerson.idSelectItem = 4;
+			mainPerson.idSelectItem = 3;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num5))
 		{
-			mainPerson.idSelectItem = 5;
+			mainPerson.idSelectItem = 4;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num6))
 		{
-			mainPerson.idSelectItem = 6;
+			mainPerson.idSelectItem = 5;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num7))
 		{
-			mainPerson.idSelectItem = 7;
+			mainPerson.idSelectItem = 6;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num8))
 		{
-			mainPerson.idSelectItem = 8;
+			mainPerson.idSelectItem = 7;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Num9))
 		{
-			mainPerson.idSelectItem = 9;
+			mainPerson.idSelectItem = 8;
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 
@@ -153,7 +164,7 @@ void processEvents(Game &game)
 		{
 			mainPerson.findObject = emptyObject;
 			mainPerson.findItem = emptyItem;
-			mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);
+			//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 		}
 		else if (event.type == Event::MouseMoved) {
 			// Передвижение предмета
@@ -188,23 +199,18 @@ void processEvents(Game &game)
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Для направление взгляда
-		mainPerson.computeAngle(window);
+		mainPerson.computeAngle(window);// ИСПРАВЬ
 		/////////////////////////////////////////////////////////////////////////////////////////
 
 		/////////////////////////////////////////////////////////////
 		// Для обновления окна
 		// получение размера окна
-		unsigned int width = window.getSize().x;
-		unsigned int height = window.getSize().y;
-		game.widthMainWindow = width;
-		game.heightMainWindow = height;
-
 		if (event.type == sf::Event::Resized) {
 			unsigned int width = window.getSize().x;
 			unsigned int height = window.getSize().y;
-			Vector2u centerWindow = { width / 2, height / 2 };
-			game.widthMainWindow = width;// ИСПРАВЬ
+			game.widthMainWindow = width;
 			game.heightMainWindow = height;
+
 			window.create(VideoMode(width, height), TITLE_PROGRAM);
 		}
 		/////////////////////////////////////////////////////////////
@@ -292,7 +298,6 @@ void render(Game & game)
 			if (game.mainPerson->itemFromPanelQuickAccess[i].typeItem != game.mainPerson->emptyItem->typeItem) {
 				window.draw(*game.mainPerson->itemFromPanelQuickAccess[i].mainSprite);
 			}
-
 		}
 	}
 
@@ -308,18 +313,19 @@ void render(Game & game)
 
 void startGame()
 {
+	// Объявление игры
 	Game *game = new Game();
 	initializeGame(*game);
 
 	RenderWindow &window = *game->window;
+	MainPerson &mainPerson = *game->mainPerson;
 
 	Time timeSinceLastUpdate = Time::Zero;
 
-	MainPerson &mainPerson = *game->mainPerson;
 	while (window.isOpen())
 	{
 		timeSinceLastUpdate += game->clock->restart();
-		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());
+		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());// ИСПРАВЬ
 		while (timeSinceLastUpdate > TIME_PER_FRAME)
 		{
 
@@ -334,7 +340,7 @@ void startGame()
 			mainPerson.updateView(*game->window);
 			window.setView(*mainPerson.view);
 
-			//printf("Angle %f \n", game->mainPerson->rotation);//смотрим на градусы в консоли	
+			//printf("Angle %f \n", game->mainPerson->rotation);// ИСПРАВЬ
 		}
 		render(*game);
 	}

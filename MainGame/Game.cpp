@@ -4,29 +4,35 @@ using namespace std;
 
 void initializeGame(Game & game)
 {
-	game.databaseSound = new dataSound;
-	game.clock = new Clock;
+	// Карта и звуки
 	game.field = new Field;
+	game.databaseSound = new dataSound;
+
+	game.clock = new Clock;
 	game.mainPerson = new MainPerson;
 
+	// Неживые объекты
 	game.typesUnlifeObject = new TypesUnlifeObject;
 	game.unlifeObjects = new list<UnlifeObject>;
 
+	// Предметы
 	game.typesItem = new TypesItem;
 	game.items = new list<Item>;
-	game.emptyItem = new Item;
-	//game.items = new list<Item>;
-	//game.ite
+	game.emptyItem = new Item;// Нужно для корректной работы инвентаря
 
-
+	// GUI
 	game.gui = new GUI;
 	game.textGame = new TextGame;
 
 	game.window = new RenderWindow(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
-
+	// Карта и звуки
 	initializeSound(game.databaseSound);// На будущее
 	initializeField(*game.field);
+
+	// Неживые объекты
+	initializeTypeUnlifeObjects(game.typesUnlifeObject, *game.databaseSound);
+	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject);
 
 	// Предметы
 	initializeTypesItem(*game.typesItem, *game.databaseSound);
@@ -35,18 +41,30 @@ void initializeGame(Game & game)
 	// Основной персонаж
 	initializeMainPerson(*game.mainPerson, *game.databaseSound, *game.emptyItem);
 
-	// Неживые объекты
-	initializeTypeUnlifeObjects(game.typesUnlifeObject, *game.databaseSound);
-	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject);
-
 	// GUI
 	initializeGUI(*game.gui, *game.textGame);
 	initializeTexts(*game.textGame);
-	//initializeEntity(*game.mainPerson, *game.databaseSound);
 
 	// Часы
 	initializeClock(*game.clock);
 }
+
+/*
+void initializeCategorysBreakingObject(Game &game) 
+{
+	game.axeBreakingBlock = new unsigned int[AMOUNT_AXE_BREAKING_BLOCKS];
+
+	game.axeBreakingBlock = {
+		idBlocks::logOak,
+		idBlocks::woodLadder,
+	}
+
+	game.axeBreakingObject = new unsigned int[AMOUNT_AXE_BREAKING_OBJECTS];
+	game.pickaxBreakingBlock = new unsigned int[AMOUNT_AXE_BREAKING_BLOCKS];
+	game.pickaxBreakingObject = new unsigned int[AMOUNT_PICKAX_BREAKING_OBJECTS];
+}
+*/
+
 
 void destroyGame(Game & game)
 {
@@ -90,8 +108,9 @@ void informationAboutSelect(Game &game, float x, float y)
 	///////////////////////////////////////////////////////////////////
 	// Осмотр неживых объектов
 	list<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
+	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
-	textGame.texts[idText::infoWindowUnlifeObject].setString("UnlifeObject : not select");
+	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (std::list<UnlifeObject>::iterator it = unlifeObjects.begin(); it != unlifeObjects.end(); ++it) {
 
 		int level = it->currentLevel;
@@ -104,11 +123,11 @@ void informationAboutSelect(Game &game, float x, float y)
 
 		if (objectBound.contains(x, y) || objectAltBound.contains(x, y)) {
 			if (level == game.mainPerson->currentLevelFloor + 1) {
-				String nameType = it->typeObject->nameType;
-				if (nameType != "") {
+				String name = it->typeObject->name;
+				if (name != "") {
 
 					game.mainPerson->findObjectFromList = it;
-					textGame.texts[idText::infoWindowUnlifeObject].setString("UnlifeObject : " + nameType);
+					infoUnlifeObject.setString("UnlifeObject : " + name);
 				}
 			}
 		}
@@ -117,8 +136,9 @@ void informationAboutSelect(Game &game, float x, float y)
 	///////////////////////////////////////////////////////////////////
 	// Осмотр предметов
 	list<Item> &items = *game.items;
+	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
-	textGame.texts[idText::infoWindowItem].setString("Item : not select");
+	infoItem.setString("Item : not select");
 	for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
 
 		int level = it->currentLevel;
@@ -131,10 +151,10 @@ void informationAboutSelect(Game &game, float x, float y)
 
 		if (itemBound.contains(x, y) || itemUseBound.contains(x, y)) {
 			if (level == game.mainPerson->currentLevelFloor + 1) {
-				String nameType = it->typeItem->nameType;
-				if (nameType != "") {
+				String name = it->typeItem->name;
+				if (name != "") {
 					game.mainPerson->findItemFromList = it;
-					textGame.texts[idText::infoWindowItem].setString("Item : " + nameType);
+					infoItem.setString("Item : " + name);
 				}
 			}
 		}
@@ -143,7 +163,7 @@ void informationAboutSelect(Game &game, float x, float y)
 	///////////////////////////////////////////////////////////////////
 }
 
-void initializeClock(Clock &clock)
+void initializeClock(Clock &clock)// ИСПРАВЬ
 {
 
 }

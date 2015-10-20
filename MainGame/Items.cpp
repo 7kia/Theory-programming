@@ -11,17 +11,43 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 	// Ïóñòîé ïðåäìåò
 	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ÈÑÏÐÀÂÜ
 
-	addItem->setType(typesItem->typesItem[idItem::smallStoneItem]);
-	addItem->setPosition(3, 3, 1);
-	items.push_front(*addItem);
+	for (size_t i = 0; i < 3; i++) {
+		addItem->setType(typesItem->typesItem[idItem::stoneItem]);
+		addItem->setPosition(3, 3, 1);
+		items.push_front(*addItem);
 
-	addItem->setType(typesItem->typesItem[idItem::mushroom]);// ÈÑÏÐÀÂÜ
-	addItem->setPosition(2, 3, 1);
-	items.push_front(*addItem);
+		addItem->setType(typesItem->typesItem[idItem::planksBlockItem]);
+		addItem->setPosition(3, 4, 1);
+		items.push_front(*addItem);
 
-	addItem->setType(typesItem->typesItem[idItem::mushroom]);// ÈÑÏÐÀÂÜ
-	addItem->setPosition(4, 3, 1);
-	items.push_front(*addItem);
+		addItem->setType(typesItem->typesItem[idItem::dirtItem]);
+		addItem->setPosition(3, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::grassItem]);
+		addItem->setPosition(3, 4, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::sandItem]);
+		addItem->setPosition(3, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::logOakItem]);
+		addItem->setPosition(3, 1, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::woodLadderItem]);
+		addItem->setPosition(3, 6, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::stoneBrickItem]);
+		addItem->setPosition(12, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::mushroom]);// ÈÑÏÐÀÂÜ
+		addItem->setPosition(2, 3, 1);
+		items.push_front(*addItem);
+	}
 
 	delete addItem;
 };
@@ -68,10 +94,8 @@ void Item::setType(TypeItem &type)
 	spriteForUse = new Sprite;
 
 	typeItem = &type;
+	categoryItem = type.category;
 	isDestroy = type.isDestroy;
-
-	//width = type.width;
-	//height = type.height;
 
 	mainSprite->setTexture(*type.textureItem);
 	mainSprite->setTextureRect(IntRect(type.pixelPosX, type.pixelPosY, type.width, type.height));
@@ -97,5 +121,5 @@ void Item::setPosition(int xPos, int yPos, int Level)
 	mainSprite->setPosition(numberX, numberY);
 	spriteForUse->setPosition(numberX, numberY - typeItem->heightUse / 2 + typeItem->height / 2);
 
-	//direction = NONE;
+	//direction = NONE;// ÈÑÏÐÀÂÜ
 }

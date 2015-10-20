@@ -1,10 +1,5 @@
-#ifndef ENTITY_H
-#define ENTITY_H
-
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
-
-
 
 #include "GlobalVar.h"
 #include "UnlifeObject.h"
@@ -12,7 +7,10 @@
 #include "Map.h"
 #include "Sound.h"
 
-const float speedEntity = 150.f;
+const float speedEntity = 350.f;
+
+const sf::Color NORMAL_COLOR(255, 255, 255, 255);
+const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
 
 class Entity 
 {
@@ -64,4 +62,5 @@ public:
 // Объявление персонажа
 void initializeEntity(Entity & Entity, dataSound &databaseSound);
 
-#endif ENTITY_H
+bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, std::list<UnlifeObject>::iterator &current, int currentLevel);
+bool isItem(float x, float y, std::list<Item> &items, Item *&findItem, std::list<Item>::iterator &findItemFromList, std::list<Item>::iterator &current, int currentLevel);

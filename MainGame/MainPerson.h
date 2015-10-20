@@ -44,6 +44,9 @@ public:
 	bool isMoveItem;
 	float dMoveItemX, dMoveItemY;
 	//////////////////////////////////////////////////
+	void takeItem(Field &field, list<Item> &items, float x, float y);
+	void throwItem(Field &field, list<Item> &items);
+	void useItem(Field &field, Event &event, int x, int y);
 
 	// кнопка "Дествие" и "Другое действие"
 	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, int x, int y);

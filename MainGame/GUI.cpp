@@ -10,7 +10,6 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 
 	gui.infoSelectBlockTexture->loadFromFile(texturePaths[idTexturePaths::infoSelectBlock]);
 	gui.infoSelectBlockSprite->setTexture(*gui.infoSelectBlockTexture);
-	//gui.infoSelectBlockSprite->setOrigin(widthInfo / 2, heightInfo / 2);
 	gui.infoSelectBlockSprite->setTextureRect(IntRect(0, 0, widthInfo, heightInfo));
 
 	// Панель быстрого доступа
@@ -55,13 +54,11 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 
 	// Размещение текста
 	pos = { pos.x + shiftX, pos.y + shiftY };
-	//textGui[idTextGui::infoWindowBlockGui]->setPosition(pos);
 	textGame.texts[idText::infoWindowBlock].setPosition(pos);
 
-	//pos.y += textGui[idTextGui::infoWindowFloorGui]->getCharacterSize();
+	// Смещаем строку на размер букв предыдущей строки вниз
 	pos.y += textGame.texts[idText::infoWindowBlock].getCharacterSize();
 	textGame.texts[idText::infoWindowFloor].setPosition(pos);
-	//textGui[idTextGui::infoWindowFloorGui]->setPosition(pos);
 
 	pos.y += textGame.texts[idText::infoWindowFloor].getCharacterSize();
 	textGame.texts[idText::infoWindowUnlifeObject].setPosition(pos);
@@ -76,17 +73,17 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	// Выбранный предмет
 	int &idSelectItem = mainPerson.idSelectItem;
 	int startPosition = widthPanelQuickAccess / 2;
-	int shift = shiftSelect * (idSelectItem - 1);
+	int shift = shiftSelect * idSelectItem;
 	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
 
 	selectInPanelQuickAccess->setPosition(pos);
 
 
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->nameType != "Empty") {
+		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != "Empty") {
 			int shift = shiftSelect * (i);
-			int widthItem = mainPerson.itemFromPanelQuickAccess[i].typeItem->width;
-			pos = { centerWindow.x - startPosition + shift + widthItem, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
+			int shiftStart = 38;// ИСПРАВЬ
+			pos = { centerWindow.x - startPosition + shift + shiftStart, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
 			mainPerson.itemFromPanelQuickAccess[i].mainSprite->setPosition(pos);
 		}
 	}

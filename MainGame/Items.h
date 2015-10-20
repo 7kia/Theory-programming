@@ -2,8 +2,8 @@
 #include <SFML\Graphics.hpp>
 
 // Для динамических списков
-#include <list>     // подключаем заголовок списка
-#include <iterator> // заголовок итераторов
+#include <list>
+#include <iterator>
 
 #include "GlobalVar.h"
 #include "TypeItems.h"
@@ -14,10 +14,7 @@ struct Item
 	sf::Sprite *spriteForUse;
 
 	sf::String nameItem;
-
-
-	//int width;
-	//int height;
+	int categoryItem;
 
 	TypeItem *typeItem;// Пренадлежность типу
 
@@ -29,7 +26,7 @@ struct Item
 	int currentLevel;
 
 	// Для анимации
-	//Direction direction;
+	//Direction direction;// ИСПРАВЬ
 	float timeAnimation;
 
 	// Передвижение. Его анимация и озвучка
@@ -46,15 +43,5 @@ struct Item
 private:
 
 };
-
-/*
-struct Items
-{
-	Item *item;
-	int maxItem = 256;
-	int countItem = 0;
-};
-*/
-
 
 void initializeItems(std::list<Item> &items, TypesItem *typesItem, Item &emptyItem);

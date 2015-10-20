@@ -3,6 +3,7 @@
 #include <SFML\Audio.hpp>
 
 #include "GlobalVar.h"
+#include "Items.h"
 #include "Sound.h"
 
 struct TypeUnlifeObject {
@@ -25,12 +26,14 @@ public:
 	int pixelYTransparent;
 
 	// Тип объекта
-	sf::String nameType;
+	sf::String name;
+
 
 	// Разрушаемый или перетаскиваемый
 	bool isDestroy;
 	// Прочность(в условных единицах
 	int toughnessObject;
+	Item* dropItems;// ИСПРАВЬ
 
 	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
 	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY);

@@ -1,9 +1,6 @@
-#ifndef MAP_H
-#define MAP_H
-
 #include <SFML\Graphics.hpp>
 
-#include "GlobalVar.h"
+#include "BlocksVar.h"
 #include "UnlifeObject.h"
 #include "Items.h"
 
@@ -15,12 +12,18 @@ const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 	"Dirt",
 	"Sand",
 	"Water",
-	"Wood",
+	"logOak",
 	"Stone",
 	"Stone brick",
-	"Wood board",
-	"Wood ladder"
+	"Planks",
+	"logOak ladder"
 };
+
+const int AMOUNT_AXE_BREAKING_BLOCKS = 5;
+const int AMOUNT_AXE_BREAKING_OBJECTS = 5;
+
+const int AMOUNT_PICKAX_BREAKING_BLOCKS = 5;
+const int AMOUNT_PICKAX_BREAKING_OBJECTS = 5;
 
 struct Field
 {
@@ -42,11 +45,7 @@ struct Field
 	void setSprite(sf::Sprite *sprite, int l, int i, int j);// Окраска спрайта
 	void setTypeSprite(int personLevelFloor, int l, int i, int j);// Красим пол или стены?
 	sf::String findCharBlocks(char block);
-	bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, std::list<UnlifeObject>::iterator &current,int currentLevel);
-	bool isItem(float x, float y, std::list<Item> *items, Item *&findItem, std::list<Item>::iterator &findItemFromList, std::list<Item>::iterator &current, int currentLevel);
 };
 
 void initializeField(Field & field);
 void readMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP], const char *fileName);
-
-#endif MAP_H

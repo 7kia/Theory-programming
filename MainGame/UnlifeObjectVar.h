@@ -9,5 +9,5 @@ const int AMOUNT_TYPES_UNLIFE_OBJECT = 15;
 typedef enum
 {
 	oak,
-	smallStone// камешек
+	smallStone// Камень
 } idUnlifeObject;

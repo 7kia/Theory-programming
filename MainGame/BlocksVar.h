@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 
-const int SIZE_BLOCK = 32;
+const int SIZE_BLOCK = 48;//32 default
 
 typedef enum
 {
@@ -11,10 +11,10 @@ typedef enum
 	dirt,
 	sand,
 	water,
-	wood,
+	logOak,
 	stone,
 	stoneBrick,
-	woodBoard,
+	planksBlock,
 	woodLadder,
 	amountKnowBlocks
 } idBlocks;

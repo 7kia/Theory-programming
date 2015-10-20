@@ -43,6 +43,11 @@ void Field::initializeDataBlocks()
 {
 	charBlocks[idBlocks::air] = u'\x020';
 
+	//////////////////////////////////
+	// Символьное обозначение
+	// Текстурные координаты x
+	// Текстурные координаты y
+	//////////////////////////////////
 	charBlocks[idBlocks::grass] = u'\x010';
 	coordinateBloks[idBlocks::grass][0] = 0;
 	coordinateBloks[idBlocks::grass][1] = 0;
@@ -64,9 +69,9 @@ void Field::initializeDataBlocks()
 	coordinateBloks[idBlocks::water][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::water][1] = 0;
 
-	charBlocks[idBlocks::woodBoard] = u'\x015';
-	coordinateBloks[idBlocks::woodBoard][0] = BLOCK_SIZE * 2;
-	coordinateBloks[idBlocks::woodBoard][1] = 0;
+	charBlocks[idBlocks::planksBlock] = u'\x015';
+	coordinateBloks[idBlocks::planksBlock][0] = BLOCK_SIZE * 2;
+	coordinateBloks[idBlocks::planksBlock][1] = 0;
 
 	charBlocks[idBlocks::stoneBrick] = u'\x016';
 	coordinateBloks[idBlocks::stoneBrick][0] = BLOCK_SIZE;
@@ -107,63 +112,8 @@ String Field::findCharBlocks(char block)
 	return namesBlocks[idBlocks::unknow];
 };
 
-bool Field::isObject(float x, float y, list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList, list<UnlifeObject>::iterator &current, int currentLevel)
-{
-	//////////////////////////////////////////////////////
-	// Ищем объект
-		int levelObject = current->currentLevel;
-
-		Sprite *spriteObject = current->spriteObject;
-		FloatRect objectBound = spriteObject->getGlobalBounds();
-
-		if (objectBound.contains(x, y) && levelObject == currentLevel) {
-			findObject = &*current;
-			findObjectFromList = current;
-			return true;
-		}
-
-	/*
-	for (int i = 1; i < unlifeObjects->countObject; i++) {
-
-		int levelUnlifeObject = unlifeObjects->unlifeObject[i].currentLevel;
-
-		Sprite &spriteObject = *unlifeObjects->unlifeObject[i].spriteObject;
-		FloatRect objectBound = spriteObject.getGlobalBounds();
-
-		if (objectBound.contains(x ,y) && levelUnlifeObject == currentLevel)
-		{
-			findObject = &unlifeObjects->unlifeObject[i];
-			return true;
-		}
-
-	}*/
-
-
-	return false;
-}
-
-bool Field::isItem(float x, float y, list<Item> *items, Item *&findItem, list<Item>::iterator &findItemFromList, list<Item>::iterator &current, int currentLevel)
-{
-
-	//////////////////////////////////////////////////////
-	// Ищем предмет
-		int levelItem = current->currentLevel;
-
-		Sprite *spriteItem = current->mainSprite;
-		FloatRect objectItem = spriteItem->getGlobalBounds();
-
-		if (objectItem.contains(x, y) && levelItem == currentLevel) {
-				findItem = &*current;
-				findItemFromList = current;// ИСПРАВЬ
-				return true;
-		}
-
-	//////////////////////////////////////////////////////
-
-	return false;
-}
-
-
+//////////////////////////////////////////////////////
+// Отрисовка блоков
 void Field::setSprite(Sprite *sprite, int l, int i, int j)
 {
 	// Обработка блоков
@@ -192,7 +142,10 @@ void Field::setSprite(Sprite *sprite, int l, int i, int j)
 
 	sprite->setPosition(j * BLOCK_SIZE, i * BLOCK_SIZE);
 }
+//////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
+// Открытие карты
 void readMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP], const char *fileName)
 {
 	FILE *pMapFile;
@@ -223,3 +176,4 @@ void readMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP], const char *fileName)
 		printf("File not find!\n");
 	}
 }
+////////////////////////////////////////////////////////////////////////////////

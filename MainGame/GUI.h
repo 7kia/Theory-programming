@@ -12,16 +12,16 @@ const int widthInfo = 188;
 const int heightInfo = 100;
 
 // Панель быстрого доступа
-const int widthPanelQuickAccess = 405;
-const int heightPanelQuickAccess = 44;
+const int widthPanelQuickAccess = 607;
+const int heightPanelQuickAccess = 66;
 
 const int shiftXSelectInPanelQuickAccess = 0;
-const int shiftYSelectInPanelQuickAccess = 44;
+const int shiftYSelectInPanelQuickAccess = 66;
 
-const int widthSelectInPanelQuickAccess = 48;
-const int heightSelectInPanelQuickAccess = 48;
+const int widthSelectInPanelQuickAccess = 72;
+const int heightSelectInPanelQuickAccess = 72;
 
-const int shiftSelect = 40;
+const int shiftSelect = 60;
 
 
 

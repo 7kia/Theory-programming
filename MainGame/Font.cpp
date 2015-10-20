@@ -9,6 +9,8 @@ void initializeTexts(TextGame &textGame)
 
 	textGame.font->loadFromFile("recourses\\font\\CyrilicOld.ttf");
 
+	////////////////////////////////////////////////////////////////////
+	// Информация о выделенном объекте
 	Text* currentText = &textGame.texts[idText::infoWindowBlock];
 	currentText->setColor(Color::Black);
 	currentText->setStyle(Text::Regular | Text::Underlined);
@@ -32,4 +34,5 @@ void initializeTexts(TextGame &textGame)
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
+	////////////////////////////////////////////////////////////////////
 }

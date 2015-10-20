@@ -11,14 +11,15 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.textureEntity = new Texture;
 
 	// Задание размера
-	mainPerson.height = 22;
-	mainPerson.width = 22;
+	mainPerson.height = 36;
+	mainPerson.width = 36;
 
+	// Дальность подбора предметов
 	mainPerson.radiusUse = 1;
 
 	// Скорость ходьбы
-	mainPerson.stepFirst = 150.f;
-	mainPerson.stepCurrent = 150.f;
+	mainPerson.stepFirst = speedEntity;
+	mainPerson.stepCurrent = speedEntity;
 	mainPerson.timeAnimation = 0.f;
 
 	// Камера
@@ -38,7 +39,9 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 
 	// Текущий выбранный тип блока
 	mainPerson.emptyItem = &emptyItem;
-	mainPerson.idSelectItem = 1;
+	mainPerson.idSelectItem = 0;
+
+	// Создайм и заполняем панель
 	mainPerson.itemFromPanelQuickAccess = new Item[AMOUNT_ACTIVE_SLOTS];
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 		mainPerson.itemFromPanelQuickAccess[i].typeItem = emptyItem.typeItem;
@@ -68,7 +71,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 
 	int isFloor;
 
-	//printf("%f %f\n", getXPos(), getYPos());
+	//printf("%f %f\n", getXPos(), getYPos());// ИСПРАВЬ
 
 	int xPosBlock = x / SIZE_BLOCK;
 	int yPosBlock = y / SIZE_BLOCK;
@@ -114,7 +117,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 					currentBlock = field.charBlocks[idBlocks::dirt];
 					break;
 				case 5:
-					currentBlock = field.charBlocks[idBlocks::woodBoard];
+					currentBlock = field.charBlocks[idBlocks::planksBlock];
 					break;
 				case 6:
 					currentBlock = field.charBlocks[idBlocks::woodLadder];
@@ -144,7 +147,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 						// Предмет
 						for (std::list<Item>::iterator it = items->begin(); it != items->end(); ++it) {
 
-							if (field.isItem(x, y, items, findItem, findItemFromList, it, l)) {
+							if (isItem(x, y, *items, findItem, findItemFromList, it, l)) {
 								//////////////////////////////////
 								// Если предмет уничтожаемый то ...
 								if (findItem->isDestroy) {
@@ -171,9 +174,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 						//////////////////////////////////////////////
 						// Объект
 						for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
-							if (field.isObject(x, y, unlifeObjects, findObject, findObjectFromList, it, l)) {
-
-
+							if (isObject(x, y, unlifeObjects, findObject, findObjectFromList, it, l)) {
 								//////////////////////////////////
 								// Если объект уничтожаемый то ...
 								if (findObject->isDestroy) {
@@ -187,10 +188,10 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 
 									// уничтожаем если прочность = 0
 									if (findObject->currentToughness == 0) {
-										//printf("%s destroy \n", findObject->typeObject->nameType);
+										//printf("%s destroy \n", findObject->typeObject->name);
 										//////////////////////////////////////////
 										// Удаление
-										for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
+										//for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
 
 											//if (&findElement != NULL) {
 											if (it == findObjectFromList) {// ИСПРАВЬ
@@ -198,7 +199,7 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 												break;
 											}
 
-										}
+										//}
 
 									}
 									//////////////////////////////////
@@ -220,7 +221,6 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 								///////////////////////////////////////////////////////////
 							}
 						}
-
 						///////////////////////////////////////////////////////////
 					}
 					////////////////////////////////////////////////////////////////////////		
@@ -228,31 +228,6 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 				//////////////////////////////////////////////////////////////
 			}
 			// Использование предмета или подбор
-			else if (pressKey == Mouse::Right) {
-				//////////////////////////////////////////////////////////////////////////////////////////////////////
-				// Если есть место
-				if (isEmptySlot()) {
-
-					for (std::list<Item>::iterator it = items->begin(); it != items->end(); ++it) {
-
-						int level = it->currentLevel;
-						////////////////////////////////////////////////////////////////////
-						// Если нашли предмет
-						if (field.isItem(x, y, items, findItem, findItemFromList, it, level)) {
-							// Перемещаем в инвентарь
-							printf("added!1\n");
-							itemFromPanelQuickAccess[emptySlot] = *it;
-							itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
-							// Удаляем из мира
-							items->erase(it);
-							break;
-						}
-						////////////////////////////////////////////////////////////////////
-					}
-				
-				}
-				//////////////////////////////////////////////////////////////////////////////////////////////////////
-			}
 			else {
 			};
 			break;
@@ -264,6 +239,116 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 	}
 }
 
+void MainPerson::takeItem(Field &field, list<Item> &items, float x, float y)
+{
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Если есть место
+	if (isEmptySlot()) {
+
+		for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
+
+			int level = it->currentLevel;
+			////////////////////////////////////////////////////////////////////
+			// Если нашли предмет
+			if (isItem(x, y, items, findItem, findItemFromList, it, level)) {
+				// Перемещаем в инвентарь
+				printf("added!1\n");
+				itemFromPanelQuickAccess[emptySlot] = *it;
+				itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
+				// Удаляем из мира
+				items.erase(it);
+				break;
+			}
+			////////////////////////////////////////////////////////////////////
+		}
+
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+void MainPerson::throwItem(Field &field, list<Item> &items)
+{
+	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+	if (currentItem.typeItem != emptyItem->typeItem) {
+		// Определяем позицию
+
+
+		Item* addItem = new Item;
+		*addItem = itemFromPanelQuickAccess[idSelectItem];
+		// Задаём уровень расположения
+		addItem->setPosition(getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK, currentLevelFloor + 1);
+		Vector2f posHero = { getXPos() + width / 2, getYPos() + height / 2 };// Начало отсчёта не в центре спрайта
+		addItem->mainSprite->setPosition(posHero);
+		addItem->mainSprite->setScale(scaleItems);
+		items.push_back(*addItem);
+		delete addItem;
+
+		itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+	}
+}
+
+void MainPerson::useItem(Field &field, Event &event, int x, int y)
+{
+	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+
+	std::cout << "typeItem " << (std::string)currentItem.typeItem->name << std::endl;
+	if (currentItem.typeItem != emptyItem->typeItem) {
+		printf("category %d\n", currentItem.categoryItem);
+		switch (currentItem.categoryItem) {
+		case idCategoryItem::food:
+			if (event.key.code == Mouse::Right) {
+				currentItem.currentToughness -= 1;
+				// Утоление голода
+
+				// Если предмет сломан удаляем
+				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+				}
+			}
+			break;
+		case idCategoryItem::other:
+			break;
+		case idCategoryItem::block:
+			if (event.type == Event::MouseButtonPressed) {
+
+				int level;
+				// Устанавливаем стену
+				if (event.key.code == Mouse::Left) {
+					level = currentLevelFloor + 1;
+				}
+				// Устанавливаем пол
+				else if (event.key.code == Mouse::Right) {
+					level = currentLevelFloor;
+				}
+				// Иначе ничего
+				else {
+					level = -1;
+				}
+
+
+				if (level > -1) {
+					// В данном случае обазначает количество// ИСПРАВЬ
+					currentItem.currentToughness -= 1;
+					// Ставим блок
+					field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
+
+					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					}
+				}
+
+			}
+			
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+
+
 bool MainPerson::isEmptySlot()
 {
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) 
@@ -273,7 +358,6 @@ bool MainPerson::isEmptySlot()
 			return true;
 		}
 	}
-	emptySlot = -1;
 	return false;
 }
 
@@ -332,7 +416,6 @@ void MainPerson::actionAlternate(Field &field, list<UnlifeObject> *unlifeObjects
 
 	/////////////////////////////////////////////////////////////////////////////
 }
-
 
 ////////////////////////////////////////////////////////////////////
 // Использую потом (не ВКЛЮЧЕНА)

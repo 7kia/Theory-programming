@@ -10,7 +10,7 @@ public:
 	sf::Texture* textureItemForUse;
 
 	// Ссылки на звуки
-	//Sound *soundsEntity[sizeBuffer];
+	//Sound *soundsEntity[sizeBuffer];// ИСПРАВЬ
 
 	// Для отрисовки в основном состоянии
 	int width;
@@ -23,8 +23,11 @@ public:
 	int pixelXUse;
 	int pixelYUse;
 
-	// Тип объекта
-	sf::String nameType;
+	
+	sf::String name;
+	int category;// Еда, оружие, блок
+	int idBlockForUse;
+	int idUnlideOnjectForUse;
 
 	// Разрушаемый или нет
 	bool isDestroy;
@@ -32,7 +35,7 @@ public:
 	int toughnessObject;
 
 	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
-	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY);
+	void Init(sf::String filenameTexture, sf::String typeName, int idCategory, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY, int idBlock, int idUnlifeObject);
 	void InitForUse(sf::String filenameTextureForUse, int w, int h, int pixelX, int pixelY);
 };
 
