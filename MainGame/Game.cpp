@@ -14,11 +14,15 @@ void initializeGame(Game & game)
 	// Неживые объекты
 	game.typesUnlifeObject = new TypesUnlifeObject;
 	game.unlifeObjects = new list<UnlifeObject>;
+	game.emptyObject = new UnlifeObject;
 
 	// Предметы
 	game.typesItem = new TypesItem;
 	game.items = new list<Item>;
 	game.emptyItem = new Item;// Нужно для корректной работы инвентаря
+
+	// Список уничтожаемых объектов и блоков
+	game.listDestroy = new destroyObjectsAndBlocks;
 
 	// GUI
 	game.gui = new GUI;
@@ -32,14 +36,17 @@ void initializeGame(Game & game)
 
 	// Неживые объекты
 	initializeTypeUnlifeObjects(game.typesUnlifeObject, *game.databaseSound);
-	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject);
+	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
 
 	// Предметы
 	initializeTypesItem(*game.typesItem, *game.databaseSound);
 	initializeItems(*game.items, game.typesItem, *game.emptyItem);
 
+	// Категории ломаемых предметов
+	initializeCategorysBreakingObject(game);
+
 	// Основной персонаж
-	initializeMainPerson(*game.mainPerson, *game.databaseSound, *game.emptyItem);
+	initializeMainPerson(*game.mainPerson, *game.databaseSound, *game.emptyItem, *game.emptyObject);
 
 	// GUI
 	initializeGUI(*game.gui, *game.textGame);
@@ -49,21 +56,27 @@ void initializeGame(Game & game)
 	initializeClock(*game.clock);
 }
 
-/*
+///*
 void initializeCategorysBreakingObject(Game &game) 
 {
-	game.axeBreakingBlock = new unsigned int[AMOUNT_AXE_BREAKING_BLOCKS];
+	destroyObjectsAndBlocks& listDestroy = *game.listDestroy;
+	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject->typeUnlifeObject;
 
-	game.axeBreakingBlock = {
-		idBlocks::logOak,
-		idBlocks::woodLadder,
-	}
+	//////////////////////////////////////
+	listDestroy.axeBreakingBlock[0] = idBlocks::logOak;
+	listDestroy.axeBreakingBlock[1] = idBlocks::woodLadder;
+	//////////////////////////////////////
 
-	game.axeBreakingObject = new unsigned int[AMOUNT_AXE_BREAKING_OBJECTS];
-	game.pickaxBreakingBlock = new unsigned int[AMOUNT_AXE_BREAKING_BLOCKS];
-	game.pickaxBreakingObject = new unsigned int[AMOUNT_PICKAX_BREAKING_OBJECTS];
+	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;
+	/////////////////////////////////////////////////////////////////////////
+	listDestroy.pickaxBreakingBlock[0] = idBlocks::stone;
+	listDestroy.pickaxBreakingBlock[1] = idBlocks::stoneBrick;
+
+	/////////////////////////
+
+	listDestroy.pickaxBreakingObject[0] = typesUnlifeObject[idUnlifeObject::smallStone].name;
 }
-*/
+//*/
 
 
 void destroyGame(Game & game)
@@ -127,6 +140,7 @@ void informationAboutSelect(Game &game, float x, float y)
 				if (name != "") {
 
 					game.mainPerson->findObjectFromList = it;
+					game.mainPerson->findObject = &*it;
 					infoUnlifeObject.setString("UnlifeObject : " + name);
 				}
 			}
@@ -154,6 +168,7 @@ void informationAboutSelect(Game &game, float x, float y)
 				String name = it->typeItem->name;
 				if (name != "") {
 					game.mainPerson->findItemFromList = it;
+					game.mainPerson->findItem = &*it;
 					infoItem.setString("Item : " + name);
 				}
 			}

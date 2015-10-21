@@ -48,12 +48,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	// Определение
 	infoSelectBlockSprite->setPosition(pos);
 
-	// Сдвиг текста
-	const int shiftX = 8 ;
-	const int shiftY = 8 ;
-
 	// Размещение текста
-	pos = { pos.x + shiftX, pos.y + shiftY };
+	pos = { pos.x + shiftXInfoText , pos.y + shiftYInfoText };
 	textGame.texts[idText::infoWindowBlock].setPosition(pos);
 
 	// Смещаем строку на размер букв предыдущей строки вниз
@@ -67,14 +63,14 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	textGame.texts[idText::infoWindowItem].setPosition(pos);
 	////////////////////////////////////////////////////////////////////////
 	// Панель быстрого доступа
-	pos = { centerWindow.x , centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
+	pos = { centerWindow.x , centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 	panelQuickAccess->setPosition(pos);
 
 	// Выбранный предмет
 	int &idSelectItem = mainPerson.idSelectItem;
 	int startPosition = widthPanelQuickAccess / 2;
 	int shift = shiftSelect * idSelectItem;
-	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
+	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 
 	selectInPanelQuickAccess->setPosition(pos);
 
@@ -83,7 +79,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != "Empty") {
 			int shift = shiftSelect * (i);
 			int shiftStart = 38;// ИСПРАВЬ
-			pos = { centerWindow.x - startPosition + shift + shiftStart, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess};// ИСПРАВЬ
+			pos = { centerWindow.x - startPosition + shift + shiftStart, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 			mainPerson.itemFromPanelQuickAccess[i].mainSprite->setPosition(pos);
 		}
 	}

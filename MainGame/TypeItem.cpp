@@ -115,7 +115,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	/////////////////////////////
 	// Деревянная лестница
 	numberItem = idItem::woodLadderItem;
-	*nameItem = "logOak ladder";
+	*nameItem = "Wood ladder";
 
 	categoryItem = idCategoryItem::block;
 
@@ -161,6 +161,46 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, 0, 0);// ИСПРАВЬ
 	typesItem.countTypeItem += 1;
+	/////////////////////////////////////////////////////////
+	// Кирки
+
+	/////////////////////////////
+	// Каменная кирка
+	numberItem = idItem::stonePickaxItem;
+	*nameItem = "Stone pickax";
+
+	categoryItem = idCategoryItem::pickax;
+
+	canDestroy = true;
+
+	toughness = 5;
+
+	pixelX = PIXEL_X_STONE_PICKAX;
+	pixelY = PIXEL_Y_STONE_PICKAX;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::air, 0);// ИСПРАВЬ
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////////////////////////
+	// Топоры
+
+	/////////////////////////////
+	// Каменный топор
+	numberItem = idItem::stoneAxeItem;
+	*nameItem = "Stone axe";
+
+	categoryItem = idCategoryItem::axe;
+
+	canDestroy = true;
+
+	toughness = 5;
+
+	pixelX = PIXEL_X_STONE_AXE;
+	pixelY = PIXEL_Y_STONE_AXE;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::air, 0);// ИСПРАВЬ
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////////////////////////
+	// ДОБАВЛЕНИЕ ПРЕДМЕТА
 	/////////////////////////////
 	// Пустой предмет( нужен для работы с инвентарём
 	numberItem = idItem::emptyItem;

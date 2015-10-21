@@ -3,7 +3,7 @@
 using namespace sf;
 using namespace std;
 
-void initializeUnlifeObjects(list<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects)
+void initializeUnlifeObjects(list<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
 {
 	//unlifeObjects->unlifeObject = new UnlifeObject[MAX_UNLIFE_OBJECT];
 
@@ -22,6 +22,8 @@ void initializeUnlifeObjects(list<UnlifeObject> &unlifeObjects, TypesUnlifeObjec
 	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
 	addObject.setPosition(8, 8, 1);
 	unlifeObjects.push_back(addObject);
+
+	emptyObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::empty]);
 }
 
 ////////////////////////////////////////////////////////////////////

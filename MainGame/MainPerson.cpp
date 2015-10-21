@@ -5,7 +5,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem)
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject)
 {
 	mainPerson.spriteEntity = new Sprite;
 	mainPerson.textureEntity = new Texture;
@@ -37,7 +37,11 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
 	mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 
+	mainPerson.findItem = new Item;
+	mainPerson.findObject = new UnlifeObject;
+
 	// Текущий выбранный тип блока
+	mainPerson.emptyObject = &emptyObject;
 	mainPerson.emptyItem = &emptyItem;
 	mainPerson.idSelectItem = 0;
 
@@ -65,6 +69,7 @@ void MainPerson::updateView(RenderWindow & window)
 }
 ////////////////////////////////////////////////////////////////////
 
+/*
 void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, Event &eventPerson, float x, float y)
 {
 	Keyboard::Key pressKey = eventPerson.key.code;
@@ -239,6 +244,8 @@ void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, li
 	}
 }
 
+*/
+
 void MainPerson::takeItem(Field &field, list<Item> &items, float x, float y)
 {
 
@@ -288,13 +295,13 @@ void MainPerson::throwItem(Field &field, list<Item> &items)
 	}
 }
 
-void MainPerson::useItem(Field &field, Event &event, int x, int y)
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, list<UnlifeObject> *unlifeObjects, Event &event, int x, int y)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
-	std::cout << "typeItem " << (std::string)currentItem.typeItem->name << std::endl;
+	//std::cout << "typeItem " << (std::string)currentItem.typeItem->name << std::endl;
 	if (currentItem.typeItem != emptyItem->typeItem) {
-		printf("category %d\n", currentItem.categoryItem);
+		//printf("category %d\n", currentItem.categoryItem);
 		switch (currentItem.categoryItem) {
 		case idCategoryItem::food:
 			if (event.key.code == Mouse::Right) {
@@ -339,7 +346,78 @@ void MainPerson::useItem(Field &field, Event &event, int x, int y)
 				}
 
 			}
-			
+			break;
+		case idCategoryItem::pickax:
+			if (event.type == Event::MouseButtonPressed) {
+
+				int level;
+				// Удаляем стену
+				if (event.key.code == Mouse::Left) {
+					level = currentLevelFloor + 1;
+				}
+				// Удаляем пол
+				else if (event.key.code == Mouse::Right) {
+					level = currentLevelFloor;
+				}
+				// Иначе ничего
+				else {
+					level = -1;
+				}
+
+				///*
+				// Ставим блок
+				if (findObject != NULL) {
+					if (isPickaxBreakingObject(listDestroy.pickaxBreakingObject)) {
+
+						currentItem.currentToughness -= 1;
+
+						unlifeObjects->erase(findObjectFromList);
+
+						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						}
+
+
+					}
+				}
+				//*/					
+			}
+			break;
+		case idCategoryItem::axe:
+			if (event.type == Event::MouseButtonPressed) {
+
+				int level;
+				// Удаляем стену
+				if (event.key.code == Mouse::Left) {
+					level = currentLevelFloor + 1;
+				}
+				// Удаляем пол
+				else if (event.key.code == Mouse::Right) {
+					level = currentLevelFloor;
+				}
+				// Иначе ничего
+				else {
+					level = -1;
+				}
+
+				///*
+				// Ставим блок
+				if (findObject != NULL) {
+					if (isAxeBreakingObject(listDestroy.axeBreakingObject)) {
+
+						currentItem.currentToughness -= 1;
+
+						unlifeObjects->erase(findObjectFromList);
+
+						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						}
+
+
+					}
+				}
+				//*/					
+			}
 			break;
 		default:
 			break;
@@ -347,7 +425,32 @@ void MainPerson::useItem(Field &field, Event &event, int x, int y)
 	}
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////
+// Разрушаемый блок или нет
+bool MainPerson::isAxeBreakingBlock(wchar_t block) {
+	return false;
+}
+bool MainPerson::isAxeBreakingObject(String* axeBreakingObject) {
+	for (size_t i = 0; i < AMOUNT_AXE_BREAKING_OBJECTS; i++) {
+		if (findObject->typeObject->name == axeBreakingObject[i]) {
+			return true;
+		}
+	}
+	return false;
+}
+bool MainPerson::isPickaxBreakingBlock(wchar_t block) {
+	return false;
+}
+bool MainPerson::isPickaxBreakingObject(String* pickaxBreakingObject) {
+	for (size_t i = 0; i < AMOUNT_PICKAX_BREAKING_OBJECTS; i++) {
+		std::cout << (string)pickaxBreakingObject[i] << "pix" << std::endl;
+		if (findObject->typeObject->name == pickaxBreakingObject[i]) {
+			return true;
+		}
+	}
+	return false;
+}
+////////////////////////////////////////////////////////////////////////////////////
 
 bool MainPerson::isEmptySlot()
 {

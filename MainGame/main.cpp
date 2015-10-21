@@ -19,6 +19,13 @@ void processEvents(Game &game)
 		Vector2i mousePos = Mouse::getPosition(window);
 		Vector2f pos = window.mapPixelToCoords(mousePos);
 
+		UnlifeObject* emptyObject = NULL;
+		Item* emptyItem = NULL;
+
+		mainPerson.findObject = emptyObject;
+		mainPerson.findItem = emptyItem;
+
+
 		informationAboutSelect(game, pos.x, pos.y);
 
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -64,106 +71,76 @@ void processEvents(Game &game)
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// Переключение режимов
-		if (Keyboard::isKeyPressed(Keyboard::G))
-		{
-			mainPerson.currenMode = idModeEntity::build;// ИСПРАВЬ
-			printf("build mode\n");
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::F))
-		{
-			mainPerson.currenMode = idModeEntity::fight;// ИСПРАВЬ
-			printf("fight mode\n");
+		if (event.type == Event::KeyPressed) {
+			if (Keyboard::isKeyPressed(Keyboard::G)) {
+				mainPerson.currenMode = idModeEntity::build;// ИСПРАВЬ
+				printf("build mode\n");
+			} else if (Keyboard::isKeyPressed(Keyboard::F)) {
+				mainPerson.currenMode = idModeEntity::fight;// ИСПРАВЬ
+				printf("fight mode\n");
+			}
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// кнопка "Дествие" и "Другое действие"
 		int numberY(pos.y / SIZE_BLOCK);
 		int numberX(pos.x / SIZE_BLOCK);
 
-		// Использование предмета
-		if (mainPerson.isInUseField(pos.x, pos.y)) {
-			mainPerson.useItem(*game.field, event, numberX, numberY);
-		}
-
-
-		if (Keyboard::isKeyPressed(Keyboard::Q))
-		{
-			mainPerson.actionAlternate(*game.field, game.unlifeObjects, game.items, numberX, numberY);
-			mainPerson.throwItem(*game.field, *game.items);
-			printf("Alternative action\n");
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::E))
-		{
-			mainPerson.actionMain(*game.field, game.unlifeObjects, game.items, numberX, numberY);// ИСПРАВЬ
-			printf("Main action\n");
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::R)) {
-			mainPerson.takeItem(*game.field, *game.items, pos.x, pos.y);
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////
-		// Бег
-		else if (Keyboard::isKeyPressed(Keyboard::LShift))
-		{
-			if (mainPerson.stepCurrent > mainPerson.stepFirst)
-			{
-				mainPerson.stepCurrent -= 450.f;
+		if (event.type == Event::KeyPressed) {
+			if (Keyboard::isKeyPressed(Keyboard::Q)) {
+				mainPerson.actionAlternate(*game.field, game.unlifeObjects, game.items, numberX, numberY);
+				mainPerson.throwItem(*game.field, *game.items);
+				printf("Alternative action\n");
+			} else if (Keyboard::isKeyPressed(Keyboard::E)) {
+				mainPerson.actionMain(*game.field, game.unlifeObjects, game.items, numberX, numberY);// ИСПРАВЬ
+				printf("Main action\n");
+			} else if (Keyboard::isKeyPressed(Keyboard::R)) {
+				mainPerson.takeItem(*game.field, *game.items, pos.x, pos.y);
 			}
-			else
-			{
-				mainPerson.stepCurrent += 450.f;
-			}	
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////
-		// Обработка 0 - 9. Панель быстрого доступа
-		else if (Keyboard::isKeyPressed(Keyboard::Num0))
-		{
-			mainPerson.idSelectItem = 9;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num1))
-		{
-			mainPerson.idSelectItem = 0;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num2))
-		{
-			mainPerson.idSelectItem = 1;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num3))
-		{
-			mainPerson.idSelectItem = 2;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num4))
-		{
-			mainPerson.idSelectItem = 3;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num5))
-		{
-			mainPerson.idSelectItem = 4;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num6))
-		{
-			mainPerson.idSelectItem = 5;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num7))
-		{
-			mainPerson.idSelectItem = 6;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num8))
-		{
-			mainPerson.idSelectItem = 7;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num9))
-		{
-			mainPerson.idSelectItem = 8;
+			/////////////////////////////////////////////////////////////////////////////////////////
+			// Бег
+			else if (Keyboard::isKeyPressed(Keyboard::LShift)) {
+				if (mainPerson.stepCurrent > mainPerson.stepFirst) {
+					mainPerson.stepCurrent -= 450.f;
+				} else {
+					mainPerson.stepCurrent += 450.f;
+				}
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////
+			// Обработка 0 - 9. Панель быстрого доступа
+			else if (Keyboard::isKeyPressed(Keyboard::Num0)) {
+				mainPerson.idSelectItem = 9;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num1)) {
+				mainPerson.idSelectItem = 0;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+				mainPerson.idSelectItem = 1;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num3)) {
+				mainPerson.idSelectItem = 2;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num4)) {
+				mainPerson.idSelectItem = 3;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num5)) {
+				mainPerson.idSelectItem = 4;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num6)) {
+				mainPerson.idSelectItem = 5;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num7)) {
+				mainPerson.idSelectItem = 6;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num8)) {
+				mainPerson.idSelectItem = 7;
+			} else if (Keyboard::isKeyPressed(Keyboard::Num9)) {
+				mainPerson.idSelectItem = 8;
+			}
+
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////////////////////////////
 		// Оюработка щелчка мыши
-		UnlifeObject* emptyObject = NULL;
-		Item* emptyItem = NULL;
 		if (event.type == Event::MouseButtonPressed)
 		{
-			mainPerson.findObject = emptyObject;
-			mainPerson.findItem = emptyItem;
+			// Использование предмета
+			if (mainPerson.isInUseField(pos.x, pos.y)) {
+
+				mainPerson.useItem(*game.field, *game.listDestroy, game.unlifeObjects, event, numberX, numberY);
+			}
 			//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 		}
 		else if (event.type == Event::MouseMoved) {

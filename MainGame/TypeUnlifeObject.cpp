@@ -12,6 +12,10 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSoun
 	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].Init(texturePaths[idTexturePaths::items], "SmallStone", false, 0, SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
 	//typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].InitTransparent(136, 208, 0, 0);
 	typesUnlifeObjects->countTypeObjects += 1;
+
+	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::empty].Init(texturePaths[idTexturePaths::items], "Empty", false, 0, 0, 0, 0, 0);
+	//typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].InitTransparent(136, 208, 0, 0);
+	typesUnlifeObjects->countTypeObjects += 1;
 }
 
 ////////////////////////////////////////////////////////////////////

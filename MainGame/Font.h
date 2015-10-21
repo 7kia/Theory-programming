@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "GlobalVar.h"
 
-const int SIZE_NORMAL_TEXT = 14;
-const int SIZE_SMALL_TEXT = 10;
+const int SIZE_NORMAL_TEXT = 18;
+const int SIZE_SMALL_TEXT = 14;
 
 
 typedef enum {

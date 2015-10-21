@@ -2,8 +2,7 @@
 #include "Entity.h"
 #include "Items.h"
 #include "UnlifeObject.h"
-
-using namespace std;
+#include "ListDestroyObjectsAndBlocks.h"// ИСПРАВЬ
 
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
@@ -11,10 +10,10 @@ class MainPerson : public Entity
 {
 public:
 	// режимы персонажа
-	void modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, sf::Event &eventPerson, float x, float y);
+	//void modeProcess(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, sf::Event &eventPerson, float x, float y);
 	// Камера
 	sf::View *view;
-	void updateView(RenderWindow & window);
+	void updateView(sf::RenderWindow & window);
 
 	void getCoordinateForView(float x, float y);
 	void viewmap(float time);
@@ -36,17 +35,23 @@ public:
 
 	// Для передвижения объекта
 	UnlifeObject *findObject;
-	list<UnlifeObject>::iterator findObjectFromList;
+	std::list<UnlifeObject>::iterator findObjectFromList;
+	UnlifeObject* emptyObject;
 	// Для передвижения предмета
 	Item *findItem;
-	list<Item>::iterator findItemFromList;
+	std::list<Item>::iterator findItemFromList;
 
 	bool isMoveItem;
 	float dMoveItemX, dMoveItemY;
 	//////////////////////////////////////////////////
-	void takeItem(Field &field, list<Item> &items, float x, float y);
-	void throwItem(Field &field, list<Item> &items);
-	void useItem(Field &field, Event &event, int x, int y);
+	void takeItem(Field &field, std::list<Item> &items, float x, float y);
+	void throwItem(Field &field, std::list<Item> &items);
+	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, std::list<UnlifeObject> *unlifeObjects, sf::Event &event, int x, int y);
+
+	bool isAxeBreakingBlock(wchar_t block);// ИСПРАВЬ
+	bool isAxeBreakingObject(String* axeBreakingObject);// ИСПРАВЬ
+	bool isPickaxBreakingBlock(wchar_t block);// ИСПРАВЬ
+	bool isPickaxBreakingObject(sf::String* pickaxBreakingObject);// ИСПРАВЬ
 
 	// кнопка "Дествие" и "Другое действие"
 	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, int x, int y);
@@ -55,4 +60,4 @@ private:
 
 };
 
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem);
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject);

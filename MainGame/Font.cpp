@@ -12,25 +12,25 @@ void initializeTexts(TextGame &textGame)
 	////////////////////////////////////////////////////////////////////
 	// Информация о выделенном объекте
 	Text* currentText = &textGame.texts[idText::infoWindowBlock];
-	currentText->setColor(Color::Black);
+	currentText->setColor(Color::White);
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 
 	currentText = &textGame.texts[idText::infoWindowFloor];
-	currentText->setColor(Color::Black);
+	currentText->setColor(Color::White);
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 
 	currentText = &textGame.texts[idText::infoWindowUnlifeObject];
-	currentText->setColor(Color::Black);
+	currentText->setColor(Color::White);
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 
 	currentText = &textGame.texts[idText::infoWindowItem];
-	currentText->setColor(Color::Black);
+	currentText->setColor(Color::White);
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);

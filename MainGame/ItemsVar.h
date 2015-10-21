@@ -47,8 +47,19 @@ const int PIXEL_Y_GRASS_BRICK = SIZE_ITEM * 2;
 const int PIXEL_X_LOG_OAK = 0;
 const int PIXEL_Y_LOG_OAK = 0;
 
+// stone pickax - каменная кирка
+const int PIXEL_X_STONE_PICKAX = SIZE_ITEM * 3;
+const int PIXEL_Y_STONE_PICKAX = SIZE_ITEM * 3;
+
+// stone axe - каменный топор
+const int PIXEL_X_STONE_AXE = SIZE_ITEM * 5;
+const int PIXEL_Y_STONE_AXE = SIZE_ITEM * 3;
+
+// ДОБАВЛЕНИЕ ПРЕДМЕТА
+
 typedef enum
 {
+	// ДОБАВЛЕНИЕ ПРЕДМЕТА
 	stoneItem,// Камень
 	planksBlockItem,
 	dirtItem,
@@ -58,6 +69,8 @@ typedef enum
 	stoneBrickItem,
 	mushroom,
 	logOakItem,
+	stonePickaxItem,
+	stoneAxeItem,
 	emptyItem
 } idItem;
 

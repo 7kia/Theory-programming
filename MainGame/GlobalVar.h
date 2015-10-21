@@ -9,7 +9,7 @@
 #include "BlocksVar.h"
 #include "UnlifeObjectVar.h"
 
-const sf::String TITLE_PROGRAM = "MainGame v1.2.4";
+const sf::String TITLE_PROGRAM = "MainGame v1.2.5";
 
 const int DEFAULT_WIDTH_WINDOW = 1200;
 const int DEFAULT_HEIGHT_WINDOW = 550;

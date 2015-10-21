@@ -36,6 +36,14 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 		addItem->setPosition(3, 1, 1);
 		items.push_front(*addItem);
 
+		addItem->setType(typesItem->typesItem[idItem::stonePickaxItem]);
+		addItem->setPosition(2, 1, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::stoneAxeItem]);
+		addItem->setPosition(4, 1, 1);
+		items.push_front(*addItem);
+
 		addItem->setType(typesItem->typesItem[idItem::woodLadderItem]);
 		addItem->setPosition(3, 6, 1);
 		items.push_front(*addItem);
@@ -47,6 +55,7 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 		addItem->setType(typesItem->typesItem[idItem::mushroom]);// хяопюбэ
 		addItem->setPosition(2, 3, 1);
 		items.push_front(*addItem);
+		// днаюбкемхе опедлерю
 	}
 
 	delete addItem;

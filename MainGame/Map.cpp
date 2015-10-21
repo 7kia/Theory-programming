@@ -19,7 +19,7 @@ void initializeField(Field & field)
 	{
 		for (size_t j = 0; j < LONG_MAP; j++)
 		{
-			printf("%ws\n", field.dataMap[i][j]);
+			//printf("%ws\n", field.dataMap[i][j]);
 		}
 	}
 	////////////////////////////////////////////

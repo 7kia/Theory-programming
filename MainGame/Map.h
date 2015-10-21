@@ -19,7 +19,7 @@ const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 	"logOak ladder"
 };
 
-const int AMOUNT_AXE_BREAKING_BLOCKS = 5;
+const int AMOUNT_AXE_BREAKING_BLOCKS = 2;
 const int AMOUNT_AXE_BREAKING_OBJECTS = 5;
 
 const int AMOUNT_PICKAX_BREAKING_BLOCKS = 5;

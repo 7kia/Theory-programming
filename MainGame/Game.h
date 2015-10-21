@@ -9,6 +9,7 @@
 #include "Items.h"
 #include "Font.h"
 #include "GUI.h"
+#include "ListDestroyObjectsAndBlocks.h"
 
 #include <math.h>
 
@@ -24,17 +25,16 @@ struct Game
 
 	TypesUnlifeObject *typesUnlifeObject;
 	std::list<UnlifeObject>* unlifeObjects;
-	unsigned int* axeBreakingObject;
-	unsigned int* pickaxBreakingObject;
 
 	Item* emptyItem;
+	UnlifeObject* emptyObject;
 
 	TypesItem *typesItem;
 	std::list<Item>* items;
 
+	destroyObjectsAndBlocks* listDestroy;
+
 	Field *field;
-	unsigned int* axeBreakingBlock;
-	unsigned int* pickaxBreakingBlock;
 
 	sf::Clock *clock;
 

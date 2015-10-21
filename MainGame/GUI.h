@@ -8,8 +8,11 @@ const int numberTextReference = 8;
 const int AMOUNT_TEXT_GUI = 4;
 
 // Информация о выделеном блоке
-const int widthInfo = 188;
-const int heightInfo = 100;
+const int widthInfo = 280;
+const int heightInfo = 135;
+
+const int shiftXInfoText = 32;
+const int shiftYInfoText = 16;
 
 // Панель быстрого доступа
 const int widthPanelQuickAccess = 607;
