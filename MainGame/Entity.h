@@ -33,6 +33,23 @@ public:
 	// Ссылки на звуки
 	sf::Sound *soundsEntity[sizeBuffer];
 
+	//////////////////////////////////////////////////
+	// Индикаторы
+	bool isDeath = false;
+
+
+	float timeForBars = 0;
+	float minusHungry = 2;
+
+	// Голод
+	int currentHungry = 2;
+	int maxHungry = 20;
+
+
+
+	//////////////////////////////////////////////////
+
+
 	// Для отрисовки
 	int width;
 	int height;

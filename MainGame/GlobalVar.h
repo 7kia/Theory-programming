@@ -10,6 +10,7 @@
 #include "UnlifeObjectVar.h"
 
 const sf::String TITLE_PROGRAM = "MainGame v1.2.5";
+const sf::String stringDeathPerson = "Death";
 
 const int DEFAULT_WIDTH_WINDOW = 1200;
 const int DEFAULT_HEIGHT_WINDOW = 550;
@@ -27,7 +28,7 @@ const int NUMBER_TEXT_STRING = 15;
 const float DIAGONAL_SCALE_SPEED = 0.7;
 const float PI = 3.14159265;// ÈÑÏÐÀÂÜ
 
-
+const int SIZE_STRING = 256;
 
 typedef enum
 {

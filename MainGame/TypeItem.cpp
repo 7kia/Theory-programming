@@ -21,13 +21,17 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	bool canDestroy = false;
 
 	int toughness = 0;
+
 	int pixelX = PIXEL_X_SMALL_STONE;
 	int pixelY = PIXEL_Y_SMALL_STONE;
+
+	int block = idBlocks::stone;
+	int unlifeObject = 0;//idUnlifeObject::
 	////////////////////////////////////////////////
 
 	/////////////////////////////////////
 	// Камень
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::stone, 0);
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////////////
 	// Гриб
@@ -43,7 +47,10 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_MUSHROOM;
 	pixelY = PIXEL_Y_MUSHROOM;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, 0, 0);
+	block = 0;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Доски
@@ -60,7 +67,10 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_PLANKS;
 	pixelY = PIXEL_Y_PLANKS;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::planksBlock, 0);
+	block = idBlocks::planksBlock;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Земля
@@ -73,11 +83,13 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	toughness = 0;
 
-
 	pixelX = PIXEL_X_DIRT;
 	pixelY = PIXEL_Y_DIRT;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::dirt, 0);
+	block = idBlocks::dirt;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Земля с травой
@@ -93,7 +105,10 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_GRASS_BRICK;
 	pixelY = PIXEL_Y_GRASS_BRICK;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::grass, 0);
+	block = idBlocks::grass;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Песок
@@ -106,11 +121,13 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	toughness = 0;
 
-
 	pixelX = PIXEL_X_SAND;
 	pixelY = PIXEL_Y_SAND;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::sand, 0);
+	block = idBlocks::sand;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Деревянная лестница
@@ -123,11 +140,13 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	toughness = 0;
 
-
 	pixelX = PIXEL_X_WOOD_LADDER;
 	pixelY = PIXEL_Y_WOOD_LADDER;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::woodLadder, 0);
+	block = idBlocks::woodLadder;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Каменные кирпичи
@@ -143,14 +162,17 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_STONE_BRICK;
 	pixelY = PIXEL_Y_STONE_BRICK;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::stoneBrick, 0);
+	block = idBlocks::stoneBrick;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Дубовое бревно
 	numberItem = idItem::logOakItem;
 	*nameItem = "Log oak";
 
-	categoryItem = idCategoryItem::other;
+	categoryItem = idCategoryItem::block;
 
 	canDestroy = false;
 
@@ -159,7 +181,10 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_LOG_OAK;
 	pixelY = PIXEL_Y_LOG_OAK;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, 0, 0);// ИСПРАВЬ
+	block = idBlocks::logOak;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);// ИСПРАВЬ
 	typesItem.countTypeItem += 1;
 	/////////////////////////////////////////////////////////
 	// Кирки
@@ -178,7 +203,10 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_STONE_PICKAX;
 	pixelY = PIXEL_Y_STONE_PICKAX;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::air, 0);// ИСПРАВЬ
+	block = idBlocks::air;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);// ИСПРАВЬ
 	typesItem.countTypeItem += 1;
 	/////////////////////////////////////////////////////////
 	// Топоры
@@ -197,7 +225,10 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_STONE_AXE;
 	pixelY = PIXEL_Y_STONE_AXE;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, idBlocks::air, 0);// ИСПРАВЬ
+	block = idBlocks::air;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject);// ИСПРАВЬ
 	typesItem.countTypeItem += 1;
 	/////////////////////////////////////////////////////////
 	// ДОБАВЛЕНИЕ ПРЕДМЕТА
@@ -217,7 +248,10 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = 0;
 	pixelY = 0;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, width, height, pixelX, pixelY, 0, 0);
+	block = 0;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, categoryItem, canDestroy, toughness, width, height, pixelX, pixelY, block, unlifeObject);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	delete pathTexture;

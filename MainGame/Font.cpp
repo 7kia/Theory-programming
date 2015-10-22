@@ -35,4 +35,27 @@ void initializeTexts(TextGame &textGame)
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 	////////////////////////////////////////////////////////////////////
+
+
+	currentText = &textGame.texts[idText::mainPersonIsDeath];
+	currentText->setColor(Color::Black);
+	currentText->setStyle(Text::Regular | Text::Underlined);
+	currentText->setFont(*textGame.font);
+	currentText->setCharacterSize(SIZE_BIG_TEXT);
+	currentText->setString(stringDeathPerson);
+
+	// Определение количества символов
+	int sizeString = 0;
+	for (int i = 0; i < SIZE_STRING; i++) {
+		if (stringDeathPerson[i] != '\0') {
+			sizeString += 1;
+		} else {
+			break;
+		}
+	}
+
+	int widthText = currentText->getCharacterSize() * sizeString;
+	Vector2f origin = { (float)widthText / 4 , 0.f };
+	currentText->setOrigin(origin);
+
 }

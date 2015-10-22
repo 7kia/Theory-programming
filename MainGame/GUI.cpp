@@ -26,6 +26,25 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	gui.selectInPanelQuickAccess->setOrigin(0, heightSelectInPanelQuickAccess / 2);// ИСПРАВЬ
 	gui.selectInPanelQuickAccess->setTextureRect(IntRect(shiftXSelectInPanelQuickAccess, shiftYSelectInPanelQuickAccess, widthSelectInPanelQuickAccess, heightSelectInPanelQuickAccess));
 
+	// добавление gui
+	// Индикатор голода
+	gui.textureBar = new Texture;
+	gui.lowHungry = new Sprite;
+	gui.highHungry = new Sprite;
+	gui.levelHungry = new Sprite;
+
+
+	gui.textureBar->loadFromFile(texturePaths[idTexturePaths::bars]);
+
+	gui.lowHungry->setTexture(*gui.textureBar);
+	gui.lowHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI, WIDTH_HUNGY_GUI, HEIGHT_HUNGY_GUI));
+
+	gui.highHungry->setTexture(*gui.textureBar);
+	gui.highHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI, WIDTH_HUNGY_GUI, HEIGHT_HUNGY_GUI));
+
+	gui.levelHungry->setTexture(*gui.textureBar);
+	gui.levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, LEVEL_HUNGY_GUI));
+
 	// ИСПРАВЬ
 	// НЕРАБОТАЕТ
 	//gui.textGui[idTextGui::infoWindowBlockGui] = &textGame.texts[idText::infoWindowBlock];
@@ -83,6 +102,24 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 			mainPerson.itemFromPanelQuickAccess[i].mainSprite->setPosition(pos);
 		}
 	}
+	// добавление gui
+	//////////////////////////////////////////////////////////////////////// 
+	// Индикатор голода
+	pos = { centerWindow.x - sizeWindow.x / 2, centerWindow.y + sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI };
+
+	lowHungry->setPosition(pos);
+	highHungry->setPosition(pos);
+
+	float level = (float)mainPerson.currentHungry / mainPerson.maxHungry;
+	printf("%d %d\n", mainPerson.currentHungry, mainPerson.maxHungry);
+
+	//int currentShift = HEIGHT_HUNGY_GUI * (1 - level);
+	//int currentHeight = LEVEL_HUNGY_GUI * level;
+	pos.y += LEVEL_SHIFT + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
+	int currentLevel = LEVEL_HUNGY_GUI * level;
+	levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
+	levelHungry->setPosition(pos);
 	////////////////////////////////////////////////////////////////////////
+	textGame.texts[idText::mainPersonIsDeath].setPosition(centerWindow);
 
 }

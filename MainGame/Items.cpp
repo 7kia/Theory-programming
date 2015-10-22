@@ -11,7 +11,7 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 	// Пустой предмет
 	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ИСПРАВЬ
 
-	for (size_t i = 0; i < 3; i++) {
+	for (size_t i = 0; i < 12; i++) {
 		addItem->setType(typesItem->typesItem[idItem::stoneItem]);
 		addItem->setPosition(3, 3, 1);
 		items.push_front(*addItem);

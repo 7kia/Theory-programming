@@ -61,16 +61,22 @@ void initializeCategorysBreakingObject(Game &game)
 {
 	destroyObjectsAndBlocks& listDestroy = *game.listDestroy;
 	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject->typeUnlifeObject;
+	wchar_t* charBlocks = game.field->charBlocks;
 
 	//////////////////////////////////////
-	listDestroy.axeBreakingBlock[0] = idBlocks::logOak;
-	listDestroy.axeBreakingBlock[1] = idBlocks::woodLadder;
+	listDestroy.axeBreakingBlock[SIZE_STRING - 1] = u'\0';
+
+	listDestroy.axeBreakingBlock[0] = charBlocks[idBlocks::logOak];
+	listDestroy.axeBreakingBlock[1] = charBlocks[idBlocks::planksBlock];
+	listDestroy.axeBreakingBlock[2] = charBlocks[idBlocks::woodLadder];
 	//////////////////////////////////////
 
 	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;
 	/////////////////////////////////////////////////////////////////////////
-	listDestroy.pickaxBreakingBlock[0] = idBlocks::stone;
-	listDestroy.pickaxBreakingBlock[1] = idBlocks::stoneBrick;
+	listDestroy.pickaxBreakingBlock[SIZE_STRING - 1] = u'\0';
+
+	listDestroy.pickaxBreakingBlock[0] = charBlocks[idBlocks::stone];
+	listDestroy.pickaxBreakingBlock[1] = charBlocks[idBlocks::stoneBrick];
 
 	/////////////////////////
 

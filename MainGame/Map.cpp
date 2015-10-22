@@ -69,11 +69,15 @@ void Field::initializeDataBlocks()
 	coordinateBloks[idBlocks::water][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::water][1] = 0;
 
-	charBlocks[idBlocks::planksBlock] = u'\x015';
+	charBlocks[idBlocks::logOak] = u'\x015';
+	coordinateBloks[idBlocks::logOak][0] = BLOCK_SIZE * 3;
+	coordinateBloks[idBlocks::logOak][1] = 0;
+
+	charBlocks[idBlocks::planksBlock] = u'\x016';
 	coordinateBloks[idBlocks::planksBlock][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::planksBlock][1] = 0;
 
-	charBlocks[idBlocks::stoneBrick] = u'\x016';
+	charBlocks[idBlocks::stoneBrick] = u'\x017';
 	coordinateBloks[idBlocks::stoneBrick][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::stoneBrick][1] = BLOCK_SIZE * 2;
 

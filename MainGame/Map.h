@@ -12,11 +12,11 @@ const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 	"Dirt",
 	"Sand",
 	"Water",
-	"logOak",
+	"Log oak",
 	"Stone",
 	"Stone brick",
 	"Planks",
-	"logOak ladder"
+	"Wood ladder"
 };
 
 const int AMOUNT_AXE_BREAKING_BLOCKS = 2;

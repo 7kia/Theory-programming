@@ -7,6 +7,23 @@ using namespace std;
 // Передвижение. Его анимация и озвучка
 void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 {
+	///////////////////////////////////////
+	// Оьновление показателей (голода)
+	timeForBars += deltaTime.asSeconds();
+
+	if (timeForBars > minusHungry) {
+		timeForBars = 0;
+		currentHungry--;
+		printf("%d\n", currentHungry);
+	}
+
+	if (currentHungry < 1) {
+		isDeath = true;
+	}
+	///////////////////////////////////////
+
+
+
 	float pauseStep = 5, resetAnimation = 2;
 	switch (direction)
 	{

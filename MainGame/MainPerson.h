@@ -23,7 +23,6 @@ public:
 	float rotation;
 	void computeAngle(sf::RenderWindow &window);
 
-	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
 	int currenMode;
 	Item *itemFromPanelQuickAccess;
@@ -48,9 +47,9 @@ public:
 	void throwItem(Field &field, std::list<Item> &items);
 	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, std::list<UnlifeObject> *unlifeObjects, sf::Event &event, int x, int y);
 
-	bool isAxeBreakingBlock(wchar_t block);// ИСПРАВЬ
+	bool isAxeBreakingBlock(wchar_t block, wchar_t *axeBreakingBlocks);// ИСПРАВЬ
 	bool isAxeBreakingObject(String* axeBreakingObject);// ИСПРАВЬ
-	bool isPickaxBreakingBlock(wchar_t block);// ИСПРАВЬ
+	bool isPickaxBreakingBlock(wchar_t block, wchar_t *pickaxBreakingBlocks);// ИСПРАВЬ
 	bool isPickaxBreakingObject(sf::String* pickaxBreakingObject);// ИСПРАВЬ
 
 	// кнопка "Дествие" и "Другое действие"

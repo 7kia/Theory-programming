@@ -26,10 +26,19 @@ const int heightSelectInPanelQuickAccess = 72;
 
 const int shiftSelect = 60;
 
+// Индикатор голода
+const int WIDTH_HUNGY_GUI = 47;// добавление gui
+const int HEIGHT_HUNGY_GUI = 33;
 
+const int LEVEL_HUNGY_GUI = 14;// добавление gui
+const int LEVEL_SHIFT = 8;
+const int MAX_SHIFT_HUNGRY_LEVEL = 11;
+
+const int X_HUNGY_GUI = 0;
+const int Y_HUNGY_GUI = 134;
 
 struct GUI
-{
+{// добавление gui
 	// Информация о выделеном блоке
 	sf::Texture* infoSelectBlockTexture;
 	sf::Sprite* infoSelectBlockSprite;
@@ -39,6 +48,11 @@ struct GUI
 	sf::Sprite* panelQuickAccess;
 	sf::Sprite* selectInPanelQuickAccess;
 
+	// Индикатор голода
+	sf::Texture* textureBar;
+	sf::Sprite* lowHungry;
+	sf::Sprite* highHungry;
+	sf::Sprite* levelHungry;
 
 	// Ссылки на текст
 	sf::Text *textGui[numberTextReference];

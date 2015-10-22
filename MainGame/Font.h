@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "GlobalVar.h"
 
+const int SIZE_BIG_TEXT = 32;
 const int SIZE_NORMAL_TEXT = 18;
 const int SIZE_SMALL_TEXT = 14;
 
@@ -11,6 +12,7 @@ typedef enum {
 	infoWindowFloorGui,
 	infoWindowUnlifeObjectGui,
 	infoWindowItemGui,
+	mainPersonIsDeathGui,
 	amountTextsGui
 } idTextGui;
 
@@ -20,6 +22,7 @@ typedef enum {
 	infoWindowFloor,
 	infoWindowUnlifeObject,
 	infoWindowItem,
+	mainPersonIsDeath,
 	amountTexts
 } idText;
 

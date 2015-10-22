@@ -303,19 +303,26 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, lis
 	if (currentItem.typeItem != emptyItem->typeItem) {
 		//printf("category %d\n", currentItem.categoryItem);
 		switch (currentItem.categoryItem) {
+			////////////////////////////////////////////////////////////////////////
+			// Еда
 		case idCategoryItem::food:
 			if (event.key.code == Mouse::Right) {
-				currentItem.currentToughness -= 1;
 				// Утоление голода
-
+				if (currentHungry < maxHungry) {
+					currentItem.currentToughness -= 1;
+					currentHungry += 1;
+				}
 				// Если предмет сломан удаляем
 				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
 				}
 			}
 			break;
+			////////////////////////////////////////////////////////////////////////
 		case idCategoryItem::other:
 			break;
+			////////////////////////////////////////////////////////////////////////
+			// Блок
 		case idCategoryItem::block:
 			if (event.type == Event::MouseButtonPressed) {
 
@@ -347,6 +354,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, lis
 
 			}
 			break;
+			////////////////////////////////////////////////////////////////////////
+			// Кирка
 		case idCategoryItem::pickax:
 			if (event.type == Event::MouseButtonPressed) {
 
@@ -376,13 +385,23 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, lis
 						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
 						}
-
-
 					}
+				}
+				else if(isPickaxBreakingBlock(field.dataMap[level][y][x], listDestroy.pickaxBreakingBlock)) {
+					currentItem.currentToughness -= 1;
+
+					field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+
+					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					}
+					
 				}
 				//*/					
 			}
 			break;
+			////////////////////////////////////////////////////////////////////////
+			// Топор
 		case idCategoryItem::axe:
 			if (event.type == Event::MouseButtonPressed) {
 
@@ -415,10 +434,20 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, lis
 
 
 					}
+				} else if (isAxeBreakingBlock(field.dataMap[level][y][x], listDestroy.axeBreakingBlock)) {
+					currentItem.currentToughness -= 1;
+
+					field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+
+					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					}
+
 				}
 				//*/					
 			}
 			break;
+			////////////////////////////////////////////////////////////////////////
 		default:
 			break;
 		}
@@ -427,7 +456,14 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, lis
 
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
-bool MainPerson::isAxeBreakingBlock(wchar_t block) {
+bool MainPerson::isAxeBreakingBlock(wchar_t block, wchar_t *axeBreakingBlocks) {
+	int i = 0;
+	while (axeBreakingBlocks[i] != u'\0') {
+		if (axeBreakingBlocks[i] == block) {
+			return true;
+		}
+		i++;
+	}
 	return false;
 }
 bool MainPerson::isAxeBreakingObject(String* axeBreakingObject) {
@@ -438,7 +474,14 @@ bool MainPerson::isAxeBreakingObject(String* axeBreakingObject) {
 	}
 	return false;
 }
-bool MainPerson::isPickaxBreakingBlock(wchar_t block) {
+bool MainPerson::isPickaxBreakingBlock(wchar_t block, wchar_t *pickaxBreakingBlocks) {
+	int i = 0;
+	while (pickaxBreakingBlocks[i] != u'\0') {
+		if (pickaxBreakingBlocks[i] == block) {
+			return true;
+		}
+		i++;
+	}
 	return false;
 }
 bool MainPerson::isPickaxBreakingObject(String* pickaxBreakingObject) {
