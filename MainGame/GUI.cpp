@@ -27,13 +27,27 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	gui.selectInPanelQuickAccess->setTextureRect(IntRect(shiftXSelectInPanelQuickAccess, shiftYSelectInPanelQuickAccess, widthSelectInPanelQuickAccess, heightSelectInPanelQuickAccess));
 
 	// добавление gui
-	// Индикатор голода
+
 	gui.textureBar = new Texture;
+	// Шкала голода
 	gui.lowHungry = new Sprite;
 	gui.highHungry = new Sprite;
 	gui.levelHungry = new Sprite;
+	// Шкала жажды
+	gui.bottle = new Sprite;
+	gui.levelThirst = new Sprite;
 
+	// Шкала здоровья
+	gui.bar = new Sprite;
+	gui.levelHealth = new Sprite;
+	gui.levelStamina = new Sprite;
+	gui.levelMana = new Sprite;
+	///////////////////////////////////////////////////////////////////
+	// Шкалы
 
+	// добавление gui
+
+	// Голода
 	gui.textureBar->loadFromFile(texturePaths[idTexturePaths::bars]);
 
 	gui.lowHungry->setTexture(*gui.textureBar);
@@ -45,6 +59,28 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	gui.levelHungry->setTexture(*gui.textureBar);
 	gui.levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, LEVEL_HUNGY_GUI));
 
+	// Жажды
+	gui.bottle->setTexture(*gui.textureBar);
+	gui.bottle->setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI, WIDTH_THIRST_GUI, HEIGHT_THIRST_GUI));
+
+	gui.levelThirst->setTexture(*gui.textureBar);
+	gui.levelThirst->setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI, WIDTH_THIRST_GUI, LEVEL_THIRST));
+
+	// Здоровья
+	gui.bar->setTexture(*gui.textureBar);
+	gui.bar->setTextureRect(IntRect(X_HEALTH_GUI, Y_HEALTH_GUI, WIDTH_BARS_GUI, HEIGHT_BARS_GUI));
+
+	gui.levelHealth->setTexture(*gui.textureBar);
+	gui.levelHealth->setTextureRect(IntRect(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI));
+
+	gui.levelStamina->setTexture(*gui.textureBar);
+	gui.levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI));
+
+	gui.levelMana->setTexture(*gui.textureBar);
+	gui.levelMana->setTextureRect(IntRect(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI));
+
+
+	///////////////////////////////////////////////////////////////////
 	// ИСПРАВЬ
 	// НЕРАБОТАЕТ
 	//gui.textGui[idTextGui::infoWindowBlockGui] = &textGame.texts[idText::infoWindowBlock];
@@ -66,24 +102,34 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 
 	// Определение
 	infoSelectBlockSprite->setPosition(pos);
+	window.draw(*infoSelectBlockSprite);
 
 	// Размещение текста
+	Text& currentText = textGame.texts[idText::infoWindowBlock];
 	pos = { pos.x + shiftXInfoText , pos.y + shiftYInfoText };
-	textGame.texts[idText::infoWindowBlock].setPosition(pos);
+	currentText.setPosition(pos);
+	window.draw(currentText);
 
 	// Смещаем строку на размер букв предыдущей строки вниз
+	currentText = textGame.texts[idText::infoWindowFloor];
 	pos.y += textGame.texts[idText::infoWindowBlock].getCharacterSize();
-	textGame.texts[idText::infoWindowFloor].setPosition(pos);
+	currentText.setPosition(pos);
+	window.draw(currentText);
 
+	currentText = textGame.texts[idText::infoWindowUnlifeObject];
 	pos.y += textGame.texts[idText::infoWindowFloor].getCharacterSize();
-	textGame.texts[idText::infoWindowUnlifeObject].setPosition(pos);
+	currentText.setPosition(pos);
+	window.draw(currentText);
 
+	currentText = textGame.texts[idText::infoWindowItem];
 	pos.y += textGame.texts[idText::infoWindowUnlifeObject].getCharacterSize();
-	textGame.texts[idText::infoWindowItem].setPosition(pos);
+	currentText.setPosition(pos);
+	window.draw(currentText);
 	////////////////////////////////////////////////////////////////////////
 	// Панель быстрого доступа
 	pos = { centerWindow.x , centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 	panelQuickAccess->setPosition(pos);
+	window.draw(*panelQuickAccess);
 
 	// Выбранный предмет
 	int &idSelectItem = mainPerson.idSelectItem;
@@ -92,34 +138,113 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	pos = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 
 	selectInPanelQuickAccess->setPosition(pos);
-
+	window.draw(*selectInPanelQuickAccess);
 
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != "Empty") {
+		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != mainPerson.emptyItem->typeItem->name) {
 			int shift = shiftSelect * (i);
 			int shiftStart = 38;// ИСПРАВЬ
 			pos = { centerWindow.x - startPosition + shift + shiftStart, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 			mainPerson.itemFromPanelQuickAccess[i].mainSprite->setPosition(pos);
+			window.draw(*mainPerson.itemFromPanelQuickAccess[i].mainSprite);
 		}
 	}
-	// добавление gui
+
 	//////////////////////////////////////////////////////////////////////// 
+	// Шкала здоровья
+	pos = centerWindow;
+
+	pos.x -= sizeWindow.x / 2;
+	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI * 3;
+
+	bar->setPosition(pos);
+	window.draw(*bar);
+
+	float level = (float)mainPerson.currentHealth / mainPerson.maxHealth;
+
+	pos.x += X_SHIFT_BARS;
+	pos.y += Y_SHIFT_BARS;
+	int currentLevel = WIDTH_LEVEL_BAR_GUI * level;
+	levelHealth->setTextureRect(IntRect(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
+	levelHealth->setPosition(pos);
+	window.draw(*levelHealth);
+	//////////////////////////////////////
+	// Шкала выносливости
+	pos = centerWindow;
+
+	pos.x -= sizeWindow.x / 2;
+	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI * 2;
+
+	bar->setPosition(pos);
+	window.draw(*bar);
+
+	level = (float)mainPerson.currentStamina / mainPerson.maxStamina;
+
+	pos.x += X_SHIFT_BARS;
+	pos.y += Y_SHIFT_BARS;
+	currentLevel = WIDTH_LEVEL_BAR_GUI * level;
+	levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
+	levelStamina->setPosition(pos);
+	window.draw(*levelStamina);
+	//////////////////////////////////////
+	// Шкала выносливости
+	pos = centerWindow;
+
+	pos.x -= sizeWindow.x / 2;
+	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI;
+
+	bar->setPosition(pos);
+	window.draw(*bar);
+
+	level = (float)mainPerson.currentMana / mainPerson.maxMana;
+
+	pos.x += X_SHIFT_BARS;
+	pos.y += Y_SHIFT_BARS;
+	currentLevel = WIDTH_LEVEL_BAR_GUI * level;
+	levelMana->setTextureRect(IntRect(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
+	levelMana->setPosition(pos);
+	window.draw(*levelMana);
+	////////////////////////////////////////////////////////////////////////
 	// Индикатор голода
-	pos = { centerWindow.x - sizeWindow.x / 2, centerWindow.y + sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI };
+	pos = centerWindow;
+	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
+	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI;
 
 	lowHungry->setPosition(pos);
 	highHungry->setPosition(pos);
+	window.draw(*lowHungry);
+	window.draw(*highHungry);
 
-	float level = (float)mainPerson.currentHungry / mainPerson.maxHungry;
-	printf("%d %d\n", mainPerson.currentHungry, mainPerson.maxHungry);
+	level = (float)mainPerson.currentHungry / mainPerson.maxHungry;
 
-	//int currentShift = HEIGHT_HUNGY_GUI * (1 - level);
-	//int currentHeight = LEVEL_HUNGY_GUI * level;
-	pos.y += LEVEL_SHIFT + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
-	int currentLevel = LEVEL_HUNGY_GUI * level;
+	pos.y += LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
+	currentLevel = LEVEL_HUNGY_GUI * level;
 	levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
 	levelHungry->setPosition(pos);
+	window.draw(*levelHungry);
 	////////////////////////////////////////////////////////////////////////
+	// Шкала жажды
+	pos = centerWindow;
+	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
+	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI - (float)HEIGHT_THIRST_GUI;
+
+	bottle->setPosition(pos);
+	window.draw(*bottle);
+
+	level = (float)mainPerson.currentThirst / mainPerson.maxThirst;
+
+	pos.y += LEVEL_SHIFT_THIRST + LEVEL_THIRST * (1 - level);
+	currentLevel = LEVEL_THIRST * level;
+	int currentShift = LEVEL_THIRST * (1 - level);
+	levelThirst->setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
+	levelThirst->setPosition(pos);
+	window.draw(*levelThirst);
+	////////////////////////////////////////////////////////////////////////
+	// Текст о смерти
 	textGame.texts[idText::mainPersonIsDeath].setPosition(centerWindow);
+	if (mainPerson.isDeath) {
+		window.draw(textGame.texts[idText::mainPersonIsDeath]);
+	}
+
 
 }

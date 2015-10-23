@@ -28,6 +28,14 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 		addItem->setPosition(3, 4, 1);
 		items.push_front(*addItem);
 
+		addItem->setType(typesItem->typesItem[idItem::glassBottleItem]);
+		addItem->setPosition(2, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::glassBottleWithWater]);
+		addItem->setPosition(1, 2, 1);
+		items.push_front(*addItem);
+
 		addItem->setType(typesItem->typesItem[idItem::sandItem]);
 		addItem->setPosition(3, 2, 1);
 		items.push_front(*addItem);
@@ -52,7 +60,7 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 		addItem->setPosition(12, 2, 1);
 		items.push_front(*addItem);
 
-		addItem->setType(typesItem->typesItem[idItem::mushroom]);// хяопюбэ
+		addItem->setType(typesItem->typesItem[idItem::mushroomItem]);// хяопюбэ
 		addItem->setPosition(2, 3, 1);
 		items.push_front(*addItem);
 		// днаюбкемхе опедлерю

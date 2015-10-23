@@ -15,7 +15,7 @@ const int SIZE_ITEM = SIZE_BLOCK;
 const int PIXEL_X_SMALL_STONE = SIZE_ITEM * 2;
 const int PIXEL_Y_SMALL_STONE = SIZE_ITEM;
 
-// mushroom - гриБ
+// mushroomItem - гриБ
 const int PIXEL_X_MUSHROOM = 0;
 const int PIXEL_Y_MUSHROOM = SIZE_ITEM;
 
@@ -55,6 +55,13 @@ const int PIXEL_Y_STONE_PICKAX = SIZE_ITEM * 3;
 const int PIXEL_X_STONE_AXE = SIZE_ITEM * 5;
 const int PIXEL_Y_STONE_AXE = SIZE_ITEM * 3;
 
+// glass bottle - стекляееая бутылка
+const int PIXEL_X_GLASS_BOTTLE = SIZE_ITEM * 6;
+const int PIXEL_Y_GLASS_BOTTLE = SIZE_ITEM * 2;
+
+// glass bottle with water - стекляееая бутылка
+const int PIXEL_X_GLASS_BOTTLE_WITH_WATER = SIZE_ITEM * 7;
+const int PIXEL_Y_GLASS_BOTTLE_WITH_WATER = SIZE_ITEM * 2;
 // ДОБАВЛЕНИЕ ПРЕДМЕТА
 
 typedef enum
@@ -67,10 +74,13 @@ typedef enum
 	sandItem,
 	woodLadderItem,
 	stoneBrickItem,
-	mushroom,
+	mushroomItem,
 	logOakItem,
 	stonePickaxItem,
 	stoneAxeItem,
+	glassBottleItem,
+	glassBottleWithWater,
+
 	emptyItem
 } idItem;
 
@@ -80,5 +90,7 @@ typedef enum
 	food,
 	block,
 	pickax,
+	bottleWithWater,
+	bottleEmpty,
 	axe
 } idCategoryItem;

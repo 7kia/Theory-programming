@@ -19,12 +19,6 @@ const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 	"Wood ladder"
 };
 
-const int AMOUNT_AXE_BREAKING_BLOCKS = 2;
-const int AMOUNT_AXE_BREAKING_OBJECTS = 5;
-
-const int AMOUNT_PICKAX_BREAKING_BLOCKS = 5;
-const int AMOUNT_PICKAX_BREAKING_OBJECTS = 5;
-
 struct Field
 {
 	int BLOCK_SIZE;

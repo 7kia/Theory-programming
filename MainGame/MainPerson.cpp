@@ -64,8 +64,25 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 void MainPerson::updateView(RenderWindow & window)
 {
 	Vector2u sizeWindow = window.getSize();
-	view->setSize((Vector2f)sizeWindow);
-	view->setCenter(getXPos(), getYPos());
+	view->setSize((Vector2f)sizeWindow);// ИСПРАВЬ
+
+	float tempX = getXPos();
+	float tempY = getYPos();//считываем коорд игрока и проверяем их, чтобы убрать края
+
+	float x = getXPos();
+	float y = getYPos();
+
+	int leftBorder = sizeWindow.x / 2;
+	int rightBorder = SIZE_BLOCK * (WIDTH_MAP - BORDER1) - sizeWindow.x / 2;
+	int topBorder = sizeWindow.y / 2;
+	int lowBorder = SIZE_BLOCK * LONG_MAP - sizeWindow.y / 2;
+
+	if (x < leftBorder) tempX = leftBorder;//убираем из вида левую сторону
+	else if (x > rightBorder) tempX = rightBorder;//убираем из вида левую сторону
+	if (y < topBorder) tempY = topBorder;//верхнюю сторону
+	else if (y > lowBorder) tempY = lowBorder;//нижнюю сторону	
+
+	view->setCenter(tempX, tempY);
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -295,13 +312,16 @@ void MainPerson::throwItem(Field &field, list<Item> &items)
 	}
 }
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, list<UnlifeObject> *unlifeObjects, Event &event, int x, int y)
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, list<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
-	//std::cout << "typeItem " << (std::string)currentItem.typeItem->name << std::endl;
+
 	if (currentItem.typeItem != emptyItem->typeItem) {
-		//printf("category %d\n", currentItem.categoryItem);
+
+		int x = xMouse / SIZE_BLOCK;
+		int y = yMouse / SIZE_BLOCK;
+
 		switch (currentItem.categoryItem) {
 			////////////////////////////////////////////////////////////////////////
 			// Еда
@@ -309,12 +329,55 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, lis
 			if (event.key.code == Mouse::Right) {
 				// Утоление голода
 				if (currentHungry < maxHungry) {
-					currentItem.currentToughness -= 1;
-					currentHungry += 1;
-				}
-				// Если предмет сломан удаляем
-				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+					currentHungry += currentItem.currentToughness;
 					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+				}
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Напитки
+		case idCategoryItem::bottleWithWater:
+			if (event.key.code == Mouse::Right) {
+				// Утоление жажды
+				if (currentThirst < maxThirst) {
+					// Утоление жажды
+					currentThirst += currentItem.currentToughness;
+
+					// Опустошение бутылки
+			
+					int defineType = currentItem.typeItem->idItem - 1;
+					currentItem.typeItem->idItem = defineType + 1;// ???
+					currentItem.setType(typesItems[defineType]);
+				}
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Бутылки
+		case idCategoryItem::bottleEmpty:// ИСПРАВЬ
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.key.code == Mouse::Right) {
+					// Наполнение бутылки
+
+					int level;
+					// Берём воду
+					if (event.key.code == Mouse::Left) {
+						level = currentLevelFloor + 1;
+					} else if (event.key.code == Mouse::Right) {
+						level = currentLevelFloor;
+					} else {
+						level = -1;
+					}
+
+
+					if (level > -1) {
+						if (field.dataMap[level][y][x] == field.charBlocks[idBlocks::water]) {
+
+							int typeFillBottle = currentItem.typeItem->idItem + 1;
+							currentItem.setType(typesItems[typeFillBottle]);
+
+						}
+					}
+
 				}
 			}
 			break;
@@ -324,127 +387,132 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, lis
 			////////////////////////////////////////////////////////////////////////
 			// Блок
 		case idCategoryItem::block:
-			if (event.type == Event::MouseButtonPressed) {
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.type == Event::MouseButtonPressed) {
 
-				int level;
-				// Устанавливаем стену
-				if (event.key.code == Mouse::Left) {
-					level = currentLevelFloor + 1;
-				}
-				// Устанавливаем пол
-				else if (event.key.code == Mouse::Right) {
-					level = currentLevelFloor;
-				}
-				// Иначе ничего
-				else {
-					level = -1;
-				}
-
-
-				if (level > -1) {
-					// В данном случае обазначает количество// ИСПРАВЬ
-					currentItem.currentToughness -= 1;
-					// Ставим блок
-					field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
-
-					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					int level;
+					// Устанавливаем стену
+					if (event.key.code == Mouse::Left) {
+						level = currentLevelFloor + 1;
 					}
-				}
+					// Устанавливаем пол
+					else if (event.key.code == Mouse::Right) {
+						level = currentLevelFloor;
+					}
+					// Иначе ничего
+					else {
+						level = -1;
+					}
 
+
+					if (level > -1) {
+						// В данном случае обазначает количество// ИСПРАВЬ
+						currentItem.currentToughness -= 1;
+						// Ставим блок
+						field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
+
+						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						}
+					}
+
+				}
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
 			// Кирка
 		case idCategoryItem::pickax:
-			if (event.type == Event::MouseButtonPressed) {
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.type == Event::MouseButtonPressed) {
 
-				int level;
-				// Удаляем стену
-				if (event.key.code == Mouse::Left) {
-					level = currentLevelFloor + 1;
-				}
-				// Удаляем пол
-				else if (event.key.code == Mouse::Right) {
-					level = currentLevelFloor;
-				}
-				// Иначе ничего
-				else {
-					level = -1;
-				}
+					int level;
+					// Удаляем стену
+					if (event.key.code == Mouse::Left) {
+						level = currentLevelFloor + 1;
+					}
+					// Удаляем пол
+					else if (event.key.code == Mouse::Right) {
+						level = currentLevelFloor;
+					}
+					// Иначе ничего
+					else {
+						level = -1;
+					}
 
-				///*
-				// Ставим блок
-				if (findObject != NULL) {
-					if (isPickaxBreakingObject(listDestroy.pickaxBreakingObject)) {
+					///*
+					// Ставим блок
+					if (findObject != NULL) {
+						if (isPickaxBreakingObject(listDestroy.pickaxBreakingObject)) {
 
+							currentItem.currentToughness -= 1;
+
+							unlifeObjects->erase(findObjectFromList);
+
+							if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+							}
+						}
+					} else if (isPickaxBreakingBlock(field.dataMap[level][y][x], listDestroy.pickaxBreakingBlock)) {
 						currentItem.currentToughness -= 1;
 
-						unlifeObjects->erase(findObjectFromList);
+						field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
 
 						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
 						}
-					}
-				}
-				else if(isPickaxBreakingBlock(field.dataMap[level][y][x], listDestroy.pickaxBreakingBlock)) {
-					currentItem.currentToughness -= 1;
 
-					field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-
-					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
 					}
-					
+					//*/					
 				}
-				//*/					
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
 			// Топор
 		case idCategoryItem::axe:
-			if (event.type == Event::MouseButtonPressed) {
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.type == Event::MouseButtonPressed) {
 
-				int level;
-				// Удаляем стену
-				if (event.key.code == Mouse::Left) {
-					level = currentLevelFloor + 1;
-				}
-				// Удаляем пол
-				else if (event.key.code == Mouse::Right) {
-					level = currentLevelFloor;
-				}
-				// Иначе ничего
-				else {
-					level = -1;
-				}
+					int level;
+					// Удаляем стену
+					if (event.key.code == Mouse::Left) {
+						level = currentLevelFloor + 1;
+					}
+					// Удаляем пол
+					else if (event.key.code == Mouse::Right) {
+						level = currentLevelFloor;
+					}
+					// Иначе ничего
+					else {
+						level = -1;
+					}
 
-				///*
-				// Ставим блок
-				if (findObject != NULL) {
-					if (isAxeBreakingObject(listDestroy.axeBreakingObject)) {
+					///*
+					// Ставим блок
+					if (findObject != NULL) {
+						if (isAxeBreakingObject(listDestroy.axeBreakingObject)) {
 
+							currentItem.currentToughness -= 1;
+
+							unlifeObjects->erase(findObjectFromList);
+
+							if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+							}
+
+
+						}
+					} else if (isAxeBreakingBlock(field.dataMap[level][y][x], listDestroy.axeBreakingBlock)) {
 						currentItem.currentToughness -= 1;
 
-						unlifeObjects->erase(findObjectFromList);
+						field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
 
 						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
 						}
 
-
 					}
-				} else if (isAxeBreakingBlock(field.dataMap[level][y][x], listDestroy.axeBreakingBlock)) {
-					currentItem.currentToughness -= 1;
-
-					field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-
-					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-					}
-
+					//*/					
 				}
-				//*/					
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
@@ -508,24 +576,19 @@ bool MainPerson::isEmptySlot()
 }
 
 // Взаимодействие с лестницами
-void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, int x, int y)
+void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, int x, int y)
 {
 	/////////////////////////////////////////////////////////////////////////////
 	// Взаимодейстиве с блоками
-	if ((currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1)
-		&& (currentLevelFloor + 1 >= 1 && currentLevelFloor + 1 <= HEIGHT_MAP - 1))
+	if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1)
 	{
-
-		if (field.dataMap[currentLevelFloor + 1][y][x] == field.charBlocks[idBlocks::woodLadder])
+		// Если блок лестница
+		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x]) != NULL)
 		{
-			Vector2i noPos = { -1, -1 };
-			Vector2i emptyPos = isEmptyFloor(field, currentLevelFloor + 1);
-			//printf("%d %d\n", emptyPos.x, emptyPos.y);
-			if (emptyPos != noPos)
-			{
-				currentLevelFloor += 1;
-				spriteEntity->setPosition(emptyPos.x * SIZE_BLOCK, emptyPos.y * SIZE_BLOCK);
-			}
+			// Чтобы точка отсчёта была у лестницы
+			spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
+			currentLevelFloor += 1;
+
 		}
 
 	}
@@ -536,24 +599,20 @@ void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, lis
 
 }
 
-void MainPerson::actionAlternate(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, int x, int y)
+void MainPerson::actionAlternate(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, int x, int y)
 {
 	/////////////////////////////////////////////////////////////////////////////
 	// Взаимодейстиве с блоками
-	if ((currentLevelFloor > 0 && currentLevelFloor <= HEIGHT_MAP - 1)
-		&& (currentLevelFloor + 1 > 1 && currentLevelFloor + 1 <= HEIGHT_MAP - 1))
+	if (currentLevelFloor >= 1)
 	{
-
-		if (field.dataMap[currentLevelFloor][y][x] == field.charBlocks[idBlocks::woodLadder])
+		// Если блок лестница
+		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x]) != NULL)
 		{
-			Vector2i noPos = { -1, -1 };
-			Vector2i emptyPos = isEmptyFloor(field, currentLevelFloor);
-			//printf("%d %d\n", emptyPos.x, emptyPos.y);
-			if (emptyPos != noPos)
-			{
-				currentLevelFloor -= 1;
-				spriteEntity->setPosition(emptyPos.x * SIZE_BLOCK, emptyPos.y * SIZE_BLOCK);
-			}
+			// Чтобы точка отсчёта была у лестницы
+			spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
+
+			currentLevelFloor -= 1;
+			
 		}
 
 	}

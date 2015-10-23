@@ -64,23 +64,48 @@ void initializeCategorysBreakingObject(Game &game)
 	wchar_t* charBlocks = game.field->charBlocks;
 
 	//////////////////////////////////////
+	// Блоки уничтожаемые топором
 	listDestroy.axeBreakingBlock[SIZE_STRING - 1] = u'\0';
 
 	listDestroy.axeBreakingBlock[0] = charBlocks[idBlocks::logOak];
 	listDestroy.axeBreakingBlock[1] = charBlocks[idBlocks::planksBlock];
 	listDestroy.axeBreakingBlock[2] = charBlocks[idBlocks::woodLadder];
 	//////////////////////////////////////
-
+	// Объекты уничтожаемые топором
 	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;
 	/////////////////////////////////////////////////////////////////////////
+	// Блоки уничтожаемые киркой
 	listDestroy.pickaxBreakingBlock[SIZE_STRING - 1] = u'\0';
 
 	listDestroy.pickaxBreakingBlock[0] = charBlocks[idBlocks::stone];
 	listDestroy.pickaxBreakingBlock[1] = charBlocks[idBlocks::stoneBrick];
-
-	/////////////////////////
-
+	//////////////////////////////////////
+	// Киркой уничтожаемые киркой
 	listDestroy.pickaxBreakingObject[0] = typesUnlifeObject[idUnlifeObject::smallStone].name;
+	/////////////////////////////////////////////////////////////////////////
+	// Проходимые блоки
+	listDestroy.passableBlocks[SIZE_STRING - 1] = u'\0';
+
+	listDestroy.passableBlocks[0] = charBlocks[idBlocks::air];
+	listDestroy.passableBlocks[1] = charBlocks[idBlocks::water];
+	listDestroy.passableBlocks[2] = charBlocks[idBlocks::woodLadder];
+	/////////////////////////////////////////////////////////////////////////
+	// Проходим по полу
+	listDestroy.passableFloor[SIZE_STRING - 1] = u'\0';
+
+	listDestroy.passableFloor[0] = charBlocks[idBlocks::air];
+	listDestroy.passableFloor[1] = charBlocks[idBlocks::water];
+	/////////////////////////////////////////////////////////////////////////
+	// Замедляющие блоки
+	listDestroy.slowingBlocks[SIZE_STRING - 1] = u'\0';
+
+	listDestroy.slowingBlocks[0] = charBlocks[idBlocks::water];
+	/////////////////////////////////////////////////////////////////////////
+	// Лестницы
+	listDestroy.ladder[SIZE_STRING - 1] = u'\0';
+
+	listDestroy.ladder[0] = charBlocks[idBlocks::woodLadder];
+	/////////////////////////////////////////////////////////////////////////
 }
 //*/
 
@@ -100,8 +125,11 @@ void informationAboutSelect(Game &game, float x, float y)
 	int xPosBlock = x / SIZE_BLOCK;
 	int yPosBlock = y / SIZE_BLOCK;
 
-	textGame.texts[idText::infoWindowBlock].setString("Block : not select");
-	textGame.texts[idText::infoWindowFloor].setString("Floor : not select");
+	Text& infoBlock = textGame.texts[idText::infoWindowBlock];
+	Text& infoFloor = textGame.texts[idText::infoWindowFloor];
+
+	infoBlock.setString("Block : not select");
+	infoFloor.setString("Floor : not select");
 	for (int l = 0; l < HEIGHT_MAP; l++) {
 	// Рисуем только текущий уровень
 	if (l == game.mainPerson->currentLevelFloor
@@ -112,10 +140,10 @@ void informationAboutSelect(Game &game, float x, float y)
 
 				if ( (xPosBlock == j) && (yPosBlock == i) ) {
 					if (l == game.mainPerson->currentLevelFloor) {
-						textGame.texts[idText::infoWindowFloor].setString("Floor : " + field.findCharBlocks(field.dataMap[l][i][j]));
+						infoFloor.setString("Floor : " + field.findCharBlocks(field.dataMap[l][i][j]));
 					}
 					else {
-						textGame.texts[idText::infoWindowBlock].setString("Block : " + field.findCharBlocks(field.dataMap[l][i][j]));
+						infoBlock.setString("Block : " + field.findCharBlocks(field.dataMap[l][i][j]));
 					}
 				}
 					

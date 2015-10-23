@@ -2,6 +2,7 @@
 #include <SFML\Audio.hpp>
 
 #include "GlobalVar.h"
+#include "ListObjectsAndBlocks.h"
 #include "UnlifeObject.h"
 #include "Items.h"
 #include "Map.h"
@@ -38,13 +39,58 @@ public:
 	bool isDeath = false;
 
 
-	float timeForBars = 0;
-	float minusHungry = 2;
+
+	// Здоровье
+	bool isMaxHealth = true;
+	bool needMinusHealth = false;
+
+	float timeForHealth = 0;
+	float timeUpdateHealth = 0.5;
+
+	int addHealth = 1;
+	int delHealth = 2;
+
+	int currentHealth = 25;
+	int maxHealth = 100;
+
+	// Выносливость
+	bool isMaxStamina = true;
+	bool needMinusStamina = false;
+
+	float timeForStamina = 0;
+	float timeUpdateStamina = 0.5;
+
+	int addStamina = 1;
+	int delStamina = 4;
+
+	int currentStamina = 25;
+	int maxStamina = 100;
+
+	// Мана
+	bool isMaxMana = true;
+	bool needMinusMana = false;
+
+	float timeForMana = 0;
+	float timeUpdateMana = 0.5;
+
+	int addMana = 1;
+	int delMana = 2;
+
+	int currentMana = 25;
+	int maxMana = 100;
 
 	// Голод
-	int currentHungry = 2;
+	float timeForHungry = 0;
+	float timeUpdateHungry = 100;
+	int currentHungry = 5;
 	int maxHungry = 20;
 
+
+	// Жажда
+	float timeForThirst = 0;
+	float timeUpdateThirst = 60;
+	int currentThirst = 5;
+	int maxThirst = 20;
 
 
 	//////////////////////////////////////////////////
@@ -62,7 +108,7 @@ public:
 	void resetTimeAnimation(float &time, float &reset);
 	
 	// Взаимодейтсвие с миром
-	void interactionWithMap(Field &field, const Time & deltaTime);
+	void interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
 	void interactionWitnUnlifeObject(std::list<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 	bool isInUseField(float x, float y);
 	

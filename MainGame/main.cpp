@@ -72,14 +72,20 @@ void processEvents(Game &game)
 			int numberX(pos.x / SIZE_BLOCK);
 
 			if (event.type == Event::KeyPressed) {
-				if (Keyboard::isKeyPressed(Keyboard::Q)) {
-					mainPerson.actionAlternate(*game.field, game.unlifeObjects, game.items, numberX, numberY);
+				if (Keyboard::isKeyPressed(Keyboard::C)) 
+				{
+					mainPerson.actionAlternate(*game.field, game.unlifeObjects, *game.listDestroy, game.items, numberX, numberY);
+				} 
+				else if (Keyboard::isKeyPressed(Keyboard::Q)) 
+				{
 					mainPerson.throwItem(*game.field, *game.items);
-					printf("Alternative action\n");
-				} else if (Keyboard::isKeyPressed(Keyboard::E)) {
-					mainPerson.actionMain(*game.field, game.unlifeObjects, game.items, numberX, numberY);// ИСПРАВЬ
-					printf("Main action\n");
-				} else if (Keyboard::isKeyPressed(Keyboard::R)) {
+				} 
+				else if (Keyboard::isKeyPressed(Keyboard::E)) 
+				{
+					mainPerson.actionMain(*game.field, game.unlifeObjects, *game.listDestroy, game.items, numberX, numberY);// ИСПРАВЬ
+				} 
+				else if (Keyboard::isKeyPressed(Keyboard::R)) 
+				{
 					mainPerson.takeItem(*game.field, *game.items, pos.x, pos.y);
 				}
 				/////////////////////////////////////////////////////////////////////////////////////////
@@ -87,8 +93,10 @@ void processEvents(Game &game)
 				else if (Keyboard::isKeyPressed(Keyboard::LShift)) {
 					if (mainPerson.stepCurrent > mainPerson.stepFirst) {
 						mainPerson.stepCurrent -= 450.f;
+						mainPerson.needMinusStamina = false;
 					} else {
 						mainPerson.stepCurrent += 450.f;
+						mainPerson.needMinusStamina = true;
 					}
 				}
 				/////////////////////////////////////////////////////////////////////////////////////////
@@ -122,12 +130,9 @@ void processEvents(Game &game)
 			// Оюработка щелчка мыши
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
-				if (mainPerson.isInUseField(pos.x, pos.y)) {
-
-					mainPerson.useItem(*game.field, *game.listDestroy, game.unlifeObjects, event, numberX, numberY);
-				}
+				mainPerson.useItem(*game.field, *game.listDestroy, game.typesItem->typesItem, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
-			} else if (event.type == Event::MouseMoved) {
+			} else if (event.type == Event::MouseMoved) {// ИСПРАВЬ
 				// Передвижение предмета
 				if (mainPerson.isMoveItem) {
 
@@ -141,13 +146,9 @@ void processEvents(Game &game)
 							Sprite &spriteItem = *mainPerson.findItem->mainSprite;
 							spriteItem.setPosition(position);
 						}
-
-
 						// Объект должен находиться в центре клетки
 						// position = { (float)( (int)position.x/ SIZE_BLOCK) * SIZE_BLOCK - SIZE_BLOCK / 2,
 						//	(float)( (int)position.y/ SIZE_BLOCK)* SIZE_BLOCK - SIZE_BLOCK / 2 };
-
-
 
 					}
 				}
@@ -253,35 +254,6 @@ void render(Game & game)
 	//////////////////////////////////////////////
 	// GUI
 	game.gui->setPositionGui(window, *game.mainPerson, *game.textGame);
-	window.draw(*game.gui->infoSelectBlockSprite);
-	window.draw(*game.gui->panelQuickAccess);
-
-	if (mainPerson.emptySlot > -1) {
-		for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-			// если есть предмет
-			if (game.mainPerson->itemFromPanelQuickAccess[i].typeItem != game.mainPerson->emptyItem->typeItem) {
-				window.draw(*game.mainPerson->itemFromPanelQuickAccess[i].mainSprite);
-			}
-		}
-	}
-
-	window.draw(*game.gui->selectInPanelQuickAccess);
-
-	// добавление gui
-	// Индикатор голода
-	window.draw(*game.gui->highHungry);
-	window.draw(*game.gui->levelHungry);
-	window.draw(*game.gui->lowHungry);	
-
-
-	//////////////////////////////////////////////
-	// Текст GUI
-	for (size_t i = 0; i < idText::amountTexts; i++) {
-		if (mainPerson.isDeath || i != idText::mainPersonIsDeath) {
-			window.draw(game.textGame->texts[i]);
-		}
-
-	}
 
 	window.display();
 }
@@ -309,7 +281,7 @@ void startGame()
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
 				mainPerson.update(TIME_PER_FRAME, *game->databaseSound);
-				mainPerson.interactionWithMap(*game->field, TIME_PER_FRAME);
+				mainPerson.interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 

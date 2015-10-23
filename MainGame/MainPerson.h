@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Items.h"
 #include "UnlifeObject.h"
-#include "ListDestroyObjectsAndBlocks.h"// ÈÑÏĞÀÂÜ
+#include "ListObjectsAndBlocks.h"// ÈÑÏĞÀÂÜ
 
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
@@ -45,7 +45,7 @@ public:
 	//////////////////////////////////////////////////
 	void takeItem(Field &field, std::list<Item> &items, float x, float y);
 	void throwItem(Field &field, std::list<Item> &items);
-	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, std::list<UnlifeObject> *unlifeObjects, sf::Event &event, int x, int y);
+	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, std::list<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
 
 	bool isAxeBreakingBlock(wchar_t block, wchar_t *axeBreakingBlocks);// ÈÑÏĞÀÂÜ
 	bool isAxeBreakingObject(String* axeBreakingObject);// ÈÑÏĞÀÂÜ
@@ -53,8 +53,8 @@ public:
 	bool isPickaxBreakingObject(sf::String* pickaxBreakingObject);// ÈÑÏĞÀÂÜ
 
 	// êíîïêà "Äåñòâèå" è "Äğóãîå äåéñòâèå"
-	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, int x, int y);
-	void actionAlternate(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, int x, int y);
+	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, int x, int y);
+	void actionAlternate(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, int x, int y);
 private:
 
 };

@@ -26,6 +26,7 @@ public:
 	
 	sf::String name;
 	int category;// Еда, оружие, блок
+	int idItem;
 	int idBlockForUse;
 	int idUnlideOnjectForUse;
 
@@ -35,7 +36,7 @@ public:
 	int toughnessObject;
 
 	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
-	void Init(sf::String filenameTexture, sf::String typeName, int idCategory, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY, int idBlock, int idUnlifeObject);
+	void Init(sf::String filenameTexture, sf::String typeName, int id, int idCategory, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY, int idBlock, int idUnlifeObject);
 	void InitForUse(sf::String filenameTextureForUse, int w, int h, int pixelX, int pixelY);
 };
 

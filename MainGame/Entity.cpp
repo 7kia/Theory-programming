@@ -7,22 +7,98 @@ using namespace std;
 // Передвижение. Его анимация и озвучка
 void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 {
-	///////////////////////////////////////
-	// Оьновление показателей (голода)
-	timeForBars += deltaTime.asSeconds();
+	////////////////////////////////////////////////////////////////////
+	// Обновление показателей 
+	
 
-	if (timeForBars > minusHungry) {
-		timeForBars = 0;
-		currentHungry--;
-		printf("%d\n", currentHungry);
+	///////////////////////////////////////
+	// Маны
+	timeForMana += deltaTime.asSeconds();
+
+	if (timeForMana > timeUpdateMana) {
+		timeForMana = 0;
+
+		if (needMinusMana) {
+			currentMana -= delMana;
+		} else {
+			currentMana += addMana;
+		}
 	}
 
-	if (currentHungry < 1) {
+	if (currentMana < 1) {
+		currentMana = 0;
+	} else if (currentMana > maxMana) {
+		currentMana = maxMana;
+	}
+	///////////////////////////////////////
+	// Выносливости
+	timeForStamina += deltaTime.asSeconds();
+
+	if (timeForStamina > timeUpdateStamina) {
+		timeForStamina = 0;
+
+		if (needMinusStamina && direction != Direction::NONE) {
+			currentStamina -= delStamina;
+		} else {
+			currentStamina += addStamina;
+		}
+	}
+
+	if (currentStamina < 1) {
+		currentStamina = 0;
+		needMinusStamina = false;
+		stepCurrent = stepFirst;// Персонаж не может бегать
+	}
+	else if (currentStamina > maxStamina){
+		currentStamina = maxStamina;
+	}
+	///////////////////////////////////////////////////
+	// Здоровья
+	timeForHealth += deltaTime.asSeconds();
+
+	if (timeForHealth > timeUpdateHealth) {
+		timeForHealth = 0;
+
+		if (needMinusHealth) {
+			currentHealth -= delHealth;
+		}
+		else {
+			currentHealth += addHealth;
+		}
+	}
+
+	if (currentHealth < 1) {
 		isDeath = true;
+	} else if (currentHealth > maxHealth) {
+		currentHealth = maxHealth;
 	}
 	///////////////////////////////////////
+	// жажды
+	timeForHungry += deltaTime.asSeconds();
+	
+	if (timeForHungry > timeUpdateThirst) {
+		timeForHungry = 0;
+		currentThirst--;
+		//printf("%d\n", currentThirst);// ИСПРАВЬ
+	}
 
+	///////////////////////////////////////
+	// голода
+	timeForThirst += deltaTime.asSeconds();
+	if (timeForThirst > timeUpdateHungry) {
+		timeForThirst = 0;
+		currentHungry--;
+		//printf("%d\n", currentHungry);// ИСПРАВЬ
+	}
 
+	if (currentHungry > 1 && currentThirst > 1) {
+		needMinusHealth = false;
+	}
+	else {
+		needMinusHealth = true;
+	}
+	///////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////
 
 	float pauseStep = 5, resetAnimation = 2;
 	switch (direction)
@@ -151,7 +227,7 @@ float Entity::getYPos()
 
 ////////////////////////////////////////////////////////////////////
 // Взаимодейтсвие с миром
-void Entity::interactionWithMap(Field &field, const Time & deltaTime)
+void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime)
 {
 	
 	float dx(movement.x);
@@ -187,7 +263,8 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 		{
 			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++)
 			{
-				if (map[currentLevelFloor + 1][i][j] != charBlocks[idBlocks::air])
+				// Проверяем по списку проходимых блоков
+				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == NULL)
 				{
 					x = getXPos();
 					y = getYPos();
@@ -204,7 +281,7 @@ void Entity::interactionWithMap(Field &field, const Time & deltaTime)
 		{
 			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++)
 			{
-				if (map[currentLevelFloor][i][j] == charBlocks[idBlocks::air])
+				if (wcschr(listDestroy.passableFloor, map[currentLevelFloor][i][j]) != NULL)
 				{
 					x = getXPos();
 					y = getYPos();
