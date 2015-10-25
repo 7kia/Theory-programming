@@ -5,7 +5,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject)
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy)
 {
 	mainPerson.spriteEntity = new Sprite;
 	mainPerson.textureEntity = new Texture;
@@ -43,9 +43,11 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	// Текущий выбранный тип блока
 	mainPerson.emptyObject = &emptyObject;
 	mainPerson.emptyItem = &emptyItem;
+	mainPerson.emptyEnemy = &emptyEnemy;
 	mainPerson.idSelectItem = 0;
 
 	// Создайм и заполняем панель
+	mainPerson.amountSlots = AMOUNT_ACTIVE_SLOTS;
 	mainPerson.itemFromPanelQuickAccess = new Item[AMOUNT_ACTIVE_SLOTS];
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 		mainPerson.itemFromPanelQuickAccess[i].typeItem = emptyItem.typeItem;
@@ -56,6 +58,16 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.currenMode = idModeEntity::build;
 	mainPerson.spriteEntity->setPosition(posX, posY);
 	mainPerson.direction = NONE;
+
+
+	// Показатели
+	mainPerson.currentHealth = 45;
+	mainPerson.currentStamina = 45;
+	mainPerson.currentMana = 45;
+
+	mainPerson.currentThirst = 1;
+	mainPerson.currentHungry = 1;
+
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -86,209 +98,33 @@ void MainPerson::updateView(RenderWindow & window)
 }
 ////////////////////////////////////////////////////////////////////
 
-/*
-void MainPerson::modeProcess(Field &field, list<UnlifeObject> *unlifeObjects, list<Item> *items, Event &eventPerson, float x, float y)
-{
-	Keyboard::Key pressKey = eventPerson.key.code;
-
-	int isFloor;
-
-	//printf("%f %f\n", getXPos(), getYPos());// ИСПРАВЬ
-
-	int xPosBlock = x / SIZE_BLOCK;
-	int yPosBlock = y / SIZE_BLOCK;
-
-	if (isInUseField(x, y)) {
-
-		switch (currenMode) {
-			////////////////////////////////////////////////////////////////////////////////////////////////
-			// Строительный режим
-		case idModeEntity::build:
-			///////////////////////////////////////////////////
-			// Установка стены
-			if (pressKey == Mouse::Left) {
-				isFloor = 1;
-			}
-			// Установка пола
-			else if (pressKey == Mouse::Right) {
-				isFloor = 0;
-			}
-			//
-			else {
-				isFloor = -1;
-			}
-			///////////////////////////////////////////////////
-			if (isFloor >= 0) {
-				//printf("%d %d\n", numberX, numberY);
-				wchar_t currentBlock(u'\x00');
-				switch (idSelectItem) {
-				case 0:
-					currentBlock = field.charBlocks[idBlocks::air];
-					break;
-				case 1:
-					currentBlock = field.charBlocks[idBlocks::stone];
-					//itemFromPanelQuickAccess[1].// ИСПРАВЬ
-					break;
-				case 2:
-					currentBlock = field.charBlocks[idBlocks::stoneBrick];
-					break;
-				case 3:
-					currentBlock = field.charBlocks[idBlocks::sand];
-					break;
-				case 4:
-					currentBlock = field.charBlocks[idBlocks::dirt];
-					break;
-				case 5:
-					currentBlock = field.charBlocks[idBlocks::planksBlock];
-					break;
-				case 6:
-					currentBlock = field.charBlocks[idBlocks::woodLadder];
-					break;
-				case 9:
-					currentBlock = u'\x99';
-					break;
-				default:
-					break;
-				}
-				if (currentBlock != u'\x00') {
-					field.dataMap[currentLevelFloor + isFloor][yPosBlock][xPosBlock] = currentBlock;
-				}
-			}
-			break;
-			////////////////////////////////////////////////////////////////////////////////////////////////
-			// Боевой режим
-		case idModeEntity::fight:
-			// Основное действие - атака, разрушение блока или объекта
-			if (pressKey == Mouse::Left) {
-				for (int l = 0; l < HEIGHT_MAP; l++) {
-					////////////////////////////////////////////////////////////////////////
-					// Ищем только на текущем уровне
-					// Находим объект или предмет
-					if (l == currentLevelFloor + 1) {
-						//////////////////////////////////////////////
-						// Предмет
-						for (std::list<Item>::iterator it = items->begin(); it != items->end(); ++it) {
-
-							if (isItem(x, y, *items, findItem, findItemFromList, it, l)) {
-								//////////////////////////////////
-								// Если предмет уничтожаемый то ...
-								if (findItem->isDestroy) {
-								}
-								//////////////////////////////////
-								// иначе просто перетаскиваем
-								else {
-									Sprite &mainSprite = *findItem->mainSprite;
-									if (mainSprite.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
-									{
-										printf("isClicked!\n");//выводим в консоль сообщение об этом
-
-																					 //spriteObject.setPosition(x, y);
-										dMoveItemX = x - mainSprite.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
-										dMoveItemY = y - mainSprite.getPosition().y;//тоже самое по игреку
-										isMoveItem = true;//можем двигать спрайт							
-									}
-								}
-								//////////////////////////////////
-								break;
-							}
-
-						}
-						//////////////////////////////////////////////
-						// Объект
-						for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
-							if (isObject(x, y, unlifeObjects, findObject, findObjectFromList, it, l)) {
-								//////////////////////////////////
-								// Если объект уничтожаемый то ...
-								if (findObject->isDestroy) {
-
-									//printf("currentToughness %d and now %d\n", findObject->currentToughness, findObject->currentToughness - 1);
-
-									// уменьшаем прочность
-									if (findObject->currentToughness > 0) {
-										findObject->currentToughness -= 1;
-									}
-
-									// уничтожаем если прочность = 0
-									if (findObject->currentToughness == 0) {
-										//printf("%s destroy \n", findObject->typeObject->name);
-										//////////////////////////////////////////
-										// Удаление
-										//for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
-
-											//if (&findElement != NULL) {
-											if (it == findObjectFromList) {// ИСПРАВЬ
-												unlifeObjects->erase(it);
-												break;
-											}
-
-										//}
-
-									}
-									//////////////////////////////////
-								}
-								//////////////////////////////////
-								// иначе просто перетаскиваем
-								else {
-									Sprite &spriteObject = *findObject->spriteObject;
-									if (spriteObject.getGlobalBounds().contains(x, y))//и при этом координата курсора попадает в спрайт
-									{
-										printf("isClicked!\n");//выводим в консоль сообщение об этом
-
-																					 //spriteObject.setPosition(x, y);
-										dMoveItemX = x - spriteObject.getPosition().x;//делаем разность между позицией курсора и спрайта.для корректировки нажатия
-										dMoveItemY = y - spriteObject.getPosition().y;//тоже самое по игреку
-										isMoveItem = true;//можем двигать спрайт							
-									}
-								}
-								///////////////////////////////////////////////////////////
-							}
-						}
-						///////////////////////////////////////////////////////////
-					}
-					////////////////////////////////////////////////////////////////////////		
-				}
-				//////////////////////////////////////////////////////////////
-			}
-			// Использование предмета или подбор
-			else {
-			};
-			break;
-			////////////////////////////////////////////////////////////////////////////////////////////////
-		default:
-			break;
-		}
-
-	}
-}
-
-*/
-
 void MainPerson::takeItem(Field &field, list<Item> &items, float x, float y)
 {
+	if (isInUseField(x, y)) {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Если есть место
+		if (isEmptySlot()) {
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Если есть место
-	if (isEmptySlot()) {
+			for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
 
-		for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
-
-			int level = it->currentLevel;
-			////////////////////////////////////////////////////////////////////
-			// Если нашли предмет
-			if (isItem(x, y, items, findItem, findItemFromList, it, level)) {
-				// Перемещаем в инвентарь
-				printf("added!1\n");
-				itemFromPanelQuickAccess[emptySlot] = *it;
-				itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
-				// Удаляем из мира
-				items.erase(it);
-				break;
+				int level = it->currentLevel;
+				////////////////////////////////////////////////////////////////////
+				// Если нашли предмет
+				if (isItem(x, y, items, findItem, findItemFromList, it, level)) {
+					// Перемещаем в инвентарь
+					printf("added!1\n");
+					itemFromPanelQuickAccess[emptySlot] = *it;
+					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
+					// Удаляем из мира
+					items.erase(it);
+					break;
+				}
+				////////////////////////////////////////////////////////////////////
 			}
-			////////////////////////////////////////////////////////////////////
-		}
 
+		}
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void MainPerson::throwItem(Field &field, list<Item> &items)
@@ -304,7 +140,7 @@ void MainPerson::throwItem(Field &field, list<Item> &items)
 		addItem->setPosition(getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK, currentLevelFloor + 1);
 		Vector2f posHero = { getXPos() + width / 2, getYPos() + height / 2 };// Начало отсчёта не в центре спрайта
 		addItem->mainSprite->setPosition(posHero);
-		addItem->mainSprite->setScale(scaleItems);
+		addItem->mainSprite->scale(scaleItems);
 		items.push_back(*addItem);
 		delete addItem;
 
@@ -336,6 +172,47 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 			break;
 			////////////////////////////////////////////////////////////////////////
 			// Напитки
+		case idCategoryItem::bukketWithWater:	
+			if (currentThirst < maxThirst) {
+
+				// Если используем ведро с водой
+				if (event.key.code == Mouse::Left) {
+					int fluid = currentItem.typeItem->idBlockForUse;
+					if (fluid) {
+
+						// Пытаемся вылить на землю
+						int level = currentLevelFloor + 1;
+						if (field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
+							// Выливаем в яму если стена не мешает
+							if (field.dataMap[level - 1][y][x] == field.charBlocks[idBlocks::air]) {
+								field.dataMap[level - 1][y][x] = field.charBlocks[fluid];
+							}
+							// 
+							else {
+								field.dataMap[level][y][x] = field.charBlocks[fluid];
+							}
+						}
+
+
+					}
+				}
+
+				// Утоление жажды
+				if (event.key.code == Mouse::Right) {
+					currentThirst += currentItem.currentToughness;
+				}
+
+				if (event.key.code == Mouse::Left || event.key.code == Mouse::Right) {
+					// Опустошение бутылки
+					int defineType = currentItem.typeItem->idItem - 1;
+					currentItem.typeItem->idItem = defineType + 1;
+					currentItem.setType(typesItems[defineType]);
+					currentItem.mainSprite->scale(normalSize);
+
+				}
+
+			}
+			break;
 		case idCategoryItem::bottleWithWater:
 			if (event.key.code == Mouse::Right) {
 				// Утоление жажды
@@ -344,41 +221,81 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 					currentThirst += currentItem.currentToughness;
 
 					// Опустошение бутылки
-			
 					int defineType = currentItem.typeItem->idItem - 1;
-					currentItem.typeItem->idItem = defineType + 1;// ???
+					currentItem.typeItem->idItem = defineType + 1;
 					currentItem.setType(typesItems[defineType]);
+					currentItem.mainSprite->scale(normalSize);
+
 				}
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
 			// Бутылки
-		case idCategoryItem::bottleEmpty:// ИСПРАВЬ
+		case idCategoryItem::bukketEmpty:// ИСПРАВЬ
 			if (isInUseField(xMouse, yMouse)) {
-				if (event.key.code == Mouse::Right) {
-					// Наполнение бутылки
+				// Наполнение бутылки
 
-					int level;
-					// Берём воду
-					if (event.key.code == Mouse::Left) {
-						level = currentLevelFloor + 1;
-					} else if (event.key.code == Mouse::Right) {
-						level = currentLevelFloor;
-					} else {
-						level = -1;
-					}
+				int level;
+				// Берём воду
+				if (event.key.code == Mouse::Left) {
+					level = currentLevelFloor + 1;
+				} else if (event.key.code == Mouse::Right) {
+					level = currentLevelFloor;
+				} else {
+					level = -1;
+				}
 
 
-					if (level > -1) {
-						if (field.dataMap[level][y][x] == field.charBlocks[idBlocks::water]) {
+				if (level > -1) {
+					int fluid = currentItem.typeItem->idBlockForUse;
+					if (fluid) {
+						if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
 
-							int typeFillBottle = currentItem.typeItem->idItem + 1;
-							currentItem.setType(typesItems[typeFillBottle]);
+							field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+							// Опустошение бутылки
+							int defineType = currentItem.typeItem->idItem + 1;
+							currentItem.typeItem->idItem = defineType - 1;
+							currentItem.setType(typesItems[defineType]);
+							currentItem.mainSprite->scale(normalSize);
 
 						}
 					}
-
 				}
+
+			}
+			break;
+		case idCategoryItem::bottleEmpty:// ИСПРАВЬ
+			if (isInUseField(xMouse, yMouse)) {
+
+				// Наполнение бутылки
+
+				int level;
+				// Берём воду
+				if (event.key.code == Mouse::Left) {
+					level = currentLevelFloor + 1;
+				} else if (event.key.code == Mouse::Right) {
+					level = currentLevelFloor;
+				} else {
+					level = -1;
+				}
+
+
+				if (level > -1) {
+					int fluid = currentItem.typeItem->idBlockForUse;
+					if (fluid) {
+						if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
+
+							// Опустошение бутылки
+							int defineType = currentItem.typeItem->idItem + 1;
+							currentItem.typeItem->idItem = defineType - 1;
+							currentItem.setType(typesItems[defineType]);
+							currentItem.mainSprite->scale(normalSize);
+
+						}
+					}
+				}
+
+
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
@@ -563,63 +480,55 @@ bool MainPerson::isPickaxBreakingObject(String* pickaxBreakingObject) {
 }
 ////////////////////////////////////////////////////////////////////////////////////
 
-bool MainPerson::isEmptySlot()
-{
-	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) 
-	{
-		if (itemFromPanelQuickAccess[i].typeItem == emptyItem->typeItem) {
-			emptySlot = i;
-			return true;
-		}
-	}
-	return false;
-}
-
 // Взаимодействие с лестницами
-void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, int x, int y)
+void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
 {
-	/////////////////////////////////////////////////////////////////////////////
-	// Взаимодейстиве с блоками
-	if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1)
-	{
-		// Если блок лестница
-		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x]) != NULL)
-		{
-			// Чтобы точка отсчёта была у лестницы
-			spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
-			currentLevelFloor += 1;
+	if (isInUseField(xPos, yPos)) {
+		/////////////////////////////////////////////////////////////////////////////
+		// Взаимодейстиве с блоками
+		if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
+			// Если блок лестница
+			int x = xPos / SIZE_BLOCK;
+			int y = yPos / SIZE_BLOCK;
+			if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x]) != NULL) {
+				// Чтобы точка отсчёта была у лестницы
+				spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
+				currentLevelFloor += 1;
+
+			}
 
 		}
+		/////////////////////////////////////////////////////////////////////////////
+		// Взаимодейстиве с предметами
+
+		/////////////////////////////////////////////////////////////////////////////
 
 	}
-	/////////////////////////////////////////////////////////////////////////////
-	// Взаимодейстиве с предметами
-
-	/////////////////////////////////////////////////////////////////////////////
-
+	
 }
 
-void MainPerson::actionAlternate(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, int x, int y)
+void MainPerson::actionAlternate(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
 {
-	/////////////////////////////////////////////////////////////////////////////
-	// Взаимодейстиве с блоками
-	if (currentLevelFloor >= 1)
-	{
-		// Если блок лестница
-		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x]) != NULL)
-		{
-			// Чтобы точка отсчёта была у лестницы
-			spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
+	if (isInUseField(xPos, yPos)) {
+		/////////////////////////////////////////////////////////////////////////////
+		// Взаимодейстиве с блоками
+		if (currentLevelFloor >= 1) {
+			int x = xPos / SIZE_BLOCK;
+			int y = yPos / SIZE_BLOCK;
+			// Если блок лестница
+			if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x]) != NULL) {
+				// Чтобы точка отсчёта была у лестницы
+				spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
+				currentLevelFloor -= 1;
 
-			currentLevelFloor -= 1;
-			
+			}
+
 		}
+		/////////////////////////////////////////////////////////////////////////////
+		// Взаимодейстиве с предметами
 
+		/////////////////////////////////////////////////////////////////////////////
 	}
-	/////////////////////////////////////////////////////////////////////////////
-	// Взаимодейстиве с предметами
-
-	/////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////

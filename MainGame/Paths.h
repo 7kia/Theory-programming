@@ -4,6 +4,8 @@
 
 typedef enum {
 	mainPerson,
+	wolf,
+	skelet,
 	mapFloor,
 	mapWall,
 	Trees,
@@ -24,6 +26,8 @@ typedef enum {
 const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 {
 	"recourses\\images\\entity\\mainPerson.png",
+	"recourses\\images\\entity\\wolf.png",
+	"recourses\\images\\entity\\skeleton.png",
 	"recourses\\images\\blocks\\mapFloor.png",
 	"recourses\\images\\blocks\\mapWall.png",
 	"recourses\\images\\unlife\\Trees.png",

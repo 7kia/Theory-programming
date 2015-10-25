@@ -4,7 +4,6 @@
 #include "BlocksVar.h"
 
 const int MAX_ITEMS = 256;
-const int AMOUNT_TYPES_ITEM = 15;
 
 const sf::Vector2f scaleItems = { 0.75f, 0.75f };
 const sf::Vector2f normalSize = { 1.34f, 1.34f };
@@ -55,34 +54,63 @@ const int PIXEL_Y_STONE_PICKAX = SIZE_ITEM * 3;
 const int PIXEL_X_STONE_AXE = SIZE_ITEM * 5;
 const int PIXEL_Y_STONE_AXE = SIZE_ITEM * 3;
 
-// glass bottle - стекляееая бутылка
+// glass bottle - стеклянная бутылка
 const int PIXEL_X_GLASS_BOTTLE = SIZE_ITEM * 6;
 const int PIXEL_Y_GLASS_BOTTLE = SIZE_ITEM * 2;
 
-// glass bottle with water - стекляееая бутылка
+// glass bottle with water - стеклянная бутылка с водой
 const int PIXEL_X_GLASS_BOTTLE_WITH_WATER = SIZE_ITEM * 7;
 const int PIXEL_Y_GLASS_BOTTLE_WITH_WATER = SIZE_ITEM * 2;
+
+// wood bukket - ведро
+const int PIXEL_X_WOOD_BUKKET = SIZE_ITEM * 8;
+const int PIXEL_Y_WOOD_BUKKET = SIZE_ITEM * 2;
+
+// wood bukket with water - ведро с водой
+const int PIXEL_X_WOOD_BUKKET_WITH_WATER = SIZE_ITEM * 9;
+const int PIXEL_Y_WOOD_BUKKET_WITH_WATER = SIZE_ITEM * 2;
+
+// stone knife - каменный нож
+const int PIXEL_X_STONE_KNIFE = SIZE_ITEM * 4;
+const int PIXEL_Y_STONE_KNIFE = SIZE_ITEM * 3;
+
+// wood club - деревянная дубина
+const int PIXEL_X_WOOD_CLUB = SIZE_ITEM * 6;
+const int PIXEL_Y_WOOD_CLUB = SIZE_ITEM * 3;
 // ДОБАВЛЕНИЕ ПРЕДМЕТА
 
 typedef enum
 {
 	// ДОБАВЛЕНИЕ ПРЕДМЕТА
-	stoneItem,// Камень
-	planksBlockItem,
-	dirtItem,
+	emptyItem,
+	// Блоки
 	grassItem,
+	dirtItem,
 	sandItem,
-	woodLadderItem,
-	stoneBrickItem,
-	mushroomItem,
 	logOakItem,
+	stoneItem,
+	stoneBrickItem,
+	planksBlockItem,
+	woodLadderItem,
+	// Еда
+	mushroomItem,
+	// Инструменты
 	stonePickaxItem,
 	stoneAxeItem,
+	// Мечи
+	stoneKnifeItem,
+	// Дубины
+	woodClubItem,
+	// Сосуды с водой и без
 	glassBottleItem,
-	glassBottleWithWater,
+	glassbukketWithWater,
+	woodBukketItem,
+	woodBukketWithWaterItem,
 
-	emptyItem
+	amountItem
 } idItem;
+
+const int AMOUNT_TYPES_ITEM = idItem::amountItem;
 
 typedef enum
 {
@@ -90,7 +118,11 @@ typedef enum
 	food,
 	block,
 	pickax,
-	bottleWithWater,
 	bottleEmpty,
-	axe
+	bottleWithWater,
+	bukketWithWater,
+	bukketEmpty,
+	weapon,
+	axe,
+	amounCategory
 } idCategoryItem;

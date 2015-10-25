@@ -105,26 +105,38 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	window.draw(*infoSelectBlockSprite);
 
 	// Размещение текста
-	Text& currentText = textGame.texts[idText::infoWindowBlock];
+	Text* currentText = &textGame.texts[idText::infoWindowBlock];
 	pos = { pos.x + shiftXInfoText , pos.y + shiftYInfoText };
-	currentText.setPosition(pos);
-	window.draw(currentText);
+	currentText->setPosition(pos);
+	window.draw(*currentText);
 
 	// Смещаем строку на размер букв предыдущей строки вниз
-	currentText = textGame.texts[idText::infoWindowFloor];
+	currentText = &textGame.texts[idText::infoWindowFloor];
 	pos.y += textGame.texts[idText::infoWindowBlock].getCharacterSize();
-	currentText.setPosition(pos);
-	window.draw(currentText);
+	currentText->setPosition(pos);
+	window.draw(*currentText);
 
-	currentText = textGame.texts[idText::infoWindowUnlifeObject];
+	currentText = &textGame.texts[idText::infoWindowUnlifeObject];
 	pos.y += textGame.texts[idText::infoWindowFloor].getCharacterSize();
-	currentText.setPosition(pos);
-	window.draw(currentText);
+	currentText->setPosition(pos);
+	window.draw(*currentText);
 
-	currentText = textGame.texts[idText::infoWindowItem];
+	currentText = &textGame.texts[idText::infoWindowItem];
 	pos.y += textGame.texts[idText::infoWindowUnlifeObject].getCharacterSize();
-	currentText.setPosition(pos);
-	window.draw(currentText);
+	currentText->setPosition(pos);
+	window.draw(*currentText);
+
+	currentText = &textGame.texts[idText::infoEntity];
+	pos.y += textGame.texts[idText::infoWindowItem].getCharacterSize();
+	currentText->setPosition(pos);
+	window.draw(*currentText);
+
+	// Текст о смерти
+	currentText = &textGame.texts[idText::mainPersonIsDeath];
+	currentText->setPosition(centerWindow);
+	if (mainPerson.isDeath) {
+		window.draw(*currentText);
+	}
 	////////////////////////////////////////////////////////////////////////
 	// Панель быстрого доступа
 	pos = { centerWindow.x , centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
@@ -210,11 +222,11 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
 	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI;
 
-	lowHungry->setPosition(pos);
+	// Верхняя часть тарелки
 	highHungry->setPosition(pos);
-	window.draw(*lowHungry);
 	window.draw(*highHungry);
 
+	// Уровень голода
 	level = (float)mainPerson.currentHungry / mainPerson.maxHungry;
 
 	pos.y += LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
@@ -222,6 +234,13 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
 	levelHungry->setPosition(pos);
 	window.draw(*levelHungry);
+
+	// Дно тарелки
+	pos = centerWindow;
+	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
+	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI;
+	lowHungry->setPosition(pos);
+	window.draw(*lowHungry);
 	////////////////////////////////////////////////////////////////////////
 	// Шкала жажды
 	pos = centerWindow;
@@ -240,11 +259,5 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	levelThirst->setPosition(pos);
 	window.draw(*levelThirst);
 	////////////////////////////////////////////////////////////////////////
-	// Текст о смерти
-	textGame.texts[idText::mainPersonIsDeath].setPosition(centerWindow);
-	if (mainPerson.isDeath) {
-		window.draw(textGame.texts[idText::mainPersonIsDeath]);
-	}
-
 
 }

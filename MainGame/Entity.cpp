@@ -82,6 +82,9 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		//printf("%d\n", currentThirst);// ИСПРАВЬ
 	}
 
+	if (currentThirst > maxThirst) {
+		currentThirst = maxThirst;
+	}
 	///////////////////////////////////////
 	// голода
 	timeForThirst += deltaTime.asSeconds();
@@ -91,7 +94,11 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		//printf("%d\n", currentHungry);// ИСПРАВЬ
 	}
 
-	if (currentHungry > 1 && currentThirst > 1) {
+	if (currentHungry > maxHungry) {
+		currentHungry = maxHungry;
+	}
+	// Персонаж умирает от голода или жажды
+	if (currentHungry > 0 && currentThirst > 0) {
 		needMinusHealth = false;
 	}
 	else {
@@ -113,7 +120,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
 
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 2, width, height));
 		break;
 	case UP_RIGHT:
 		movement.y = -stepCurrent;
@@ -124,7 +131,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 2, width, height));
 		break;
 	case UP:
 		movement.y = -stepCurrent;
@@ -134,7 +141,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		timeAnimation += deltaTime.asSeconds() * pauseStep;
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 3, width, height));
+		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 2, width, height));
 		break;
 	case DOWN_LEFT:
 		movement.y = stepCurrent;
@@ -258,14 +265,18 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
 		/////////////////////////////////////////////
-		// Проверяем окружающие объекты
-		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++)
-		{
-			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++)
-			{
-				// Проверяем по списку проходимых блоков
-				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == NULL)
-				{
+		// Проверяем пол
+		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
+				// Замедляющие блоки
+				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {
+					stepCurrent = stepFirst / slowingStep;
+				} else if (stepCurrent == stepFirst / slowingStep) {
+					stepCurrent = stepFirst;
+				}
+
+				// Является непроходимым
+				if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
 					x = getXPos();
 					y = getYPos();
 					break;
@@ -276,12 +287,20 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 		/////////////////////////////////////////////
 
 		/////////////////////////////////////////////
-		// Проверяем пол
+		// Проверяем окружающие объекты
 		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++)
 		{
 			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++)
 			{
-				if (wcschr(listDestroy.passableFloor, map[currentLevelFloor][i][j]) != NULL)
+				// Замедляющие блоки
+				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {
+					stepCurrent = stepFirst / slowingStep;
+				} else if (stepCurrent == stepFirst / slowingStep) {
+					stepCurrent = stepFirst;
+				}
+
+				// Проверяем по списку проходимых блоков
+				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == NULL)
 				{
 					x = getXPos();
 					y = getYPos();
@@ -363,7 +382,16 @@ void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, cons
 	movement = { 0.f, 0.f };
 }
 
-
+bool Entity::isEmptySlot()
+{
+	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
+		if (itemFromPanelQuickAccess[i].typeItem == emptyItem->typeItem) {
+			emptySlot = i;
+			return true;
+		}
+	}
+	return false;
+}
 //////////////////////////////////////////////////////
 // Поиск неживого объекта
 bool isObject(float x, float y, list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList, list<UnlifeObject>::iterator &current, int currentLevel)
@@ -482,3 +510,78 @@ bool Entity::isExitFromBorder(int x, int y)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Сущности
+void Enemy::EnemyInit(String texturePath, String nameEnemy, int widthEnemy, int heightEnemy, int amountEnemySlots, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level)
+{
+	spriteEntity = new Sprite;
+	textureEntity = new Texture;
+
+	name = nameEnemy;
+
+	// Задание размера
+	height = widthEnemy;
+	width = heightEnemy;
+
+	// Дальность подбора предметов
+	radiusUse = 1;
+
+	// Скорость ходьбы
+	stepFirst = speedEntity;
+	stepCurrent = speedEntity;
+	timeAnimation = 0.f;
+
+	// Текстура
+	textureEntity->loadFromFile(texturePath);
+	spriteEntity->setTexture(*textureEntity);
+	spriteEntity->setTextureRect(IntRect(0, 0, width, height));
+
+	// Звуки 
+	soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
+	soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
+
+	findItem = new Item;
+	findObject = new UnlifeObject;
+
+	// Текущий выбранный тип блока
+	this->emptyObject = &emptyObject;
+	this->emptyItem = &emptyItem;
+	idSelectItem = 0;
+
+	// Создайм и заполняем пустыми предметами
+	amountSlots = amountEnemySlots;
+	itemFromPanelQuickAccess = new Item[amountEnemySlots];
+	Item* itemsEnemy = itemFromPanelQuickAccess;
+	for (int i = 0; i < amountEnemySlots; i++) {
+		itemsEnemy[i].typeItem = emptyItem.typeItem;
+	}
+
+	// Позиция и направление
+	currentLevelFloor = level;
+	currenMode = idModeEntity::fight;
+	spriteEntity->setPosition(xPos * SIZE_BLOCK - width / 2, yPos * SIZE_BLOCK - height / 2);
+	direction = NONE;
+
+
+	// Показатели
+	maxHealth = 50;
+	maxStamina = 50;
+	maxMana = 0;
+
+	currentHealth = maxHealth;
+	currentStamina = maxStamina;
+	currentMana = maxMana;
+
+	currentThirst = maxThirst;
+	currentHungry = maxHungry;
+
+
+
+
+}
+
+Enemy::~Enemy() {
+
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

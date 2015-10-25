@@ -74,7 +74,7 @@ void processEvents(Game &game)
 			if (event.type == Event::KeyPressed) {
 				if (Keyboard::isKeyPressed(Keyboard::C)) 
 				{
-					mainPerson.actionAlternate(*game.field, game.unlifeObjects, *game.listDestroy, game.items, numberX, numberY);
+					mainPerson.actionAlternate(*game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::Q)) 
 				{
@@ -82,7 +82,7 @@ void processEvents(Game &game)
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::E)) 
 				{
-					mainPerson.actionMain(*game.field, game.unlifeObjects, *game.listDestroy, game.items, numberX, numberY);// ИСПРАВЬ
+					mainPerson.actionMain(*game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);// ИСПРАВЬ
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::R)) 
 				{
@@ -92,7 +92,7 @@ void processEvents(Game &game)
 				// Бег
 				else if (Keyboard::isKeyPressed(Keyboard::LShift)) {
 					if (mainPerson.stepCurrent > mainPerson.stepFirst) {
-						mainPerson.stepCurrent -= 450.f;
+						mainPerson.stepCurrent = mainPerson.stepFirst;
 						mainPerson.needMinusStamina = false;
 					} else {
 						mainPerson.stepCurrent += 450.f;
@@ -250,11 +250,15 @@ void render(Game & game)
 		
 	}
 	////////////////////////////////////////////////////////
+	// Сущности
+
+	renderEntitys(game);
+
 
 	//////////////////////////////////////////////
 	// GUI
 	game.gui->setPositionGui(window, *game.mainPerson, *game.textGame);
-
+	//////////////////////////////////////////////
 	window.display();
 }
 
@@ -273,10 +277,9 @@ void startGame()
 	{
 		timeSinceLastUpdate += game->clock->restart();
 		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());// ИСПРАВЬ
-		while (timeSinceLastUpdate > TIME_PER_FRAME)
-		{
-				timeSinceLastUpdate -= TIME_PER_FRAME;
-				processEvents(*game);
+		while (timeSinceLastUpdate > TIME_PER_FRAME) {
+			timeSinceLastUpdate -= TIME_PER_FRAME;
+			processEvents(*game);
 			////////////////////////////////////////////////////////////
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
@@ -284,6 +287,18 @@ void startGame()
 				mainPerson.interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
+
+				/////////////////////////////////////
+				// Взаимодействие существ с миром
+				list<Enemy>* Enemys = game->Enemys;
+				for (std::list<Enemy>::iterator it = Enemys->begin(); it != Enemys->end(); ++it) {
+					
+					it->update(TIME_PER_FRAME, *game->databaseSound);
+					it->interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
+					it->interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
+
+				}
+				/////////////////////////////////////
 
 				mainPerson.updateView(*game->window);
 				window.setView(*mainPerson.view);

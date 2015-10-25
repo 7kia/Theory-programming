@@ -22,6 +22,10 @@ struct Item
 	bool isDestroy;
 	int currentToughness;// Прочность
 
+	// Урон
+	int cuttingDamage;// Режущий
+	int crushingDamage;// Дробящий
+
 	// Текущий уровень размещения
 	int currentLevel;
 

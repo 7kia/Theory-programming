@@ -3,6 +3,8 @@
 
 const int SIZE_BLOCK = 48;//32 default
 
+const int slowingStep = 4;
+
 typedef enum
 {
 	unknow,

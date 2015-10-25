@@ -8,7 +8,12 @@
 #include "Map.h"
 #include "Sound.h"
 
+#include "EntityVar.h"
+
 const float speedEntity = 350.f;
+
+const int AMOUNT_ENTITY = 100;
+const int AMOUNT_ACTIVE_SLOTS = 10;
 
 const sf::Color NORMAL_COLOR(255, 255, 255, 255);
 const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
@@ -20,6 +25,9 @@ public:
 	sf::Sprite *spriteEntity;
 	sf::Texture *textureEntity;
 	
+	// Имя
+	sf::String name;
+
 	// Для движения
 	Direction direction;
 	float stepFirst;
@@ -35,10 +43,32 @@ public:
 	sf::Sound *soundsEntity[sizeBuffer];
 
 	//////////////////////////////////////////////////
+	// Для взаимодействия с миром
+	int currenMode;
+	Item *itemFromPanelQuickAccess;
+	Item *emptyItem;// ИСПРАВЬ
+	int idSelectItem;
+
+	bool isEmptySlot();
+	int emptySlot;
+
+	// Для передвижения объекта
+	UnlifeObject *findObject;
+	std::list<UnlifeObject>::iterator findObjectFromList;
+	UnlifeObject* emptyObject;
+	// Для передвижения предмета
+	Item *findItem;
+	std::list<Item>::iterator findItemFromList;
+
+	bool isMoveItem;
+	float dMoveItemX, dMoveItemY;
+	
+	// Количество ячеек инвентаря
+	int amountSlots;
+
+	//////////////////////////////////////////////////
 	// Индикаторы
 	bool isDeath = false;
-
-
 
 	// Здоровье
 	bool isMaxHealth = true;
@@ -50,7 +80,7 @@ public:
 	int addHealth = 1;
 	int delHealth = 2;
 
-	int currentHealth = 25;
+	int currentHealth = 100;
 	int maxHealth = 100;
 
 	// Выносливость
@@ -63,7 +93,7 @@ public:
 	int addStamina = 1;
 	int delStamina = 4;
 
-	int currentStamina = 25;
+	int currentStamina = 100;
 	int maxStamina = 100;
 
 	// Мана
@@ -76,20 +106,20 @@ public:
 	int addMana = 1;
 	int delMana = 2;
 
-	int currentMana = 25;
+	int currentMana = 100;
 	int maxMana = 100;
 
 	// Голод
 	float timeForHungry = 0;
 	float timeUpdateHungry = 100;
-	int currentHungry = 5;
+	int currentHungry = 20;
 	int maxHungry = 20;
 
 
 	// Жажда
 	float timeForThirst = 0;
 	float timeUpdateThirst = 60;
-	int currentThirst = 5;
+	int currentThirst = 20;
 	int maxThirst = 20;
 
 
@@ -122,7 +152,34 @@ public:
 
 };
 
-// Объявление персонажа
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Сущность
+class Enemy : public Entity
+{
+public:
+	// режимы персонажа
+
+	// Для направления взгляда
+	float rotation;
+
+	// Для взаимодействия с миром
+	int currenMode;
+	Item *items;
+	Item *emptyItem;// ИСПРАВЬ
+	int idSelectItem;
+
+	// Для уничтожения врагов
+	Enemy *findEnemy;
+	Enemy *emptyEnemy;
+	std::list<Enemy>::iterator findEnemyFromList;
+
+	void EnemyInit(sf::String texturePath, sf::String nameEnemy, int widthEnemy, int heightEnemy, int amountEnemySlots, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level);
+	~Enemy();
+private:
+
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Объявление сущности
 void initializeEntity(Entity & Entity, dataSound &databaseSound);
 
 bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, std::list<UnlifeObject>::iterator &current, int currentLevel);

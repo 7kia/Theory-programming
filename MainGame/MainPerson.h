@@ -1,11 +1,8 @@
 #pragma once
 #include "Entity.h"
-#include "Items.h"
-#include "UnlifeObject.h"
-#include "ListObjectsAndBlocks.h"// ИСПРАВЬ
 
-const int AMOUNT_ACTIVE_SLOTS = 10;
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Основной персонаж
 class MainPerson : public Entity
 {
 public:
@@ -15,6 +12,12 @@ public:
 	sf::View *view;
 	void updateView(sf::RenderWindow & window);
 
+
+	// Для уничтожения врагов
+	Enemy *findEnemy;
+	Enemy *emptyEnemy;
+	std::list<Enemy>::iterator findEnemyFromList;
+
 	void getCoordinateForView(float x, float y);
 	void viewmap(float time);
 	void changeview();
@@ -23,26 +26,6 @@ public:
 	float rotation;
 	void computeAngle(sf::RenderWindow &window);
 
-	// Для взаимодействия с миром
-	int currenMode;
-	Item *itemFromPanelQuickAccess;
-	Item *emptyItem;// ИСПРАВЬ
-	int idSelectItem;
-
-	bool isEmptySlot();
-	int emptySlot;
-
-	// Для передвижения объекта
-	UnlifeObject *findObject;
-	std::list<UnlifeObject>::iterator findObjectFromList;
-	UnlifeObject* emptyObject;
-	// Для передвижения предмета
-	Item *findItem;
-	std::list<Item>::iterator findItemFromList;
-
-	bool isMoveItem;
-	float dMoveItemX, dMoveItemY;
-	//////////////////////////////////////////////////
 	void takeItem(Field &field, std::list<Item> &items, float x, float y);
 	void throwItem(Field &field, std::list<Item> &items);
 	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, std::list<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
@@ -53,10 +36,10 @@ public:
 	bool isPickaxBreakingObject(sf::String* pickaxBreakingObject);// ИСПРАВЬ
 
 	// кнопка "Дествие" и "Другое действие"
-	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, int x, int y);
-	void actionAlternate(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, int x, int y);
+	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, float xPos, float yPos);
+	void actionAlternate(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, float xPos, float yPos);
 private:
 
 };
 
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject);
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy);

@@ -1,0 +1,26 @@
+#pragma once
+#include <SFML/Audio.hpp>
+
+#include <iostream>
+#include <string>
+
+const int AMOUNT_AXE_BREAKING_BLOCKS = 2;
+const int AMOUNT_AXE_BREAKING_OBJECTS = 5;
+
+const int AMOUNT_PICKAX_BREAKING_BLOCKS = 5;
+const int AMOUNT_PICKAX_BREAKING_OBJECTS = 5;
+
+struct destroyObjectsAndBlocks//Game.cpp
+{
+	sf::String axeBreakingObject[AMOUNT_AXE_BREAKING_OBJECTS];
+	sf::String pickaxBreakingObject[AMOUNT_PICKAX_BREAKING_OBJECTS];
+
+	wchar_t axeBreakingBlock[SIZE_STRING];
+	wchar_t pickaxBreakingBlock[SIZE_STRING];
+
+	wchar_t passableBlocks[SIZE_STRING];
+	wchar_t notPassableFloor[SIZE_STRING];
+	wchar_t slowingBlocks[SIZE_STRING];
+
+	wchar_t ladder[SIZE_STRING];
+};

@@ -4,12 +4,11 @@
 #include <iterator>
 
 #include "Sound.h"
+
 #include "MainPerson.h"
-#include "UnlifeObject.h"
-#include "Items.h"
+
 #include "Font.h"
 #include "GUI.h"
-#include "ListObjectsAndBlocks.h"
 
 #include <math.h>
 
@@ -20,7 +19,6 @@ struct Game
 	GUI *gui;
 	TextGame *textGame;
 
-	Entity *entitys;// ÈÑÏĞÀÂÜ
 	MainPerson *mainPerson;
 
 	TypesUnlifeObject *typesUnlifeObject;
@@ -32,6 +30,13 @@ struct Game
 	TypesItem *typesItem;
 	std::list<Item>* items;
 
+
+	////////////////////////////////////
+	// Îñòàëüíûå ñóùíîñòè
+	Enemy *emptyEnemy;
+	std::list<Enemy>* Enemys;// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ
+	////////////////////////////////////
+
 	destroyObjectsAndBlocks* listDestroy;
 
 	Field *field;
@@ -41,6 +46,7 @@ struct Game
 	dataSound *databaseSound;
 
 	int countUnlifeObject = 0;
+	int countEntity = 0;
 
 	unsigned int widthMainWindow = DEFAULT_WIDTH_WINDOW;
 	unsigned int heightMainWindow = DEFAULT_HEIGHT_WINDOW;
@@ -49,6 +55,9 @@ struct Game
 void initializeGame(Game & game);
 
 void initializeCategorysBreakingObject(Game &game);
+void initializeEntitys(Game &game);
+
+void renderEntitys(Game &game);
 
 void destroyGame(Game & game);
 void initializeClock(Clock &clock);

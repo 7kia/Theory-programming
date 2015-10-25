@@ -34,6 +34,12 @@ void initializeTexts(TextGame &textGame)
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
+
+	currentText = &textGame.texts[idText::infoEntity];
+	currentText->setColor(Color::White);
+	currentText->setStyle(Text::Regular | Text::Underlined);
+	currentText->setFont(*textGame.font);
+	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
 	////////////////////////////////////////////////////////////////////
 
 

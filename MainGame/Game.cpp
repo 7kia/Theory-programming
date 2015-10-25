@@ -45,8 +45,15 @@ void initializeGame(Game & game)
 	// Категории ломаемых предметов
 	initializeCategorysBreakingObject(game);
 
+	////////////////////////////////////
+	// Остальные сущности
+	game.Enemys = new std::list<Enemy>;
+
+	initializeEntitys(game);
+	////////////////////////////////////
+
 	// Основной персонаж
-	initializeMainPerson(*game.mainPerson, *game.databaseSound, *game.emptyItem, *game.emptyObject);
+	initializeMainPerson(*game.mainPerson, *game.databaseSound, *game.emptyItem, *game.emptyObject, *game.emptyEnemy);
 
 	// GUI
 	initializeGUI(*game.gui, *game.textGame);
@@ -91,10 +98,9 @@ void initializeCategorysBreakingObject(Game &game)
 	listDestroy.passableBlocks[2] = charBlocks[idBlocks::woodLadder];
 	/////////////////////////////////////////////////////////////////////////
 	// Проходим по полу
-	listDestroy.passableFloor[SIZE_STRING - 1] = u'\0';
+	listDestroy.notPassableFloor[SIZE_STRING - 1] = u'\0';
 
-	listDestroy.passableFloor[0] = charBlocks[idBlocks::air];
-	listDestroy.passableFloor[1] = charBlocks[idBlocks::water];
+	listDestroy.notPassableFloor[0] = charBlocks[idBlocks::air]; 
 	/////////////////////////////////////////////////////////////////////////
 	// Замедляющие блоки
 	listDestroy.slowingBlocks[SIZE_STRING - 1] = u'\0';
@@ -109,6 +115,92 @@ void initializeCategorysBreakingObject(Game &game)
 }
 //*/
 
+void initializeEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ 
+{
+	game.emptyEnemy = new Enemy;
+	game.emptyEnemy->EnemyInit(texturePaths[idTexturePaths::wolf], "Empty", 0, 0, 0,
+														*game.databaseSound, *game.emptyItem, *game.emptyObject, 0, 0, 0);
+
+
+	// Первая сущность
+	list<Enemy>* Enemys = game.Enemys;
+	Enemy* addEnemy = new Enemy();
+
+	srand(time(0)); // автоматическая случайность
+	//////////////////////////////////////////////////////////////
+	// Волки
+	String texturePath = texturePaths[idTexturePaths::wolf];
+
+	int width = WIDTH_WOLF;
+	int height = HEIGHT_WOLF;
+	int amountSlots = AMOUNT_WOLF_SLOTS;
+
+	int xPos;
+	int yPos;
+	int levelFloor;
+
+	for (size_t i = 0; i < 1; i++) {
+		game.countEntity++;
+		if (game.countEntity > AMOUNT_ENTITY) {
+			break;
+		}
+
+		int xPos = 5 + rand() % 5;
+		int yPos = 5 + rand() % 5;
+		int levelFloor = 0;
+
+		addEnemy->EnemyInit(texturePath, "Wolf", width, height, amountSlots, *game.databaseSound, *game.emptyItem, *game.emptyObject,
+												xPos, yPos, levelFloor);
+
+		Enemys->push_back(*addEnemy);
+
+	}
+	//////////////////////////////////////////////////////////////
+	// Скелеты
+	texturePath = texturePaths[idTexturePaths::skelet];
+
+	width = WIDTH_SKELET;
+	height = HEIGHT_SKELET;
+	amountSlots = AMOUNT_SKELET_SLOTS;
+
+	for (size_t i = 0; i < 1; i++) {
+		game.countEntity++;
+		if (game.countEntity > AMOUNT_ENTITY) {
+			break;
+		}
+
+		xPos = 7 + rand() % 5;
+		yPos = 7 + rand() % 5;
+		levelFloor = 0;
+
+		addEnemy->EnemyInit(texturePath, "Skelet", width, height, amountSlots, *game.databaseSound, *game.emptyItem, *game.emptyObject,
+												xPos, yPos, levelFloor);
+
+		Enemys->push_back(*addEnemy);
+
+	}
+	//////////////////////////////////////////////////////////////
+	delete addEnemy;
+	
+}
+
+void renderEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ
+{
+	RenderWindow& window = *game.window;
+	//////////////////////////////////////////////////////////////
+	// Волки
+	list<Enemy>* Enemys = game.Enemys;
+
+	for (std::list<Enemy>::iterator it = Enemys->begin(); it != Enemys->end(); ++it) {
+		if (it->currentLevelFloor == game.mainPerson->currentLevelFloor) {
+
+			window.draw(*it->spriteEntity);
+			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
+		}
+
+	}
+	//////////////////////////////////////////////////////////////
+}
 
 void destroyGame(Game & game)
 {
@@ -204,6 +296,32 @@ void informationAboutSelect(Game &game, float x, float y)
 					game.mainPerson->findItemFromList = it;
 					game.mainPerson->findItem = &*it;
 					infoItem.setString("Item : " + name);
+				}
+			}
+		}
+
+	}
+	///////////////////////////////////////////////////////////////////
+	// Осмотр сущностей
+	list<Enemy>& Enemys = *game.Enemys;
+	Text& infoEnemys = textGame.texts[idText::infoEntity];
+
+	infoEnemys.setString("Entity : not select");
+	for (std::list<Enemy>::iterator it = Enemys.begin(); it != Enemys.end(); ++it) {
+
+		int level = it->currentLevelFloor;
+
+		Sprite *spriteObject = it->spriteEntity;
+		FloatRect objectBound = spriteObject->getGlobalBounds();
+
+		if (objectBound.contains(x, y)) {
+			if (level == game.mainPerson->currentLevelFloor) {
+				String name = it->name;
+				if (name != "") {
+
+					game.mainPerson->findEnemyFromList = it;
+					game.mainPerson->findEnemy = &*it;
+					infoEnemys.setString("Entity : " + name);
 				}
 			}
 		}

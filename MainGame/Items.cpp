@@ -32,7 +32,7 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 		addItem->setPosition(2, 2, 1);
 		items.push_front(*addItem);
 
-		addItem->setType(typesItem->typesItem[idItem::glassBottleWithWater]);
+		addItem->setType(typesItem->typesItem[idItem::glassbukketWithWater]);
 		addItem->setPosition(1, 2, 1);
 		items.push_front(*addItem);
 
@@ -58,6 +58,22 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 
 		addItem->setType(typesItem->typesItem[idItem::stoneBrickItem]);
 		addItem->setPosition(12, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::woodBukketItem]);
+		addItem->setPosition(11, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::woodBukketWithWaterItem]);
+		addItem->setPosition(10, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::woodClubItem]);
+		addItem->setPosition(9, 2, 1);
+		items.push_front(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::stoneKnifeItem]);
+		addItem->setPosition(8, 2, 1);
 		items.push_front(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::mushroomItem]);// ИСПРАВЬ
@@ -116,7 +132,7 @@ void Item::setType(TypeItem &type)
 
 	mainSprite->setTexture(*type.textureItem);
 	mainSprite->setTextureRect(IntRect(type.pixelPosX, type.pixelPosY, type.width, type.height));
-	mainSprite->setScale(scaleItems);// Вне инвентаря предмет будет меньше
+	mainSprite->scale(scaleItems);// Вне инвентаря предмет будет меньше
 
 	spriteForUse->setTexture(*type.textureItem);
 	spriteForUse->setTextureRect(IntRect(type.pixelXUse, type.pixelXUse, type.widthForUse, type.heightUse));
