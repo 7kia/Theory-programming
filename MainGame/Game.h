@@ -34,6 +34,7 @@ struct Game
 	////////////////////////////////////
 	// Îñòàëüíûå ñóùíîñòè
 	Enemy *emptyEnemy;
+	TypesEnemy *typesEnemy;
 	std::list<Enemy>* Enemys;// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ
 	////////////////////////////////////
 
@@ -55,7 +56,6 @@ struct Game
 void initializeGame(Game & game);
 
 void initializeCategorysBreakingObject(Game &game);
-void initializeEntitys(Game &game);
 
 void renderEntitys(Game &game);
 

@@ -130,7 +130,8 @@ void processEvents(Game &game)
 			// Оюработка щелчка мыши
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
-				mainPerson.useItem(*game.field, *game.listDestroy, game.typesItem->typesItem, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
+				mainPerson.useItem(*game.field, *game.listDestroy, game.typesItem->typesItem, game.Enemys,
+													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 			} else if (event.type == Event::MouseMoved) {// ИСПРАВЬ
 				// Передвижение предмета

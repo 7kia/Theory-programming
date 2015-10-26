@@ -3,6 +3,7 @@
 using namespace sf;
 using namespace std;
 
+
 ////////////////////////////////////////////////////////////////////
 // Передвижение. Его анимация и озвучка
 void Entity::update(const Time & deltaTime, dataSound &databaseSound)
@@ -510,78 +511,3 @@ bool Entity::isExitFromBorder(int x, int y)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Сущности
-void Enemy::EnemyInit(String texturePath, String nameEnemy, int widthEnemy, int heightEnemy, int amountEnemySlots, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level)
-{
-	spriteEntity = new Sprite;
-	textureEntity = new Texture;
-
-	name = nameEnemy;
-
-	// Задание размера
-	height = widthEnemy;
-	width = heightEnemy;
-
-	// Дальность подбора предметов
-	radiusUse = 1;
-
-	// Скорость ходьбы
-	stepFirst = speedEntity;
-	stepCurrent = speedEntity;
-	timeAnimation = 0.f;
-
-	// Текстура
-	textureEntity->loadFromFile(texturePath);
-	spriteEntity->setTexture(*textureEntity);
-	spriteEntity->setTextureRect(IntRect(0, 0, width, height));
-
-	// Звуки 
-	soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
-	soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
-
-	findItem = new Item;
-	findObject = new UnlifeObject;
-
-	// Текущий выбранный тип блока
-	this->emptyObject = &emptyObject;
-	this->emptyItem = &emptyItem;
-	idSelectItem = 0;
-
-	// Создайм и заполняем пустыми предметами
-	amountSlots = amountEnemySlots;
-	itemFromPanelQuickAccess = new Item[amountEnemySlots];
-	Item* itemsEnemy = itemFromPanelQuickAccess;
-	for (int i = 0; i < amountEnemySlots; i++) {
-		itemsEnemy[i].typeItem = emptyItem.typeItem;
-	}
-
-	// Позиция и направление
-	currentLevelFloor = level;
-	currenMode = idModeEntity::fight;
-	spriteEntity->setPosition(xPos * SIZE_BLOCK - width / 2, yPos * SIZE_BLOCK - height / 2);
-	direction = NONE;
-
-
-	// Показатели
-	maxHealth = 50;
-	maxStamina = 50;
-	maxMana = 0;
-
-	currentHealth = maxHealth;
-	currentStamina = maxStamina;
-	currentMana = maxMana;
-
-	currentThirst = maxThirst;
-	currentHungry = maxHungry;
-
-
-
-
-}
-
-Enemy::~Enemy() {
-
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

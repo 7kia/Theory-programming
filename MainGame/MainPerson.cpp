@@ -68,6 +68,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.currentThirst = 1;
 	mainPerson.currentHungry = 1;
 
+	mainPerson.damageMultiplirer = 1;
+
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -148,7 +150,7 @@ void MainPerson::throwItem(Field &field, list<Item> &items)
 	}
 }
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, list<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, list<Enemy> *enemy, list<Item> *items, list<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -357,6 +359,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 					}
 
 					///*
+					wchar_t* block = &field.dataMap[level][y][x];
 					// Ставим блок
 					if (findObject != NULL) {
 						if (isPickaxBreakingObject(listDestroy.pickaxBreakingObject)) {
@@ -369,10 +372,21 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
 							}
 						}
-					} else if (isPickaxBreakingBlock(field.dataMap[level][y][x], listDestroy.pickaxBreakingBlock)) {
+					} else if (isPickaxBreakingBlock(*block, listDestroy.pickaxBreakingBlock)) {
 						currentItem.currentToughness -= 1;
 
-						field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+						//////////////////////////////
+						// Выпадение предмета
+						Item* addItem = new Item;
+
+						addItem->setType(typesItems[field.findIdBlock(*block)]);
+						addItem->setPosition(x, y, currentLevelFloor + 1);
+						items->push_back(*addItem);
+
+						delete addItem;
+						//////////////////////////////
+
+						*block = field.charBlocks[idBlocks::air];
 
 						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
@@ -404,11 +418,36 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 					}
 
 					///*
+					wchar_t* block = &field.dataMap[level][y][x];
 					// Ставим блок
 					if (findObject != NULL) {
 						if (isAxeBreakingObject(listDestroy.axeBreakingObject)) {
 
 							currentItem.currentToughness -= 1;
+
+							//////////////////////////////////////////////////
+							// Выпадение предметов
+							Item* addItem = new Item;
+							int countItem = sizeof(findObjectFromList->typeObject->minCountItems) / sizeof(int);
+
+							int* minAmount = findObjectFromList->typeObject->minCountItems;
+							int* maxAmount = findObjectFromList->typeObject->maxCountItems;
+							int* idItems = findObjectFromList->typeObject->dropItems;
+
+							int currentAmount;
+							for (int i = 0; i < countItem; i++) {
+
+								currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+								for (int j = 0; j < currentAmount; j++) {
+									addItem->setType(typesItems[idItems[i]]);
+									addItem->setPosition(x, y, currentLevelFloor + 1);
+									items->push_back(*addItem);
+
+								}
+
+							}
+							delete addItem;
+							//////////////////////////////////////////////////
 
 							unlifeObjects->erase(findObjectFromList);
 
@@ -418,15 +457,76 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 
 
 						}
-					} else if (isAxeBreakingBlock(field.dataMap[level][y][x], listDestroy.axeBreakingBlock)) {
+					} else if (isAxeBreakingBlock(*block, listDestroy.axeBreakingBlock)) {
 						currentItem.currentToughness -= 1;
 
-						field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+
+						//////////////////////////////
+						// Выпадение предмета
+						Item* addItem = new Item;
+
+						addItem->setType(typesItems[field.findIdBlock(*block)]);
+						addItem->setPosition(x, y, currentLevelFloor + 1);
+						items->push_back(*addItem);
+
+						delete addItem;
+						//////////////////////////////
+
+						*block = field.charBlocks[idBlocks::air];
 
 						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
 						}
 
+					}
+					//*/					
+				}
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Оружие
+		case idCategoryItem::weapon:
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.key.code == Mouse::Left) {
+
+					if (findEnemy != NULL) {
+						if (findEnemy->currentLevelFloor == currentLevelFloor) {
+
+							currentItem.currentToughness -= 1;
+
+							//////////////////////////////////////////////////
+							// Выпадение предметов
+							Item* addItem = new Item;
+							TypeEnemy& typeEnemy = *findEnemyFromList->type;
+							int countItem = sizeof(typeEnemy.minCountItems) / sizeof(int);
+
+							int* minAmount = typeEnemy.minCountItems;
+							int* maxAmount = typeEnemy.maxCountItems;
+							int* idItems = typeEnemy.dropItems;
+
+							int currentAmount;
+							for (int i = 0; i < countItem; i++) {
+
+								currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+								for (int j = 0; j < currentAmount; j++) {
+									addItem->setType(typesItems[idItems[i]]);
+									addItem->setPosition(x, y, currentLevelFloor + 1);
+									items->push_back(*addItem);
+
+								}
+
+							}
+							delete addItem;
+							//////////////////////////////////////////////////
+
+							enemy->erase(findEnemyFromList);
+
+							if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+							}
+
+
+						}
 					}
 					//*/					
 				}

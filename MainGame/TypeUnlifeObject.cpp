@@ -5,16 +5,37 @@ using namespace sf;
 void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSound &databaseSound) {
 	typesUnlifeObjects->typeUnlifeObject = new TypeUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
 
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].Init(texturePaths[idTexturePaths::Trees], "Oak", true, 2,  47, 30, 0, 208);
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak].InitTransparent(136, 208, 0, 0);
+	////////////////////////////////////////////////////////////////////////////////////////
+	// Дуб
+	TypeUnlifeObject* typeObject = &typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak];
+
+	int* minAmountForOak = new int[1];
+	int* maxAmountForOak = new int[1];
+	int* idItemsForOak = new int[1];
+
+	*minAmountForOak = { 3 };
+	*maxAmountForOak = { 6 };
+	*idItemsForOak = { idItem::logOakItem };
+
+	typeObject->Init(texturePaths[idTexturePaths::Trees], "Oak", true, 2,  47, 30, 0, 208);
+	typeObject->InitTransparent(136, 208, 0, 0);
+	typeObject->InitItem(idItemsForOak, minAmountForOak, maxAmountForOak, 1);
 	typesUnlifeObjects->countTypeObjects += 1;
 
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].Init(texturePaths[idTexturePaths::items], "SmallStone", false, 0, SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
+	delete minAmountForOak;
+	delete maxAmountForOak;
+	delete idItemsForOak;
+	////////////////////////////////////////////////////////////////////////////////////////
+	// Камень
+	typeObject = &typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone];
+	typeObject->Init(texturePaths[idTexturePaths::items], "SmallStone", false, 0, SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
 	//typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].InitTransparent(136, 208, 0, 0);
 	typesUnlifeObjects->countTypeObjects += 1;
 
-	typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::empty].Init(texturePaths[idTexturePaths::items], "Empty", false, 0, 0, 0, 0, 0);
-	//typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].InitTransparent(136, 208, 0, 0);
+	////////////////////////////////////////////////////////////////////////////////////////
+	// Пустой предмет
+	typeObject = &typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::empty];
+	typeObject->Init(texturePaths[idTexturePaths::items], "Empty", false, 0, 0, 0, 0, 0);
 	typesUnlifeObjects->countTypeObjects += 1;
 }
 
@@ -52,6 +73,20 @@ void TypeUnlifeObject::Init(String filenameTexture, String typeName, bool canDes
 	//mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
 	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 };
+
+void TypeUnlifeObject::InitItem(int* idItems, int* minAmountItems, int* maxAmountItems, int count)
+{
+	dropItems = new int[count];
+	minCountItems = new int[count];
+	maxCountItems = new int[count];
+
+	for (size_t i = 0; i < count; i++) {
+		dropItems[i] = idItems[i];
+		minCountItems[i] = minAmountItems[i];
+		maxCountItems[i] = maxAmountItems[i];
+	}
+	
+}
 
 void TypeUnlifeObject::InitTransparent(int w, int h, int pixelX, int pixelY) {
 	// Задание размера

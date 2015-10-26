@@ -11,7 +11,7 @@
 #include "BlocksVar.h"
 #include "UnlifeObjectVar.h"
 
-const sf::String TITLE_PROGRAM = "MainGame v1.2.7";
+const sf::String TITLE_PROGRAM = "MainGame v1.3.0";
 const sf::String stringDeathPerson = "Death";
 
 const int DEFAULT_WIDTH_WINDOW = 1200;

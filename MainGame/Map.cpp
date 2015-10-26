@@ -105,7 +105,7 @@ void Field::setTypeSprite(int personLevelFloor, int l, int i, int j)
 
 };
 
-String Field::findCharBlocks(char block)
+String Field::findCharBlocks(wchar_t block)
 {
 	for (int i = 1; i < idBlocks::amountKnowBlocks; i++) {
 		if (block == charBlocks[i]) {
@@ -114,7 +114,19 @@ String Field::findCharBlocks(char block)
 		
 	}
 	return namesBlocks[idBlocks::unknow];
+}
+int Field::findIdBlock(wchar_t block)
+{
+	for (int i = 1; i < idBlocks::amountKnowBlocks; i++) {
+		if (block == charBlocks[i]) {
+			return i + shiftForItem;
+		}
+
+	}
+	return idBlocks::unknow;
 };
+
+
 
 //////////////////////////////////////////////////////
 // Отрисовка блоков

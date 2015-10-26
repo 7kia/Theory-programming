@@ -38,7 +38,8 @@ struct Field
 	void initializeDataBlocks();// Данные блоков
 	void setSprite(sf::Sprite *sprite, int l, int i, int j);// Окраска спрайта
 	void setTypeSprite(int personLevelFloor, int l, int i, int j);// Красим пол или стены?
-	sf::String findCharBlocks(char block);
+	sf::String findCharBlocks(wchar_t block);
+	int findIdBlock(wchar_t block);
 };
 
 void initializeField(Field & field);

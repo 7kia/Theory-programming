@@ -33,10 +33,14 @@ public:
 	bool isDestroy;
 	// Прочность(в условных единицах
 	int toughnessObject;
-	Item* dropItems;// ИСПРАВЬ
+
+	int* minCountItems;
+	int* maxCountItems;
+	int* dropItems;// ИСПРАВЬ
 
 	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
 	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY);
+	void InitItem(int* idItems, int* minAmountItems, int* maxAmountItems, int count);
 	void InitTransparent(int w, int h, int pixelX, int pixelY);
 };
 

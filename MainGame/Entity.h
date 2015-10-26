@@ -1,16 +1,7 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
-#include "GlobalVar.h"
-#include "ListObjectsAndBlocks.h"
-#include "UnlifeObject.h"
-#include "Items.h"
-#include "Map.h"
-#include "Sound.h"
-
-#include "EntityVar.h"
-
-const float speedEntity = 350.f;
+#include "TypeEnemy.h"
 
 const int AMOUNT_ENTITY = 100;
 const int AMOUNT_ACTIVE_SLOTS = 10;
@@ -23,10 +14,6 @@ class Entity
 public:
 	// Текструра
 	sf::Sprite *spriteEntity;
-	sf::Texture *textureEntity;
-	
-	// Имя
-	sf::String name;
 
 	// Для движения
 	Direction direction;
@@ -35,12 +22,15 @@ public:
 	float timeAnimation;
 	sf::Vector2f movement;
 
+	// Ссылки на звуки
+	sf::Sound *soundsEntity[sizeBuffer];
+
 	// Для взаимодействия с миром
 	int radiusUse;
 	int currentLevelFloor;
 
-	// Ссылки на звуки
-	sf::Sound *soundsEntity[sizeBuffer];
+	int width;
+	int height;
 
 	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
@@ -52,24 +42,23 @@ public:
 	bool isEmptySlot();
 	int emptySlot;
 
-	// Для передвижения объекта
+	/////////////////////////////////////////
+	// Для взаимодействия с объектом
 	UnlifeObject *findObject;
 	std::list<UnlifeObject>::iterator findObjectFromList;
 	UnlifeObject* emptyObject;
-	// Для передвижения предмета
+	/////////////////////////////////////////
+	// Для взаимодействия с предметом
 	Item *findItem;
 	std::list<Item>::iterator findItemFromList;
-
+	/////////////////////////////////////////
 	bool isMoveItem;
 	float dMoveItemX, dMoveItemY;
-	
-	// Количество ячеек инвентаря
-	int amountSlots;
 
 	//////////////////////////////////////////////////
 	// Индикаторы
 	bool isDeath = false;
-
+	////////////////////////////
 	// Здоровье
 	bool isMaxHealth = true;
 	bool needMinusHealth = false;
@@ -82,7 +71,7 @@ public:
 
 	int currentHealth = 100;
 	int maxHealth = 100;
-
+	////////////////////////////
 	// Выносливость
 	bool isMaxStamina = true;
 	bool needMinusStamina = false;
@@ -95,7 +84,7 @@ public:
 
 	int currentStamina = 100;
 	int maxStamina = 100;
-
+	////////////////////////////
 	// Мана
 	bool isMaxMana = true;
 	bool needMinusMana = false;
@@ -108,29 +97,22 @@ public:
 
 	int currentMana = 100;
 	int maxMana = 100;
-
+	////////////////////////////
 	// Голод
 	float timeForHungry = 0;
 	float timeUpdateHungry = 100;
 	int currentHungry = 20;
 	int maxHungry = 20;
 
-
+	////////////////////////////
 	// Жажда
 	float timeForThirst = 0;
 	float timeUpdateThirst = 60;
 	int currentThirst = 20;
 	int maxThirst = 20;
-
+	////////////////////////////
 
 	//////////////////////////////////////////////////
-
-
-	// Для отрисовки
-	int width;
-	int height;
-	int widthForAnimation;
-	int heightForAnimation;
 
 	// Передвижение. Его анимация и озвучка
 	void update(const Time & deltaTime, dataSound &databaseSound);
@@ -151,36 +133,6 @@ public:
 //private:
 
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Сущность
-class Enemy : public Entity
-{
-public:
-	// режимы персонажа
-
-	// Для направления взгляда
-	float rotation;
-
-	// Для взаимодействия с миром
-	int currenMode;
-	Item *items;
-	Item *emptyItem;// ИСПРАВЬ
-	int idSelectItem;
-
-	// Для уничтожения врагов
-	Enemy *findEnemy;
-	Enemy *emptyEnemy;
-	std::list<Enemy>::iterator findEnemyFromList;
-
-	void EnemyInit(sf::String texturePath, sf::String nameEnemy, int widthEnemy, int heightEnemy, int amountEnemySlots, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level);
-	~Enemy();
-private:
-
-};
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Объявление сущности
-void initializeEntity(Entity & Entity, dataSound &databaseSound);
 
 bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, std::list<UnlifeObject>::iterator &current, int currentLevel);
 bool isItem(float x, float y, std::list<Item> &items, Item *&findItem, std::list<Item>::iterator &findItemFromList, std::list<Item>::iterator &current, int currentLevel);

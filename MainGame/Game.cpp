@@ -47,9 +47,11 @@ void initializeGame(Game & game)
 
 	////////////////////////////////////
 	// Остальные сущности
-	game.Enemys = new std::list<Enemy>;
+	game.Enemys = new list<Enemy>;
+	game.typesEnemy = new TypesEnemy;
 
-	initializeEntitys(game);
+	initializeTypeEnemy(*game.typesEnemy, *game.databaseSound);
+	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, *game.emptyItem, *game.emptyObject);
 	////////////////////////////////////
 
 	// Основной персонаж
@@ -114,75 +116,6 @@ void initializeCategorysBreakingObject(Game &game)
 	/////////////////////////////////////////////////////////////////////////
 }
 //*/
-
-void initializeEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ 
-{
-	game.emptyEnemy = new Enemy;
-	game.emptyEnemy->EnemyInit(texturePaths[idTexturePaths::wolf], "Empty", 0, 0, 0,
-														*game.databaseSound, *game.emptyItem, *game.emptyObject, 0, 0, 0);
-
-
-	// Первая сущность
-	list<Enemy>* Enemys = game.Enemys;
-	Enemy* addEnemy = new Enemy();
-
-	srand(time(0)); // автоматическая случайность
-	//////////////////////////////////////////////////////////////
-	// Волки
-	String texturePath = texturePaths[idTexturePaths::wolf];
-
-	int width = WIDTH_WOLF;
-	int height = HEIGHT_WOLF;
-	int amountSlots = AMOUNT_WOLF_SLOTS;
-
-	int xPos;
-	int yPos;
-	int levelFloor;
-
-	for (size_t i = 0; i < 1; i++) {
-		game.countEntity++;
-		if (game.countEntity > AMOUNT_ENTITY) {
-			break;
-		}
-
-		int xPos = 5 + rand() % 5;
-		int yPos = 5 + rand() % 5;
-		int levelFloor = 0;
-
-		addEnemy->EnemyInit(texturePath, "Wolf", width, height, amountSlots, *game.databaseSound, *game.emptyItem, *game.emptyObject,
-												xPos, yPos, levelFloor);
-
-		Enemys->push_back(*addEnemy);
-
-	}
-	//////////////////////////////////////////////////////////////
-	// Скелеты
-	texturePath = texturePaths[idTexturePaths::skelet];
-
-	width = WIDTH_SKELET;
-	height = HEIGHT_SKELET;
-	amountSlots = AMOUNT_SKELET_SLOTS;
-
-	for (size_t i = 0; i < 1; i++) {
-		game.countEntity++;
-		if (game.countEntity > AMOUNT_ENTITY) {
-			break;
-		}
-
-		xPos = 7 + rand() % 5;
-		yPos = 7 + rand() % 5;
-		levelFloor = 0;
-
-		addEnemy->EnemyInit(texturePath, "Skelet", width, height, amountSlots, *game.databaseSound, *game.emptyItem, *game.emptyObject,
-												xPos, yPos, levelFloor);
-
-		Enemys->push_back(*addEnemy);
-
-	}
-	//////////////////////////////////////////////////////////////
-	delete addEnemy;
-	
-}
 
 void renderEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ
 {
@@ -316,7 +249,7 @@ void informationAboutSelect(Game &game, float x, float y)
 
 		if (objectBound.contains(x, y)) {
 			if (level == game.mainPerson->currentLevelFloor) {
-				String name = it->name;
+				String name = it->type->name;
 				if (name != "") {
 
 					game.mainPerson->findEnemyFromList = it;
