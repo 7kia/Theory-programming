@@ -21,6 +21,7 @@ struct Item
 	// Разрушаемый или нет
 	bool isDestroy;
 	int currentToughness;// Прочность
+	int maxToughness;// максимальная прочность
 
 	// Урон
 	int cuttingDamage;// Режущий

@@ -130,6 +130,9 @@ void Item::setType(TypeItem &type)
 	categoryItem = type.category;
 	isDestroy = type.isDestroy;
 
+	cuttingDamage = type.cuttingDamage;
+	crushingDamage = type.crushingDamage;
+
 	mainSprite->setTexture(*type.textureItem);
 	mainSprite->setTextureRect(IntRect(type.pixelPosX, type.pixelPosY, type.width, type.height));
 	mainSprite->scale(scaleItems);// Вне инвентаря предмет будет меньше
@@ -142,6 +145,7 @@ void Item::setType(TypeItem &type)
 
 	// Прочность 
 	currentToughness = type.toughnessObject;
+	maxToughness = type.toughnessObject;
 }
 
 void Item::setPosition(int xPos, int yPos, int Level)

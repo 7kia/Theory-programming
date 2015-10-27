@@ -120,8 +120,7 @@ void initializeCategorysBreakingObject(Game &game)
 void renderEntitys(Game &game)// днаюбкемхе ясымнярх
 {
 	RenderWindow& window = *game.window;
-	//////////////////////////////////////////////////////////////
-	// бНКЙХ
+
 	list<Enemy>* Enemys = game.Enemys;
 
 	for (std::list<Enemy>::iterator it = Enemys->begin(); it != Enemys->end(); ++it) {
@@ -132,7 +131,7 @@ void renderEntitys(Game &game)// днаюбкемхе ясымнярх
 		}
 
 	}
-	//////////////////////////////////////////////////////////////
+
 }
 
 void destroyGame(Game & game)

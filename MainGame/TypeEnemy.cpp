@@ -15,17 +15,25 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	String name = "Wolf";
 
 	int width = WIDTH_WOLF;
-	int height = HEIGHT_SKELET;
+	int height = HEIGHT_WOLF;
 
 	int* minAmountForWolf = new int[1];
 	int* maxAmountForWolf = new int[1];
 	int* idItemsForWolf = new int[1];
 
+	int health = 50;
+	int stamina = 50;
+	int mana = 0;
+
+	float protectCut = 1.5f;
+	float protectCrush = 1.f;
+
 	*minAmountForWolf = { 1 };
 	*maxAmountForWolf = { 2 };
 	*idItemsForWolf = { idItem::dirtItem };// ИСПРАВЬ
 
-	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 50, 50, 0,
+	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 
+									health, stamina, mana, protectCut, protectCrush,
 									idItemsForWolf, minAmountForWolf, maxAmountForWolf, 1);
 
 	delete minAmountForWolf;
@@ -45,11 +53,19 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	int* maxAmountForSkelet = new int[1];
 	int* idItemsForSkelet = new int[1];
 
+	health = 50;
+	stamina = 50;
+	mana = 0;
+
+	protectCut = 0.f;
+	protectCrush = 1.f;
+
 	*minAmountForSkelet = { 1 };
 	*maxAmountForSkelet = { 2 };
 	*idItemsForSkelet = { idItem::dirtItem };// ИСПРАВЬ
 
-	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 50, 50, 0,
+	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_SKELET_SLOTS,
+									health, stamina, mana, protectCut, protectCrush,
 									idItemsForSkelet, minAmountForSkelet, maxAmountForSkelet, 1);
 
 	delete minAmountForSkelet;
@@ -60,7 +76,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 										 int widthEnemy, int heightEnemy, int amountEnemySlots,
-										 int health, int stamina, int mana,
+										 int health, int stamina, int mana, float protectCut, float protectCrush,
 										 int * idItems, int * minAmountItems, int * maxAmountItems, int count)
 {
 	textureEntity = new Texture;
@@ -90,6 +106,9 @@ void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &da
 	maxHealth = health;
 	maxStamina = stamina;
 	maxMana = mana;
+
+	protectionCut = protectCut;
+	protectionCrash = protectCrush;
 
 	// Выпадающие предметы
 	dropItems = new int[count];

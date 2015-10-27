@@ -8,6 +8,7 @@ using namespace std;
 // Передвижение. Его анимация и озвучка
 void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 {
+
 	////////////////////////////////////////////////////////////////////
 	// Обновление показателей 
 	
@@ -203,7 +204,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	}
 }
 
-void Entity::playSound(float time, float start, const int idSound)
+void Entity::playSound(float time, float &start, const int idSound)
 {
 	if (time == start)
 	{
@@ -264,22 +265,27 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 	{
 		wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
-
 		/////////////////////////////////////////////
-		// Проверяем пол
+		// Проверяем окружающие объекты
 		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
 			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
 				// Замедляющие блоки
-				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {
+
+				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {
 					stepCurrent = stepFirst / slowingStep;
+					needMinusStamina = false;
+					break;
 				} else if (stepCurrent == stepFirst / slowingStep) {
 					stepCurrent = stepFirst;
 				}
 
-				// Является непроходимым
-				if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
+
+
+				// Проверяем по списку проходимых блоков
+				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == NULL) {
 					x = getXPos();
 					y = getYPos();
+					direction = Direction::NONE;
 					break;
 				}
 
@@ -287,24 +293,27 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 		}
 		/////////////////////////////////////////////
 
-		/////////////////////////////////////////////
-		// Проверяем окружающие объекты
-		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++)
-		{
-			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++)
-			{
-				// Замедляющие блоки
-				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {
-					stepCurrent = stepFirst / slowingStep;
-				} else if (stepCurrent == stepFirst / slowingStep) {
-					stepCurrent = stepFirst;
-				}
 
-				// Проверяем по списку проходимых блоков
-				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == NULL)
-				{
+		/////////////////////////////////////////////
+		// Проверяем пол
+		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
+				
+				if (needMinusStamina) {
+					// Замедляющие блоки
+					if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {// ИСПРАВЬ
+						stepCurrent = stepFirst / slowingStep;
+						needMinusStamina = false;
+						break;
+					} else if (stepCurrent == stepFirst / slowingStep) {
+						stepCurrent = stepFirst;
+					}
+				}
+				// Является непроходимым
+				if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
 					x = getXPos();
 					y = getYPos();
+					direction = Direction::NONE;
 					break;
 				}
 
@@ -316,71 +325,10 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 	{
 		x = getXPos();
 		y = getYPos();
+		direction = Direction::NONE;
 	}
 
 	spriteEntity->setPosition(x, y);
-}
-
-void Entity::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, const Time & deltaTime)// ИСПРАВЬ for enity and mainPerson
-{
-	float dx(movement.x);
-	float dy(movement.y);
-
-	float x;
-	float y;
-	x = getXPos();
-	y = getYPos();
-
-	// Проверка на выход за карту
-	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x >  0))
-		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y >  0)))
-	{
-		for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it)
-		{
-			int levelUnlifeObject = it->currentLevel;
-
-			Sprite *spriteObject = it->spriteObject;
-			FloatRect objectBound = spriteObject->getGlobalBounds();
-
-			Sprite *transparentSpiteObject = it->transparentSpiteObject;
-			FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
-			FloatRect entityBound = spriteEntity->getGlobalBounds();
-
-			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1) )
-			{
-				if (direction >= Direction::UP_LEFT)
-				{
-					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-					x -= DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
-					y -= DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
-				}
-				else
-				{
-					x -=  dx * deltaTime.asSeconds();
-					y -=  dy * deltaTime.asSeconds();
-				}
-				direction = Direction::NONE;
-				break;
-			}
-			else if(entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1))
-			{
-				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
-			}
-			else
-			{
-				transparentSpiteObject->setColor(NORMAL_COLOR);
-			}
-
-		}
-	}
-	else
-	{
-		x = (int)getXPos();
-		y = (int)getYPos();
-	}
-
-	spriteEntity->setPosition(x, y);
-	movement = { 0.f, 0.f };
 }
 
 bool Entity::isEmptySlot()

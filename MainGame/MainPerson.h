@@ -32,7 +32,6 @@ public:
 	int endurance;// выносливость
 	int expEndurace;
 	int expEnduracehUp;
-
 	///////////////////////////////////////////////////////
 	void getCoordinateForView(float x, float y);
 	void viewmap(float time);
@@ -51,6 +50,7 @@ public:
 	bool isPickaxBreakingBlock(wchar_t block, wchar_t *pickaxBreakingBlocks);// ИСПРАВЬ
 	bool isPickaxBreakingObject(sf::String* pickaxBreakingObject);// ИСПРАВЬ
 
+	void interactionWitnUnlifeObject(std::list<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 	// кнопка "Дествие" и "Другое действие"
 	void actionMain(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, float xPos, float yPos);
 	void actionAlternate(Field &field, std::list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, float xPos, float yPos);

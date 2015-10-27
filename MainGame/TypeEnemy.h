@@ -31,6 +31,10 @@ struct TypeEnemy
 	int maxStamina;
 	int maxMana;
 
+	// Защита
+	float protectionCut;
+	float protectionCrash;
+
 	// Для отрисовки
 	int width;
 	int height;
@@ -49,7 +53,7 @@ struct TypeEnemy
 
 	void Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 						int widthEnemy, int heightEnemy, int amountEnemySlots,
-						int health, int stamina, int mana,
+						int health, int stamina, int mana, float protectCut, float protectCrush,
 						int* idItems, int* minAmountItems, int* maxAmountItems, int count);
 };
 

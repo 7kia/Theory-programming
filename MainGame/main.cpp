@@ -95,7 +95,7 @@ void processEvents(Game &game)
 						mainPerson.stepCurrent = mainPerson.stepFirst;
 						mainPerson.needMinusStamina = false;
 					} else {
-						mainPerson.stepCurrent += 450.f;
+						mainPerson.stepCurrent = mainPerson.stepFirst * 3;
 						mainPerson.needMinusStamina = true;
 					}
 				}
@@ -239,6 +239,10 @@ void render(Game & game)
 	window.draw(*mainPerson.spriteEntity);
 
 	////////////////////////////////////////////////////////
+	// Сущности
+	renderEntitys(game);
+
+	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
 	for (std::list<UnlifeObject>::iterator it = game.unlifeObjects->begin(); it != game.unlifeObjects->end(); ++it)
 	{
@@ -250,15 +254,10 @@ void render(Game & game)
 		}
 		
 	}
-	////////////////////////////////////////////////////////
-	// Сущности
-
-	renderEntitys(game);
-
 
 	//////////////////////////////////////////////
 	// GUI
-	game.gui->setPositionGui(window, *game.mainPerson, *game.textGame);
+	game.gui->setPositionGui(window, *game.mainPerson, *game.Enemys, *game.textGame);
 	//////////////////////////////////////////////
 	window.display();
 }
@@ -296,7 +295,8 @@ void startGame()
 					
 					it->update(TIME_PER_FRAME, *game->databaseSound);
 					it->interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
-					it->interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
+					it->randomWalk(TIME_PER_FRAME);
+
 
 				}
 				/////////////////////////////////////

@@ -1,6 +1,7 @@
 #include "GUI.h"
 
 using namespace sf;
+using namespace std;
 
 void initializeGUI(GUI &gui, TextGame &textGame)
 {
@@ -89,7 +90,7 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	//gui.textGui[idTextGui::infoWindowItemGui] = &textGame.texts[idText::infoWindowItemGui];
 }
 
-void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enemy>& enemy, TextGame &textGame)
 {
 
 	Vector2f centerWindow = mainPerson.view->getCenter();
@@ -154,11 +155,39 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != mainPerson.emptyItem->typeItem->name) {
+			Item& currentItem = mainPerson.itemFromPanelQuickAccess[i];
+
 			int shift = shiftSelect * (i);
 			int shiftStart = 38;// ИСПРАВЬ
 			pos = { centerWindow.x - startPosition + shift + shiftStart, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
-			mainPerson.itemFromPanelQuickAccess[i].mainSprite->setPosition(pos);
-			window.draw(*mainPerson.itemFromPanelQuickAccess[i].mainSprite);
+			currentItem.mainSprite->setPosition(pos);
+			window.draw(*currentItem.mainSprite);
+
+			if (currentItem.isDestroy) {
+				///*
+				pos.x -= SIZE_ITEM / 2;
+				pos.y += SIZE_ITEM / 2 - HEIGHT_BARS_GUI * 0.5 * scaleItems.y;
+
+				bar->setPosition(pos);
+				bar->setScale(scaleGuiForEnemy);
+				window.draw(*bar);
+				bar->setScale(normalSizeGuiForEnemy);
+
+				float levelToughness = (float)currentItem.currentToughness / currentItem.typeItem->toughnessObject;// текущая на макс.
+
+				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
+				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
+				int currentToughness = WIDTH_LEVEL_BAR_GUI * levelToughness;
+				levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
+				levelStamina->setPosition(pos);
+
+				levelStamina->setScale(scaleGuiForEnemy);
+				window.draw(*levelStamina);
+				levelStamina->setScale(normalSizeGuiForEnemy);
+				//*/
+			}
+			
+
 		}
 	}
 
@@ -180,6 +209,66 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, TextGame 
 	levelHealth->setTextureRect(IntRect(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
 	levelHealth->setPosition(pos);
 	window.draw(*levelHealth);
+
+	// для противников
+	for (std::list<Enemy>::iterator it = enemy.begin(); it != enemy.end(); ++it) {
+		if (it->currentLevelFloor == mainPerson.currentLevelFloor) {
+
+			pos = it->spriteEntity->getPosition();
+			pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
+			pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
+
+
+			bar->setPosition(pos);
+			bar->setScale(scaleGuiForEnemy);
+			window.draw(*bar);
+			bar->setScale(normalSizeGuiForEnemy);
+
+			level = (float)it->currentHealth / it->maxHealth;
+
+			pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
+			pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
+			currentLevel = WIDTH_LEVEL_BAR_GUI * level;
+			levelHealth->setTextureRect(IntRect(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
+			levelHealth->setPosition(pos);
+
+			levelHealth->setScale(scaleGuiForEnemy);
+			window.draw(*levelHealth);
+			levelHealth->setScale(normalSizeGuiForEnemy);
+
+			/*
+			// Отображение урона
+			currentText = &textGame.texts[idText::inputDamage];
+
+			string damage = "";
+			char inputChar;
+			int count = 0;
+
+			//strrev(damage);
+			// Запись
+			do {
+				inputChar = it->inputDamage % 10 + '0';
+				damage[count] = inputChar;
+				count++;
+				it->inputDamage /= 10;
+			} while (it->inputDamage > 0);
+
+			// Перевёртыш
+			for (size_t i = 0; i < count / 2; i++) {
+				damage[i] = inputChar;
+				damage[i] = damage[count - i];
+				damage[count - i] = inputChar;
+			}
+
+			std::cout << "damage string " <<  damage << std::endl;
+			currentText->setString((string)it->inputDamage);
+			window.draw(*currentText);
+
+			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
+			//*/
+		}
+
+	}
 	//////////////////////////////////////
 	// Шкала выносливости
 	pos = centerWindow;

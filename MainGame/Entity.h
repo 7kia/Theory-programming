@@ -26,6 +26,9 @@ public:
 	sf::Sound *soundsEntity[sizeBuffer];
 
 	// Для взаимодействия с миром
+	float timeWalk = 0;
+	float currentTime = 0;
+
 	int radiusUse;
 	int currentLevelFloor;
 
@@ -57,6 +60,15 @@ public:
 
 	//////////////////////////////////////////////////
 	// Индикаторы
+
+	// Показатели
+	sf::Sprite* bar;
+	sf::Sprite* levelHealth;// ИСПРАВЬ
+	sf::Sprite* levelStamina;
+	sf::Sprite* levelMana;
+
+	int inputDamage;
+
 	bool isDeath = false;
 	////////////////////////////
 	// Здоровье
@@ -112,16 +124,20 @@ public:
 	int maxThirst = 20;
 	////////////////////////////
 
+
+	//////////////////////////////////////////////////
+	// Защита
+	float protectionCut;
+	float protectionCrash;
 	//////////////////////////////////////////////////
 
 	// Передвижение. Его анимация и озвучка
 	void update(const Time & deltaTime, dataSound &databaseSound);
-	void playSound(float time, float start, const int idSound);
+	void playSound(float time, float &start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 	
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
-	void interactionWitnUnlifeObject(std::list<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 	bool isInUseField(float x, float y);
 	
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки

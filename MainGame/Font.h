@@ -23,6 +23,7 @@ typedef enum {
 	infoWindowUnlifeObject,
 	infoWindowItem,
 	infoEntity,
+	inputDamage,
 	mainPersonIsDeath,
 	amountTexts
 } idText;

@@ -42,5 +42,6 @@ typedef enum
 	UP_LEFT,
 	UP_RIGHT,
 	DOWN_LEFT,
-	DOWN_RIGHT
+	DOWN_RIGHT,
+	AMOUNT_DIRECTION
 } Direction;

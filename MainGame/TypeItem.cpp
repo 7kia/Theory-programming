@@ -43,7 +43,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	categoryItem = idCategoryItem::food;
 
-	canDestroy = true;
+	canDestroy = false;
 
 	toughness = 4;
 
@@ -245,7 +245,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	categoryItem = idCategoryItem::bukketWithWater;
 
-	canDestroy = true;
+	canDestroy = false;
 
 	toughness = 20;
 
@@ -289,7 +289,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	categoryItem = idCategoryItem::bottleWithWater;
 
-	canDestroy = true;
+	canDestroy = false;
 
 	toughness = 5;
 
@@ -316,7 +316,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = true;
 
-	toughness = 5;
+	toughness = 32;
 
 	pixelX = PIXEL_X_STONE_KNIFE;
 	pixelY = PIXEL_Y_STONE_KNIFE;
@@ -341,7 +341,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = true;
 
-	toughness = 5;
+	toughness = 32;
 
 	pixelX = PIXEL_X_WOOD_CLUB;
 	pixelY = PIXEL_Y_WOOD_CLUB;
@@ -366,7 +366,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = true;
 
-	toughness = 5;
+	toughness = 32;
 
 	pixelX = PIXEL_X_STONE_PICKAX;
 	pixelY = PIXEL_Y_STONE_PICKAX;
@@ -391,7 +391,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = true;
 
-	toughness = 5;
+	toughness = 32;
 
 	pixelX = PIXEL_X_STONE_AXE;
 	pixelY = PIXEL_Y_STONE_AXE;

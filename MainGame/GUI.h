@@ -71,6 +71,9 @@ const int Y_LEVEL_STAMINA_GUI = 0;
 const int X_LEVEL_MANA_GUI = WIDTH_BARS_GUI + WIDTH_LEVEL_BAR_GUI;// добавление gui
 const int Y_LEVEL_MANA_GUI = 0;
 
+const Vector2f scaleGuiForEnemy = { 0.33f, 0.33f };
+const Vector2f normalSizeGuiForEnemy = { 1.f, 1.f };
+
 struct GUI
 {// добавление gui
 	// Информация о выделеном блоке
@@ -101,7 +104,7 @@ struct GUI
 	// Ссылки на текст
 	sf::Text *textGui[numberTextReference];
 
-	void setPositionGui(sf::RenderWindow &window, MainPerson &mainPerson, TextGame &textGame);
+	void setPositionGui(sf::RenderWindow &window, MainPerson &mainPerson, std::list<Enemy>& enemy, TextGame &textGame);
 };
 
 void initializeGUI(GUI &gui, TextGame &textGame);

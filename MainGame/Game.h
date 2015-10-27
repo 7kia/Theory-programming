@@ -30,7 +30,10 @@ struct Game
 	TypesItem *typesItem;
 	std::list<Item>* items;
 
-
+	////////////////////////////////////
+	// Ходьба по карте(для противников
+	float minTimeWalk = 4.f;
+	float maxTimeWalk = 12.f;
 	////////////////////////////////////
 	// Остальные сущности
 	Enemy *emptyEnemy;
