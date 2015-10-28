@@ -21,6 +21,8 @@ public:
 	Item *emptyItem;// ИСПРАВЬ
 	int idSelectItem;
 
+	float radiuseView;
+
 	TypeEnemy *type;
 	///////////////////////////////////////////////////////
 	// Для уничтожения врагов

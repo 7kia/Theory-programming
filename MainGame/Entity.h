@@ -69,6 +69,10 @@ public:
 	sf::Sprite* levelStamina;
 	sf::Sprite* levelMana;
 
+	float damageMultiplirer;
+	int cuttingDamage = 0;// Значение по умолчанию
+	int crushingDamage = 1;// Значение по умолчанию
+
 	int inputDamage;
 	float timeDamage;// Показывает урон в течении ... секунд
 

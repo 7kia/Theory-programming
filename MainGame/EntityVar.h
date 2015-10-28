@@ -3,7 +3,8 @@ const int AMOUNT_ENEMY_ITEM = 8;
 
 const float MULTIPLIER_OF_DAMAGE = 1;
 
-const float speedEntity = 150.f;
+const float SPEED_ENTITY = 150.f;
+const float RADIUSE_VIEW = 300.f;
 
 const int WIDTH_WOLF = 81;
 const int HEIGHT_WOLF = 81;

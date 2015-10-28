@@ -18,8 +18,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.radiusUse = 1;
 
 	// Скорость ходьбы
-	mainPerson.stepFirst = speedEntity;
-	mainPerson.stepCurrent = speedEntity;
+	mainPerson.stepFirst = SPEED_ENTITY;
+	mainPerson.stepCurrent = SPEED_ENTITY;
 	mainPerson.timeAnimation = 0.f;
 
 	// Камера
@@ -62,8 +62,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 
 	// Показатели
 	mainPerson.currentHealth = 45;
-	mainPerson.currentStamina = 45;
-	mainPerson.currentMana = 45;
+	mainPerson.currentStamina = 35;
+	mainPerson.currentMana = 10;
 
 	mainPerson.currentThirst = 1;
 	mainPerson.currentHungry = 1;
@@ -221,11 +221,341 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 		int x = xMouse / SIZE_BLOCK;
 		int y = yMouse / SIZE_BLOCK;
 
-		if (isInUseField(xMouse, yMouse)) {
-			// Сначала наносим урон
-			if (event.key.code == Mouse::Left) {
 
-				if (findEnemy != NULL) {
+	
+		// Если это не противник
+
+		switch (currentItem.categoryItem) {
+			////////////////////////////////////////////////////////////////////////
+			// Еда
+		case idCategoryItem::food:
+			if (event.key.code == Mouse::Right) {
+				// Утоление голода
+				if (currentHungry < maxHungry) {
+					currentHungry += currentItem.currentToughness;
+					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+				}
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Напитки
+		case idCategoryItem::bukketWithWater:
+			if (currentThirst < maxThirst) {
+
+				// Если используем ведро с водой
+				if (event.key.code == Mouse::Left) {
+					int fluid = currentItem.typeItem->idBlockForUse;
+					if (fluid) {
+
+						// Пытаемся вылить на землю
+						int level = currentLevelFloor + 1;
+						if (field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
+							// Выливаем в яму если стена не мешает
+							if (field.dataMap[level - 1][y][x] == field.charBlocks[idBlocks::air]) {
+								field.dataMap[level - 1][y][x] = field.charBlocks[fluid];
+							}
+							// 
+							else {
+								field.dataMap[level][y][x] = field.charBlocks[fluid];
+							}
+						}
+
+
+					}
+				}
+
+				// Утоление жажды
+				if (event.key.code == Mouse::Right) {
+					currentThirst += currentItem.currentToughness;
+				}
+
+				if (event.key.code == Mouse::Left || event.key.code == Mouse::Right) {
+					// Опустошение бутылки
+					int defineType = currentItem.typeItem->idItem - 1;
+					currentItem.typeItem->idItem = defineType + 1;
+					currentItem.setType(typesItems[defineType]);
+					currentItem.mainSprite->scale(normalSize);
+
+				}
+
+			}
+			break;
+		case idCategoryItem::bottleWithWater:
+			if (event.key.code == Mouse::Right) {
+				// Утоление жажды
+				if (currentThirst < maxThirst) {
+					// Утоление жажды
+					currentThirst += currentItem.currentToughness;
+
+					// Опустошение бутылки
+					int defineType = currentItem.typeItem->idItem - 1;
+					currentItem.typeItem->idItem = defineType + 1;
+					currentItem.setType(typesItems[defineType]);
+					currentItem.mainSprite->scale(normalSize);
+
+				}
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Бутылки
+		case idCategoryItem::bukketEmpty:// ИСПРАВЬ
+			if (isInUseField(xMouse, yMouse)) {
+				// Наполнение бутылки
+
+				int level;
+				// Берём воду
+				if (event.key.code == Mouse::Left) {
+					level = currentLevelFloor + 1;
+				} else if (event.key.code == Mouse::Right) {
+					level = currentLevelFloor;
+				} else {
+					level = -1;
+				}
+
+
+				if (level > -1) {
+					int fluid = currentItem.typeItem->idBlockForUse;
+					if (fluid) {
+						if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
+
+							field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+							// Опустошение бутылки
+							int defineType = currentItem.typeItem->idItem + 1;
+							currentItem.typeItem->idItem = defineType - 1;
+							currentItem.setType(typesItems[defineType]);
+							currentItem.mainSprite->scale(normalSize);
+
+						}
+					}
+				}
+
+			}
+			break;
+		case idCategoryItem::bottleEmpty:// ИСПРАВЬ
+			if (isInUseField(xMouse, yMouse)) {
+
+				// Наполнение бутылки
+
+				int level;
+				// Берём воду
+				if (event.key.code == Mouse::Left) {
+					level = currentLevelFloor + 1;
+				} else if (event.key.code == Mouse::Right) {
+					level = currentLevelFloor;
+				} else {
+					level = -1;
+				}
+
+
+				if (level > -1) {
+					int fluid = currentItem.typeItem->idBlockForUse;
+					if (fluid) {
+						if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
+
+							// Опустошение бутылки
+							int defineType = currentItem.typeItem->idItem + 1;
+							currentItem.typeItem->idItem = defineType - 1;
+							currentItem.setType(typesItems[defineType]);
+							currentItem.mainSprite->scale(normalSize);
+
+						}
+					}
+				}
+
+
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+		case idCategoryItem::other:
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Блок
+		case idCategoryItem::block:
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.type == Event::MouseButtonPressed) {
+
+					int level;
+					// Устанавливаем стену
+					if (event.key.code == Mouse::Left) {
+						level = currentLevelFloor + 1;
+					}
+					// Устанавливаем пол
+					else if (event.key.code == Mouse::Right) {
+						level = currentLevelFloor;
+					}
+					// Иначе ничего
+					else {
+						level = -1;
+					}
+
+
+					if (level > -1) {
+						// В данном случае обазначает количество// ИСПРАВЬ
+						currentItem.currentToughness -= 1;
+						// Ставим блок
+						field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
+
+						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						}
+					}
+
+				}
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Кирка
+		case idCategoryItem::pickax:
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.type == Event::MouseButtonPressed) {
+
+					int level;
+					// Удаляем стену
+					if (event.key.code == Mouse::Left) {
+						level = currentLevelFloor + 1;
+					}
+					// Удаляем пол
+					else if (event.key.code == Mouse::Right) {
+						level = currentLevelFloor;
+					}
+					// Иначе ничего
+					else {
+						level = -1;
+					}
+
+					///*
+					wchar_t* block = &field.dataMap[level][y][x];
+					// Ставим блок
+					if (findObject != NULL) {
+						if (isPickaxBreakingObject(listDestroy.pickaxBreakingObject)) {
+
+							currentItem.currentToughness -= 1;
+
+							unlifeObjects->erase(findObjectFromList);
+
+							if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+							}
+						}
+					} else if (isPickaxBreakingBlock(*block, listDestroy.pickaxBreakingBlock)) {
+						currentItem.currentToughness -= 1;
+
+						//////////////////////////////
+						// Выпадение предмета
+						Item* addItem = new Item;
+
+						addItem->setType(typesItems[field.findIdBlock(*block)]);
+						addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+						items->push_back(*addItem);
+
+						delete addItem;
+						//////////////////////////////
+
+						*block = field.charBlocks[idBlocks::air];
+
+						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						}
+
+					}
+					//*/					
+				}
+			}
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Топор
+		case idCategoryItem::axe:
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.type == Event::MouseButtonPressed) {
+
+					int level;
+					// Удаляем стену
+					if (event.key.code == Mouse::Left) {
+						level = currentLevelFloor + 1;
+					}
+					// Удаляем пол
+					else if (event.key.code == Mouse::Right) {
+						level = currentLevelFloor;
+					}
+					// Иначе ничего
+					else {
+						level = -1;
+					}
+
+					///*
+					wchar_t* block = &field.dataMap[level][y][x];
+					// Ставим блок
+					if (findObject != NULL) {
+						if (isAxeBreakingObject(listDestroy.axeBreakingObject)) {
+
+							currentItem.currentToughness -= 1;
+
+							//////////////////////////////////////////////////
+							// Выпадение предметов
+							Item* addItem = new Item;
+							int countItem = sizeof(findObjectFromList->typeObject->minCountItems) / sizeof(int);
+
+							int* minAmount = findObjectFromList->typeObject->minCountItems;
+							int* maxAmount = findObjectFromList->typeObject->maxCountItems;
+							int* idItems = findObjectFromList->typeObject->dropItems;
+
+							int currentAmount;
+							for (int i = 0; i < countItem; i++) {
+
+								currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+								for (int j = 0; j < currentAmount; j++) {
+									addItem->setType(typesItems[idItems[i]]);
+									addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+									items->push_back(*addItem);
+
+								}
+
+							}
+							delete addItem;
+							//////////////////////////////////////////////////
+
+							unlifeObjects->erase(findObjectFromList);
+
+							if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+							}
+
+
+						}
+					} else if (isAxeBreakingBlock(*block, listDestroy.axeBreakingBlock)) {
+						currentItem.currentToughness -= 1;
+
+
+						//////////////////////////////
+						// Выпадение предмета
+						Item* addItem = new Item;
+
+						addItem->setType(typesItems[field.findIdBlock(*block)]);
+						addItem->setPosition(x, y, currentLevelFloor + 1);
+						items->push_back(*addItem);
+
+						delete addItem;
+						//////////////////////////////
+
+						*block = field.charBlocks[idBlocks::air];
+
+						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						}
+
+					}
+					//*/					
+				}
+			}
+			break;
+		default:
+			break;
+		}
+
+	// Сначала наносим урон
+		if (findEnemy != NULL) {
+			if (isInUseField(xMouse, yMouse)) {
+				if (event.key.code == Mouse::Left) {
 					if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
 						if (currentItem.isDestroy) {
@@ -250,7 +580,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 								currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
 								for (int j = 0; j < currentAmount; j++) {
 									addItem->setType(typesItems[idItems[i]]);
-									addItem->setPosition(x, y, currentLevelFloor + 1);
+									addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
 									items->push_back(*addItem);
 
 								}
@@ -263,8 +593,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 						//////////////////////////////////////////////////
 						// Иначе наносим урон
 						else {
-							float cutDamage =  damageMultiplirer * currentItem.cuttingDamage;
-							float crashDamage =  damageMultiplirer * currentItem.crushingDamage;
+							float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
+							float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
 							cutDamage *= findEnemy->protectionCut;
 							crashDamage *= findEnemy->protectionCrash;
@@ -285,342 +615,13 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 					}
 				}
 				//*/					
-			} 
-			// Если это не оружие
-			else {
-
-				switch (currentItem.categoryItem) {
-					////////////////////////////////////////////////////////////////////////
-					// Еда
-				case idCategoryItem::food:
-					if (event.key.code == Mouse::Right) {
-						// Утоление голода
-						if (currentHungry < maxHungry) {
-							currentHungry += currentItem.currentToughness;
-							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-						}
-					}
-					break;
-					////////////////////////////////////////////////////////////////////////
-					// Напитки
-				case idCategoryItem::bukketWithWater:
-					if (currentThirst < maxThirst) {
-
-						// Если используем ведро с водой
-						if (event.key.code == Mouse::Left) {
-							int fluid = currentItem.typeItem->idBlockForUse;
-							if (fluid) {
-
-								// Пытаемся вылить на землю
-								int level = currentLevelFloor + 1;
-								if (field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
-									// Выливаем в яму если стена не мешает
-									if (field.dataMap[level - 1][y][x] == field.charBlocks[idBlocks::air]) {
-										field.dataMap[level - 1][y][x] = field.charBlocks[fluid];
-									}
-									// 
-									else {
-										field.dataMap[level][y][x] = field.charBlocks[fluid];
-									}
-								}
-
-
-							}
-						}
-
-						// Утоление жажды
-						if (event.key.code == Mouse::Right) {
-							currentThirst += currentItem.currentToughness;
-						}
-
-						if (event.key.code == Mouse::Left || event.key.code == Mouse::Right) {
-							// Опустошение бутылки
-							int defineType = currentItem.typeItem->idItem - 1;
-							currentItem.typeItem->idItem = defineType + 1;
-							currentItem.setType(typesItems[defineType]);
-							currentItem.mainSprite->scale(normalSize);
-
-						}
-
-					}
-					break;
-				case idCategoryItem::bottleWithWater:
-					if (event.key.code == Mouse::Right) {
-						// Утоление жажды
-						if (currentThirst < maxThirst) {
-							// Утоление жажды
-							currentThirst += currentItem.currentToughness;
-
-							// Опустошение бутылки
-							int defineType = currentItem.typeItem->idItem - 1;
-							currentItem.typeItem->idItem = defineType + 1;
-							currentItem.setType(typesItems[defineType]);
-							currentItem.mainSprite->scale(normalSize);
-
-						}
-					}
-					break;
-					////////////////////////////////////////////////////////////////////////
-					// Бутылки
-				case idCategoryItem::bukketEmpty:// ИСПРАВЬ
-					if (isInUseField(xMouse, yMouse)) {
-						// Наполнение бутылки
-
-						int level;
-						// Берём воду
-						if (event.key.code == Mouse::Left) {
-							level = currentLevelFloor + 1;
-						} else if (event.key.code == Mouse::Right) {
-							level = currentLevelFloor;
-						} else {
-							level = -1;
-						}
-
-
-						if (level > -1) {
-							int fluid = currentItem.typeItem->idBlockForUse;
-							if (fluid) {
-								if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
-
-									field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-									// Опустошение бутылки
-									int defineType = currentItem.typeItem->idItem + 1;
-									currentItem.typeItem->idItem = defineType - 1;
-									currentItem.setType(typesItems[defineType]);
-									currentItem.mainSprite->scale(normalSize);
-
-								}
-							}
-						}
-
-					}
-					break;
-				case idCategoryItem::bottleEmpty:// ИСПРАВЬ
-					if (isInUseField(xMouse, yMouse)) {
-
-						// Наполнение бутылки
-
-						int level;
-						// Берём воду
-						if (event.key.code == Mouse::Left) {
-							level = currentLevelFloor + 1;
-						} else if (event.key.code == Mouse::Right) {
-							level = currentLevelFloor;
-						} else {
-							level = -1;
-						}
-
-
-						if (level > -1) {
-							int fluid = currentItem.typeItem->idBlockForUse;
-							if (fluid) {
-								if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
-
-									// Опустошение бутылки
-									int defineType = currentItem.typeItem->idItem + 1;
-									currentItem.typeItem->idItem = defineType - 1;
-									currentItem.setType(typesItems[defineType]);
-									currentItem.mainSprite->scale(normalSize);
-
-								}
-							}
-						}
-
-
-					}
-					break;
-					////////////////////////////////////////////////////////////////////////
-				case idCategoryItem::other:
-					break;
-					////////////////////////////////////////////////////////////////////////
-					// Блок
-				case idCategoryItem::block:
-					if (isInUseField(xMouse, yMouse)) {
-						if (event.type == Event::MouseButtonPressed) {
-
-							int level;
-							// Устанавливаем стену
-							if (event.key.code == Mouse::Left) {
-								level = currentLevelFloor + 1;
-							}
-							// Устанавливаем пол
-							else if (event.key.code == Mouse::Right) {
-								level = currentLevelFloor;
-							}
-							// Иначе ничего
-							else {
-								level = -1;
-							}
-
-
-							if (level > -1) {
-								// В данном случае обазначает количество// ИСПРАВЬ
-								currentItem.currentToughness -= 1;
-								// Ставим блок
-								field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
-
-								if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-									itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-								}
-							}
-
-						}
-					}
-					break;
-					////////////////////////////////////////////////////////////////////////
-					// Кирка
-				case idCategoryItem::pickax:
-					if (isInUseField(xMouse, yMouse)) {
-						if (event.type == Event::MouseButtonPressed) {
-
-							int level;
-							// Удаляем стену
-							if (event.key.code == Mouse::Left) {
-								level = currentLevelFloor + 1;
-							}
-							// Удаляем пол
-							else if (event.key.code == Mouse::Right) {
-								level = currentLevelFloor;
-							}
-							// Иначе ничего
-							else {
-								level = -1;
-							}
-
-							///*
-							wchar_t* block = &field.dataMap[level][y][x];
-							// Ставим блок
-							if (findObject != NULL) {
-								if (isPickaxBreakingObject(listDestroy.pickaxBreakingObject)) {
-
-									currentItem.currentToughness -= 1;
-
-									unlifeObjects->erase(findObjectFromList);
-
-									if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-										itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-									}
-								}
-							} else if (isPickaxBreakingBlock(*block, listDestroy.pickaxBreakingBlock)) {
-								currentItem.currentToughness -= 1;
-
-								//////////////////////////////
-								// Выпадение предмета
-								Item* addItem = new Item;
-
-								addItem->setType(typesItems[field.findIdBlock(*block)]);
-								addItem->setPosition(x, y, currentLevelFloor + 1);
-								items->push_back(*addItem);
-
-								delete addItem;
-								//////////////////////////////
-
-								*block = field.charBlocks[idBlocks::air];
-
-								if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-									itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-								}
-
-							}
-							//*/					
-						}
-					}
-					break;
-					////////////////////////////////////////////////////////////////////////
-					// Топор
-				case idCategoryItem::axe:
-					if (isInUseField(xMouse, yMouse)) {
-						if (event.type == Event::MouseButtonPressed) {
-
-							int level;
-							// Удаляем стену
-							if (event.key.code == Mouse::Left) {
-								level = currentLevelFloor + 1;
-							}
-							// Удаляем пол
-							else if (event.key.code == Mouse::Right) {
-								level = currentLevelFloor;
-							}
-							// Иначе ничего
-							else {
-								level = -1;
-							}
-
-							///*
-							wchar_t* block = &field.dataMap[level][y][x];
-							// Ставим блок
-							if (findObject != NULL) {
-								if (isAxeBreakingObject(listDestroy.axeBreakingObject)) {
-
-									currentItem.currentToughness -= 1;
-
-									//////////////////////////////////////////////////
-									// Выпадение предметов
-									Item* addItem = new Item;
-									int countItem = sizeof(findObjectFromList->typeObject->minCountItems) / sizeof(int);
-
-									int* minAmount = findObjectFromList->typeObject->minCountItems;
-									int* maxAmount = findObjectFromList->typeObject->maxCountItems;
-									int* idItems = findObjectFromList->typeObject->dropItems;
-
-									int currentAmount;
-									for (int i = 0; i < countItem; i++) {
-
-										currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
-										for (int j = 0; j < currentAmount; j++) {
-											addItem->setType(typesItems[idItems[i]]);
-											addItem->setPosition(x, y, currentLevelFloor + 1);
-											items->push_back(*addItem);
-
-										}
-
-									}
-									delete addItem;
-									//////////////////////////////////////////////////
-
-									unlifeObjects->erase(findObjectFromList);
-
-									if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-										itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-									}
-
-
-								}
-							} else if (isAxeBreakingBlock(*block, listDestroy.axeBreakingBlock)) {
-								currentItem.currentToughness -= 1;
-
-
-								//////////////////////////////
-								// Выпадение предмета
-								Item* addItem = new Item;
-
-								addItem->setType(typesItems[field.findIdBlock(*block)]);
-								addItem->setPosition(x, y, currentLevelFloor + 1);
-								items->push_back(*addItem);
-
-								delete addItem;
-								//////////////////////////////
-
-								*block = field.charBlocks[idBlocks::air];
-
-								if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-									itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-								}
-
-							}
-							//*/					
-						}
-					}
-					break;
-				default:
-					break;
-				}
-
 			}
 		}
-		
-		
 	}
+		
+		
+		
+	
 }
 
 ////////////////////////////////////////////////////////////////////////////////////

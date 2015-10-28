@@ -21,6 +21,7 @@ struct TypeEnemy
 
 	// Для взаимодействия с миром
 	int radiusUse;
+	float radiuseView;
 
 	// Ходьба
 	float stepFirst;
@@ -30,6 +31,10 @@ struct TypeEnemy
 	int maxHealth;
 	int maxStamina;
 	int maxMana;
+
+	// Урон
+	int cuttingDamage;// Значение по умолчанию
+	int crushingDamage;// Значение по умолчанию
 
 	// Защита
 	float protectionCut;
@@ -54,6 +59,7 @@ struct TypeEnemy
 	void Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 						int widthEnemy, int heightEnemy, int amountEnemySlots,
 						int health, int stamina, int mana, float protectCut, float protectCrush,
+						float view, int damCut, int damCrash,
 						int* idItems, int* minAmountItems, int* maxAmountItems, int count);
 };
 

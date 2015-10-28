@@ -40,7 +40,10 @@ public:
 	int toughnessObject;
 
 	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
-	void Init(sf::String filenameTexture, sf::String typeName, int id, int idCategory, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY, int idBlock, int idUnlifeObject, int damCut, int damCrash);
+	void Init(sf::String filenameTexture, sf::String typeName, int id, int idCategory, bool canDestroy, int toughness,
+						int w, int h, int pixelX, int pixelY,
+						int idBlock, int idUnlifeObject,
+						int damCut, int damCrash);
 	void InitForUse(sf::String filenameTextureForUse, int w, int h, int pixelX, int pixelY);
 };
 

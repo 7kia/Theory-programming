@@ -27,7 +27,6 @@ public:
 	int strength;// сила
 	int expStrength;// опыт
 	int expStrengthUp;// количество для повышения
-	float damageMultiplirer;// strength / 10
 
 	int endurance;// выносливость
 	int expEndurace;

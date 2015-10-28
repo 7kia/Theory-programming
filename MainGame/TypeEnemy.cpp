@@ -25,8 +25,13 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	int stamina = 50;
 	int mana = 0;
 
+	int damCut = 5;
+	int damCrash = 0;
+
 	float protectCut = 1.5f;
 	float protectCrush = 1.f;
+
+	float view = RADIUSE_VIEW;
 
 	*minAmountForWolf = { 1 };
 	*maxAmountForWolf = { 2 };
@@ -34,6 +39,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 
 									health, stamina, mana, protectCut, protectCrush,
+									view, damCut, damCrash,
 									idItemsForWolf, minAmountForWolf, maxAmountForWolf, 1);
 
 	delete minAmountForWolf;
@@ -57,8 +63,13 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	stamina = 50;
 	mana = 0;
 
+	damCut = 0;
+	damCrash = 5;
+
 	protectCut = 0.f;
 	protectCrush = 1.f;
+
+	view = RADIUSE_VIEW;
 
 	*minAmountForSkelet = { 1 };
 	*maxAmountForSkelet = { 2 };
@@ -66,6 +77,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_SKELET_SLOTS,
 									health, stamina, mana, protectCut, protectCrush,
+									view, damCut, damCrash,
 									idItemsForSkelet, minAmountForSkelet, maxAmountForSkelet, 1);
 
 	delete minAmountForSkelet;
@@ -77,6 +89,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 										 int widthEnemy, int heightEnemy, int amountEnemySlots,
 										 int health, int stamina, int mana, float protectCut, float protectCrush,
+										 float view, int damCut, int damCrash,
 										 int * idItems, int * minAmountItems, int * maxAmountItems, int count)
 {
 	textureEntity = new Texture;
@@ -89,10 +102,11 @@ void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &da
 
 	// Дальность подбора предметов
 	radiusUse = 1;
+	radiuseView = view;
 
 	// Скорость ходьбы
-	stepFirst = speedEntity;
-	stepCurrent = speedEntity;
+	stepFirst = SPEED_ENTITY;
+	stepCurrent = SPEED_ENTITY;
 	timeAnimation = 0.f;
 
 	// Текстура
@@ -106,6 +120,9 @@ void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &da
 	maxHealth = health;
 	maxStamina = stamina;
 	maxMana = mana;
+
+	cuttingDamage = damCut;
+	protectionCrash = damCrash;
 
 	protectionCut = protectCut;
 	protectionCrash = protectCrush;

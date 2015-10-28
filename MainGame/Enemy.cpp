@@ -71,8 +71,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	radiusUse = 1;
 
 	// Скорость ходьбы
-	stepFirst = speedEntity;
-	stepCurrent = speedEntity;
+	stepFirst = SPEED_ENTITY;
+	stepCurrent = SPEED_ENTITY;
 	timeAnimation = 0.f;
 
 	// Текстура
