@@ -6,6 +6,8 @@
 const int AMOUNT_ENTITY = 100;
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
+const float timeAttentionDamage = 1.5f;
+
 const sf::Color NORMAL_COLOR(255, 255, 255, 255);
 const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
 
@@ -68,6 +70,7 @@ public:
 	sf::Sprite* levelMana;
 
 	int inputDamage;
+	float timeDamage;// Показывает урон в течении ... секунд
 
 	bool isDeath = false;
 	////////////////////////////

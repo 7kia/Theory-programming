@@ -11,7 +11,13 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 	////////////////////////////////////////////////////////////////////
 	// Обновление показателей 
-	
+	if (inputDamage) {
+		timeDamage += deltaTime.asSeconds();
+	}
+	if (timeDamage > timeAttentionDamage) {
+		timeDamage = 0;
+		inputDamage = 0;
+	}
 
 	///////////////////////////////////////
 	// Маны

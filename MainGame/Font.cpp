@@ -70,7 +70,7 @@ void initializeTexts(TextGame &textGame)
 	currentText->setColor(Color::White);
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
-	currentText->setCharacterSize(SIZE_BIG_TEXT);
+	currentText->setCharacterSize(SIZE_SMALL_TEXT);
 
 	/*
 	// Определение количества символов

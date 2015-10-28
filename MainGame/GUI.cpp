@@ -236,33 +236,25 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 			window.draw(*levelHealth);
 			levelHealth->setScale(normalSizeGuiForEnemy);
 
-			/*
+			///*
 			// Отображение урона
 			currentText = &textGame.texts[idText::inputDamage];
 
-			string damage = "";
-			char inputChar;
-			int count = 0;
-
-			//strrev(damage);
-			// Запись
-			do {
-				inputChar = it->inputDamage % 10 + '0';
-				damage[count] = inputChar;
-				count++;
-				it->inputDamage /= 10;
-			} while (it->inputDamage > 0);
-
-			// Перевёртыш
-			for (size_t i = 0; i < count / 2; i++) {
-				damage[i] = inputChar;
-				damage[i] = damage[count - i];
-				damage[count - i] = inputChar;
-			}
-
+			std::stringstream ss;
+			int damage = it->inputDamage;
+			ss << damage;
+			std::string stringDamage;
+			ss >> stringDamage;
+			
 			std::cout << "damage string " <<  damage << std::endl;
-			currentText->setString((string)it->inputDamage);
-			window.draw(*currentText);
+			currentText->setString(stringDamage);
+
+			currentText->setPosition(pos);
+			// Если нанесли урон то отображаем
+			if (damage) {
+				window.draw(*currentText);
+			}
+		
 
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
 			//*/

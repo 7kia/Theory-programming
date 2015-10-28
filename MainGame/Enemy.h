@@ -21,7 +21,6 @@ public:
 	Item *emptyItem;// ИСПРАВЬ
 	int idSelectItem;
 
-
 	TypeEnemy *type;
 	///////////////////////////////////////////////////////
 	// Для уничтожения врагов

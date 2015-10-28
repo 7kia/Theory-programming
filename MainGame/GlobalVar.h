@@ -5,13 +5,14 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>// Для перевода числа в строку
 
 #include "Paths.h"
 #include "ItemsVar.h"
 #include "BlocksVar.h"
 #include "UnlifeObjectVar.h"
 
-const sf::String TITLE_PROGRAM = "MainGame v1.3.0";
+const sf::String TITLE_PROGRAM = "MainGame v1.3.2";
 const sf::String stringDeathPerson = "Death";
 
 const int DEFAULT_WIDTH_WINDOW = 1200;
