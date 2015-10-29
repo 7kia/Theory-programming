@@ -25,6 +25,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	int stamina = 50;
 	int mana = 0;
 
+	float timeGivenDamage = 1.f;
 	int damCut = 5;
 	int damCrash = 0;
 
@@ -39,7 +40,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 
 									health, stamina, mana, protectCut, protectCrush,
-									view, damCut, damCrash,
+									view, damCut, damCrash, timeGivenDamage,
 									idItemsForWolf, minAmountForWolf, maxAmountForWolf, 1);
 
 	delete minAmountForWolf;
@@ -63,6 +64,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	stamina = 50;
 	mana = 0;
 
+	timeGivenDamage = 1.f;
 	damCut = 0;
 	damCrash = 5;
 
@@ -77,7 +79,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_SKELET_SLOTS,
 									health, stamina, mana, protectCut, protectCrush,
-									view, damCut, damCrash,
+									view, damCut, damCrash, timeGivenDamage,
 									idItemsForSkelet, minAmountForSkelet, maxAmountForSkelet, 1);
 
 	delete minAmountForSkelet;
@@ -89,7 +91,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 										 int widthEnemy, int heightEnemy, int amountEnemySlots,
 										 int health, int stamina, int mana, float protectCut, float protectCrush,
-										 float view, int damCut, int damCrash,
+										 float view, int damCut, int damCrash, float timeDam,
 										 int * idItems, int * minAmountItems, int * maxAmountItems, int count)
 {
 	textureEntity = new Texture;
@@ -121,8 +123,9 @@ void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &da
 	maxStamina = stamina;
 	maxMana = mana;
 
+	timeGivenDamage = timeDam;
 	cuttingDamage = damCut;
-	protectionCrash = damCrash;
+	crushingDamage = damCrash;
 
 	protectionCut = protectCut;
 	protectionCrash = protectCrush;

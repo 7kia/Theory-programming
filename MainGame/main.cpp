@@ -59,10 +59,10 @@ void processEvents(Game &game)
 			// Ïåðåêëþ÷åíèå ðåæèìîâ
 			if (event.type == Event::KeyPressed) {
 				if (Keyboard::isKeyPressed(Keyboard::G)) {
-					mainPerson.currenMode = idModeEntity::build;// ÈÑÏÐÀÂÜ
+					//mainPerson.currenMode = idEntityMode::build;// ÈÑÏÐÀÂÜ
 					printf("build mode\n");
 				} else if (Keyboard::isKeyPressed(Keyboard::F)) {
-					mainPerson.currenMode = idModeEntity::fight;// ÈÑÏÐÀÂÜ
+					//mainPerson.currenMode = idModeEntity::fight;// ÈÑÏÐÀÂÜ
 					printf("fight mode\n");
 				}
 			}
@@ -296,7 +296,7 @@ void startGame()
 					it->update(TIME_PER_FRAME, *game->databaseSound);
 					it->interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
 					it->randomWalk(TIME_PER_FRAME);
-
+					mainPerson.attractionEnemy(*it, TIME_PER_FRAME);
 
 				}
 				/////////////////////////////////////

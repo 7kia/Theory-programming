@@ -22,6 +22,9 @@ public:
 	Enemy *findEnemy;
 	Enemy *emptyEnemy;
 	std::list<Enemy>::iterator findEnemyFromList;
+
+	void givenForPersonDamage(Enemy & enemy);
+	void attractionEnemy(Enemy & enemy, const Time &deltaTime);
 	///////////////////////////////////////////////////////
 	// Основные характерисктики
 	int strength;// сила

@@ -3,7 +3,6 @@
 using namespace sf;
 using namespace std;
 
-
 ////////////////////////////////////////////////////////////////////
 // Передвижение. Его анимация и озвучка
 void Entity::update(const Time & deltaTime, dataSound &databaseSound)
@@ -204,6 +203,10 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		resetTimeAnimation(timeAnimation, resetAnimation);
 
 		spriteEntity->setTextureRect(IntRect(((int)timeAnimation + 1) *   width, height, -width, height));
+		break;
+	case NONE:
+		movement.x = 0;
+		movement.y = 0;
 		break;
 	default:
 		break;

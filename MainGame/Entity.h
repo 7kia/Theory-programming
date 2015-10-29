@@ -73,6 +73,10 @@ public:
 	int cuttingDamage = 0;// Значение по умолчанию
 	int crushingDamage = 1;// Значение по умолчанию
 
+	float timeGivenDamage;
+	int outputDamage;
+	float timeOutputDamage;
+
 	int inputDamage;
 	float timeDamage;// Показывает урон в течении ... секунд
 
@@ -137,6 +141,7 @@ public:
 	float protectionCut;
 	float protectionCrash;
 	//////////////////////////////////////////////////
+
 
 	// Передвижение. Его анимация и озвучка
 	void update(const Time & deltaTime, dataSound &databaseSound);

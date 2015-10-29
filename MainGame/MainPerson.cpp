@@ -55,7 +55,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 
 	// Позиция и направление
 	mainPerson.currentLevelFloor = 0;
-	mainPerson.currenMode = idModeEntity::build;
+	mainPerson.currenMode = idEntityMode::walk;
 	mainPerson.spriteEntity->setPosition(posX, posY);
 	mainPerson.direction = NONE;
 
@@ -100,6 +100,104 @@ void MainPerson::updateView(RenderWindow & window)
 	else if (y > lowBorder) tempY = lowBorder;//нижнюю сторону	
 
 	view->setCenter(tempX, tempY);
+}
+
+void MainPerson::givenForPersonDamage(Enemy &enemy)
+{
+	float cutDamage;
+	float crashDamage;
+
+	cutDamage = enemy.damageMultiplirer * enemy.cuttingDamage;
+	crashDamage = enemy.damageMultiplirer * enemy.crushingDamage;
+	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
+	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
+
+	cutDamage *= protectionCut;
+	crashDamage *= protectionCrash;
+
+	printf("health!!! %f\n", enemy.cuttingDamage);
+	inputDamage = cutDamage + crashDamage;
+	currentHealth -= inputDamage;
+
+	inputDamage = 0;// TODO
+}
+
+void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
+{
+	Vector2f personPoint = { getXPos(), getYPos() };
+	Vector2f enemyPoint;
+	Vector2f movemoment;
+	float distanse;
+
+	enemyPoint = enemy.spriteEntity->getPosition();
+
+	distanse = distansePoints(personPoint, enemyPoint);
+	// Если увидел
+	if (distanse <= RADIUSE_VIEW) {
+		enemy.mode = idEntityMode::fight;
+		// Вплотную не подходим
+		
+		if (distanse >= SIZE_BLOCK) {
+			// Обнуляем время нанесения урона
+			enemy.timeDamage = 0.f;
+
+			movemoment = vectorDirection(enemyPoint, personPoint);
+
+			printf("vector %f %f\n", movemoment.x, movemoment.y);
+			// TODO:
+			float zero = 5.f;
+
+			bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
+			bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
+
+			if (movemoment.x > zero && movemoment.y > zero) {
+				enemy.direction = DOWN_RIGHT;
+			}
+			else if (movemoment.x < -zero && movemoment.y > zero) {
+				enemy.direction = DOWN_LEFT;
+			}
+			else if (movemoment.x < -zero && movemoment.y < -zero) {
+				enemy.direction = UP_LEFT;
+			}
+			else if (movemoment.x > zero && movemoment.y < zero) {
+				enemy.direction = UP_RIGHT;
+			}
+			else if (movemoment.y > zero && xAboutZero) {
+				enemy.direction = DOWN;
+			}
+			else if (movemoment.y < -zero && xAboutZero) {
+				enemy.direction = UP;
+			}
+			else if (movemoment.x > zero && yAboutZero) {
+				enemy.direction = RIGHT;
+			}
+			else if (movemoment.x < -zero && yAboutZero) {
+				enemy.direction = LEFT;
+			}
+			else {
+				enemy.direction = NONE;
+			}
+
+			/*
+			
+			*/
+		}
+		else {
+			enemy.timeDamage += deltaTime.asSeconds();
+			if (enemy.timeDamage > enemy.timeGivenDamage) {
+				enemy.timeDamage = 0;
+				givenForPersonDamage(enemy);
+			}
+			
+			enemy.direction = NONE;
+		}
+
+	}
+	// Идём дальше
+	else {
+		enemy.mode = idEntityMode::walk;
+	}
+
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -600,7 +698,6 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 							crashDamage *= findEnemy->protectionCrash;
 
 							findEnemy->inputDamage = cutDamage + crashDamage;
-							printf("damage club %d\n", findEnemy->currentHealth);
 							findEnemy->currentHealth -= findEnemy->inputDamage;
 						}
 						//////////////////////////////////////////////////

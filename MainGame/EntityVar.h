@@ -1,7 +1,8 @@
 #pragma once
 const int AMOUNT_ENEMY_ITEM = 8;
 
-const float MULTIPLIER_OF_DAMAGE = 1;
+const float MULTIPLIER_OF_DAMAGE = 1.f;
+const float TIME_GIVEN_DAMAGE = 1.f;
 
 const float SPEED_ENTITY = 150.f;
 const float RADIUSE_VIEW = 300.f;
@@ -19,4 +20,12 @@ enum idEnemy
 	wolfEnemy,
 	skeletEnemy,
 	amountEnemy
+};
+
+enum idEntityMode
+{
+	walk,
+	fight,
+	panic,
+	amountEnemyMode
 };

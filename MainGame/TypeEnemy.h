@@ -33,6 +33,7 @@ struct TypeEnemy
 	int maxMana;
 
 	// Урон
+	float timeGivenDamage;
 	int cuttingDamage;// Значение по умолчанию
 	int crushingDamage;// Значение по умолчанию
 
@@ -59,7 +60,7 @@ struct TypeEnemy
 	void Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 						int widthEnemy, int heightEnemy, int amountEnemySlots,
 						int health, int stamina, int mana, float protectCut, float protectCrush,
-						float view, int damCut, int damCrash,
+						float view, int damCut, int damCrash, float timeDam,
 						int* idItems, int* minAmountItems, int* maxAmountItems, int count);
 };
 

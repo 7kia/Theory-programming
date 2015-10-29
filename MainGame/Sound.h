@@ -13,12 +13,6 @@ typedef enum
 } idSoundEntity;
 const int sizeBuffer = sizeof(idSoundEntity);
 
-typedef enum
-{
-	build,
-	fight
-} idModeEntity;
-
 struct dataSound
 {
 	float *startSounds;

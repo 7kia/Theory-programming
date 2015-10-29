@@ -15,7 +15,7 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int coun
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 0; i < 3; i++) {
+	for (size_t i = 0; i < 0; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -34,7 +34,7 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int coun
 	// Скелеты
 	typeEnemy = &typesEnemy->typesEnemy[idEnemy::skeletEnemy];
 
-	for (size_t i = 0; i < 3; i++) {
+	for (size_t i = 0; i < 1; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -70,6 +70,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	// Дальность подбора предметов
 	radiusUse = 1;
 
+	mode = idEntityMode::walk;
+
 	// Скорость ходьбы
 	stepFirst = SPEED_ENTITY;
 	stepCurrent = SPEED_ENTITY;
@@ -93,7 +95,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 
 	// Позиция и направление
 	currentLevelFloor = level;
-	currenMode = idModeEntity::fight;
+	currenMode = idEntityMode::fight;
 
 	spriteEntity->setOrigin(type->width / 2, type->height / 2);
 	spriteEntity->setPosition(xPos * SIZE_BLOCK - SIZE_BLOCK / 2, yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
@@ -125,6 +127,13 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	protectionCut = type->protectionCut;
 	protectionCrash = type->protectionCrash;
 
+	timeGivenDamage = type->timeGivenDamage;
+	timeDamage = 0.f;
+
+	cuttingDamage = type->cuttingDamage;
+	crushingDamage = type->crushingDamage;
+	damageMultiplirer = 1.f;
+
 }
 
 Enemy::~Enemy()
@@ -133,23 +142,21 @@ Enemy::~Enemy()
 
 void Enemy::randomWalk(const Time &deltaTime) {
 
-	if (currentTime < timeWalk && direction != Direction::NONE){
+	if (mode == idEntityMode::walk) {
+		if (currentTime < timeWalk && direction != Direction::NONE) {
 
-		currentTime += deltaTime.asSeconds();
+			currentTime += deltaTime.asSeconds();
 
-	} else {
+		} else {
 
-		currentTime = 0;
-		timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
+			currentTime = 0;
+			timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
 
-		int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
-		direction = (Direction)randomDirection;
+			int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
+			direction = (Direction)randomDirection;
+		}
 	}
-
 	
-
-
-
 
 }
 

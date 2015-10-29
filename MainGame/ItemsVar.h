@@ -79,36 +79,38 @@ const int PIXEL_X_WOOD_CLUB = SIZE_ITEM * 6;
 const int PIXEL_Y_WOOD_CLUB = SIZE_ITEM * 3;
 // ДОБАВЛЕНИЕ ПРЕДМЕТА
 
-typedef enum
-{
-	// ДОБАВЛЕНИЕ ПРЕДМЕТА
-	emptyItem,
-	// Блоки
-	grassItem,
-	dirtItem,
-	sandItem,
-	logOakItem,
-	stoneItem,
-	stoneBrickItem,
-	planksBlockItem,
-	woodLadderItem,
-	// Еда
-	mushroomItem,
-	// Инструменты
-	stonePickaxItem,
-	stoneAxeItem,
-	// Мечи
-	stoneKnifeItem,
-	// Дубины
-	woodClubItem,
-	// Сосуды с водой и без
-	glassBottleItem,
-	glassbukketWithWater,
-	woodBukketItem,
-	woodBukketWithWaterItem,
+namespace idItem {
+	enum
+	{
+		// ДОБАВЛЕНИЕ ПРЕДМЕТА
+		emptyItem,
+		// Блоки
+		grassItem,
+		dirtItem,
+		sandItem,
+		logOakItem,
+		stoneItem,
+		stoneBrickItem,
+		planksBlockItem,
+		woodLadderItem,
+		// Еда
+		mushroomItem,
+		// Инструменты
+		stonePickaxItem,
+		stoneAxeItem,
+		// Мечи
+		stoneKnifeItem,
+		// Дубины
+		woodClubItem,
+		// Сосуды с водой и без
+		glassBottleItem,
+		glassbukketWithWater,
+		woodBukketItem,
+		woodBukketWithWaterItem,
 
-	amountItem
-} idItem;
+		amountItem
+	};
+}
 
 const int AMOUNT_TYPES_ITEM = idItem::amountItem;
 

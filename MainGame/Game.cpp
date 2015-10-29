@@ -117,6 +117,7 @@ void initializeCategorysBreakingObject(Game &game)
 }
 //*/
 
+
 void renderEntitys(Game &game)// днаюбкемхе ясымнярх
 {
 	RenderWindow& window = *game.window;

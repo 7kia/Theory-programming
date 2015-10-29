@@ -11,6 +11,7 @@ class Enemy : public Entity
 {
 public:
 	// режимы персонажа
+	int mode;
 
 	// Для направления взгляда
 	float rotation;
@@ -32,6 +33,7 @@ public:
 	///////////////////////////////////////////////////////
 	void EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level);
 	~Enemy();
+
 
 	void randomWalk(const sf::Time &deltaTime);
 private:
