@@ -74,7 +74,29 @@ const int Y_LEVEL_MANA_GUI = 0;
 const Vector2f scaleGuiForEnemy = { 0.4f, 0.4f };
 const Vector2f normalSizeGuiForEnemy = { 1.f, 1.f };
 
+// Отображение нанесйнного урона
 const int shiftEnemyDamage = 5;
+
+// Окошко над панелью быстрого доступа
+const int WIDTH_ITEM_OVER_PANEL_INFO = 600;
+const int HEIGHT_ITEM_OVER_PANEL_INFO = 60;
+
+const int X_ITEM_OVER_PANEL_INFO = 0;
+const int Y_ITEM_OVER_PANEL_INFO = heightPanelQuickAccess + heightSelectInPanelQuickAccess;
+// Отображение характеристик предмета
+const int AMOUNT_DAMAGE_FEATURES = 2;
+
+const int WIDTH_DAMAGE_GUI = 58;
+const int HEIGHT_DAMAGE_GUI = 58;
+
+const sf::Vector2f SCALE_CHARACTER = { 0.5f, 0.5f };// TODO features
+const int Y_SHIFT_OUT_PANEL = 32;
+
+const int X_CRASH_DAMAGE_GUI = 40;//X_CRASH_DAMAGE_GUI
+const int Y_CRASH_DAMAGE_GUI = 32;//Y_CRASH_DAMAGE_GUI
+
+const int X_CUT_DAMAGE_GUI = X_CRASH_DAMAGE_GUI + WIDTH_DAMAGE_GUI;
+const int Y_CUT_DAMAGE_GUI = Y_CRASH_DAMAGE_GUI;
 
 struct GUI
 {// добавление gui
@@ -102,6 +124,11 @@ struct GUI
 	sf::Sprite* levelHealth;
 	sf::Sprite* levelStamina;
 	sf::Sprite* levelMana;
+
+	// Показатели предметов
+	sf::Sprite* itemInfoOverPanel;
+	sf::Sprite* cutSprite;
+	sf::Sprite* crashSprite;
 
 	// Ссылки на текст
 	sf::Text *textGui[numberTextReference];

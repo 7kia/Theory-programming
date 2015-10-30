@@ -25,7 +25,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	int stamina = 50;
 	int mana = 0;
 
-	float timeGivenDamage = 1.f;
+	float timeOutputDamage = 1.f;
 	int damCut = 5;
 	int damCrash = 0;
 
@@ -40,7 +40,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 
 									health, stamina, mana, protectCut, protectCrush,
-									view, damCut, damCrash, timeGivenDamage,
+									view, damCut, damCrash, timeOutputDamage,
 									idItemsForWolf, minAmountForWolf, maxAmountForWolf, 1);
 
 	delete minAmountForWolf;
@@ -64,7 +64,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	stamina = 50;
 	mana = 0;
 
-	timeGivenDamage = 1.f;
+	timeOutputDamage = 1.f;
 	damCut = 0;
 	damCrash = 5;
 
@@ -79,7 +79,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_SKELET_SLOTS,
 									health, stamina, mana, protectCut, protectCrush,
-									view, damCut, damCrash, timeGivenDamage,
+									view, damCut, damCrash, timeOutputDamage,
 									idItemsForSkelet, minAmountForSkelet, maxAmountForSkelet, 1);
 
 	delete minAmountForSkelet;
@@ -123,7 +123,8 @@ void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &da
 	maxStamina = stamina;
 	maxMana = mana;
 
-	timeGivenDamage = timeDam;
+	timeOutputDamage = timeDam;
+
 	cuttingDamage = damCut;
 	crushingDamage = damCrash;
 

@@ -11,11 +11,14 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	////////////////////////////////////////////////////////////////////
 	// Обновление показателей 
 	if (inputDamage) {
-		timeDamage += deltaTime.asSeconds();
-	}
-	if (timeDamage > timeAttentionDamage) {
-		timeDamage = 0;
-		inputDamage = 0;
+		timeInputDamage += deltaTime.asSeconds();
+		printf("damage %d time %f\n", inputDamage, timeInputDamage);
+
+		if (timeInputDamage > TIME_ATTENTION_SHOW_DAMAGE) {
+			timeInputDamage = 0;
+			inputDamage = 0;
+		}
+
 	}
 
 	///////////////////////////////////////
@@ -274,14 +277,16 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 	{
 		wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+
+		bool isSlowingBlock = false;
 		/////////////////////////////////////////////
 		// Проверяем окружающие объекты
 		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
 			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
 				// Замедляющие блоки
-
-				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {
+				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {// ИСПРАВЬ
 					stepCurrent = stepFirst / slowingStep;
+					isSlowingBlock = true;
 					needMinusStamina = false;
 					break;
 				} else if (stepCurrent == stepFirst / slowingStep) {
@@ -302,32 +307,33 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 		}
 		/////////////////////////////////////////////
 
-
 		/////////////////////////////////////////////
 		// Проверяем пол
-		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
-				
-				if (needMinusStamina) {
+		
+			for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
+				for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
+
+					
 					// Замедляющие блоки
 					if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {// ИСПРАВЬ
 						stepCurrent = stepFirst / slowingStep;
 						needMinusStamina = false;
 						break;
-					} else if (stepCurrent == stepFirst / slowingStep) {
+					} else if (stepCurrent == stepFirst / slowingStep && !isSlowingBlock) {
 						stepCurrent = stepFirst;
 					}
-				}
-				// Является непроходимым
-				if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
-					x = getXPos();
-					y = getYPos();
-					direction = Direction::NONE;
-					break;
-				}
+					
+					// Является непроходимым
+					if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
+						x = getXPos();
+						y = getYPos();
+						direction = Direction::NONE;
+						break;
+					}
 
+				}
 			}
-		}
+		
 		/////////////////////////////////////////////
 	}
 	else

@@ -107,16 +107,15 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	float cutDamage;
 	float crashDamage;
 
-	cutDamage = enemy.damageMultiplirer * enemy.cuttingDamage;
-	crashDamage = enemy.damageMultiplirer * enemy.crushingDamage;
+	inputCutDamage = enemy.damageMultiplirer * enemy.cuttingDamage;
+	inputCrashDamage = enemy.damageMultiplirer * enemy.crushingDamage;
 	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
 	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
-	cutDamage *= protectionCut;
-	crashDamage *= protectionCrash;
+	inputCutDamage *= protectionCut;
+	inputCrashDamage *= protectionCrash;
 
-	printf("health!!! %f\n", enemy.cuttingDamage);
-	inputDamage = cutDamage + crashDamage;
+	inputDamage = inputCutDamage + inputCrashDamage;
 	currentHealth -= inputDamage;
 
 	inputDamage = 0;// TODO
@@ -139,13 +138,13 @@ void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
 		
 		if (distanse >= SIZE_BLOCK) {
 			// Обнуляем время нанесения урона
-			enemy.timeDamage = 0.f;
+			enemy.currentTimeOutputDamage = 0.f;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
 
-			printf("vector %f %f\n", movemoment.x, movemoment.y);
+			//printf("vector %f %f\n", movemoment.x, movemoment.y);// TODO
 			// TODO:
-			float zero = 5.f;
+			float zero = SIZE_BLOCK / 2;
 
 			bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
 			bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
@@ -183,9 +182,9 @@ void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
 			*/
 		}
 		else {
-			enemy.timeDamage += deltaTime.asSeconds();
-			if (enemy.timeDamage > enemy.timeGivenDamage) {
-				enemy.timeDamage = 0;
+			enemy.currentTimeOutputDamage += deltaTime.asSeconds();
+			if (enemy.currentTimeOutputDamage > enemy.timeOutputDamage) {
+				enemy.currentTimeOutputDamage = 0;
 				givenForPersonDamage(enemy);
 			}
 			
@@ -699,6 +698,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 
 							findEnemy->inputDamage = cutDamage + crashDamage;
 							findEnemy->currentHealth -= findEnemy->inputDamage;
+
+							findEnemy->timeInputDamage = 0.f;
 						}
 						//////////////////////////////////////////////////
 

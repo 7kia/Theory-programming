@@ -33,7 +33,8 @@ struct TypeEnemy
 	int maxMana;
 
 	// Урон
-	float timeGivenDamage;
+	float timeOutputDamage;
+	float timeInputDamage;
 	int cuttingDamage;// Значение по умолчанию
 	int crushingDamage;// Значение по умолчанию
 

@@ -15,7 +15,7 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int coun
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 0; i < 0; i++) {
+	for (size_t i = 0; i < 4; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -34,7 +34,7 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int coun
 	// Скелеты
 	typeEnemy = &typesEnemy->typesEnemy[idEnemy::skeletEnemy];
 
-	for (size_t i = 0; i < 1; i++) {
+	for (size_t i = 0; i < 4; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -127,8 +127,10 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	protectionCut = type->protectionCut;
 	protectionCrash = type->protectionCrash;
 
-	timeGivenDamage = type->timeGivenDamage;
-	timeDamage = 0.f;
+	timeOutputDamage = type->timeOutputDamage;
+	currentTimeOutputDamage = 0.f;
+
+	timeInputDamage = 0.f;
 
 	cuttingDamage = type->cuttingDamage;
 	crushingDamage = type->crushingDamage;

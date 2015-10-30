@@ -6,7 +6,7 @@
 const int AMOUNT_ENTITY = 100;
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
-const float timeAttentionDamage = 1.5f;
+const float TIME_ATTENTION_SHOW_DAMAGE = 1.5f;
 
 const sf::Color NORMAL_COLOR(255, 255, 255, 255);
 const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
@@ -73,12 +73,17 @@ public:
 	int cuttingDamage = 0;// Значение по умолчанию
 	int crushingDamage = 1;// Значение по умолчанию
 
-	float timeGivenDamage;
-	int outputDamage;
+	// Скорость атаки
 	float timeOutputDamage;
+	float currentTimeOutputDamage;
+
+	int outputDamage;
 
 	int inputDamage;
-	float timeDamage;// Показывает урон в течении ... секунд
+	int inputCutDamage;
+	int inputCrashDamage;
+
+	float timeInputDamage;// Показывает урон в течении ... секунд
 
 	bool isDeath = false;
 	////////////////////////////

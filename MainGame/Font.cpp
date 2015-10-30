@@ -65,7 +65,7 @@ void initializeTexts(TextGame &textGame)
 	currentText->setString(stringDeathPerson);
 
 	////////////////////////////////////////////////////////////////////
-
+	// Уровень характеристик и входной урон
 	currentText = &textGame.texts[idText::inputDamage];
 	currentText->setColor(Color::White);
 	currentText->setStyle(Text::Regular | Text::Underlined);
@@ -77,7 +77,14 @@ void initializeTexts(TextGame &textGame)
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
-
+	////////////////////////////////////////////////////////////////////
+	// Характеристики предмета
+	currentText = &textGame.texts[idText::itemGui];
+	currentText->setColor(Color::White);
+	currentText->setStyle(Text::Regular | Text::Underlined);
+	currentText->setFont(*textGame.font);
+	currentText->setCharacterSize(SIZE_NORMAL_TEXT);
+	////////////////////////////////////////////////////////////////////
 	/*
 	// Определение количества символов
 	int sizeString = 0;

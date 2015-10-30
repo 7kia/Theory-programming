@@ -6,17 +6,6 @@ const int SIZE_BIG_TEXT = 32;
 const int SIZE_NORMAL_TEXT = 18;
 const int SIZE_SMALL_TEXT = 14;
 
-
-typedef enum {
-	infoWindowBlockGui,
-	infoWindowFloorGui,
-	infoWindowUnlifeObjectGui,
-	infoWindowItemGui,
-	mainPersonIsDeathGui,
-	amountTextsGui
-} idTextGui;
-
-
 typedef enum {
 	infoWindowBlock,
 	infoWindowFloor,
@@ -25,6 +14,7 @@ typedef enum {
 	infoEntity,
 	inputDamage,
 	levelBar,
+	itemGui,
 	mainPersonIsDeath,
 	amountTexts
 } idText;

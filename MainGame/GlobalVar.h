@@ -14,7 +14,7 @@
 
 #include "MyMath.h"
 
-const sf::String TITLE_PROGRAM = "MainGame v1.3.5";
+const sf::String TITLE_PROGRAM = "MainGame v1.3.6";
 const sf::String stringDeathPerson = "Death";
 
 const int DEFAULT_WIDTH_WINDOW = 1200;
@@ -34,6 +34,8 @@ const float DIAGONAL_SCALE_SPEED = 0.7;
 const float PI = 3.14159265;// ÈÑÏÐÀÂÜ
 
 const int SIZE_STRING = 256;
+
+const char DIVIDE_SYMBOL = '/';// TODO
 
 typedef enum
 {
