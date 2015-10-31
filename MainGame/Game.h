@@ -12,6 +12,8 @@
 
 #include <math.h>
 
+const sf::String TITLE_PROGRAM = "MainGame v1.3.9";
+
 struct Game
 {
 	RenderWindow *window;

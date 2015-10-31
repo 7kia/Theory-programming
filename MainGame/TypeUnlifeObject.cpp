@@ -27,11 +27,23 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSoun
 	delete idItemsForOak;
 	////////////////////////////////////////////////////////////////////////////////////////
 	// Камень
+	int* minAmountForSmallStone = new int[1];
+	int* maxAmountForSmallStone = new int[1];
+	int* idItemsForSmallStone = new int[1];
+
+	*minAmountForSmallStone = { 1 };
+	*maxAmountForSmallStone = { 1 };
+	*idItemsForSmallStone = { idItem::stoneItem };
+
+
 	typeObject = &typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone];
 	typeObject->Init(texturePaths[idTexturePaths::items], "SmallStone", false, 0, SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
-	//typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone].InitTransparent(136, 208, 0, 0);
+	typeObject->InitItem(idItemsForSmallStone, minAmountForSmallStone, maxAmountForSmallStone, 1);
 	typesUnlifeObjects->countTypeObjects += 1;
 
+	delete minAmountForSmallStone;
+	delete maxAmountForSmallStone;
+	delete idItemsForSmallStone;
 	////////////////////////////////////////////////////////////////////////////////////////
 	// Пустой предмет
 	typeObject = &typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::empty];

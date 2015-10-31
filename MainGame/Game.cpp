@@ -73,6 +73,16 @@ void initializeCategorysBreakingObject(Game &game)
 	wchar_t* charBlocks = game.field->charBlocks;
 
 	//////////////////////////////////////
+	// Блоки уничтожаемые лопатой
+	listDestroy.backoeBreakingBlock[SIZE_STRING - 1] = u'\0';
+
+	listDestroy.backoeBreakingBlock[0] = charBlocks[idBlocks::grass];
+	listDestroy.backoeBreakingBlock[1] = charBlocks[idBlocks::dirt];
+	listDestroy.backoeBreakingBlock[2] = charBlocks[idBlocks::sand];
+	//////////////////////////////////////
+	// Объекты уничтожаемые лопатой TODO
+	//listDestroy.backoeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;;
+	//////////////////////////////////////
 	// Блоки уничтожаемые топором
 	listDestroy.axeBreakingBlock[SIZE_STRING - 1] = u'\0';
 
@@ -182,6 +192,7 @@ void informationAboutSelect(Game &game, float x, float y)
 	list<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
+	game.mainPerson->findObject = game.emptyObject;
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (std::list<UnlifeObject>::iterator it = unlifeObjects.begin(); it != unlifeObjects.end(); ++it) {
 
@@ -211,6 +222,7 @@ void informationAboutSelect(Game &game, float x, float y)
 	list<Item> &items = *game.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
+	game.mainPerson->findItem = game.emptyItem;
 	infoItem.setString("Item : not select");
 	for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
 
@@ -239,6 +251,7 @@ void informationAboutSelect(Game &game, float x, float y)
 	list<Enemy>& Enemys = *game.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
+	game.mainPerson->findEnemy = game.emptyEnemy;
 	infoEnemys.setString("Entity : not select");
 	for (std::list<Enemy>::iterator it = Enemys.begin(); it != Enemys.end(); ++it) {
 

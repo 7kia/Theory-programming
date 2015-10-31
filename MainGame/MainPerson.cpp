@@ -65,8 +65,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.currentStamina = 35;
 	mainPerson.currentMana = 10;
 
-	mainPerson.currentThirst = 1;
-	mainPerson.currentHungry = 1;
+	mainPerson.currentThirst = 5;
+	mainPerson.currentHungry = 5;
 
 	mainPerson.protectionCut = 1.5f;
 	mainPerson.protectionCrash = 1.f;
@@ -308,7 +308,8 @@ void MainPerson::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, 
 	movement = { 0.f, 0.f };
 }
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, list<Enemy> *enemy, list<Item> *items, list<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, list<Enemy> *enemy,
+												 list<Item> *items, list<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -317,10 +318,62 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 
 		int x = xMouse / SIZE_BLOCK;
 		int y = yMouse / SIZE_BLOCK;
-
-
 	
-		// Если это не противник
+
+		String* listObjects;
+		wchar_t* listBlocks;
+		int sizeListObjects;
+
+		bool findTool = true;
+
+		switch (currentItem.categoryItem) {
+			////////////////////////////////////////////////////////////////////////
+			// Лопата
+		case idCategoryItem::backhoe:
+
+			sizeListObjects = AMOUNT_BACKHOE_BREAKING_OBJECTS;
+			listObjects = listDestroy.backoeBreakingObject;
+
+			listBlocks = listDestroy.backoeBreakingBlock;
+
+			useTool(xMouse, yMouse, event, field,
+							listObjects, listBlocks, sizeListObjects,
+							currentItem,
+							typesItems, items, unlifeObjects);
+
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Кирка
+		case idCategoryItem::pickax:
+			sizeListObjects = AMOUNT_PICKAX_BREAKING_OBJECTS;
+			listObjects = listDestroy.pickaxBreakingObject;
+
+			listBlocks = listDestroy.pickaxBreakingBlock;
+
+			useTool(xMouse, yMouse, event, field,
+							listObjects, listBlocks, sizeListObjects,
+							currentItem,
+							typesItems, items, unlifeObjects);
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Топор
+		case idCategoryItem::axe:
+			sizeListObjects = AMOUNT_AXE_BREAKING_OBJECTS;
+			listObjects = listDestroy.axeBreakingObject;
+
+			listBlocks = listDestroy.axeBreakingBlock;
+
+			useTool(xMouse, yMouse, event, field,
+							listObjects, listBlocks, sizeListObjects,
+							currentItem,
+							typesItems, items, unlifeObjects);
+			break;
+			////////////////////////////////////////////////////////////////////////
+		default:
+			findTool = false;
+			break;
+		}
+
 
 		switch (currentItem.categoryItem) {
 			////////////////////////////////////////////////////////////////////////
@@ -500,157 +553,12 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 				}
 			}
 			break;
-			////////////////////////////////////////////////////////////////////////
-			// Кирка
-		case idCategoryItem::pickax:
-			if (isInUseField(xMouse, yMouse)) {
-				if (event.type == Event::MouseButtonPressed) {
-
-					int level;
-					// Удаляем стену
-					if (event.key.code == Mouse::Left) {
-						level = currentLevelFloor + 1;
-					}
-					// Удаляем пол
-					else if (event.key.code == Mouse::Right) {
-						level = currentLevelFloor;
-					}
-					// Иначе ничего
-					else {
-						level = -1;
-					}
-
-					///*
-					wchar_t* block = &field.dataMap[level][y][x];
-					// Ставим блок
-					if (findObject != NULL) {
-						if (isPickaxBreakingObject(listDestroy.pickaxBreakingObject)) {
-
-							currentItem.currentToughness -= 1;
-
-							unlifeObjects->erase(findObjectFromList);
-
-							if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-							}
-						}
-					} else if (isPickaxBreakingBlock(*block, listDestroy.pickaxBreakingBlock)) {
-						currentItem.currentToughness -= 1;
-
-						//////////////////////////////
-						// Выпадение предмета
-						Item* addItem = new Item;
-
-						addItem->setType(typesItems[field.findIdBlock(*block)]);
-						addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-						items->push_back(*addItem);
-
-						delete addItem;
-						//////////////////////////////
-
-						*block = field.charBlocks[idBlocks::air];
-
-						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-						}
-
-					}
-					//*/					
-				}
-			}
-			break;
-			////////////////////////////////////////////////////////////////////////
-			// Топор
-		case idCategoryItem::axe:
-			if (isInUseField(xMouse, yMouse)) {
-				if (event.type == Event::MouseButtonPressed) {
-
-					int level;
-					// Удаляем стену
-					if (event.key.code == Mouse::Left) {
-						level = currentLevelFloor + 1;
-					}
-					// Удаляем пол
-					else if (event.key.code == Mouse::Right) {
-						level = currentLevelFloor;
-					}
-					// Иначе ничего
-					else {
-						level = -1;
-					}
-
-					///*
-					wchar_t* block = &field.dataMap[level][y][x];
-					// Ставим блок
-					if (findObject != NULL) {
-						if (isAxeBreakingObject(listDestroy.axeBreakingObject)) {
-
-							currentItem.currentToughness -= 1;
-
-							//////////////////////////////////////////////////
-							// Выпадение предметов
-							Item* addItem = new Item;
-							int countItem = sizeof(findObjectFromList->typeObject->minCountItems) / sizeof(int);
-
-							int* minAmount = findObjectFromList->typeObject->minCountItems;
-							int* maxAmount = findObjectFromList->typeObject->maxCountItems;
-							int* idItems = findObjectFromList->typeObject->dropItems;
-
-							int currentAmount;
-							for (int i = 0; i < countItem; i++) {
-
-								currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
-								for (int j = 0; j < currentAmount; j++) {
-									addItem->setType(typesItems[idItems[i]]);
-									addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-									items->push_back(*addItem);
-
-								}
-
-							}
-							delete addItem;
-							//////////////////////////////////////////////////
-
-							unlifeObjects->erase(findObjectFromList);
-
-							if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-								itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-							}
-
-
-						}
-					} else if (isAxeBreakingBlock(*block, listDestroy.axeBreakingBlock)) {
-						currentItem.currentToughness -= 1;
-
-
-						//////////////////////////////
-						// Выпадение предмета
-						Item* addItem = new Item;
-
-						addItem->setType(typesItems[field.findIdBlock(*block)]);
-						addItem->setPosition(x, y, currentLevelFloor + 1);
-						items->push_back(*addItem);
-
-						delete addItem;
-						//////////////////////////////
-
-						*block = field.charBlocks[idBlocks::air];
-
-						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-						}
-
-					}
-					//*/					
-				}
-			}
-			break;
 		default:
 			break;
 		}
 
-	// Сначала наносим урон
-		if (findEnemy != NULL) {
+		// Сначала наносим урон
+		if (findEnemy != emptyEnemy) {
 			if (isInUseField(xMouse, yMouse)) {
 				if (event.key.code == Mouse::Left) {
 					if (findEnemy->currentLevelFloor == currentLevelFloor) {
@@ -714,7 +622,10 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 				}
 				//*/					
 			}
+
 		}
+		// Если это не противник
+
 	}
 		
 		
@@ -722,40 +633,113 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 	
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////
+// Способы применения предметов
+void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &field,
+												 String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
+												 Item &currentItem,
+												 TypeItem *typesItems, list<Item> *items, list<UnlifeObject> *unlifeObjects) {
+	if (isInUseField(xMouse, yMouse)) {
+		if (event.type == Event::MouseButtonPressed) {
+
+			int level;
+			// Удаляем стену
+			if (event.key.code == Mouse::Left) {
+				level = currentLevelFloor + 1;
+			}
+			// Удаляем пол
+			else if (event.key.code == Mouse::Right) {
+				level = currentLevelFloor;
+			}
+			// Иначе ничего
+			else {
+				level = -1;
+			}
+
+			int x = xMouse / SIZE_BLOCK;
+			int y = yMouse / SIZE_BLOCK;
+			///*
+			wchar_t* block = &field.dataMap[level][y][x];
+			// Ставим блок
+			if (findObject != emptyObject) {
+				if (isInListObjects(listObjects, sizeListObjects)) {
+
+					currentItem.currentToughness -= 1;
+
+					//////////////////////////////////////////////////
+					// Выпадение предметов
+					Item* addItem = new Item;
+					int countItem = sizeof(findObjectFromList->typeObject->minCountItems) / sizeof(int);
+
+					int* minAmount = findObjectFromList->typeObject->minCountItems;
+					int* maxAmount = findObjectFromList->typeObject->maxCountItems;
+					int* idItems = findObjectFromList->typeObject->dropItems;
+
+					int currentAmount;
+					for (int i = 0; i < countItem; i++) {
+
+						currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+						for (int j = 0; j < currentAmount; j++) {
+							addItem->setType(typesItems[idItems[i]]);
+							addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+							items->push_back(*addItem);
+
+						}
+
+					}
+					delete addItem;
+					//////////////////////////////////////////////////
+
+					unlifeObjects->erase(findObjectFromList);
+
+					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					}
+
+
+				}
+			} else if (isInListBlocks(*block, listBlocks)) {
+				currentItem.currentToughness -= 1;
+
+				//////////////////////////////
+				// Выпадение предмета
+				Item* addItem = new Item;
+
+				addItem->setType(typesItems[field.findIdBlock(*block)]);
+				addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+				items->push_back(*addItem);
+
+				delete addItem;
+				//////////////////////////////
+
+				*block = field.charBlocks[idBlocks::air];
+
+				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+				}
+
+			}
+		}
+	}
+	
+}
+
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
-bool MainPerson::isAxeBreakingBlock(wchar_t block, wchar_t *axeBreakingBlocks) {
+bool MainPerson::isInListBlocks(wchar_t block, wchar_t *listBlocks) {
 	int i = 0;
-	while (axeBreakingBlocks[i] != u'\0') {
-		if (axeBreakingBlocks[i] == block) {
+	while (listBlocks[i] != u'\0') {
+		if (listBlocks[i] == block) {
 			return true;
 		}
 		i++;
 	}
 	return false;
 }
-bool MainPerson::isAxeBreakingObject(String* axeBreakingObject) {
-	for (size_t i = 0; i < AMOUNT_AXE_BREAKING_OBJECTS; i++) {
-		if (findObject->typeObject->name == axeBreakingObject[i]) {
-			return true;
-		}
-	}
-	return false;
-}
-bool MainPerson::isPickaxBreakingBlock(wchar_t block, wchar_t *pickaxBreakingBlocks) {
-	int i = 0;
-	while (pickaxBreakingBlocks[i] != u'\0') {
-		if (pickaxBreakingBlocks[i] == block) {
-			return true;
-		}
-		i++;
-	}
-	return false;
-}
-bool MainPerson::isPickaxBreakingObject(String* pickaxBreakingObject) {
-	for (size_t i = 0; i < AMOUNT_PICKAX_BREAKING_OBJECTS; i++) {
-		std::cout << (string)pickaxBreakingObject[i] << "pix" << std::endl;
-		if (findObject->typeObject->name == pickaxBreakingObject[i]) {
+bool MainPerson::isInListObjects(String* listObjects, int sizeString) {
+	for (size_t i = 0; i < sizeString; i++) {
+		if (findObject->typeObject->name == listObjects[i]) {
 			return true;
 		}
 	}

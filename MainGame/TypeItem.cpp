@@ -36,28 +36,6 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	// Камень
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
-	/////////////////////////////////////
-	// Гриб
-	numberItem = idItem::mushroomItem;
-	*nameItem = "Mushroom";
-
-	categoryItem = idCategoryItem::food;
-
-	canDestroy = false;
-
-	toughness = 4;
-
-	pixelX = PIXEL_X_MUSHROOM;
-	pixelY = PIXEL_Y_MUSHROOM;
-
-	cuttingDamage = 0;
-	crushingDamage = 1;
-
-	block = 0;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
 	/////////////////////////////
 	// Доски
 	numberItem = idItem::planksBlockItem;
@@ -105,7 +83,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	/////////////////////////////
 	// Земля с травой
 	numberItem = idItem::grassItem;
-	*nameItem = "Grass brick";
+	*nameItem = "Grass";
 
 	categoryItem = idCategoryItem::block;
 
@@ -305,6 +283,31 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////////////////////////////////
+	// Еда
+
+	/////////////////////////////////////
+	// Гриб
+	numberItem = idItem::mushroomItem;
+	*nameItem = "Mushroom";
+
+	categoryItem = idCategoryItem::food;
+
+	canDestroy = false;
+
+	toughness = 4;
+
+	pixelX = PIXEL_X_MUSHROOM;
+	pixelY = PIXEL_Y_MUSHROOM;
+
+	cuttingDamage = 0;
+	crushingDamage = 1;
+
+	block = 0;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////////////////////////
 	// Мечи
 
 	/////////////////////////////
@@ -350,6 +353,31 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 18;
 
 	block = 0;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////////////////////////
+	// Лопаты
+
+	/////////////////////////////
+	// Железная лопата
+	numberItem = idItem::ironBackHoerIte;
+	*nameItem = "Iron backhoe";
+
+	categoryItem = idCategoryItem::backhoe;
+
+	canDestroy = true;
+
+	toughness = 128;
+
+	pixelX = PIXEL_X_IRON_BACKHOE;
+	pixelY = PIXEL_Y_IRON_BACKHOE;
+
+	cuttingDamage = 1;
+	crushingDamage = 10;
+
+	block = idBlocks::air;
 	unlifeObject = 0;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);

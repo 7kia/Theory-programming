@@ -115,6 +115,7 @@ String Field::findCharBlocks(wchar_t block)
 	}
 	return namesBlocks[idBlocks::unknow];
 }
+
 int Field::findIdBlock(wchar_t block)
 {
 	for (int i = 1; i < idBlocks::amountKnowBlocks; i++) {
@@ -125,8 +126,6 @@ int Field::findIdBlock(wchar_t block)
 	}
 	return idBlocks::unknow;
 };
-
-
 
 //////////////////////////////////////////////////////
 // Отрисовка блоков
@@ -189,6 +188,33 @@ void readMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP], const char *fileName)
 	}
 	else
 	{
+		printf("File not find!\n");
+	}
+}
+////////////////////////////////////////////////////////////////////////////////
+// Запись карты
+void writeMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP])
+{
+	FILE *pMapFile;
+	errno_t eMapFile = fopen_s(&pMapFile, "map.txt", "w");// TODO
+
+	const int amountHelpSymblos = 4;
+	int countLevel;
+
+	// Если файл открыт
+	if (pMapFile) {
+		for (size_t i = 0; i < HEIGHT_MAP; i++) {
+			countLevel = 0;
+			while (!feof(pMapFile) && countLevel < LONG_MAP) {
+				fputws(dataMap[i][countLevel], pMapFile);
+				//fgetws(buff, amountHelpSymblos, pMapFile);//Пропускаем остальную часть строки
+				countLevel++;
+			}
+			//fgetws(buff, amountHelpSymblos, pMapFile);//Пропускаем строку
+		}
+
+	} else {
+
 		printf("File not find!\n");
 	}
 }
