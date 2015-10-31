@@ -1,0 +1,48 @@
+# ignore folder
+Project/Debug
+Project/x64
+Project/.vs
+# ignore files
+Project/*.dll
+Project/*.wav
+Project/*.ogg
+Project/*.png
+Project/*.pdn
+Project/*.user
+Project/*.vcxproj
+Project/*.sln
+Project/*.sdf
+Project/*.filters
+Project/*.suo
+Project/*.sdf
+Project/*.obj
+Project/*.log
+Project/*.exe
+Project/*.ilk
+Project/*.opensdf
+# ignore folder
+Project/MapGenerator/Debug
+Project/MapGenerator/ipch
+Project/MapGenerator/x64
+# ignore folder
+Project/MapGenerator/MapGenerator1/x64
+Project/MapGenerator/MapGenerator1/Debus
+Project/MapGenerator/MapGenerator1/.vs
+# ignore files
+Project/MapGenerator/MapGenerator1/*.dll
+Project/MapGenerator/MapGenerator1/*.wav
+Project/MapGenerator/MapGenerator1/*.ogg
+Project/MapGenerator/MapGenerator1/*.png
+Project/MapGenerator/MapGenerator1/*.pdn
+Project/MapGenerator/MapGenerator1/*.user
+Project/MapGenerator/MapGenerator1/*.vcxproj
+Project/MapGenerator/MapGenerator1/*.sln
+Project/MapGenerator/MapGenerator1/*.sdf
+Project/MapGenerator/MapGenerator1/*.filters
+Project/MapGenerator/MapGenerator1/*.suo
+Project/MapGenerator/MapGenerator1/*.sdf
+Project/MapGenerator/MapGenerator1/*.obj
+Project/MapGenerator/MapGenerator1/*.log
+Project/MapGenerator/MapGenerator1/*.exe
+Project/MapGenerator/MapGenerator1/*.ilk
+Project/MapGenerator/MapGenerator1/*.opensdf
