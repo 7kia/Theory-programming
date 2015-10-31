@@ -50,4 +50,4 @@ struct TypesUnlifeObject {
 	int maxTypeObject = 256;
 };
 
-void initializeTypeUnlifeObjects(TypesUnlifeObject *unlifeObjects, dataSound &databaseSound);
+void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);

@@ -250,7 +250,7 @@ void MainPerson::throwItem(Field &field, list<Item> &items)
 	}
 }
 
-void MainPerson::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, const Time & deltaTime)// ИСПРАВЬ for enity and mainPerson
+void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const Time & deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
 	float dx(movement.x);
 	float dy(movement.y);
@@ -271,13 +271,14 @@ void MainPerson::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, 
 		FloatRect objectAltBound;
 		FloatRect entityBound;
 
-		for (std::list<UnlifeObject>::iterator it = unlifeObjects->begin(); it != unlifeObjects->end(); ++it) {
-			levelUnlifeObject = it->currentLevel;
+		vector<UnlifeObject> &objects = *unlifeObjects;
+		for (int i = 0; i != objects.size(); ++i) {
+			levelUnlifeObject = objects[i].currentLevel;
 
-			spriteObject = it->spriteObject;
+			spriteObject = objects[i].spriteObject;
 			objectBound = spriteObject->getGlobalBounds();
 
-			transparentSpiteObject = it->transparentSpiteObject;
+			transparentSpiteObject = objects[i].transparentSpiteObject;
 			objectAltBound = transparentSpiteObject->getGlobalBounds();
 			entityBound = spriteEntity->getGlobalBounds();
 
@@ -309,7 +310,7 @@ void MainPerson::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, 
 }
 
 void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, vector<Enemy> *enemy,
-												 list<Item> *items, list<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
+												 list<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -639,7 +640,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &field,
 												 String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
 												 Item &currentItem,
-												 TypeItem *typesItems, list<Item> *items, list<UnlifeObject> *unlifeObjects) {
+												 TypeItem *typesItems, list<Item> *items, vector<UnlifeObject> *unlifeObjects) {
 	if (isInUseField(xMouse, yMouse)) {
 		if (event.type == Event::MouseButtonPressed) {
 
@@ -670,11 +671,11 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 					//////////////////////////////////////////////////
 					// Выпадение предметов
 					Item* addItem = new Item;
-					int countItem = sizeof(findObjectFromList->typeObject->minCountItems) / sizeof(int);
+					int countItem = sizeof(findObject->typeObject->minCountItems) / sizeof(int);
 
-					int* minAmount = findObjectFromList->typeObject->minCountItems;
-					int* maxAmount = findObjectFromList->typeObject->maxCountItems;
-					int* idItems = findObjectFromList->typeObject->dropItems;
+					int* minAmount = findObject->typeObject->minCountItems;
+					int* maxAmount = findObject->typeObject->maxCountItems;
+					int* idItems = findObject->typeObject->dropItems;
 
 					int currentAmount;
 					for (int i = 0; i < countItem; i++) {
@@ -691,7 +692,7 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 					delete addItem;
 					//////////////////////////////////////////////////
 
-					unlifeObjects->erase(findObjectFromList);
+					unlifeObjects->erase(unlifeObjects->begin() + findObjectFromList);
 
 					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
@@ -748,7 +749,7 @@ bool MainPerson::isInListObjects(String* listObjects, int sizeString) {
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Взаимодействие с лестницами
-void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
+void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
 {
 	if (isInUseField(xPos, yPos)) {
 		/////////////////////////////////////////////////////////////////////////////
@@ -774,7 +775,7 @@ void MainPerson::actionMain(Field &field, list<UnlifeObject> *unlifeObjects, des
 	
 }
 
-void MainPerson::actionAlternate(Field &field, list<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
+void MainPerson::actionAlternate(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
 {
 	if (isInUseField(xPos, yPos)) {
 		/////////////////////////////////////////////////////////////////////////////

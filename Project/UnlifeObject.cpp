@@ -3,7 +3,7 @@
 using namespace sf;
 using namespace std;
 
-void initializeUnlifeObjects(list<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
+void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
 {
 	//unlifeObjects->unlifeObject = new UnlifeObject[MAX_UNLIFE_OBJECT];
 

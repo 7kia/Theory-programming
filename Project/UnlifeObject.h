@@ -61,4 +61,4 @@ struct UnlifeObjects
 */
 
 
-void initializeUnlifeObjects(std::list<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject);
+void initializeUnlifeObjects(std::vector<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject);

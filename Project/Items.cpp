@@ -29,15 +29,15 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 		items.push_front(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::glassBottleItem]);
-		addItem->setPosition(2, 2, 1);
+		addItem->setPosition(3, 5, 1);
 		items.push_front(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::glassbukketWithWater]);
-		addItem->setPosition(1, 2, 1);
+		addItem->setPosition(4, 2, 1);
 		items.push_front(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::sandItem]);
-		addItem->setPosition(3, 2, 1);
+		addItem->setPosition(4, 3, 1);
 		items.push_front(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::logOakItem]);

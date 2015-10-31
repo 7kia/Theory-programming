@@ -358,7 +358,7 @@ bool Entity::isEmptySlot()
 }
 //////////////////////////////////////////////////////
 // Поиск неживого объекта
-bool isObject(float x, float y, list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList, list<UnlifeObject>::iterator &current, int currentLevel)
+bool isObject(float x, float y, vector<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList, list<UnlifeObject>::iterator &current, int currentLevel)
 {
 	int levelObject = current->currentLevel;
 

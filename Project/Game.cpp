@@ -13,7 +13,7 @@ void initializeGame(Game & game)
 
 	// Неживые объекты
 	game.typesUnlifeObject = new TypesUnlifeObject;
-	game.unlifeObjects = new list<UnlifeObject>;
+	game.unlifeObjects = new vector<UnlifeObject>;
 	game.emptyObject = new UnlifeObject;
 
 	// Предметы
@@ -189,28 +189,28 @@ void informationAboutSelect(Game &game, float x, float y)
 	}
 	///////////////////////////////////////////////////////////////////
 	// Осмотр неживых объектов
-	list<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
+	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
 	game.mainPerson->findObject = game.emptyObject;
 	infoUnlifeObject.setString("UnlifeObject : not select");
-	for (std::list<UnlifeObject>::iterator it = unlifeObjects.begin(); it != unlifeObjects.end(); ++it) {
+	for (int i = 0; i != unlifeObjects.size(); ++i) {
 
-		int level = it->currentLevel;
+		int level = unlifeObjects[i].currentLevel;
 
-		Sprite *spriteObject = it->spriteObject;
+		Sprite *spriteObject = unlifeObjects[i].spriteObject;
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
-		Sprite *transparentSpiteObject = it->transparentSpiteObject;
+		Sprite *transparentSpiteObject = unlifeObjects[i].transparentSpiteObject;
 		FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) || objectAltBound.contains(x, y)) {
 			if (level == game.mainPerson->currentLevelFloor + 1) {
-				String name = it->typeObject->name;
+				String name = unlifeObjects[i].typeObject->name;
 				if (name != "") {
 
-					game.mainPerson->findObjectFromList = it;
-					game.mainPerson->findObject = &*it;
+					game.mainPerson->findObjectFromList = i;
+					game.mainPerson->findObject = &unlifeObjects[i];
 					infoUnlifeObject.setString("UnlifeObject : " + name);
 				}
 			}

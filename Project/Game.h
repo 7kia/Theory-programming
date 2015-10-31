@@ -24,7 +24,7 @@ struct Game
 	MainPerson *mainPerson;
 
 	TypesUnlifeObject *typesUnlifeObject;
-	std::list<UnlifeObject>* unlifeObjects;
+	std::vector<UnlifeObject>* unlifeObjects;
 
 	Item* emptyItem;
 	UnlifeObject* emptyObject;

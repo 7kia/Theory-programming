@@ -244,13 +244,14 @@ void render(Game & game)
 
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
-	for (std::list<UnlifeObject>::iterator it = game.unlifeObjects->begin(); it != game.unlifeObjects->end(); ++it)
+	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
+	for (int i = 0; i != unlifeObjects.size(); ++i)
 	{
-		if (it->currentLevel == game.mainPerson->currentLevelFloor + 1)
+		if (unlifeObjects[i].currentLevel == game.mainPerson->currentLevelFloor + 1)
 		{
 
-			window.draw(*it->spriteObject);
-			window.draw(*it->transparentSpiteObject);
+			window.draw(*unlifeObjects[i].spriteObject);
+			window.draw(*unlifeObjects[i].transparentSpiteObject);
 		}
 		
 	}
