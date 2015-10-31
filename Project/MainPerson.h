@@ -43,15 +43,19 @@ public:
 	float rotation;
 	void computeAngle(sf::RenderWindow &window);
 
-	void takeItem(Field &field, std::list<Item> &items, float x, float y);
-	void throwItem(Field &field, std::list<Item> &items);
-	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, std::vector<Enemy> *enemy,
-							 std::list<Item> *items, std::vector<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
+	void takeItem(Field &field, std::vector<Item> &items, float x, float y);
+	void throwItem(Field &field, std::vector<Item> &items);
+	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, 
+							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, std::vector<Enemy> *enemy,
+							 std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
 	// Использование предметов
 	void useTool(float &xMouse, float &yMouse, Event &event, Field &field,
 							 sf::String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
 							 Item &currentItem,
-							 TypeItem *typesItems, std::list<Item> *items, std::vector<UnlifeObject> *unlifeObjects);
+							 TypeItem *typesItems, std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects);
+	void useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,
+								Item & currentItem, TypeItem * typesItems, std::vector<Item>* items,
+								TypeUnlifeObject * typesUnlifeObjects, std::vector<UnlifeObject>* unlifeObjects);
 
 	bool isInListBlocks(wchar_t block, wchar_t * listBlocks);
 	bool isInListObjects(String * listObjects, int sizeString);
@@ -59,8 +63,10 @@ public:
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 
 	// кнопка "Дествие" и "Другое действие"
-	void actionMain(Field &field, std::vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, float xPos, float yPos);
-	void actionAlternate(Field &field, std::vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, std::list<Item> *items, float xPos, float yPos);
+	void actionMain(Field &field, std::vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
+									std::vector<Item> *items, float xPos, float yPos);
+	void actionAlternate(Field &field, std::vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
+											 std::vector<Item> *items, float xPos, float yPos);
 private:
 
 };

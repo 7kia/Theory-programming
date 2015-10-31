@@ -18,7 +18,7 @@ void initializeGame(Game & game)
 
 	// Предметы
 	game.typesItem = new TypesItem;
-	game.items = new list<Item>;
+	game.items = new vector<Item>;
 	game.emptyItem = new Item;// Нужно для корректной работы инвентаря
 
 	// Список уничтожаемых объектов и блоков
@@ -35,7 +35,7 @@ void initializeGame(Game & game)
 	initializeField(*game.field);
 
 	// Неживые объекты
-	initializeTypeUnlifeObjects(game.typesUnlifeObject, *game.databaseSound);
+	initializeTypeUnlifeObjects(*game.typesUnlifeObject, *game.databaseSound);
 	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
 
 	// Предметы
@@ -81,7 +81,7 @@ void initializeCategorysBreakingObject(Game &game)
 	listDestroy.backoeBreakingBlock[2] = charBlocks[idBlocks::sand];
 	//////////////////////////////////////
 	// Объекты уничтожаемые лопатой TODO
-	//listDestroy.backoeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;;
+	listDestroy.backoeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oakSeadling].name;
 	//////////////////////////////////////
 	// Блоки уничтожаемые топором
 	listDestroy.axeBreakingBlock[SIZE_STRING - 1] = u'\0';
@@ -91,7 +91,8 @@ void initializeCategorysBreakingObject(Game &game)
 	listDestroy.axeBreakingBlock[2] = charBlocks[idBlocks::woodLadder];
 	//////////////////////////////////////
 	// Объекты уничтожаемые топором
-	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;
+	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oakGrow].name;
+	listDestroy.axeBreakingObject[1] = typesUnlifeObject[idUnlifeObject::oakSmall].name;
 	/////////////////////////////////////////////////////////////////////////
 	// Блоки уничтожаемые киркой
 	listDestroy.pickaxBreakingBlock[SIZE_STRING - 1] = u'\0';
@@ -193,6 +194,7 @@ void informationAboutSelect(Game &game, float x, float y)
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
 	game.mainPerson->findObject = game.emptyObject;
+	game.mainPerson->findObjectFromList = -1;
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
 
@@ -219,27 +221,28 @@ void informationAboutSelect(Game &game, float x, float y)
 	}
 	///////////////////////////////////////////////////////////////////
 	// Осмотр предметов
-	list<Item> &items = *game.items;
+	vector<Item> &items = *game.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
 	game.mainPerson->findItem = game.emptyItem;
+	game.mainPerson->findItemFromList = -1;
 	infoItem.setString("Item : not select");
-	for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
+	for (int i = 0; i != items.size(); ++i) {
 
-		int level = it->currentLevel;
+		int level = items[i].currentLevel;
 
-		Sprite *mainSprite = it->mainSprite;
+		Sprite *mainSprite = items[i].mainSprite;
 		FloatRect itemBound = mainSprite->getGlobalBounds();
 
-		Sprite *useSpiteObject = it->spriteForUse;// ИСПРАВЬ
+		Sprite *useSpiteObject = items[i].spriteForUse;// ИСПРАВЬ
 		FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
 
 		if (itemBound.contains(x, y) || itemUseBound.contains(x, y)) {
 			if (level == game.mainPerson->currentLevelFloor + 1) {
-				String name = it->typeItem->name;
+				String name = items[i].typeItem->name;
 				if (name != "") {
-					game.mainPerson->findItemFromList = it;
-					game.mainPerson->findItem = &*it;
+					game.mainPerson->findItemFromList = i;
+					game.mainPerson->findItem = &items[i];
 					infoItem.setString("Item : " + name);
 				}
 			}
@@ -252,6 +255,7 @@ void informationAboutSelect(Game &game, float x, float y)
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
 	game.mainPerson->findEnemy = game.emptyEnemy;
+	game.mainPerson->findEnemyFromList = -1;
 	infoEnemys.setString("Entity : not select");
 	for (int i = 0; i != Enemys.size(); ++i) {
 

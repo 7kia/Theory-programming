@@ -130,7 +130,8 @@ void processEvents(Game &game)
 			// Оюработка щелчка мыши
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
-				mainPerson.useItem(*game.field, *game.listDestroy, game.typesItem->typesItem, game.Enemys,
+				mainPerson.useItem(*game.field, *game.listDestroy, 
+													 game.typesItem->typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
 													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 			} else if (event.type == Event::MouseMoved) {// ИСПРАВЬ
@@ -225,10 +226,11 @@ void render(Game & game)
 
 	//////////////////////////////////////////////
 	// Отрисовка предметов
-	for (std::list<Item>::iterator it = game.items->begin(); it != game.items->end(); ++it) {
-		if (it->currentLevel == game.mainPerson->currentLevelFloor + 1) {
+	vector<Item> &items = *game.items;
+	for (int i = 0; i != items.size(); ++i) {
+		if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 1) {
 
-			window.draw(*it->mainSprite);
+			window.draw(*items[i].mainSprite);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
 		}
 

@@ -49,4 +49,4 @@ private:
 
 };
 
-void initializeItems(std::list<Item> &items, TypesItem *typesItem, Item &emptyItem);
+void initializeItems(std::vector<Item> &items, TypesItem *typesItem, Item &emptyItem);

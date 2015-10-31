@@ -11,13 +11,20 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypesUnlifeObj
 
 	UnlifeObject addObject;
 
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakGrow]);
 	addObject.setPosition(4, 12, 1);
 	unlifeObjects.push_back(addObject);
 
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
-	addObject.setPosition(12, 12, 1);
+	/*
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSmall]);
+	addObject.setPosition(8, 12, 1);
 	unlifeObjects.push_back(addObject);
+
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSeadling]);
+	addObject.setPosition(12, 13, 1);
+	unlifeObjects.push_back(addObject);
+	//*/
+	
 
 	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
 	addObject.setPosition(8, 8, 1);

@@ -20,7 +20,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	bool canDestroy = false;
 
-	int toughness = 0;
+	int toughness = 1;
 
 	int pixelX = PIXEL_X_SMALL_STONE;
 	int pixelY = PIXEL_Y_SMALL_STONE;
@@ -29,7 +29,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	int crushingDamage = 1;
 
 	int block = idBlocks::stone;
-	int unlifeObject = 0;//idUnlifeObject::
+	int unlifeObject = -1;//idUnlifeObject::
 	////////////////////////////////////////////////
 
 	/////////////////////////////////////
@@ -45,7 +45,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_PLANKS;
 	pixelY = PIXEL_Y_PLANKS;
@@ -54,7 +54,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::planksBlock;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -67,7 +67,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_DIRT;
 	pixelY = PIXEL_Y_DIRT;
@@ -76,7 +76,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::dirt;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -89,7 +89,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_GRASS_BRICK;
 	pixelY = PIXEL_Y_GRASS_BRICK;
@@ -98,7 +98,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::grass;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -111,7 +111,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_SAND;
 	pixelY = PIXEL_Y_SAND;
@@ -120,7 +120,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::sand;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -133,7 +133,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_WOOD_LADDER;
 	pixelY = PIXEL_Y_WOOD_LADDER;
@@ -142,7 +142,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::woodLadder;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -155,7 +155,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_STONE_BRICK;
 	pixelY = PIXEL_Y_STONE_BRICK;
@@ -164,7 +164,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::stoneBrick;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -177,7 +177,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_LOG_OAK;
 	pixelY = PIXEL_Y_LOG_OAK;
@@ -186,13 +186,37 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::logOak;
-	unlifeObject = 0;
+	unlifeObject = -1;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////////////////////////
+	// Саженцы
+
+	/////////////////////////////
+	// Саженец дуба
+	numberItem = idItem::seadlingOakItem;
+	*nameItem = "Seadling oak";
+
+	categoryItem = idCategoryItem::unlifeObject;
+
+	canDestroy = false;
+
+	toughness = 1;
+
+	pixelX = PIXEL_X_SEADLING_OAK_ITEM;
+	pixelY = PIXEL_Y_SEADLING_OAK_ITEM;
+
+	cuttingDamage = 0;
+	crushingDamage = 1;
+
+	block = -1;
+	unlifeObject = idUnlifeObject::oakSeadling;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
 	/////////////////////////////////////////////////////////
 	// Напитки
-
 
 	/////////////////////////////
 	// Деревянное ведро
@@ -203,7 +227,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_WOOD_BUKKET;
 	pixelY = PIXEL_Y_WOOD_BUKKET;
@@ -212,7 +236,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::water;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -234,7 +258,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::water;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -247,7 +271,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	pixelX = PIXEL_X_GLASS_BOTTLE;
 	pixelY = PIXEL_Y_GLASS_BOTTLE;
@@ -256,7 +280,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	crushingDamage = 1;
 
 	block = idBlocks::water;
-	unlifeObject = 0;
+	unlifeObject = -1;
 
 	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
 	typesItem.countTypeItem += 1;
@@ -298,6 +322,72 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	pixelX = PIXEL_X_MUSHROOM;
 	pixelY = PIXEL_Y_MUSHROOM;
+
+	cuttingDamage = 0;
+	crushingDamage = 1;
+
+	block = 0;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////
+	// Мясо волка(сырое
+	numberItem = idItem::rawMeatWolfItem;
+	*nameItem = "Raw meat wolf";
+
+	categoryItem = idCategoryItem::other;
+
+	canDestroy = false;
+
+	toughness = 1;
+
+	pixelX = PIXEL_X_RAW_MEAT_WOLF;
+	pixelY = PIXEL_Y_RAW_MEAT_WOLF;
+
+	cuttingDamage = 0;
+	crushingDamage = 1;
+
+	block = 0;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////
+	// Мясо волка(жаренное
+	numberItem = idItem::roastMeatWolfItem;
+	*nameItem = "Roast meat wolf";
+
+	categoryItem = idCategoryItem::food;
+
+	canDestroy = false;
+
+	toughness = 10;
+
+	pixelX = PIXEL_X_ROAST_MEAT_WOLF;
+	pixelY = PIXEL_Y_ROAST_MEAT_WOLF;
+
+	cuttingDamage = 0;
+	crushingDamage = 1;
+
+	block = 0;
+	unlifeObject = 0;
+
+	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
+	typesItem.countTypeItem += 1;
+	/////////////////////////////////////
+	// Яблоко
+	numberItem = idItem::appleItem;
+	*nameItem = "Apple";
+
+	categoryItem = idCategoryItem::food;
+
+	canDestroy = false;
+
+	toughness = 4;
+
+	pixelX = PIXEL_X_APPLE;
+	pixelY = PIXEL_Y_APPLE;
 
 	cuttingDamage = 0;
 	crushingDamage = 1;
@@ -443,7 +533,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	canDestroy = false;
 
-	toughness = 0;
+	toughness = 1;
 
 	int width = 0;
 	int height = 0;
@@ -465,7 +555,8 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 ////////////////////////////////////////////////////////////////////
 // Виды объектов
-void TypeItem::Init(String filenameTexture, String typeName, int id, int idCategory, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY, int idBlock, int idUnlifeObject, int damCut, int damCrash)
+void TypeItem::Init(String filenameTexture, String typeName, int id, int idCategory, bool canDestroy, int toughness,
+										int w, int h, int pixelX, int pixelY, int idBlock, int idUnlifeObject, int damCut, int damCrash)
 {
 	textureItem = new Texture;
 
@@ -504,7 +595,11 @@ void TypeItem::Init(String filenameTexture, String typeName, int id, int idCateg
 	case idCategoryItem::bottleWithWater:
 	case idCategoryItem::bukketWithWater:
 		idBlockForUse = idBlock;
+		idUnlideOnjectForUse = -1;
 		break;
+	case idCategoryItem::unlifeObject:
+		idUnlideOnjectForUse = idUnlifeObject;
+		idBlockForUse = -1;
 	default:
 		break;
 	}

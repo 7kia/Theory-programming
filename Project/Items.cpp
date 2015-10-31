@@ -3,7 +3,7 @@
 using namespace sf;
 using namespace std;
 
-void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
+void initializeItems(vector<Item> &items, TypesItem *typesItem, Item &emptyItem)
 {
 
 	Item* addItem = new Item;
@@ -14,75 +14,91 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 	for (size_t i = 0; i < 12; i++) {
 		addItem->setType(typesItem->typesItem[idItem::stoneItem]);
 		addItem->setPosition(2, 2, 1);
-		items.push_front(*addItem);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::planksBlockItem]);
 		addItem->setPosition(2, 3, 1);
-		items.push_front(*addItem);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::dirtItem]);
 		addItem->setPosition(3, 2, 1);
-		items.push_front(*addItem);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::grassItem]);
 		addItem->setPosition(3, 4, 1);
-		items.push_front(*addItem);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::glassBottleItem]);
 		addItem->setPosition(3, 5, 1);
-		items.push_front(*addItem);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::glassbukketWithWater]);
 		addItem->setPosition(4, 2, 1);
-		items.push_front(*addItem);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::sandItem]);
 		addItem->setPosition(4, 3, 1);
-		items.push_front(*addItem);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::logOakItem]);
-		addItem->setPosition(3, 1, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(4, 4, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::stonePickaxItem]);
-		addItem->setPosition(2, 1, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(5, 2, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::stoneAxeItem]);
-		addItem->setPosition(4, 1, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(5, 3, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::ironBackHoerIte]);
-		addItem->setPosition(2, 3, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(5, 4, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::woodLadderItem]);
-		addItem->setPosition(3, 6, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(6, 2, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::stoneBrickItem]);
-		addItem->setPosition(12, 2, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(6, 3, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::woodBukketItem]);
-		addItem->setPosition(11, 2, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(6, 4, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::woodBukketWithWaterItem]);
-		addItem->setPosition(10, 2, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(7, 2, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::woodClubItem]);
-		addItem->setPosition(9, 2, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(7, 3, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::stoneKnifeItem]);
-		addItem->setPosition(8, 2, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(7, 4, 1);
+		items.push_back(*addItem);
 
 		addItem->setType(typesItem->typesItem[idItem::mushroomItem]);// »—œ–¿¬‹
-		addItem->setPosition(2, 3, 1);
-		items.push_front(*addItem);
+		addItem->setPosition(8, 2, 1);
+		items.push_back(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::rawMeatWolfItem]);// »—œ–¿¬‹
+		addItem->setPosition(8, 3, 1);
+		items.push_back(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::roastMeatWolfItem]);// »—œ–¿¬‹
+		addItem->setPosition(8, 4, 1);
+		items.push_back(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::seadlingOakItem]);// »—œ–¿¬‹
+		addItem->setPosition(9, 2, 1);
+		items.push_back(*addItem);
+
+		addItem->setType(typesItem->typesItem[idItem::appleItem]);// »—œ–¿¬‹
+		addItem->setPosition(9, 3, 1);
+		items.push_back(*addItem);
 		// ƒŒ¡¿¬À≈Õ»≈ œ–≈ƒÃ≈“¿
 	}
 

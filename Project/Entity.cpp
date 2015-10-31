@@ -374,15 +374,15 @@ bool isObject(float x, float y, vector<UnlifeObject> *unlifeObjects, UnlifeObjec
 }
 //////////////////////////////////////////////////////
 // Поиск предмета
-bool isItem(float x, float y, list<Item> &items, Item *&findItem, list<Item>::iterator &findItemFromList, list<Item>::iterator &current, int currentLevel)
+bool isItem(float x, float y, vector<Item> &items, Item *&findItem, int &findItemFromList, int &current, int currentLevel)
 {
-	int levelItem = current->currentLevel;
+	int levelItem = items[current].currentLevel;
 
-	Sprite *spriteItem = current->mainSprite;
+	Sprite *spriteItem = items[current].mainSprite;
 	FloatRect objectItem = spriteItem->getGlobalBounds();
 
 	if (objectItem.contains(x, y) && levelItem == currentLevel) {
-		findItem = &*current;
+		findItem = &items[current];
 		findItemFromList = current;// ИСПРАВЬ
 		return true;
 	}

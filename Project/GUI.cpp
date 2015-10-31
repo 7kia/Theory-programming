@@ -390,7 +390,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int shiftBar;
 
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor) {
+		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor
+				&& i == mainPerson.findEnemyFromList) {
 
 			shiftBar = enemy[i].maxMana > 0;
 			pos = enemy[i].spriteEntity->getPosition();
@@ -502,7 +503,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	////////////////////////////////////////////////////////////////
 	// дл€ противников
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor) {
+		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor
+				&& i == mainPerson.findEnemyFromList) {
 
 			if (enemy[i].maxStamina) {
 				shiftBar = enemy[i].maxMana > 0;
@@ -597,7 +599,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	// дл€ противников
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor) {
+		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor
+				&& i == mainPerson.findEnemyFromList) {
 
 			if (enemy[i].maxMana) {
 				pos = enemy[i].spriteEntity->getPosition();
@@ -681,12 +684,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	// Ўкала жажды
 	pos = centerWindow;
 	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI - (float)HEIGHT_THIRST_GUI;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - (float)HEIGHT_THIRST_GUI;
 
 	bottle->setPosition(pos);
 	window.draw(*bottle);
 
-	level = (float)mainPerson.currentThirst / mainPerson.maxThirst;
+	level = float(mainPerson.currentThirst) / mainPerson.maxThirst;
 
 	pos.y += LEVEL_SHIFT_THIRST + LEVEL_THIRST * (1 - level);
 	currentLevel = LEVEL_THIRST * level;

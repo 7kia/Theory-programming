@@ -21,8 +21,8 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int co
 			break;
 		}
 
-		int xPos = 5 + rand() % 5;
-		int yPos = 5 + rand() % 5;
+		int xPos = 9 + rand() % 5;
+		int yPos = 9 + rand() % 5;
 		int levelFloor = 0;
 
 		addEnemy->EnemyInit(*typeEnemy, emptyItem, emptyObject, xPos, yPos, levelFloor);
@@ -40,8 +40,8 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int co
 			break;
 		}
 
-		xPos = 7 + rand() % 5;
-		yPos = 7 + rand() % 5;
+		xPos = 9 + rand() % 5;
+		yPos = 9 + rand() % 5;
 		levelFloor = 0;
 
 		addEnemy->EnemyInit(*typeEnemy, emptyItem, emptyObject, xPos, yPos, levelFloor);

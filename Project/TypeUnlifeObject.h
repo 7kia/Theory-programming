@@ -41,7 +41,7 @@ public:
 	//void Init(String *filenameTexture, int w, int h, int pixelX, int pixelY, float xPos, float yPos, int Level);
 	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY);
 	void InitItem(int* idItems, int* minAmountItems, int* maxAmountItems, int count);
-	void InitTransparent(int w, int h, int pixelX, int pixelY);
+	void InitTransparent(int width, int height, int pixelX, int pixelY);
 };
 
 struct TypesUnlifeObject {
@@ -50,4 +50,4 @@ struct TypesUnlifeObject {
 	int maxTypeObject = 256;
 };
 
-void initializeTypeUnlifeObjects(TypesUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);
+void initializeTypeUnlifeObjects(TypesUnlifeObject &typesUnlifeObjects, dataSound &databaseSound);

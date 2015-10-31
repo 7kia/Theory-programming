@@ -30,7 +30,7 @@ struct Game
 	UnlifeObject* emptyObject;
 
 	TypesItem *typesItem;
-	std::list<Item>* items;
+	std::vector<Item>* items;
 
 	////////////////////////////////////
 	// Ходьба по карте(для противников

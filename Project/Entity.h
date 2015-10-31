@@ -55,7 +55,7 @@ public:
 	/////////////////////////////////////////
 	// Для взаимодействия с предметом
 	Item *findItem;
-	std::list<Item>::iterator findItemFromList;
+	int findItemFromList;
 	/////////////////////////////////////////
 	bool isMoveItem;
 	float dMoveItemX, dMoveItemY;
@@ -167,5 +167,5 @@ public:
 
 };
 
-bool isObject(float x, float y, std::vector<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, std::list<UnlifeObject>::iterator &current, int currentLevel);
-bool isItem(float x, float y, std::list<Item> &items, Item *&findItem, std::list<Item>::iterator &findItemFromList, std::list<Item>::iterator &current, int currentLevel);
+bool isObject(float x, float y, std::vector<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, int &findObjectFromList, int &current, int currentLevel);
+bool isItem(float x, float y, std::vector<Item> &items, Item *&findItem, int &findItemFromList, int &current, int currentLevel);

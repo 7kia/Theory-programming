@@ -81,7 +81,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 void MainPerson::updateView(RenderWindow & window)
 {
 	Vector2u sizeWindow = window.getSize();
-	view->setSize((Vector2f)sizeWindow);// ИСПРАВЬ
+	view->setSize(Vector2f(sizeWindow));// ИСПРАВЬ
 
 	float tempX = getXPos();
 	float tempY = getYPos();//считываем коорд игрока и проверяем их, чтобы убрать края
@@ -200,25 +200,25 @@ void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
 }
 ////////////////////////////////////////////////////////////////////
 
-void MainPerson::takeItem(Field &field, list<Item> &items, float x, float y)
+void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 {
 	if (isInUseField(x, y)) {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Если есть место
 		if (isEmptySlot()) {
 
-			for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
+			for (int i = 0; i != items.size(); ++i) {
 
-				int level = it->currentLevel;
+				int level = items[i].currentLevel;
 				////////////////////////////////////////////////////////////////////
 				// Если нашли предмет
-				if (isItem(x, y, items, findItem, findItemFromList, it, level)) {
+				if (isItem(x, y, items, findItem, findItemFromList, i, level)) {
 					// Перемещаем в инвентарь
 					printf("added!1\n");
-					itemFromPanelQuickAccess[emptySlot] = *it;
+					itemFromPanelQuickAccess[emptySlot] = items[i];
 					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
 					// Удаляем из мира
-					items.erase(it);
+					items.erase(items.begin() + i);
 					break;
 				}
 				////////////////////////////////////////////////////////////////////
@@ -229,7 +229,7 @@ void MainPerson::takeItem(Field &field, list<Item> &items, float x, float y)
 	}
 }
 
-void MainPerson::throwItem(Field &field, list<Item> &items)
+void MainPerson::throwItem(Field &field, vector<Item> &items)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 	if (currentItem.typeItem != emptyItem->typeItem) {
@@ -309,8 +309,9 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 	movement = { 0.f, 0.f };
 }
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, vector<Enemy> *enemy,
-												 list<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, 
+												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, vector<Enemy> *enemy,
+												 vector<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -368,6 +369,14 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 							listObjects, listBlocks, sizeListObjects,
 							currentItem,
 							typesItems, items, unlifeObjects);
+			break;
+			////////////////////////////////////////////////////////////////////////
+			// Блок и неживой объект
+		case idCategoryItem::block:
+		case idCategoryItem::unlifeObject:
+			useBlock(xMouse, yMouse, event, field,
+							 currentItem, typesItems, items,
+							 typesUnlifeObjects, unlifeObjects);
 			break;
 			////////////////////////////////////////////////////////////////////////
 		default:
@@ -519,41 +528,6 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 			////////////////////////////////////////////////////////////////////////
 		case idCategoryItem::other:
 			break;
-			////////////////////////////////////////////////////////////////////////
-			// Блок
-		case idCategoryItem::block:
-			if (isInUseField(xMouse, yMouse)) {
-				if (event.type == Event::MouseButtonPressed) {
-
-					int level;
-					// Устанавливаем стену
-					if (event.key.code == Mouse::Left) {
-						level = currentLevelFloor + 1;
-					}
-					// Устанавливаем пол
-					else if (event.key.code == Mouse::Right) {
-						level = currentLevelFloor;
-					}
-					// Иначе ничего
-					else {
-						level = -1;
-					}
-
-
-					if (level > -1) {
-						// В данном случае обазначает количество// ИСПРАВЬ
-						currentItem.currentToughness -= 1;
-						// Ставим блок
-						field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
-
-						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-						}
-					}
-
-				}
-			}
-			break;
 		default:
 			break;
 		}
@@ -640,7 +614,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &field,
 												 String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
 												 Item &currentItem,
-												 TypeItem *typesItems, list<Item> *items, vector<UnlifeObject> *unlifeObjects) {
+												 TypeItem *typesItems, vector<Item> *items, vector<UnlifeObject> *unlifeObjects) {
 	if (isInUseField(xMouse, yMouse)) {
 		if (event.type == Event::MouseButtonPressed) {
 
@@ -726,6 +700,67 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 	
 }
 
+void MainPerson::useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,
+													Item & currentItem, TypeItem * typesItems, vector<Item>* items,
+													TypeUnlifeObject * typesUnlifeObjects, vector<UnlifeObject>* unlifeObjects)
+{
+	if (isInUseField(xMouse, yMouse)) {
+		if (event.type == Event::MouseButtonPressed) {
+
+			int x = xMouse / SIZE_BLOCK;
+			int y = yMouse / SIZE_BLOCK;
+
+			int level;
+			// Устанавливаем стену
+			if (event.key.code == Mouse::Left) {
+				level = currentLevelFloor + 1;
+			}
+			// Устанавливаем пол
+			else if (event.key.code == Mouse::Right) {
+				level = currentLevelFloor;
+			}
+			// Иначе ничего
+			else {
+				level = -1;
+			}
+
+
+			if (level > -1) {
+				bool successfullUse = false;
+
+				// Ставим блок
+				if (currentItem.typeItem->idBlockForUse > -1
+						&& field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
+					field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
+					successfullUse = true;
+				}
+				// Неживой объет
+				else if(currentItem.typeItem->idUnlideOnjectForUse > -1){
+					UnlifeObject* addObject = new UnlifeObject;
+
+					addObject->setType(typesUnlifeObjects[currentItem.typeItem->idUnlideOnjectForUse]);
+					addObject->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+					unlifeObjects->push_back(*addObject);
+
+					delete addObject;
+					successfullUse = true;
+				}
+				
+				////////////////////////////////
+				// Если успешно применён
+				if (successfullUse) {
+					// В данном случае обазначает количество// ИСПРАВЬ
+					currentItem.currentToughness -= 1;
+					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					}
+				}
+				////////////////////////////////
+			}
+
+		}
+	}
+}
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
 bool MainPerson::isInListBlocks(wchar_t block, wchar_t *listBlocks) {
@@ -749,7 +784,8 @@ bool MainPerson::isInListObjects(String* listObjects, int sizeString) {
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Взаимодействие с лестницами
-void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
+void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
+														vector<Item> *items, float xPos, float yPos)
 {
 	if (isInUseField(xPos, yPos)) {
 		/////////////////////////////////////////////////////////////////////////////
@@ -775,7 +811,8 @@ void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, d
 	
 }
 
-void MainPerson::actionAlternate(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy, list<Item> *items, float xPos, float yPos)
+void MainPerson::actionAlternate(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
+																 vector<Item> *items, float xPos, float yPos)
 {
 	if (isInUseField(xPos, yPos)) {
 		/////////////////////////////////////////////////////////////////////////////
