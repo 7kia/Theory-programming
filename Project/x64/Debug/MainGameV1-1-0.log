@@ -1,0 +1,59 @@
+﻿Сборка начата 31.10.2015 11:56:17.
+     1>Проект "c:\Study\MainGame\MainGame\MainGameV1-1-0.vcxproj" в узле 2 (целевые объекты Build).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /IC:\SFML\include /ZI /nologo /W3 /WX- /sdl /Od /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt MainPerson.cpp
+         MainPerson.cpp
+     1>c:\study\maingame\maingame\globalvar.h(33): warning C4305: инициализация: усечение из "double" к "float"
+     1>c:\study\maingame\maingame\globalvar.h(34): warning C4305: инициализация: усечение из "double" к "float"
+     1>c:\study\maingame\maingame\mainperson.cpp(29): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(59): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(97): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(98): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(99): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(100): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(110): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(111): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(115): warning C4244: *=: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(116): warning C4244: *=: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(107): warning C4101: cutDamage: неиспользованная локальная переменная
+     1>c:\study\maingame\maingame\mainperson.cpp(108): warning C4101: crashDamage: неиспользованная локальная переменная
+     1>c:\study\maingame\maingame\mainperson.cpp(242): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(303): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(304): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(319): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(320): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(607): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(660): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(661): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(758): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(759): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(762): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(783): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(784): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(788): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(823): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(827): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(831): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+     1>c:\study\maingame\maingame\mainperson.cpp(834): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Study\MainGame\MainGame\x64\Debug\MainGameV1-2-1.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\SFML\lib "sfml-audio-d.lib" "sfml-graphics-d.lib" "sfml-network-d.lib" "sfml-system-d.lib" "sfml-window-d.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Study\MainGame\MainGame\x64\Debug\MainGameV1-2-1.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Study\MainGame\MainGame\x64\Debug\MainGameV1-2-1.lib" /MACHINE:X64 x64\Debug\Enemy.obj
+         x64\Debug\Entity.obj
+         x64\Debug\Font.obj
+         x64\Debug\Game.obj
+         x64\Debug\GUI.obj
+         x64\Debug\Items.obj
+         x64\Debug\main.obj
+         x64\Debug\MainPerson.obj
+         x64\Debug\Map.obj
+         x64\Debug\MyMath.obj
+         x64\Debug\Sound.obj
+         x64\Debug\TypeEnemy.obj
+         x64\Debug\TypeItem.obj
+         x64\Debug\TypeUnlifeObject.obj
+         x64\Debug\UnlifeObject.obj
+         MainGameV1-1-0.vcxproj -> C:\Study\MainGame\MainGame\x64\Debug\MainGameV1-2-1.exe
+     1>Сборка проекта "c:\Study\MainGame\MainGame\MainGameV1-1-0.vcxproj" завершена (целевые объекты Build).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:01.40

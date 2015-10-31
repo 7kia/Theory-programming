@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Font.cpp">
+      <Filter>GUI and Font</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>GUI and Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="MainPerson.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeItem.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeUnlifeObject.cpp">
+      <Filter>UnlifeObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UnlifeObject.cpp">
+      <Filter>UnlifeObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeEnemy.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMath.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GlobalVar.h" />
+    <ClInclude Include="Paths.h" />
+    <ClInclude Include="Font.h">
+      <Filter>GUI and Font</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>GUI and Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="MainPerson.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeItems.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemsVar.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeUnlifeObject.h">
+      <Filter>UnlifeObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UnlifeObject.h">
+      <Filter>UnlifeObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UnlifeObjectVar.h">
+      <Filter>UnlifeObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="BlocksVar.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="ListObjectsAndBlocks.h" />
+    <ClInclude Include="EntityVar.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeEnemy.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMath.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GUI and Font">
+      <UniqueIdentifier>{fbfdee3d-b6fb-45d9-be94-8937b1523eae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{ec90c64f-ac27-4d71-a7a4-7b0b29a97ea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{9b868665-5a56-4545-962a-046782d9f27e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UnlifeObject">
+      <UniqueIdentifier>{c9898961-19fd-4104-86ed-644851fded78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{6647b1f0-d6e5-4444-9c9f-c3eaf7631c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{ace2251d-111f-4ade-9eb1-1f0b53f69c43}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
