@@ -146,7 +146,7 @@ struct GUI
 	// —сылки на текст
 	sf::Text *textGui[numberTextReference];
 
-	void setPositionGui(sf::RenderWindow &window, MainPerson &mainPerson, std::list<Enemy>& enemy, TextGame &textGame);
+	void setPositionGui(sf::RenderWindow &window, MainPerson &mainPerson, std::vector<Enemy>& enemy, TextGame &textGame);
 };
 
 void initializeGUI(GUI &gui, TextGame &textGame);

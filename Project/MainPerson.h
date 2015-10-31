@@ -21,7 +21,7 @@ public:
 	// Для уничтожения врагов
 	Enemy *findEnemy;
 	Enemy *emptyEnemy;
-	std::list<Enemy>::iterator findEnemyFromList;
+	int findEnemyFromList;
 
 	void givenForPersonDamage(Enemy & enemy);
 	void attractionEnemy(Enemy & enemy, const Time &deltaTime);
@@ -45,7 +45,8 @@ public:
 
 	void takeItem(Field &field, std::list<Item> &items, float x, float y);
 	void throwItem(Field &field, std::list<Item> &items);
-	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, std::list<Enemy> *enemy, std::list<Item> *items, std::list<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
+	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, std::vector<Enemy> *enemy,
+							 std::list<Item> *items, std::list<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
 	// Использование предметов
 	void useTool(float &xMouse, float &yMouse, Event &event, Field &field,
 							 sf::String* listObjects, wchar_t* listBlocks, int &sizeListObjects,

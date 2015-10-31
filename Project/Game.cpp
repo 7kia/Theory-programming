@@ -47,7 +47,7 @@ void initializeGame(Game & game)
 
 	////////////////////////////////////
 	// Остальные сущности
-	game.Enemys = new list<Enemy>;
+	game.Enemys = new vector<Enemy>;
 	game.typesEnemy = new TypesEnemy;
 
 	initializeTypeEnemy(*game.typesEnemy, *game.databaseSound);
@@ -132,12 +132,12 @@ void renderEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ
 {
 	RenderWindow& window = *game.window;
 
-	list<Enemy>* Enemys = game.Enemys;
+	vector<Enemy>& Enemys = *game.Enemys;
 
-	for (std::list<Enemy>::iterator it = Enemys->begin(); it != Enemys->end(); ++it) {
-		if (it->currentLevelFloor == game.mainPerson->currentLevelFloor) {
+	for (int i = 0; i != Enemys.size(); ++i) {
+		if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor) {
 
-			window.draw(*it->spriteEntity);
+			window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
 		}
 
@@ -248,25 +248,25 @@ void informationAboutSelect(Game &game, float x, float y)
 	}
 	///////////////////////////////////////////////////////////////////
 	// Осмотр сущностей
-	list<Enemy>& Enemys = *game.Enemys;
+	vector<Enemy>& Enemys = *game.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
 	game.mainPerson->findEnemy = game.emptyEnemy;
 	infoEnemys.setString("Entity : not select");
-	for (std::list<Enemy>::iterator it = Enemys.begin(); it != Enemys.end(); ++it) {
+	for (int i = 0; i != Enemys.size(); ++i) {
 
-		int level = it->currentLevelFloor;
+		int level = Enemys[i].currentLevelFloor;
 
-		Sprite *spriteObject = it->spriteEntity;
+		Sprite *spriteObject = Enemys[i].spriteEntity;
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y)) {
 			if (level == game.mainPerson->currentLevelFloor) {
-				String name = it->type->name;
+				String name = Enemys[i].type->name;
 				if (name != "") {
 
-					game.mainPerson->findEnemyFromList = it;
-					game.mainPerson->findEnemy = &*it;
+					game.mainPerson->findEnemyFromList = i;
+					game.mainPerson->findEnemy = &Enemys[i];
 					infoEnemys.setString("Entity : " + name);
 				}
 			}

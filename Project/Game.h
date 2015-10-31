@@ -40,7 +40,7 @@ struct Game
 	// нЯРЮКЭМШЕ ЯСЫМНЯРХ
 	Enemy *emptyEnemy;
 	TypesEnemy *typesEnemy;
-	std::list<Enemy>* Enemys;// днаюбкемхе ясымнярх
+	std::vector<Enemy>* Enemys;// днаюбкемхе ясымнярх
 	////////////////////////////////////
 
 	destroyObjectsAndBlocks* listDestroy;

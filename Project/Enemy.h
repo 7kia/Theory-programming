@@ -29,7 +29,7 @@ public:
 	// ƒл€ уничтожени€ врагов
 	Enemy *findEnemy;
 	Enemy *emptyEnemy;
-	std::list<Enemy>::iterator findEnemyFromList;
+	int findEnemyFromList;
 	///////////////////////////////////////////////////////
 	void EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level);
 	~Enemy();
@@ -41,5 +41,5 @@ private:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ќбъ€вление сущности
-void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int countEnemy,
+void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject);

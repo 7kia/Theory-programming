@@ -308,7 +308,7 @@ void MainPerson::interactionWitnUnlifeObject(list<UnlifeObject> *unlifeObjects, 
 	movement = { 0.f, 0.f };
 }
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, list<Enemy> *enemy,
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, TypeItem *typesItems, vector<Enemy> *enemy,
 												 list<Item> *items, list<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
@@ -572,7 +572,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 						if (findEnemy->isDeath) {
 
 							Item* addItem = new Item;
-							TypeEnemy& typeEnemy = *findEnemyFromList->type;
+							TypeEnemy& typeEnemy = *findEnemy->type;
 							int countItem = sizeof(typeEnemy.minCountItems) / sizeof(int);
 
 							int* minAmount = typeEnemy.minCountItems;
@@ -592,7 +592,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, Typ
 
 							}
 							delete addItem;
-							enemy->erase(findEnemyFromList);
+							enemy->erase(enemy->begin() + findEnemyFromList);
 
 						}
 						//////////////////////////////////////////////////

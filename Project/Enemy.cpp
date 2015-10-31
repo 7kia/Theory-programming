@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int countEnemy,
+void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject)// днаюбкемхе ясымнярх 
 {
 

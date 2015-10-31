@@ -290,13 +290,13 @@ void startGame()
 
 				/////////////////////////////////////
 				// Взаимодействие существ с миром
-				list<Enemy>* Enemys = game->Enemys;
-				for (std::list<Enemy>::iterator it = Enemys->begin(); it != Enemys->end(); ++it) {
+				vector<Enemy>& Enemys = *game->Enemys;
+				for (int i = 0; i != Enemys.size(); ++i) {
 					
-					it->update(TIME_PER_FRAME, *game->databaseSound);
-					it->interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
-					it->randomWalk(TIME_PER_FRAME);
-					mainPerson.attractionEnemy(*it, TIME_PER_FRAME);
+					Enemys[i].update(TIME_PER_FRAME, *game->databaseSound);
+					Enemys[i].interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
+					Enemys[i].randomWalk(TIME_PER_FRAME);
+					mainPerson.attractionEnemy(Enemys[i], TIME_PER_FRAME);
 
 				}
 				/////////////////////////////////////

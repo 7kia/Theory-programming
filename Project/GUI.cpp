@@ -118,7 +118,7 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	//gui.textGui[idTextGui::infoWindowItemGui] = &textGame.texts[idText::infoWindowItemGui];
 }
 
-void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enemy>& enemy, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<Enemy>& enemy, TextGame &textGame)
 {
 
 	Vector2f centerWindow = mainPerson.view->getCenter();
@@ -389,13 +389,13 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	// для противников
 	int shiftBar;
 
-	for (std::list<Enemy>::iterator it = enemy.begin(); it != enemy.end(); ++it) {
-		if (it->currentLevelFloor == mainPerson.currentLevelFloor) {
+	for (int i = 0; i != enemy.size(); ++i) {
+		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor) {
 
-			shiftBar = it->maxMana > 0;
-			pos = it->spriteEntity->getPosition();
+			shiftBar = enemy[i].maxMana > 0;
+			pos = enemy[i].spriteEntity->getPosition();
 			pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-			pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
+			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
 
 
 			bar->setPosition(pos);
@@ -403,7 +403,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 			window.draw(*bar);
 			bar->setScale(normalSizeGuiForEnemy);
 
-			level = (float)it->currentHealth / it->maxHealth;
+			level = (float)enemy[i].currentHealth / enemy[i].maxHealth;
 
 			pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 			pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -423,11 +423,11 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 			currentText = &textGame.texts[idText::inputDamage];
 
 			// Позиция
-			pos = it->spriteEntity->getPosition();
-			pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shiftBar) + shiftEnemyDamage;
+			pos = enemy[i].spriteEntity->getPosition();
+			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shiftBar) + shiftEnemyDamage;
 
 			// Если нанесли урон то отображаем
-			int damage = it->inputDamage;
+			int damage = enemy[i].inputDamage;
 			if (damage) {
 				string stringDamage;
 				intToString(damage, stringDamage);
@@ -443,14 +443,14 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 			// Отображение текущего здоровья
 			currentText = &textGame.texts[idText::levelBar];
 		
-			pos = it->spriteEntity->getPosition();
+			pos = enemy[i].spriteEntity->getPosition();
 			pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-			pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
+			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
 
 			////////////////
 			// Перевод из числа в строку
-			int currentHealthEnemy = it->currentHealth;
-			int maxHealthEnemy = it->maxHealth;
+			int currentHealthEnemy = enemy[i].currentHealth;
+			int maxHealthEnemy = enemy[i].maxHealth;
 
 			currentText->setString(toStringCharacter(currentHealthEnemy, maxHealthEnemy));
 
@@ -487,22 +487,10 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	currentText = &textGame.texts[idText::levelBar];
 
 	////////////////
-	// Перевод из числа в строку
-	std::stringstream SP;
 	int stamina = mainPerson.currentStamina;
-	SP << stamina;
-
-	string staminaPerson;
-	SP >> staminaPerson;
-	////////////////
-	std::stringstream MS;
 	int staminaMax = mainPerson.maxStamina;
-	MS << staminaMax;
 
-	string staminaMaxPerson;
-	MS >> staminaMaxPerson;
-	////////////////
-	currentText->setString(staminaPerson + '/' + staminaMaxPerson);
+	currentText->setString(toStringCharacter(stamina, staminaMax));
 
 	middleString = currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 
@@ -513,15 +501,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 
 	////////////////////////////////////////////////////////////////
 	// для противников
-	for (std::list<Enemy>::iterator it = enemy.begin(); it != enemy.end(); ++it) {
-		if (it->currentLevelFloor == mainPerson.currentLevelFloor) {
+	for (int i = 0; i != enemy.size(); ++i) {
+		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor) {
 
-			if (it->maxStamina) {
-				shiftBar = it->maxMana > 0;
+			if (enemy[i].maxStamina) {
+				shiftBar = enemy[i].maxMana > 0;
 
-				pos = it->spriteEntity->getPosition();
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
 
 
 				bar->setPosition(pos);
@@ -529,7 +517,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				window.draw(*bar);
 				bar->setScale(normalSizeGuiForEnemy);
 
-				level = (float)it->currentStamina / it->maxStamina;
+				level = (float)enemy[i].currentStamina / enemy[i].maxStamina;
 
 				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -549,26 +537,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				// Отображение текущей выносливости
 				currentText = &textGame.texts[idText::levelBar];
 
-				pos = it->spriteEntity->getPosition();
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
 
 				////////////////
-				// Перевод из числа в строку
-				std::stringstream sSL;
-				std::stringstream sSH;
-				int currentStaminaEnemy = it->currentStamina;
-				int maxStaminaEnemy = it->maxStamina;
-				sSL << currentStaminaEnemy;
+				int currentStaminaEnemy = enemy[i].currentStamina;
+				int maxStaminaEnemy = enemy[i].maxStamina;
 
-				string stringStamina;
-				sSL >> stringStamina;
-
-				sSH << maxStaminaEnemy;
-				string stringMaxStamina;
-				sSH >> stringMaxStamina;
-				////////////////
-				currentText->setString(stringStamina + '/' + stringMaxStamina);
+				currentText->setString(toStringCharacter(currentStaminaEnemy, maxStaminaEnemy));
 
 				pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 				currentText->setPosition(pos);
@@ -606,22 +583,10 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	currentText = &textGame.texts[idText::levelBar];
 
 	////////////////
-	// Перевод из числа в строку
-	std::stringstream CM;
 	int mana = mainPerson.currentMana;
-	CM << mana;
-
-	string manaPerson;
-	CM >> manaPerson;
-	////////////////
-	std::stringstream MM;
 	int manaMax = mainPerson.maxMana;
-	MM << manaMax;
 
-	string manaMaxPerson;
-	MM >> manaMaxPerson;
-	////////////////
-	currentText->setString(manaPerson + '/' + manaMaxPerson);
+	currentText->setString(toStringCharacter(mana, manaMax));
 
 	middleString = currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 
@@ -631,13 +596,13 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	////////////////////////////////
 
 	// для противников
-	for (std::list<Enemy>::iterator it = enemy.begin(); it != enemy.end(); ++it) {
-		if (it->currentLevelFloor == mainPerson.currentLevelFloor) {
+	for (int i = 0; i != enemy.size(); ++i) {
+		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor) {
 
-			if (it->maxMana) {
-				pos = it->spriteEntity->getPosition();
+			if (enemy[i].maxMana) {
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
 
 
 				bar->setPosition(pos);
@@ -645,7 +610,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				window.draw(*bar);
 				bar->setScale(normalSizeGuiForEnemy);
 
-				level = (float)it->currentMana / it->maxMana;
+				level = (float)enemy[i].currentMana / enemy[i].maxMana;
 
 				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -665,26 +630,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				// Отображение текущей маны
 				currentText = &textGame.texts[idText::levelBar];
 
-				pos = it->spriteEntity->getPosition();
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
 
 				////////////////
-				// Перевод из числа в строку
-				std::stringstream sML;
-				std::stringstream sMH;
-				int currentManaEnemy = it->currentMana;
-				int maxManaEnemy = it->maxMana;
-				sML << currentManaEnemy;
+				int currentManaEnemy = enemy[i].currentMana;
+				int maxManaEnemy = enemy[i].maxMana;
 
-				string stringMana;
-				sML >> stringMana;
-
-				sMH << maxManaEnemy;
-				string stringMaxMana;
-				sMH >> stringMaxMana;
-				////////////////
-				currentText->setString(stringMana + '/' + stringMaxMana);
+				currentText->setString(toStringCharacter(currentManaEnemy, maxManaEnemy));
 
 				pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 				currentText->setPosition(pos);
