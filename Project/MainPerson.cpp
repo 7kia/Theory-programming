@@ -65,8 +65,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.currentStamina = 35;
 	mainPerson.currentMana = 10;
 
-	mainPerson.currentThirst = 1;
-	mainPerson.currentHungry = 1;
+	mainPerson.currentThirst = 5;
+	mainPerson.currentHungry = 5;
 
 	mainPerson.protectionCut = 1.5f;
 	mainPerson.protectionCrash = 1.f;

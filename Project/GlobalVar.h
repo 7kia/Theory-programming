@@ -14,7 +14,7 @@
 
 #include "MyMath.h"
 
-const sf::String TITLE_PROGRAM = "MainGame v1.3.7";
+const sf::String TITLE_PROGRAM = "MainGame v1.3.9";
 const sf::String stringDeathPerson = "DEATH";
 
 const int DEFAULT_WIDTH_WINDOW = 1200;
