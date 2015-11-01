@@ -15,8 +15,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.textureEntity = new Texture;
 
 	// Задание размера
-	mainPerson.height = 36;
-	mainPerson.width = 36;
+	mainPerson.height = 32;
+	mainPerson.width = 32;
 
 	// Дальность подбора предметов
 	mainPerson.radiusUse = 1;
@@ -136,7 +136,7 @@ void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
 
 	distanse = distansePoints(personPoint, enemyPoint);
 	// Если увидел
-	if (distanse <= RADIUSE_VIEW) {
+	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
 		enemy.mode = idEntityMode::fight;
 		// Вплотную не подходим
 		
@@ -211,22 +211,24 @@ void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 		// Если есть место
 		if (isEmptySlot()) {
 
-			for (int i = 0; i != items.size(); ++i) {
 
-				int level = items[i].currentLevel;
 				////////////////////////////////////////////////////////////////////
 				// Если нашли предмет
-				if (isItem(x, y, items, *findItem, findItemFromList, i, level)) {
+				int levelItem = items[findItemFromList].currentLevel;
+
+				Sprite *spriteItem = items[findItemFromList].mainSprite;
+				FloatRect objectItem = spriteItem->getGlobalBounds();
+
+				if (objectItem.contains(x, y) && levelItem == currentLevelFloor + 1) {
 					// Перемещаем в инвентарь
 					printf("added!1\n");
-					itemFromPanelQuickAccess[emptySlot] = items[i];
+					itemFromPanelQuickAccess[emptySlot] = items[findItemFromList];
 					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
 					// Удаляем из мира
-					items.erase(items.begin() + i);
-					break;
+					items.erase(items.begin() + findItemFromList);
 				}
 				////////////////////////////////////////////////////////////////////
-			}
+
 
 		}
 		//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -323,77 +325,74 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 	int y = yMouse / SIZE_BLOCK;
 
 	// Сначала наносим урон
-	if (findEnemy != emptyEnemy) {
+	if (findEnemy != emptyEnemy && event.key.code == Mouse::Left) {
 
 		if (isInUseField(xMouse, yMouse)) {
-			if (event.key.code == Mouse::Left) {
-				if (findEnemy->currentLevelFloor == currentLevelFloor) {
+			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
-					if (currentItem.isDestroy) {
-						currentItem.currentToughness -= 1;
-					}
+				if (currentItem.isDestroy) {
+					currentItem.currentToughness -= 1;
+				}
 
-					//////////////////////////////////////////////////
-					// Смерть и выпадение предметов
-					if (findEnemy->isDeath) {
+				//////////////////////////////////////////////////
+				// Смерть и выпадение предметов
+				if (findEnemy->isDeath) {
 
-						Item* addItem = new Item;
-						TypeEnemy& typeEnemy = *findEnemy->type;
-						int countItem = sizeof(typeEnemy.minCountItems) / sizeof(int);
+					Item* addItem = new Item;
+					TypeEnemy& typeEnemy = *findEnemy->type;
+					int countItem = sizeof(typeEnemy.minCountItems) / sizeof(int);
 
-						int* minAmount = typeEnemy.minCountItems;
-						int* maxAmount = typeEnemy.maxCountItems;
-						int* idItems = typeEnemy.dropItems;
+					int* minAmount = typeEnemy.minCountItems;
+					int* maxAmount = typeEnemy.maxCountItems;
+					int* idItems = typeEnemy.dropItems;
 
-						int currentAmount;
-						for (int i = 0; i < countItem; i++) {
+					int currentAmount;
+					for (int i = 0; i < countItem; i++) {
 
-							currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
-							for (int j = 0; j < currentAmount; j++) {
-								addItem->setType(typesItems[idItems[i]]);
-								addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-								items->push_back(*addItem);
-
-							}
+						currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+						for (int j = 0; j < currentAmount; j++) {
+							addItem->setType(typesItems[idItems[i]]);
+							addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+							items->push_back(*addItem);
 
 						}
-						delete addItem;
-						enemy->erase(enemy->begin() + findEnemyFromList);
 
 					}
-					//////////////////////////////////////////////////
-					// Иначе наносим урон
-					else {
-						float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
-						float crashDamage = damageMultiplirer * currentItem.crushingDamage;
-
-						cutDamage *= findEnemy->protectionCut;
-						crashDamage *= findEnemy->protectionCrash;
-
-						findEnemy->inputDamage = cutDamage + crashDamage;
-						findEnemy->currentHealth -= findEnemy->inputDamage;
-
-						findEnemy->timeInputDamage = 0.f;
-					}
-					//////////////////////////////////////////////////
-
-
-
-					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-					}
-
+					delete addItem;
+					enemy->erase(enemy->begin() + findEnemyFromList);
 
 				}
+				//////////////////////////////////////////////////
+				// Иначе наносим урон
+				else {
+					float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
+					float crashDamage = damageMultiplirer * currentItem.crushingDamage;
+
+					cutDamage *= findEnemy->protectionCut;
+					crashDamage *= findEnemy->protectionCrash;
+
+					findEnemy->inputDamage = cutDamage + crashDamage;
+					findEnemy->currentHealth -= findEnemy->inputDamage;
+
+					findEnemy->timeInputDamage = 0.f;
+				}
+				//////////////////////////////////////////////////
+
+
+
+				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+				}
+
+
 			}
+
 			//*/					
 		}
 
 	}
 	// Если это не противник
 	else {
-
-
 
 		String* listObjects;
 		wchar_t* listBlocks;
@@ -457,7 +456,9 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 			break;
 		}
 
-		switch (currentItem.categoryItem) {
+		if (findTool == false)
+		{
+			switch (currentItem.categoryItem) {
 			////////////////////////////////////////////////////////////////////////
 			// Еда
 		case idCategoryItem::food:
@@ -465,7 +466,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 				// Утоление голода
 				if (currentHungry < maxHungry) {
 					currentHungry += currentItem.currentToughness;
-					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					currentItem = *emptyItem;
 				}
 			}
 			break;
@@ -603,6 +604,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 		default:
 			break;
 		}
+		}
+		
 
 	}
 
@@ -669,7 +672,7 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 					unlifeObjects->erase(unlifeObjects->begin() + findObjectFromList);
 
 					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						currentItem = *emptyItem;
 					}
 
 
@@ -691,7 +694,7 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 				*block = field.charBlocks[idBlocks::air];
 
 				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					currentItem = *emptyItem;
 				}
 
 			}
@@ -755,8 +758,8 @@ void MainPerson::useBlock(float & xMouse, float & yMouse, sf::Event & event, Fie
 				if (successfullUse) {
 					// В данном случае обазначает количество// ИСПРАВЬ
 					currentItem.currentToughness -= 1;
-					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					if (currentItem.currentToughness < 1) {
+						currentItem = *emptyItem;
 					}
 				}
 				////////////////////////////////

@@ -3,6 +3,9 @@
 #include "BlocksVar.h"
 #include "UnlifeObject.h"
 
+const sf::Color UP_BLOCK(350, 350, 350, 127);
+const sf::Color DOWN_BLOCK(127, 127, 127, 255);
+
 const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 {
 	"Unknow",
@@ -10,12 +13,12 @@ const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 	"Grass",
 	"Dirt",
 	"Sand",
-	"Water",
 	"Log oak",
 	"Stone",
 	"Stone brick",
 	"Planks",
-	"Wood ladder"
+	"Wood ladder",
+	"Water"
 };
 
 struct Field

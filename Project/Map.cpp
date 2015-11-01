@@ -116,6 +116,9 @@ String Field::findCharBlocks(wchar_t block)
 	return namesBlocks[idBlocks::unknow];
 }
 
+/*
+
+*/
 int Field::findIdBlock(wchar_t block)
 {
 	for (int i = 1; i < idBlocks::amountKnowBlocks; i++) {

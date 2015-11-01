@@ -312,7 +312,7 @@ void startGame()
 			////////////////////////////////////////////////////////////
 		}
 		render(*game);
-		writeMap(game->field->dataMap);
+		//writeMap(game->field->dataMap);
 	}
 	destroyGame(*game);
 }

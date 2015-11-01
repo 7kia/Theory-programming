@@ -45,6 +45,7 @@ public:
 
 	void takeItem(Field &field, std::vector<Item> &items, float x, float y);
 	void throwItem(Field &field, std::vector<Item> &items);
+
 	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, 
 							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, std::vector<Enemy> *enemy,
 							 std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);

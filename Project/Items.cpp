@@ -12,7 +12,7 @@ void initializeItems(vector<Item> &items, TypesItem *typesItem, Item &emptyItem)
 	// Пустой предмет
 	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ИСПРАВЬ
 
-	for (size_t i = 0; i < 3; i++) {
+	for (size_t i = 0; i < 2; i++) {
 		addItem->setType(typesItem->typesItem[idItem::stoneItem]);
 		addItem->setPosition(2, 2, 1);
 		items.push_back(*addItem);

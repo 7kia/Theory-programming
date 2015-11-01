@@ -656,7 +656,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	window.draw(*highHungry);
 
 	// Уровень голода
-	level = (float)mainPerson.currentHungry / mainPerson.maxHungry;
+	level = float(mainPerson.currentHungry) / mainPerson.maxHungry;
 
 	pos.y += LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
 	currentLevel = LEVEL_HUNGY_GUI * level;

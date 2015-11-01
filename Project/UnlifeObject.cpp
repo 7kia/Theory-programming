@@ -17,7 +17,7 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypesUnlifeObj
 	addObject.setPosition(4, 12, 1);
 	unlifeObjects.push_back(addObject);
 
-	/*
+	///*
 	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSmall]);
 	addObject.setPosition(8, 12, 1);
 	unlifeObjects.push_back(addObject);
