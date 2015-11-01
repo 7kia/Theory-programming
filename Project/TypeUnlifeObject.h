@@ -1,9 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
 
-#include "GlobalVar.h"
-#include "Items.h"
 #include "Sound.h"
 
 struct TypeUnlifeObject {

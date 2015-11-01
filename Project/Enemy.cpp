@@ -1,4 +1,7 @@
 #include "Enemy.h"
+#include "Items.h"
+#include "UnlifeObject.h"
+#include "EntityVar.h"
 
 void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject)// днаюбкемхе ясымнярх 

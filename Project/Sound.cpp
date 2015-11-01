@@ -1,4 +1,5 @@
 #include "Sound.h"
+#include "Paths.h"
 
 using namespace sf;
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
+#include "Items.h"
 
+class UnlifeObject;
 ////////////////////////////////////
 // Ходьба по карте(для противников
 const float minTimeWalk = 4.f;

@@ -21,8 +21,8 @@ void processEvents(Game &game)
 			Vector2i mousePos = Mouse::getPosition(window);
 			Vector2f pos = window.mapPixelToCoords(mousePos);
 
-			UnlifeObject* emptyObject = NULL;
-			Item* emptyItem = NULL;
+			UnlifeObject* emptyObject = nullptr;
+			Item* emptyItem = nullptr;
 
 			mainPerson.findObject = emptyObject;
 			mainPerson.findItem = emptyItem;

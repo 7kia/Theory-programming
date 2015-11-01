@@ -1,4 +1,6 @@
 #include "UnlifeObject.h"
+#include "BlocksVar.h"
+#include "UnlifeObjectVar.h"
 
 using namespace sf;
 using namespace std;

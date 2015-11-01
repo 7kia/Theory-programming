@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "GlobalVar.h"
 
 const int SIZE_BIG_TEXT = 32;
 const int SIZE_NORMAL_TEXT = 18;

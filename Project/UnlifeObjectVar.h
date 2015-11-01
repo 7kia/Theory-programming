@@ -1,6 +1,4 @@
 #pragma once
-#include <SFML\Graphics.hpp>
-
 const int NUMBER_TYPE_BLOCKS = 256;
 
 const int MAX_UNLIFE_OBJECT = 256;

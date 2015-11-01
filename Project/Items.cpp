@@ -1,4 +1,5 @@
 #include "Items.h"
+#include "ItemsVar.h"
 
 using namespace sf;
 using namespace std;
@@ -11,7 +12,7 @@ void initializeItems(vector<Item> &items, TypesItem *typesItem, Item &emptyItem)
 	// Пустой предмет
 	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ИСПРАВЬ
 
-	for (size_t i = 0; i < 12; i++) {
+	for (size_t i = 0; i < 3; i++) {
 		addItem->setType(typesItem->typesItem[idItem::stoneItem]);
 		addItem->setPosition(2, 2, 1);
 		items.push_back(*addItem);

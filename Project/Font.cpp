@@ -1,4 +1,5 @@
 #include "Font.h"
+#include "GlobalVar.h"
 
 using namespace sf;
 

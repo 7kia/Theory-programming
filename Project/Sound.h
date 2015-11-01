@@ -1,8 +1,5 @@
 #pragma once
 #include <SFML/Audio.hpp>
-#include "GlobalVar.h"
-
-
 
 typedef enum
 {

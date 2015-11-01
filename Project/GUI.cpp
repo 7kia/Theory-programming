@@ -244,100 +244,90 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 					levelStamina->setScale(normalSizeGuiForEnemy);
 					//*/
 
-					///* TODO
-					////////////////////////////////
-					// и наносимый урон
-					if (idSelectItem == i) {
-
-						//////////////////////////////////////////////////////////
-						// Отображение характеристик
-						pos = { posName.x + halfSizeString,
-										centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
-						// Перевод из числа в строку
-						int itemCutDam = currentItem.cuttingDamage;
-						int itemCrashDam = currentItem.crushingDamage;
-
-						string itemCut;
-						string itemCrash;
-
-						intToString(itemCutDam, itemCut);
-						intToString(itemCrashDam, itemCrash);
-
-						////////////////
-						// Режущий урон
-						cutSprite->setPosition(pos);
-						cutSprite->setScale(SCALE_FEATURES);
-						window.draw(*cutSprite);
-
-						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-						currentText->setString(itemCut);
-						currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-						currentText->setPosition(pos);
-						window.draw(*currentText);
-						////////////////
-						// Дробящий урон
-						pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
-						crashSprite->setPosition(pos);
-						crashSprite->setScale(SCALE_FEATURES);
-						window.draw(*crashSprite);
-
-						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-						currentText->setString(itemCrash);
-						currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-						currentText->setPosition(pos);
-						window.draw(*currentText);
-						////////////////
-						//////////////////////////////////////////////////////////
-					}
-					////////////////////////////////
-					//*/
 				}
-				/////////////////////////////////////////////////////////////
-				// или что-то другое
-				else {
+				////////////////////////////////
+				// Характеристики
+				if (idSelectItem == i) {
 
-					if (idSelectItem == i) {
-						//////////////////////////////////////////////////////////
-						// Отображение характеристик
-						pos = { posName.x + halfSizeString,
-							centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
-						// Перевод из числа в строку
-						int itemToughness = currentItem.currentToughness;
+					//////////////////////////////////////////////////////////
+					// Отображение характеристик
+					pos = { posName.x + halfSizeString,
+						centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
+					// Перевод из числа в строку
+					int itemCutDam = currentItem.cuttingDamage;
+					int itemCrashDam = currentItem.crushingDamage;
 
-						string itemToug;
+					string itemCut;
+					string itemCrash;
 
-						intToString(itemToughness, itemToug);
+					intToString(itemCutDam, itemCut);
+					intToString(itemCrashDam, itemCrash);
 
-						////////////////
-						// Голод
-						if (currentItem.categoryItem == idCategoryItem::food) {
-							hungrySprite->setPosition(pos);
-							hungrySprite->setScale(SCALE_FEATURES);
-							window.draw(*hungrySprite);
-						}
-						////////////////
-						// Жажда
-						else if (currentItem.categoryItem == idCategoryItem::bottleWithWater
-										 || currentItem.categoryItem == idCategoryItem::bukketWithWater) {
-							thirstSprite->setPosition(pos);
-							thirstSprite->setScale(SCALE_FEATURES);
-							window.draw(*thirstSprite);
-						}
-						////////////////
-						// Другое не показываем
-						else {
-							itemToug = "";// ИСПРАВЬ
-						}
+					////////////////
+					// Режущий урон
+					cutSprite->setPosition(pos);
+					cutSprite->setScale(SCALE_FEATURES);
+					window.draw(*cutSprite);
 
-						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-						currentText->setString(itemToug);
-						currentText->setOrigin(itemToug.size() / 2, currentText->getCharacterSize() / 2);
-						currentText->setPosition(pos);
-						window.draw(*currentText);
-						//////////////////////////////////////////////////////////
+					pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+					currentText->setString(itemCut);
+					currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
+					currentText->setPosition(pos);
+					window.draw(*currentText);
+					////////////////
+					// Дробящий урон
+					pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+					crashSprite->setPosition(pos);
+					crashSprite->setScale(SCALE_FEATURES);
+					window.draw(*crashSprite);
+
+					pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+					currentText->setString(itemCrash);
+					currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
+					currentText->setPosition(pos);
+					window.draw(*currentText);
+					////////////////
+					//////////////////////////////////////////////////////////
+					// Отображение характеристик
+
+					pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+					// Перевод из числа в строку
+					int itemToughness = currentItem.currentToughness;
+
+					string itemToug;
+
+					intToString(itemToughness, itemToug);
+
+					////////////////
+					// Голод
+					if (currentItem.categoryItem == idCategoryItem::food) {
+						hungrySprite->setPosition(pos);
+						hungrySprite->setScale(SCALE_FEATURES);
+						window.draw(*hungrySprite);
+					}
+					////////////////
+					// Жажда
+					else if (currentItem.categoryItem == idCategoryItem::bottleWithWater
+									 || currentItem.categoryItem == idCategoryItem::bukketWithWater) {
+						thirstSprite->setPosition(pos);
+						thirstSprite->setScale(SCALE_FEATURES);
+						window.draw(*thirstSprite);
+					}
+					////////////////
+					// Другое не показываем
+					else {
+						itemToug = "";// ИСПРАВЬ
 					}
 
+					pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+					currentText->setString(itemToug);
+					currentText->setOrigin(itemToug.size() / 2, currentText->getCharacterSize() / 2);
+					currentText->setPosition(pos);
+					window.draw(*currentText);
+					//////////////////////////////////////////////////////////
 				}
+				////////////////////////////////
+
 				/////////////////////////////////////////////////////////////
 
 

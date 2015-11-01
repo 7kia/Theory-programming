@@ -2,7 +2,6 @@
 
 #include "BlocksVar.h"
 #include "UnlifeObject.h"
-#include "Items.h"
 
 const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 {

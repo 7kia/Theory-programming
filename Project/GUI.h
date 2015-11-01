@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "GlobalVar.h"
 #include "MainPerson.h"
 #include "Font.h"
 

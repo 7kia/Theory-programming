@@ -1,4 +1,7 @@
 #include "TypeItems.h"
+#include "ItemsVar.h"
+#include "UnlifeObjectVar.h"
+#include "Paths.h"
 
 using namespace sf;
 
@@ -20,13 +23,13 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 
 	bool canDestroy = false;
 
-	int toughness = 1;
+	int toughness = 4;
 
 	int pixelX = PIXEL_X_SMALL_STONE;
 	int pixelY = PIXEL_Y_SMALL_STONE;
 
 	int cuttingDamage = 0;
-	int crushingDamage = 1;
+	int crushingDamage = 10;
 
 	int block = idBlocks::stone;
 	int unlifeObject = -1;//idUnlifeObject::
@@ -51,7 +54,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_PLANKS;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 5;
 
 	block = idBlocks::planksBlock;
 	unlifeObject = -1;
@@ -95,7 +98,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_GRASS_BRICK;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 2;
 
 	block = idBlocks::grass;
 	unlifeObject = -1;
@@ -139,7 +142,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_WOOD_LADDER;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 4;
 
 	block = idBlocks::woodLadder;
 	unlifeObject = -1;
@@ -161,7 +164,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_STONE_BRICK;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 10;
 
 	block = idBlocks::stoneBrick;
 	unlifeObject = -1;
@@ -183,7 +186,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_LOG_OAK;
 	
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 7;
 
 	block = idBlocks::logOak;
 	unlifeObject = -1;
@@ -207,7 +210,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelX = PIXEL_X_SEADLING_OAK_ITEM;
 	pixelY = PIXEL_Y_SEADLING_OAK_ITEM;
 
-	cuttingDamage = 0;
+	cuttingDamage = 1;
 	crushingDamage = 1;
 
 	block = -1;
@@ -233,7 +236,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_WOOD_BUKKET;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 3;
 
 	block = idBlocks::water;
 	unlifeObject = -1;
@@ -255,7 +258,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_WOOD_BUKKET_WITH_WATER;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 4;
 
 	block = idBlocks::water;
 	unlifeObject = -1;
@@ -277,7 +280,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_GLASS_BOTTLE;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 2;
 
 	block = idBlocks::water;
 	unlifeObject = -1;
@@ -299,7 +302,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = PIXEL_Y_GLASS_BOTTLE_WITH_WATER;
 
 	cuttingDamage = 0;
-	crushingDamage = 1;
+	crushingDamage = 2;
 
 	block = 0;
 	unlifeObject = 0;
@@ -542,7 +545,7 @@ void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
 	pixelY = 0;
 
 	cuttingDamage = 0;
-	crushingDamage = 0;
+	crushingDamage = 1;
 
 	block = 0;
 	unlifeObject = 0;

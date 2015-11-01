@@ -1,11 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 
-// Для динамических списков
-#include <list>
-#include <iterator>
-
-#include "GlobalVar.h"
 #include "TypeItems.h"
 
 struct Item 

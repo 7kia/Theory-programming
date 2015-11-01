@@ -1,4 +1,7 @@
 #include "TypeUnlifeObject.h"
+#include "Paths.h"
+#include "UnlifeObjectVar.h"
+#include "ItemsVar.h"
 
 using namespace sf;
 

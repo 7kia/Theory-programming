@@ -1,10 +1,5 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
-
-// Для динамических списков
-#include <list>     // подключаем заголовок списка
-#include <iterator> // заголовок итераторов
 
 #include "GlobalVar.h"
 #include "Sound.h"

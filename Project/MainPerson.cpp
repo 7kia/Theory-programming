@@ -1,4 +1,8 @@
 #include "MainPerson.h"
+#include "ItemsVar.h"
+#include "EntityVar.h"
+#include "ListObjectsAndBlocks.h"
+#include "Map.h"
 
 using namespace sf;
 using namespace std;
@@ -212,7 +216,7 @@ void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 				int level = items[i].currentLevel;
 				////////////////////////////////////////////////////////////////////
 				// Если нашли предмет
-				if (isItem(x, y, items, findItem, findItemFromList, i, level)) {
+				if (isItem(x, y, items, *findItem, findItemFromList, i, level)) {
 					// Перемещаем в инвентарь
 					printf("added!1\n");
 					itemFromPanelQuickAccess[emptySlot] = items[i];
@@ -309,18 +313,87 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 	movement = { 0.f, 0.f };
 }
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, 
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, vector<Enemy> *enemy,
 												 vector<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
+	int x = xMouse / SIZE_BLOCK;
+	int y = yMouse / SIZE_BLOCK;
 
-	if (currentItem.typeItem != emptyItem->typeItem) {
+	// Сначала наносим урон
+	if (findEnemy != emptyEnemy) {
 
-		int x = xMouse / SIZE_BLOCK;
-		int y = yMouse / SIZE_BLOCK;
-	
+		if (isInUseField(xMouse, yMouse)) {
+			if (event.key.code == Mouse::Left) {
+				if (findEnemy->currentLevelFloor == currentLevelFloor) {
+
+					if (currentItem.isDestroy) {
+						currentItem.currentToughness -= 1;
+					}
+
+					//////////////////////////////////////////////////
+					// Смерть и выпадение предметов
+					if (findEnemy->isDeath) {
+
+						Item* addItem = new Item;
+						TypeEnemy& typeEnemy = *findEnemy->type;
+						int countItem = sizeof(typeEnemy.minCountItems) / sizeof(int);
+
+						int* minAmount = typeEnemy.minCountItems;
+						int* maxAmount = typeEnemy.maxCountItems;
+						int* idItems = typeEnemy.dropItems;
+
+						int currentAmount;
+						for (int i = 0; i < countItem; i++) {
+
+							currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+							for (int j = 0; j < currentAmount; j++) {
+								addItem->setType(typesItems[idItems[i]]);
+								addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+								items->push_back(*addItem);
+
+							}
+
+						}
+						delete addItem;
+						enemy->erase(enemy->begin() + findEnemyFromList);
+
+					}
+					//////////////////////////////////////////////////
+					// Иначе наносим урон
+					else {
+						float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
+						float crashDamage = damageMultiplirer * currentItem.crushingDamage;
+
+						cutDamage *= findEnemy->protectionCut;
+						crashDamage *= findEnemy->protectionCrash;
+
+						findEnemy->inputDamage = cutDamage + crashDamage;
+						findEnemy->currentHealth -= findEnemy->inputDamage;
+
+						findEnemy->timeInputDamage = 0.f;
+					}
+					//////////////////////////////////////////////////
+
+
+
+					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					}
+
+
+				}
+			}
+			//*/					
+		}
+
+	}
+	// Если это не противник
+	else {
+
+
 
 		String* listObjects;
 		wchar_t* listBlocks;
@@ -383,7 +456,6 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 			findTool = false;
 			break;
 		}
-
 
 		switch (currentItem.categoryItem) {
 			////////////////////////////////////////////////////////////////////////
@@ -532,80 +604,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 			break;
 		}
 
-		// Сначала наносим урон
-		if (findEnemy != emptyEnemy) {
-			if (isInUseField(xMouse, yMouse)) {
-				if (event.key.code == Mouse::Left) {
-					if (findEnemy->currentLevelFloor == currentLevelFloor) {
-
-						if (currentItem.isDestroy) {
-							currentItem.currentToughness -= 1;
-						}
-
-						//////////////////////////////////////////////////
-						// Смерть и выпадение предметов
-						if (findEnemy->isDeath) {
-
-							Item* addItem = new Item;
-							TypeEnemy& typeEnemy = *findEnemy->type;
-							int countItem = sizeof(typeEnemy.minCountItems) / sizeof(int);
-
-							int* minAmount = typeEnemy.minCountItems;
-							int* maxAmount = typeEnemy.maxCountItems;
-							int* idItems = typeEnemy.dropItems;
-
-							int currentAmount;
-							for (int i = 0; i < countItem; i++) {
-
-								currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
-								for (int j = 0; j < currentAmount; j++) {
-									addItem->setType(typesItems[idItems[i]]);
-									addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-									items->push_back(*addItem);
-
-								}
-
-							}
-							delete addItem;
-							enemy->erase(enemy->begin() + findEnemyFromList);
-
-						}
-						//////////////////////////////////////////////////
-						// Иначе наносим урон
-						else {
-							float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
-							float crashDamage = damageMultiplirer * currentItem.crushingDamage;
-
-							cutDamage *= findEnemy->protectionCut;
-							crashDamage *= findEnemy->protectionCrash;
-
-							findEnemy->inputDamage = cutDamage + crashDamage;
-							findEnemy->currentHealth -= findEnemy->inputDamage;
-
-							findEnemy->timeInputDamage = 0.f;
-						}
-						//////////////////////////////////////////////////
-
-
-
-						if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-							itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-						}
-
-
-					}
-				}
-				//*/					
-			}
-
-		}
-		// Если это не противник
-
 	}
-		
-		
-		
-	
+
 }
 
 
@@ -726,7 +726,7 @@ void MainPerson::useBlock(float & xMouse, float & yMouse, sf::Event & event, Fie
 
 
 			if (level > -1) {
-				bool successfullUse = false;
+				bool successfullUse;
 
 				// Ставим блок
 				if (currentItem.typeItem->idBlockForUse > -1
@@ -744,6 +744,10 @@ void MainPerson::useBlock(float & xMouse, float & yMouse, sf::Event & event, Fie
 
 					delete addObject;
 					successfullUse = true;
+				}
+				else
+				{
+					successfullUse = false;
 				}
 				
 				////////////////////////////////

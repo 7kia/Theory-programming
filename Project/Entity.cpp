@@ -1,4 +1,8 @@
 #include "Entity.h"
+#include <list>
+#include "Items.h"
+#include "Map.h"
+#include "ListObjectsAndBlocks.h"
 
 using namespace sf;
 using namespace std;
@@ -358,15 +362,16 @@ bool Entity::isEmptySlot()
 }
 //////////////////////////////////////////////////////
 // Поиск неживого объекта
-bool isObject(float x, float y, vector<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, list<UnlifeObject>::iterator &findObjectFromList, list<UnlifeObject>::iterator &current, int currentLevel)
+bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
+							int &findObjectFromList, int &current, int currentLevel)
 {
-	int levelObject = current->currentLevel;
+	int levelObject = unlifeObjects[current].currentLevel;
 
-	Sprite *spriteObject = current->spriteObject;
+	Sprite *spriteObject = unlifeObjects[current].spriteObject;
 	FloatRect objectBound = spriteObject->getGlobalBounds();
 
 	if (objectBound.contains(x, y) && levelObject == currentLevel) {
-		findObject = &*current;
+		findObject = unlifeObjects[current];
 		findObjectFromList = current;
 		return true;
 	}
@@ -374,7 +379,7 @@ bool isObject(float x, float y, vector<UnlifeObject> *unlifeObjects, UnlifeObjec
 }
 //////////////////////////////////////////////////////
 // Поиск предмета
-bool isItem(float x, float y, vector<Item> &items, Item *&findItem, int &findItemFromList, int &current, int currentLevel)
+bool isItem(float x, float y, vector<Item> &items, Item &findItem, int &findItemFromList, int &current, int currentLevel)
 {
 	int levelItem = items[current].currentLevel;
 
@@ -382,7 +387,7 @@ bool isItem(float x, float y, vector<Item> &items, Item *&findItem, int &findIte
 	FloatRect objectItem = spriteItem->getGlobalBounds();
 
 	if (objectItem.contains(x, y) && levelItem == currentLevel) {
-		findItem = &items[current];
+		findItem = items[current];
 		findItemFromList = current;// ИСПРАВЬ
 		return true;
 	}

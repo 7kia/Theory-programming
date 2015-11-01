@@ -1,4 +1,6 @@
 #include "TypeEnemy.h"
+#include "EntityVar.h"
+#include "Paths.h"
 
 using namespace sf;
 

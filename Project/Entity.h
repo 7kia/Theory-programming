@@ -2,7 +2,11 @@
 #include <SFML\Audio.hpp>
 
 #include "TypeEnemy.h"
+#include "Items.h"
+#include "UnlifeObject.h"
 
+struct destroyObjectsAndBlocks;
+struct Field;
 const int AMOUNT_ENTITY = 100;
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
@@ -167,5 +171,7 @@ public:
 
 };
 
-bool isObject(float x, float y, std::vector<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, int &findObjectFromList, int &current, int currentLevel);
-bool isItem(float x, float y, std::vector<Item> &items, Item *&findItem, int &findItemFromList, int &current, int currentLevel);
+bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
+							int &findObjectFromList, int &current, int currentLevel);
+bool isItem(float x, float y, std::vector<Item> &items, Item &findItem,
+						int &findItemFromList, int &current, int currentLevel);
