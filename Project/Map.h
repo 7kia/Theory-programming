@@ -3,8 +3,9 @@
 #include "BlocksVar.h"
 #include "UnlifeObject.h"
 
-const sf::Color UP_BLOCK(350, 350, 350, 127);
-const sf::Color DOWN_BLOCK(127, 127, 127, 255);
+const sf::Color UP_VIEW(255, 255, 255, 150);
+const sf::Color NORMAL_VIEW(255, 255, 255, 255);
+const sf::Color DOWN_VIEW(127, 127, 127, 255);
 
 const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 {

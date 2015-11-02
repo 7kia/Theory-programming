@@ -159,7 +159,7 @@ public:
 	
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
-	bool isInUseField(float x, float y);
+	bool isInUseField(float x, float y, bool under);
 	
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты

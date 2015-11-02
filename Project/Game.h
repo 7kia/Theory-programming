@@ -12,7 +12,7 @@
 #include "Map.h"
 
 
-const sf::String TITLE_PROGRAM = "MainGame v1.4.0";
+const sf::String TITLE_PROGRAM = "MainGame v1.4.1";
 
 struct Game
 {

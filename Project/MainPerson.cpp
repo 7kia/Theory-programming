@@ -27,7 +27,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.timeAnimation = 0.f;
 
 	// Камера
-	int posX(70), posY(70);
+	int posX(64), posY(64);
 	mainPerson.view = new View;
 	mainPerson.view->setSize(640, 480);
 	mainPerson.view->setCenter(posX, posY);
@@ -206,10 +206,11 @@ void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
 
 void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 {
-	if (isInUseField(x, y)) {
-		//////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Если есть место
-		if (isEmptySlot()) {
+	if (findItem->typeItem != emptyItem->typeItem) {
+		if (isInUseField(x, y, true)) {
+			//////////////////////////////////////////////////////////////////////////////////////////////////////
+			// Если есть место
+			if (isEmptySlot()) {
 
 
 				////////////////////////////////////////////////////////////////////
@@ -230,8 +231,9 @@ void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 				////////////////////////////////////////////////////////////////////
 
 
+			}
+			//////////////////////////////////////////////////////////////////////////////////////////////////////
 		}
-		//////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
 }
 
@@ -327,7 +329,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 	// Сначала наносим урон
 	if (findEnemy != emptyEnemy && event.key.code == Mouse::Left) {
 
-		if (isInUseField(xMouse, yMouse)) {
+		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
 				if (currentItem.isDestroy) {
@@ -532,7 +534,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 			////////////////////////////////////////////////////////////////////////
 			// Бутылки
 		case idCategoryItem::bukketEmpty:// ИСПРАВЬ
-			if (isInUseField(xMouse, yMouse)) {
+			if (isInUseField(xMouse, yMouse, true)) {
 				// Наполнение бутылки
 
 				int level;
@@ -565,7 +567,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 			}
 			break;
 		case idCategoryItem::bottleEmpty:// ИСПРАВЬ
-			if (isInUseField(xMouse, yMouse)) {
+			if (isInUseField(xMouse, yMouse, true)) {
 
 				// Наполнение бутылки
 
@@ -618,7 +620,7 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 												 String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
 												 Item &currentItem,
 												 TypeItem *typesItems, vector<Item> *items, vector<UnlifeObject> *unlifeObjects) {
-	if (isInUseField(xMouse, yMouse)) {
+	if (isInUseField(xMouse, yMouse, true)) {
 		if (event.type == Event::MouseButtonPressed) {
 
 			int level;
@@ -707,7 +709,7 @@ void MainPerson::useBlock(float & xMouse, float & yMouse, sf::Event & event, Fie
 													Item & currentItem, TypeItem * typesItems, vector<Item>* items,
 													TypeUnlifeObject * typesUnlifeObjects, vector<UnlifeObject>* unlifeObjects)
 {
-	if (isInUseField(xMouse, yMouse)) {
+	if (isInUseField(xMouse, yMouse, false)) {
 		if (event.type == Event::MouseButtonPressed) {
 
 			int x = xMouse / SIZE_BLOCK;
@@ -794,7 +796,7 @@ bool MainPerson::isInListObjects(String* listObjects, int sizeString) {
 void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
 														vector<Item> *items, float xPos, float yPos)
 {
-	if (isInUseField(xPos, yPos)) {
+	if (isInUseField(xPos, yPos, true)) {
 		/////////////////////////////////////////////////////////////////////////////
 		// Взаимодейстиве с блоками
 		if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
@@ -821,7 +823,7 @@ void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, d
 void MainPerson::actionAlternate(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
 																 vector<Item> *items, float xPos, float yPos)
 {
-	if (isInUseField(xPos, yPos)) {
+	if (isInUseField(xPos, yPos, true)) {
 		/////////////////////////////////////////////////////////////////////////////
 		// Взаимодейстиве с блоками
 		if (currentLevelFloor >= 1) {

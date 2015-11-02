@@ -393,7 +393,7 @@ bool isItem(float x, float y, vector<Item> &items, Item &findItem, int &findItem
 }
 //////////////////////////////////////////////////////
 
-bool Entity::isInUseField(float x, float y)
+bool Entity::isInUseField(float x, float y, bool under)
 {
 	int xPosBlock = x / SIZE_BLOCK;
 	int yPosBlock = y / SIZE_BLOCK;
@@ -404,10 +404,15 @@ bool Entity::isInUseField(float x, float y)
 	bool checkY = (((getYPos() + height / 2) / SIZE_BLOCK) + radiusUse > yPosBlock)
 		&& (((getYPos() + height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= yPosBlock);
 
-	bool checkUnderPerson = xPosBlock != ( (int)getXPos() / SIZE_BLOCK)
-		|| yPosBlock != ((int)getYPos() / SIZE_BLOCK);
+	bool checkUnderPerson = xPosBlock == (((int)getXPos() + SIZE_BLOCK / 2) / SIZE_BLOCK)
+		&& yPosBlock == (((int)getYPos() + SIZE_BLOCK / 2) / SIZE_BLOCK);
 
-	if (checkX && checkY && checkUnderPerson) return true;
+	if (checkX && checkY) {
+		{
+			if (checkUnderPerson && !under) return false;
+			return true;
+		}
+	}
 
 	return false;
 }

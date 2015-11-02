@@ -139,7 +139,7 @@ void processEvents(Game &game)
 				if (mainPerson.isMoveItem) {
 
 
-					if (mainPerson.isInUseField(pos.x, pos.y)) {
+					if (mainPerson.isInUseField(pos.x, pos.y, false)) {
 						Vector2f position = { pos.x - mainPerson.dMoveItemX, pos.y - mainPerson.dMoveItemY };
 						if (mainPerson.findObject != emptyObject) {
 							Sprite &spriteObject = *mainPerson.findObject->spriteObject;
@@ -206,8 +206,8 @@ void render(Game & game)
 	while (l < HEIGHT_MAP)
 	{
 		// Рисуем только текущий уровень
-		if (l == mainPerson.currentLevelFloor
-			|| l == mainPerson.currentLevelFloor + 1)
+		if (l >= mainPerson.currentLevelFloor - 1
+			&& l <= mainPerson.currentLevelFloor + 2)
 		{
 			for (int i = 0; i < LONG_MAP; i++)
 			{
@@ -215,8 +215,9 @@ void render(Game & game)
 				{
 					field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
-					window.draw(*field.floorSprite);
 					window.draw(*field.wallSprite);
+					window.draw(*field.floorSprite);
+
 				}
 			}
 		}
@@ -228,7 +229,20 @@ void render(Game & game)
 	// Отрисовка предметов
 	vector<Item> &items = *game.items;
 	for (int i = 0; i != items.size(); ++i) {
-		if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 1) {
+		if (items[i].currentLevel >= game.mainPerson->currentLevelFloor
+				&& items[i].currentLevel <= game.mainPerson->currentLevelFloor + 2) {
+
+
+			if (items[i].currentLevel == game.mainPerson->currentLevelFloor)
+			{
+				items[i].mainSprite->setColor(DOWN_VIEW);
+			}
+			else if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 1) {
+				items[i].mainSprite->setColor(NORMAL_VIEW);
+			}
+			else if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 2) {
+				items[i].mainSprite->setColor(UP_VIEW);
+			}
 
 			window.draw(*items[i].mainSprite);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
@@ -246,11 +260,27 @@ void render(Game & game)
 
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
+	int currentLevel = game.mainPerson->currentLevelFloor;
 	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
 	for (int i = 0; i != unlifeObjects.size(); ++i)
 	{
-		if (unlifeObjects[i].currentLevel == game.mainPerson->currentLevelFloor + 1)
+		if (unlifeObjects[i].currentLevel >= currentLevel
+				&& unlifeObjects[i].currentLevel <= currentLevel + 2)
 		{
+			if (unlifeObjects[i].currentLevel == currentLevel)
+			{
+				unlifeObjects[i].spriteObject->setColor(DOWN_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(DOWN_VIEW);
+			}
+			else if (unlifeObjects[i].currentLevel == currentLevel + 1)
+			{
+				unlifeObjects[i].spriteObject->setColor(NORMAL_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(NORMAL_VIEW);
+			}
+			else if (unlifeObjects[i].currentLevel == currentLevel + 2) {
+				unlifeObjects[i].spriteObject->setColor(UP_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(UP_VIEW);
+			}
 
 			window.draw(*unlifeObjects[i].spriteObject);
 			window.draw(*unlifeObjects[i].transparentSpiteObject);

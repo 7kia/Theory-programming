@@ -380,7 +380,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int shiftBar;
 
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor
+		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
 				&& i == mainPerson.findEnemyFromList) {
 
 			shiftBar = enemy[i].maxMana > 0;
@@ -493,7 +494,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	////////////////////////////////////////////////////////////////
 	// для противников
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor
+		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
 				&& i == mainPerson.findEnemyFromList) {
 
 			if (enemy[i].maxStamina) {
@@ -589,7 +591,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	// для противников
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor == mainPerson.currentLevelFloor
+		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
 				&& i == mainPerson.findEnemyFromList) {
 
 			if (enemy[i].maxMana) {

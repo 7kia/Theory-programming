@@ -136,12 +136,23 @@ void renderEntitys(Game &game)// ƒŒ¡¿¬À≈Õ»≈ —”ŸÕŒ—“»
 	vector<Enemy>& Enemys = *game.Enemys;
 
 	for (int i = 0; i != Enemys.size(); ++i) {
-		if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor) {
 
+
+		if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor - 1) {
+			Enemys[i].spriteEntity->setColor(DOWN_VIEW);
 			window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// »—œ–¿¬‹
 		}
-
+		else if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor) {
+			Enemys[i].spriteEntity->setColor(NORMAL_VIEW);
+			window.draw(*Enemys[i].spriteEntity);
+			//window.draw(*game.items->item[i].spriteForUse);// »—œ–¿¬‹
+		}
+		else if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor + 1) {
+			Enemys[i].spriteEntity->setColor(UP_VIEW);
+			window.draw(*Enemys[i].spriteEntity);
+			//window.draw(*game.items->item[i].spriteForUse);// »—œ–¿¬‹
+		}
 	}
 
 }
@@ -168,8 +179,8 @@ void informationAboutSelect(Game &game, float x, float y)
 	infoFloor.setString("Floor : not select");
 	for (int l = 0; l < HEIGHT_MAP; l++) {
 	// –ËÒÛÂÏ ÚÓÎ¸ÍÓ ÚÂÍÛ˘ËÈ ÛÓ‚ÂÌ¸
-	if (l == game.mainPerson->currentLevelFloor
-		|| l == game.mainPerson->currentLevelFloor + 1) {
+	if (l >= game.mainPerson->currentLevelFloor - 1
+		&& l <= game.mainPerson->currentLevelFloor + 2) {
 		for (int i = 0; i < LONG_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 
@@ -207,7 +218,8 @@ void informationAboutSelect(Game &game, float x, float y)
 		FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) || objectAltBound.contains(x, y)) {
-			if (level == game.mainPerson->currentLevelFloor + 1) {
+			if (level >= game.mainPerson->currentLevelFloor
+					&& level <= game.mainPerson->currentLevelFloor + 1) {
 				String name = unlifeObjects[i].typeObject->name;
 				if (name != "") {
 
@@ -238,7 +250,8 @@ void informationAboutSelect(Game &game, float x, float y)
 		FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
 
 		if (itemBound.contains(x, y) || itemUseBound.contains(x, y)) {
-			if (level == game.mainPerson->currentLevelFloor + 1) {
+			if (level >= game.mainPerson->currentLevelFloor
+					&& level <= game.mainPerson->currentLevelFloor + 2) {
 				String name = items[i].typeItem->name;
 				if (name != "") {
 					game.mainPerson->findItemFromList = i;
@@ -265,7 +278,8 @@ void informationAboutSelect(Game &game, float x, float y)
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y)) {
-			if (level == game.mainPerson->currentLevelFloor) {
+			if (level >= game.mainPerson->currentLevelFloor - 1
+					&& level <= game.mainPerson->currentLevelFloor + 1) {
 				String name = Enemys[i].type->name;
 				if (name != "") {
 
