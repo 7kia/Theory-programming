@@ -44,7 +44,7 @@ void initializeTexts(TextGame &textGame)
 	////////////////////////////////////////////////////////////////////
 
 	currentText = &textGame.texts[idText::mainPersonIsDeath];
-	currentText->setColor(Color::Black);
+	currentText->setColor(Color::White);
 	currentText->setStyle(Text::Regular | Text::Underlined);
 	currentText->setFont(*textGame.font);
 	currentText->setCharacterSize(SIZE_BIG_TEXT);

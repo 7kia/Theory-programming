@@ -23,9 +23,13 @@ public:
 
 	// ƒл€ движени€
 	Direction direction;
+	Direction directionLook;
 	float stepFirst;
 	float stepCurrent;
-	float timeAnimation;
+
+	bool atack;
+	float timeAnimation = 0.f;
+	float timeFightAnimation = 0.f;
 	sf::Vector2f movement;
 
 	// —сылки на звуки

@@ -12,9 +12,6 @@ const float maxTimeWalk = 12.f;
 class Enemy : public Entity
 {
 public:
-	// режимы персонажа
-	int mode;
-
 	// Для направления взгляда
 	float rotation;
 

@@ -3,6 +3,7 @@
 #include "Items.h"
 #include "Map.h"
 #include "ListObjectsAndBlocks.h"
+#include "EntityVar.h"
 
 using namespace sf;
 using namespace std;
@@ -121,102 +122,188 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	///////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////
 
-	float pauseStep = 5, resetAnimation = 2;
-	switch (direction)
+	float pauseStep = 5, resetAnimation = 4;
+
+	if (currenMode == idEntityMode::walk) {
+		switch (direction) {
+		case UP_LEFT:
+			directionLook = UP_LEFT;
+			movement.y = -stepCurrent;
+			movement.x = -stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+
+			spriteEntity->setTextureRect(IntRect(2 * width, height * int(timeAnimation), -width, height));
+			break;
+		case UP_RIGHT:
+			directionLook = UP_RIGHT;
+			movement.y = -stepCurrent;
+			movement.x = stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+			spriteEntity->setTextureRect(IntRect(width, height * int(timeAnimation), width, height));
+			break;
+		case UP:
+			directionLook = UP;
+			movement.y = -stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+			spriteEntity->setTextureRect(IntRect(0, height * int(timeAnimation), width, height));
+			break;
+		case DOWN_LEFT:
+			directionLook = DOWN_LEFT;
+			movement.y = stepCurrent;
+			movement.x = -stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+
+
+			spriteEntity->setTextureRect(IntRect(4 * width, height * int(timeAnimation), -width, height));
+			break;
+		case DOWN_RIGHT:
+			directionLook = DOWN_RIGHT;
+			movement.y = stepCurrent;
+			movement.x = stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+			spriteEntity->setTextureRect(IntRect(3 * width, height * int(timeAnimation), width, height));
+			break;
+		case DOWN:
+			directionLook = DOWN;
+			movement.y = stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+			spriteEntity->setTextureRect(IntRect(4 * width, height * int(timeAnimation), width, height));
+			break;
+		case LEFT:
+			directionLook = LEFT;
+			movement.x = -stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+			spriteEntity->setTextureRect(IntRect(3 * width, height * int(timeAnimation), -width, height));
+			break;
+		case RIGHT:
+			directionLook = RIGHT;
+			movement.x = stepCurrent;
+
+			playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+			timeAnimation += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(timeAnimation, resetAnimation);
+
+			spriteEntity->setTextureRect(IntRect(2 * width, height * int(timeAnimation), width, height));
+			break;
+		case NONE:
+			movement.x = 0;
+			movement.y = 0;
+			break;
+		default:
+			break;
+		}
+	}
+
+
+	if(currentTimeOutputDamage > 0)
 	{
-	case UP_LEFT:
-		movement.y = -stepCurrent;
-		movement.x = -stepCurrent;
+		resetAnimation = 3;
+		int shiftAnimation = 4;
+		switch (directionLook) {
+		case UP_LEFT:
+			// TODO
+			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
+			spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+			break;
+		case UP_RIGHT:
+			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 2, width, height));
-		break;
-	case UP_RIGHT:
-		movement.y = -stepCurrent;
-		movement.x = stepCurrent;
+			spriteEntity->setTextureRect(IntRect(width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+			break;
+		case UP:
+			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
+			spriteEntity->setTextureRect(IntRect(0, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+			break;
+		case DOWN_LEFT:
+			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 2, width, height));
-		break;
-	case UP:
-		movement.y = -stepCurrent;
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+			spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+			break;
+		case DOWN_RIGHT:
+			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *  width, height * 2, width, height));
-		break;
-	case DOWN_LEFT:
-		movement.y = stepCurrent;
-		movement.x = -stepCurrent;
+			spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+			break;
+		case DOWN:
+			//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
+			spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+			break;
+		case LEFT:
+			//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
+			spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+			break;
+		case RIGHT:
+			//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
-		break;
-	case DOWN_RIGHT:
-		movement.y = stepCurrent;
-		movement.x = stepCurrent;
+			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, 0, width, height));
-		break;
-	case DOWN:
-		movement.y = stepCurrent;
-
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation * width, 0, width, height));
-		break;
-	case LEFT:
-		movement.x = -stepCurrent;
-		
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect((int)timeAnimation *   width, height, width, height));
-		break;
-	case RIGHT:
-		movement.x = stepCurrent;
-
-		playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		timeAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(timeAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(((int)timeAnimation + 1) *   width, height, -width, height));
-		break;
-	case NONE:
-		movement.x = 0;
-		movement.y = 0;
-		break;
-	default:
-		break;
+			spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+			break;
+		default:
+			break;
+		}
 	}
 }
 

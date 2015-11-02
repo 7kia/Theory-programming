@@ -7,7 +7,7 @@ const Time TIME_PER_FRAME = seconds(1.f / 60.f);
 using namespace sf;
 using namespace std;
 
-void processEvents(Game &game)
+void processEvents(Game &game, const Time &deltaTime)
 {
 	Event event;
 	RenderWindow &window = *game.window;
@@ -130,7 +130,7 @@ void processEvents(Game &game)
 			// Îþðàáîòêà ùåë÷êà ìûøè
 			if (event.type == Event::MouseButtonPressed) {
 				// Èñïîëüçîâàíèå ïðåäìåòà
-				mainPerson.useItem(*game.field, *game.listDestroy, 
+				mainPerson.useItem(*game.field, *game.listDestroy, deltaTime,
 													 game.typesItem->typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
 													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ÈÑÏÐÀÂÜ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ÈÑÏÐÀÂÜ
@@ -312,7 +312,7 @@ void startGame()
 		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());// ÈÑÏÐÀÂÜ
 		while (timeSinceLastUpdate > TIME_PER_FRAME) {
 			timeSinceLastUpdate -= TIME_PER_FRAME;
-			processEvents(*game);
+			processEvents(*game, TIME_PER_FRAME);
 			////////////////////////////////////////////////////////////
 			// Åñëè ïåðñîíàæ æèâ
 			if (mainPerson.isDeath == false) {
@@ -328,8 +328,8 @@ void startGame()
 					
 					Enemys[i].update(TIME_PER_FRAME, *game->databaseSound);
 					Enemys[i].interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
+					mainPerson.attractionEnemy(&Enemys[i], TIME_PER_FRAME);
 					Enemys[i].randomWalk(TIME_PER_FRAME);
-					mainPerson.attractionEnemy(Enemys[i], TIME_PER_FRAME);
 
 				}
 				/////////////////////////////////////

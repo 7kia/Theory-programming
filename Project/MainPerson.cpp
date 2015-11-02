@@ -61,8 +61,15 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.currentLevelFloor = 0;
 	mainPerson.currenMode = idEntityMode::walk;
 	mainPerson.spriteEntity->setPosition(posX, posY);
-	mainPerson.direction = NONE;
 
+	mainPerson.timeAnimation = 0.f;
+	mainPerson.timeFightAnimation = 0.f;
+
+	mainPerson.currentTimeOutputDamage = 0.f;
+	mainPerson.timeOutputDamage = 1.f;
+
+	mainPerson.direction = NONE;
+	mainPerson.directionLook = DOWN;
 
 	// Показатели
 	mainPerson.currentHealth = 45;
@@ -125,24 +132,25 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	inputDamage = 0;// TODO
 }
 
-void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
+void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 {
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
 	Vector2f movemoment;
 	float distanse;
 
-	enemyPoint = enemy.spriteEntity->getPosition();
+	enemyPoint = enemy->spriteEntity->getPosition();
 
 	distanse = distansePoints(personPoint, enemyPoint);
 	// Если увидел
-	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
-		enemy.mode = idEntityMode::fight;
+	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy->currentLevelFloor) {
 		// Вплотную не подходим
-		
+		atack = false;
+		enemy->currenMode = idEntityMode::fight;
 		if (distanse >= SIZE_BLOCK) {
 			// Обнуляем время нанесения урона
-			enemy.currentTimeOutputDamage = 0.f;
+			atack = false;
+			enemy->currentTimeOutputDamage = 0.f;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
 
@@ -154,31 +162,39 @@ void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
 			bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
 
 			if (movemoment.x > zero && movemoment.y > zero) {
-				enemy.direction = DOWN_RIGHT;
+				enemy->direction = DOWN_RIGHT;
+				enemy->directionLook = DOWN_RIGHT;
 			}
 			else if (movemoment.x < -zero && movemoment.y > zero) {
-				enemy.direction = DOWN_LEFT;
+				enemy->direction = DOWN_LEFT;
+				enemy->directionLook = DOWN_LEFT;
 			}
 			else if (movemoment.x < -zero && movemoment.y < -zero) {
-				enemy.direction = UP_LEFT;
+				enemy->direction = UP_LEFT;
+				enemy->directionLook = UP_LEFT;
 			}
 			else if (movemoment.x > zero && movemoment.y < zero) {
-				enemy.direction = UP_RIGHT;
+				enemy->direction = UP_RIGHT;
+				enemy->directionLook = UP_RIGHT;
 			}
 			else if (movemoment.y > zero && xAboutZero) {
-				enemy.direction = DOWN;
+				enemy->direction = DOWN;
+				enemy->directionLook = DOWN;
 			}
 			else if (movemoment.y < -zero && xAboutZero) {
-				enemy.direction = UP;
+				enemy->direction = UP;
+				enemy->directionLook = UP;
 			}
 			else if (movemoment.x > zero && yAboutZero) {
-				enemy.direction = RIGHT;
+				enemy->direction = RIGHT;
+				enemy->directionLook = RIGHT;
 			}
 			else if (movemoment.x < -zero && yAboutZero) {
-				enemy.direction = LEFT;
+				enemy->direction = LEFT;
+				enemy->directionLook = LEFT;
 			}
 			else {
-				enemy.direction = NONE;
+				enemy->direction = NONE;
 			}
 
 			/*
@@ -186,19 +202,20 @@ void MainPerson::attractionEnemy(Enemy & enemy, const Time &deltaTime)
 			*/
 		}
 		else {
-			enemy.currentTimeOutputDamage += deltaTime.asSeconds();
-			if (enemy.currentTimeOutputDamage > enemy.timeOutputDamage) {
-				enemy.currentTimeOutputDamage = 0;
-				givenForPersonDamage(enemy);
+			enemy->currenMode = idEntityMode::fight;
+			enemy->currentTimeOutputDamage += deltaTime.asSeconds();
+			if (enemy->currentTimeOutputDamage > enemy->timeOutputDamage) {
+				enemy->currentTimeOutputDamage = 0;
+				givenForPersonDamage(*enemy);
 			}
 			
-			enemy.direction = NONE;
+			enemy->direction = NONE;
 		}
 
 	}
 	// Идём дальше
 	else {
-		enemy.mode = idEntityMode::walk;
+		enemy->currenMode = idEntityMode::walk;
 	}
 
 }
@@ -317,7 +334,7 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 	movement = { 0.f, 0.f };
 }
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
+void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
 												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, vector<Enemy> *enemy,
 												 vector<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
@@ -327,7 +344,9 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 	int y = yMouse / SIZE_BLOCK;
 
 	// Сначала наносим урон
-	if (findEnemy != emptyEnemy && event.key.code == Mouse::Left) {
+	if (findEnemy != emptyEnemy //&& event.type == Event::MouseButtonPressed
+			//&& event.type == Event::MouseMoved
+			&& event.key.code == Mouse::Left) {
 
 		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
@@ -367,7 +386,13 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 				//////////////////////////////////////////////////
 				// Иначе наносим урон
 				else {
-					float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
+					
+					currentTimeOutputDamage += deltaTime.asSeconds();
+					// TODO
+					//printf("Time %f\n", currentTimeOutputDamage);
+					//if (currentTimeOutputDamage > timeOutputDamage) {
+					//	currentTimeOutputDamage = 0;
+						float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
 					float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
 					cutDamage *= findEnemy->protectionCut;
@@ -377,6 +402,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy,
 					findEnemy->currentHealth -= findEnemy->inputDamage;
 
 					findEnemy->timeInputDamage = 0.f;
+					//}
+					
 				}
 				//////////////////////////////////////////////////
 
