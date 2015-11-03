@@ -429,6 +429,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 		bool findTool = true;
 
+		// useTool(mouse, world, currentItem);
 		switch (currentItem.categoryItem) {
 			////////////////////////////////////////////////////////////////////////
 			// Лопата
@@ -439,6 +440,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 			listBlocks = listDestroy.backoeBreakingBlock;
 
+			// useBackhoe(mouse, world, currentItem);
 			useTool(xMouse, yMouse, event, field,
 							listObjects, listBlocks, sizeListObjects,
 							currentItem,

@@ -36,7 +36,7 @@ void initializeGame(Game & game)
 
 	// Неживые объекты
 	initializeTypeUnlifeObjects(*game.typesUnlifeObject, *game.databaseSound);
-	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
+	initialiunzeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
 
 	// Предметы
 	initializeTypesItem(*game.typesItem, *game.databaseSound);

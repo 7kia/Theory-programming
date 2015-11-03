@@ -3,6 +3,11 @@
 
 #include "Sound.h"
 
+struct sizeMainSprite
+{
+	
+};
+
 struct TypeItem {
 public:
 	// Текструра
