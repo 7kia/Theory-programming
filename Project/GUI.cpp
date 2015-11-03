@@ -308,7 +308,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 					////////////////
 					// Голод
-					if (currentItem.typeItem->features.category == idCategoryItem::food) {
+					if (categoryItem == idCategoryItem::food) {
 						hungrySprite->setPosition(pos);
 						hungrySprite->setScale(SCALE_FEATURES);
 						window.draw(*hungrySprite);

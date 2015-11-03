@@ -316,6 +316,7 @@ void startGame()
 			////////////////////////////////////////////////////////////
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
+
 				mainPerson.update(TIME_PER_FRAME, *game->databaseSound);
 				mainPerson.interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);

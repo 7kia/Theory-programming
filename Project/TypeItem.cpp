@@ -149,7 +149,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_LOG_OAK, PIXEL_Y_LOG_OAK);
 
-	damage.init(0, 10);
+	damage.init(1, 5);
 
 	idCreated.init(idBlocks::logOak, idUnlifeObject::NONE_OBJECT);
 
@@ -198,7 +198,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 
 	typesItem[numberItem] = addType;
 	/////////////////////////////
-	// Деревянное ведро
+	// Деревянное ведро с водой
 	numberItem = idItem::woodBukketWithWaterItem;
 
 	featuresAddItem.init("Wood bukket with water", numberItem, idCategoryItem::bukketWithWater);
@@ -509,13 +509,8 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 	features.name = featuresAddItem.name;
 	features.id = featuresAddItem.id;
 
-	damageItem.cuttingDamage = damage.crushingDamage;// Режущий
+	damageItem.cuttingDamage = damage.cuttingDamage;// Режущий
 	damageItem.crushingDamage = damage.crushingDamage;// Дробящий
-
-	// У разрушаемых предметов недолжно быть прочности
-	if (features.isDestroy == false) {
-		features.toughness = 0;
-	}
 
 	switch (features.category) {
 	case idCategoryItem::block:

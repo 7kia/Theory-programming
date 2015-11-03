@@ -39,10 +39,10 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="MyMath.cpp">
+    <ClCompile Include="TypeItems.cpp" />
+    <ClCompile Include="MyFunctions.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="TypeItems.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -96,10 +96,10 @@
     <ClInclude Include="Enemy.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="MyMath.h">
+    <ClInclude Include="Recourses.h" />
+    <ClInclude Include="MyFunctions.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Recourses.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GUI and Font">

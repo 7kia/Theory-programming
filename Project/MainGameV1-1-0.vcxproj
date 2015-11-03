@@ -32,7 +32,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="ItemsVar.h" />
     <ClInclude Include="BlocksVar.h" />
-    <ClInclude Include="MyMath.h" />
+    <ClInclude Include="MyFunctions.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="TypeEnemy.h" />
     <ClInclude Include="TypeItems.h" />
@@ -51,7 +51,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainPerson.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MyMath.cpp" />
+    <ClCompile Include="MyFunctions.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="TypeEnemy.cpp" />
     <ClCompile Include="TypeItem.cpp" />

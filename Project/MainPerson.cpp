@@ -144,17 +144,12 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 	distanse = distansePoints(personPoint, enemyPoint);
 	// Если увидел
 	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy->currentLevelFloor) {
-		// Вплотную не подходим
-		atack = false;
 		enemy->currenMode = idEntityMode::fight;
 		if (distanse >= SIZE_BLOCK) {
-			// Обнуляем время нанесения урона
-			atack = false;
 			enemy->currentTimeOutputDamage = 0.f;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
 
-			//printf("vector %f %f\n", movemoment.x, movemoment.y);// TODO
 			// TODO:
 			float zero = SIZE_BLOCK / 2;
 
@@ -177,19 +172,19 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 				enemy->direction = UP_RIGHT;
 				enemy->directionLook = UP_RIGHT;
 			}
-			else if (movemoment.y > zero && xAboutZero) {
+			else if (movemoment.y >= zero && xAboutZero) {
 				enemy->direction = DOWN;
 				enemy->directionLook = DOWN;
 			}
-			else if (movemoment.y < -zero && xAboutZero) {
+			else if (movemoment.y <= -zero && xAboutZero) {
 				enemy->direction = UP;
 				enemy->directionLook = UP;
 			}
-			else if (movemoment.x > zero && yAboutZero) {
+			else if (movemoment.x >= zero && yAboutZero) {
 				enemy->direction = RIGHT;
 				enemy->directionLook = RIGHT;
 			}
-			else if (movemoment.x < -zero && yAboutZero) {
+			else if (movemoment.x <= -zero && yAboutZero) {
 				enemy->direction = LEFT;
 				enemy->directionLook = LEFT;
 			}
@@ -202,13 +197,14 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 			*/
 		}
 		else {
-			enemy->currenMode = idEntityMode::fight;
+			//printf("vector %f %f\n", movemoment.x, movemoment.y);// TODO
+			printf("%f %d\n", distanse, enemy->direction);
 			enemy->currentTimeOutputDamage += deltaTime.asSeconds();
 			if (enemy->currentTimeOutputDamage > enemy->timeOutputDamage) {
-				enemy->currentTimeOutputDamage = 0;
+				enemy->currentTimeOutputDamage = 0.f;
 				givenForPersonDamage(*enemy);
 			}
-			
+			enemy->currenMode = idEntityMode::fight;
 			enemy->direction = NONE_DIRECTION;
 		}
 
@@ -351,6 +347,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
+				currenMode = idEntityMode::fight;
+
 				bool isDestroy = currentItem.typeItem->features.isDestroy;
 				if (isDestroy) {
 					currentItem.currentToughness -= 1;
@@ -426,6 +424,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 	}
 	// Если это не противник
 	else {
+
+		currenMode = idEntityMode::walk;
 
 		String* listObjects;
 		wchar_t* listBlocks;

@@ -1,4 +1,4 @@
-#include "MyMath.h"
+#include "MyFunctions.h"
 
 using namespace sf;
 using namespace std;

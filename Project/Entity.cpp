@@ -26,6 +26,17 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 	}
 
+	/*
+	if (outputDamage) {
+		currentTimeOutputDamage += deltaTime.asSeconds();
+		if (currentTimeOutputDamage > timeOutputDamage) {
+			currentTimeOutputDamage = 0;
+
+			outputDamage = 0;
+		}
+	}
+	*/
+
 	///////////////////////////////////////
 	// Маны
 	timeForMana += deltaTime.asSeconds();

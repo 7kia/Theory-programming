@@ -12,7 +12,7 @@
 #include "BlocksVar.h"
 #include "UnlifeObjectVar.h"
 
-#include "MyMath.h"
+#include "MyFunctions.h"
 
 const sf::String stringDeathPerson = "DEATH";
 
