@@ -104,7 +104,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 
 	timeAnimation = 0.f;
 	timeFightAnimation = 0.f;
-	direction = NONE;
+	direction = NONE_DIRECTION;
 	directionLook = DOWN;
 
 	////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ Enemy::~Enemy()
 void Enemy::randomWalk(const Time &deltaTime) {
 
 	if (currenMode == idEntityMode::walk) {
-		if (currentTime < timeWalk && direction != Direction::NONE) {
+		if (currentTime < timeWalk && direction != Direction::NONE_DIRECTION) {
 
 			currentTime += deltaTime.asSeconds();
 

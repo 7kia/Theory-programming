@@ -1,5 +1,5 @@
 #include "TypeUnlifeObject.h"
-#include "Paths.h"
+#include "Recourses.h"
 #include "UnlifeObjectVar.h"
 #include "ItemsVar.h"
 

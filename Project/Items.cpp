@@ -4,103 +4,23 @@
 using namespace sf;
 using namespace std;
 
-void initializeItems(vector<Item> &items, TypesItem *typesItem, Item &emptyItem)
+void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 {
 
 	Item* addItem = new Item;
 
 	// Ïóñòîé ïðåäìåò
-	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ÈÑÏÐÀÂÜ
+	emptyItem.setType(typesItem[idItem::emptyItem]);// ÈÑÏÐÀÂÜ
 
-	for (size_t i = 0; i < 2; i++) {
-		addItem->setType(typesItem->typesItem[idItem::stoneItem]);
-		addItem->setPosition(2, 2, 1);
+	for (size_t i = idItem::airItem + 1; i < AMOUNT_TYPES_ITEM; i++) {
+		for (size_t countItem = 1; countItem <= 4; countItem++)
+		{
+				addItem->setType(typesItem[i]);
+		addItem->setPosition(i / 2 + 2, i % 3 + 2, 1);
 		items.push_back(*addItem);
+		// ÄÎÁÀÂËÅÍÈÅ ÏÐÅÄÌÅÒÀ	
+		}
 
-		addItem->setType(typesItem->typesItem[idItem::planksBlockItem]);
-		addItem->setPosition(2, 3, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::dirtItem]);
-		addItem->setPosition(3, 2, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::grassItem]);
-		addItem->setPosition(3, 4, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::glassBottleItem]);
-		addItem->setPosition(3, 5, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::glassbukketWithWater]);
-		addItem->setPosition(4, 2, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::sandItem]);
-		addItem->setPosition(4, 3, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::logOakItem]);
-		addItem->setPosition(4, 4, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stonePickaxItem]);
-		addItem->setPosition(5, 2, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stoneAxeItem]);
-		addItem->setPosition(5, 3, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::ironBackHoerIte]);
-		addItem->setPosition(5, 4, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodLadderItem]);
-		addItem->setPosition(6, 2, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stoneBrickItem]);
-		addItem->setPosition(6, 3, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodBukketItem]);
-		addItem->setPosition(6, 4, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodBukketWithWaterItem]);
-		addItem->setPosition(7, 2, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodClubItem]);
-		addItem->setPosition(7, 3, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stoneKnifeItem]);
-		addItem->setPosition(7, 4, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::mushroomItem]);// ÈÑÏÐÀÂÜ
-		addItem->setPosition(8, 2, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::rawMeatWolfItem]);// ÈÑÏÐÀÂÜ
-		addItem->setPosition(8, 3, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::roastMeatWolfItem]);// ÈÑÏÐÀÂÜ
-		addItem->setPosition(8, 4, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::seadlingOakItem]);// ÈÑÏÐÀÂÜ
-		addItem->setPosition(9, 2, 1);
-		items.push_back(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::appleItem]);// ÈÑÏÐÀÂÜ
-		addItem->setPosition(9, 3, 1);
-		items.push_back(*addItem);
-		// ÄÎÁÀÂËÅÍÈÅ ÏÐÅÄÌÅÒÀ
 	}
 
 	delete addItem;
@@ -145,28 +65,34 @@ float Item::getYPos()
 void Item::setType(TypeItem &type)
 {
 	mainSprite = new Sprite;
-	spriteForUse = new Sprite;
 
 	typeItem = &type;
-	categoryItem = type.category;
-	isDestroy = type.isDestroy;
-
-	cuttingDamage = type.cuttingDamage;
-	crushingDamage = type.crushingDamage;
 
 	mainSprite->setTexture(*type.textureItem);
-	mainSprite->setTextureRect(IntRect(type.pixelPosX, type.pixelPosY, type.width, type.height));
+
+	int pixelXPos = type.sizeMain.pixelPosX;
+	int pixelYPos = type.sizeMain.pixelPosY;
+	int width = type.sizeMain.width;
+	int height = type.sizeMain.height;
+	mainSprite->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
 	mainSprite->scale(scaleItems);// Âíå èíâåíòàðÿ ïðåäìåò áóäåò ìåíüøå
+	mainSprite->setOrigin(width / 2, height / 2);
 
+	/*
+	spriteForUse = new Sprite;
+
+	pixelXPos = type.sizeAlternative.pixelXForUse;
+	pixelYPos = type.sizeAlternative.pixelYForUse;
+	width = type.sizeAlternative.widthForUse;
+	height = type.sizeAlternative.heightForUse;
 	spriteForUse->setTexture(*type.textureItem);
-	spriteForUse->setTextureRect(IntRect(type.pixelXUse, type.pixelXUse, type.widthForUse, type.heightUse));
+	spriteForUse->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
+	spriteForUse->setOrigin(width / 2, height / 2);
+	*/
+	
 
-	mainSprite->setOrigin(type.width / 2, type.height / 2);
-	spriteForUse->setOrigin(type.widthForUse / 2, type.widthForUse / 2);
-
-	// Ïðî÷íîñòü 
-	currentToughness = type.toughnessObject;
-	maxToughness = type.toughnessObject;
+	maxToughness = type.features.toughness;
+	currentToughness = maxToughness;
 }
 
 void Item::setPosition(int xPos, int yPos, int Level)
@@ -174,10 +100,9 @@ void Item::setPosition(int xPos, int yPos, int Level)
 	float numberX = xPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 	float numberY = yPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 
-	// Ïîçèöèÿ è íàïðàâëåíèå
 	currentLevel = Level;
 	mainSprite->setPosition(numberX, numberY);
-	spriteForUse->setPosition(numberX, numberY - typeItem->heightUse / 2 + typeItem->height / 2);
-
-	//direction = NONE;// ÈÑÏÐÀÂÜ
+	// TODO
+	//spriteForUse->setPosition(numberX, numberY - typeItem->sizeAlternative.heightForUse / 2 + typeItem->sizeMainSprite.height / 2);
+	//direction = NONE_DIRECRION;
 }

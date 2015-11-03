@@ -53,7 +53,7 @@ void processEvents(Game &game, const Time &deltaTime)
 			} else if (Keyboard::isKeyPressed(Keyboard::D)) {
 				mainPerson.direction = RIGHT;
 			} else {
-				mainPerson.direction = NONE;
+				mainPerson.direction = NONE_DIRECTION;
 			}
 			/////////////////////////////////////////////////////////////////////////////////////////
 			// Переключение режимов
@@ -131,7 +131,7 @@ void processEvents(Game &game, const Time &deltaTime)
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
 				mainPerson.useItem(*game.field, *game.listDestroy, deltaTime,
-													 game.typesItem->typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
+													 game.typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
 													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 			} else if (event.type == Event::MouseMoved) {// ИСПРАВЬ

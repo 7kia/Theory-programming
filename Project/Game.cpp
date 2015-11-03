@@ -17,7 +17,7 @@ void initializeGame(Game & game)
 	game.emptyObject = new UnlifeObject;
 
 	// Предметы
-	game.typesItem = new TypesItem;
+	game.typesItem = new TypeItem[AMOUNT_TYPES_ITEM];
 	game.items = new vector<Item>;
 	game.emptyItem = new Item;// Нужно для корректной работы инвентаря
 
@@ -36,17 +36,16 @@ void initializeGame(Game & game)
 
 	// Неживые объекты
 	initializeTypeUnlifeObjects(*game.typesUnlifeObject, *game.databaseSound);
-	initialiunzeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
+	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
 
 	// Предметы
-	initializeTypesItem(*game.typesItem, *game.databaseSound);
+	initializeTypesItem(game.typesItem, *game.databaseSound);
 	initializeItems(*game.items, game.typesItem, *game.emptyItem);
 
+	// TODO
 	// Категории ломаемых предметов
 	initializeCategorysBreakingObject(game);
 
-	////////////////////////////////////
-	// Остальные сущности
 	game.Enemys = new vector<Enemy>;
 	game.typesEnemy = new TypesEnemy;
 
@@ -246,13 +245,14 @@ void informationAboutSelect(Game &game, float x, float y)
 		Sprite *mainSprite = items[i].mainSprite;
 		FloatRect itemBound = mainSprite->getGlobalBounds();
 
-		Sprite *useSpiteObject = items[i].spriteForUse;// ИСПРАВЬ
-		FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
-
-		if (itemBound.contains(x, y) || itemUseBound.contains(x, y)) {
+		// TODO
+		//Sprite *useSpiteObject = items[i].spriteForUse;// ИСПРАВЬ
+		//FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
+		//|| itemUseBound.contains(x, y)
+		if (itemBound.contains(x, y) ) {
 			if (level >= game.mainPerson->currentLevelFloor
 					&& level <= game.mainPerson->currentLevelFloor + 2) {
-				String name = items[i].typeItem->name;
+				String name = items[i].typeItem->features.name;
 				if (name != "") {
 					game.mainPerson->findItemFromList = i;
 					game.mainPerson->findItem = &items[i];

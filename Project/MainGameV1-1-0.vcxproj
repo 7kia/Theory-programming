@@ -38,7 +38,7 @@
     <ClInclude Include="TypeItems.h" />
     <ClInclude Include="TypeUnlifeObject.h" />
     <ClInclude Include="UnlifeObject.h" />
-    <ClInclude Include="Paths.h" />
+    <ClInclude Include="Recourses.h" />
     <ClInclude Include="UnlifeObjectVar.h" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +55,7 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="TypeEnemy.cpp" />
     <ClCompile Include="TypeItem.cpp" />
+    <ClCompile Include="TypeItems.cpp" />
     <ClCompile Include="TypeUnlifeObject.cpp" />
     <ClCompile Include="UnlifeObject.cpp" />
   </ItemGroup>

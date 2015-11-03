@@ -42,11 +42,11 @@
     <ClCompile Include="MyMath.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="TypeItems.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GlobalVar.h" />
-    <ClInclude Include="Paths.h" />
     <ClInclude Include="Font.h">
       <Filter>GUI and Font</Filter>
     </ClInclude>
@@ -99,6 +99,7 @@
     <ClInclude Include="MyMath.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="Recourses.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GUI and Font">

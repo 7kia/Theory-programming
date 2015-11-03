@@ -7,6 +7,7 @@ const int shiftForItem = 0;
 
 typedef enum
 {
+	NONE_BLOCK = -1,
 	unknow,
 	air,
 	grass,

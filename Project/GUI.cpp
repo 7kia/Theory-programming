@@ -187,9 +187,16 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	itemInfoOverPanel->setPosition(pos);
 	window.draw(*itemInfoOverPanel);
 
+	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
+	String nameEmptyItem = mainPerson.emptyItem->typeItem->features.name;
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != mainPerson.emptyItem->typeItem->name) {
+
+		nameCurrentItem = mainPerson.itemFromPanelQuickAccess[i].typeItem->features.name;
+		if (nameCurrentItem != nameEmptyItem) {
 			Item& currentItem = mainPerson.itemFromPanelQuickAccess[i];
+			TypeItem *typeItem = currentItem.typeItem;
+			featuresItem *features = &typeItem->features;
+			int categoryItem = typeItem->features.category;
 
 			int shift = shiftSelect * (i);
 			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ИСПРАВЬ
@@ -203,7 +210,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 				currentText = &textGame.texts[idText::itemGui];
 				Vector2f posName;// Сначала выписываем характеристики, потом имя(так как имя перед ними)
 
-				currentText->setString(currentItem.typeItem->name);
+				currentText->setString(nameCurrentItem);
 
 				posName = { centerWindow.x - WIDTH_ITEM_OVER_PANEL_INFO / 2 + SHIFT_FEATURES_PANEL,
 										centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - HEIGHT_ITEM_OVER_PANEL_INFO / 2 };
@@ -219,7 +226,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 				/////////////////////////////////////////////////////////////
 				// Если предмет инструмент или оружие
-				if (currentItem.isDestroy) {
+				bool isDestroy = features->isDestroy;
+				if (isDestroy) {
 					pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 									centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };
 					// то отображаем прочность
@@ -231,7 +239,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 					window.draw(*bar);
 					bar->setScale(normalSizeGuiForEnemy);
 
-					float levelToughness = (float)currentItem.currentToughness / currentItem.typeItem->toughnessObject;// текущая на макс.
+					float levelToughness = float(currentItem.currentToughness) / currentItem.maxToughness;// текущая на макс.
 
 					pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 					pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -254,8 +262,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 					pos = { posName.x + halfSizeString,
 						centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
 					// Перевод из числа в строку
-					int itemCutDam = currentItem.cuttingDamage;
-					int itemCrashDam = currentItem.crushingDamage;
+					int itemCutDam = typeItem->damageItem.cuttingDamage;
+					int itemCrashDam = typeItem->damageItem.crushingDamage;
 
 					string itemCut;
 					string itemCrash;
@@ -300,15 +308,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 					////////////////
 					// Голод
-					if (currentItem.categoryItem == idCategoryItem::food) {
+					if (currentItem.typeItem->features.category == idCategoryItem::food) {
 						hungrySprite->setPosition(pos);
 						hungrySprite->setScale(SCALE_FEATURES);
 						window.draw(*hungrySprite);
 					}
 					////////////////
 					// Жажда
-					else if (currentItem.categoryItem == idCategoryItem::bottleWithWater
-									 || currentItem.categoryItem == idCategoryItem::bukketWithWater) {
+					else if (categoryItem == idCategoryItem::bottleWithWater
+									 || categoryItem == idCategoryItem::bukketWithWater) {
 						thirstSprite->setPosition(pos);
 						thirstSprite->setScale(SCALE_FEATURES);
 						window.draw(*thirstSprite);
@@ -342,12 +350,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	pos = centerWindow;
 
 	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI * 3;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * 3;
 
 	bar->setPosition(pos);
 	window.draw(*bar);
 
-	float level = (float)mainPerson.currentHealth / mainPerson.maxHealth;
+	float level = float(mainPerson.currentHealth) / mainPerson.maxHealth;
 
 	pos.x += X_SHIFT_BARS;
 	pos.y += Y_SHIFT_BARS;
@@ -395,7 +403,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			window.draw(*bar);
 			bar->setScale(normalSizeGuiForEnemy);
 
-			level = (float)enemy[i].currentHealth / enemy[i].maxHealth;
+			level = float(enemy[i].currentHealth) / enemy[i].maxHealth;
 
 			pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 			pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -460,12 +468,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	pos = centerWindow;
 
 	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI * 2;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * 2;
 
 	bar->setPosition(pos);
 	window.draw(*bar);
 
-	level = (float)mainPerson.currentStamina / mainPerson.maxStamina;
+	level = float(mainPerson.currentStamina) / mainPerson.maxStamina;
 
 	pos.x += X_SHIFT_BARS;
 	pos.y += Y_SHIFT_BARS;
@@ -511,7 +519,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 				window.draw(*bar);
 				bar->setScale(normalSizeGuiForEnemy);
 
-				level = (float)enemy[i].currentStamina / enemy[i].maxStamina;
+				level = float(enemy[i].currentStamina) / enemy[i].maxStamina;
 
 				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -558,12 +566,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	pos = centerWindow;
 
 	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI);
 
 	bar->setPosition(pos);
 	window.draw(*bar);
 
-	level = (float)mainPerson.currentMana / mainPerson.maxMana;
+	level = float(mainPerson.currentMana) / mainPerson.maxMana;
 
 	pos.x += X_SHIFT_BARS;
 	pos.y += Y_SHIFT_BARS;
@@ -606,7 +614,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 				window.draw(*bar);
 				bar->setScale(normalSizeGuiForEnemy);
 
-				level = (float)enemy[i].currentMana / enemy[i].maxMana;
+				level = float(enemy[i].currentMana) / enemy[i].maxMana;
 
 				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -651,8 +659,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	////////////////////////////////////////////////////////////////////////
 	// Индикатор голода
 	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
 
 	// Верхняя часть тарелки
 	highHungry->setPosition(pos);
@@ -669,15 +677,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	// Дно тарелки
 	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
 	lowHungry->setPosition(pos);
 	window.draw(*lowHungry);
 	////////////////////////////////////////////////////////////////////////
 	// Шкала жажды
 	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - (float)HEIGHT_THIRST_GUI;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI);
 
 	bottle->setPosition(pos);
 	window.draw(*bottle);

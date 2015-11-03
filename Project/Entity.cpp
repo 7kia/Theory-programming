@@ -52,7 +52,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	if (timeForStamina > timeUpdateStamina) {
 		timeForStamina = 0;
 
-		if (needMinusStamina && direction != Direction::NONE) {
+		if (needMinusStamina && direction != NONE_DIRECTION) {
 			currentStamina -= delStamina;
 		} else {
 			currentStamina += addStamina;
@@ -221,7 +221,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 			spriteEntity->setTextureRect(IntRect(2 * width, height * int(timeAnimation), width, height));
 			break;
-		case NONE:
+		case NONE_DIRECTION:
 			movement.x = 0;
 			movement.y = 0;
 			break;
@@ -390,7 +390,7 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == NULL) {
 					x = getXPos();
 					y = getYPos();
-					direction = Direction::NONE;
+					direction = NONE_DIRECTION;
 					break;
 				}
 
@@ -418,7 +418,7 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 					if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
 						x = getXPos();
 						y = getYPos();
-						direction = Direction::NONE;
+						direction = NONE_DIRECTION;
 						break;
 					}
 
@@ -431,7 +431,7 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 	{
 		x = getXPos();
 		y = getYPos();
-		direction = Direction::NONE;
+		direction = NONE_DIRECTION;
 	}
 
 	spriteEntity->setPosition(x, y);

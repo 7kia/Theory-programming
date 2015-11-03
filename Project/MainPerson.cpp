@@ -68,7 +68,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.currentTimeOutputDamage = 0.f;
 	mainPerson.timeOutputDamage = 1.f;
 
-	mainPerson.direction = NONE;
+	mainPerson.direction = NONE_DIRECTION;
 	mainPerson.directionLook = DOWN;
 
 	// Показатели
@@ -194,7 +194,7 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 				enemy->directionLook = LEFT;
 			}
 			else {
-				enemy->direction = NONE;
+				enemy->direction = NONE_DIRECTION;
 			}
 
 			/*
@@ -209,7 +209,7 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 				givenForPersonDamage(*enemy);
 			}
 			
-			enemy->direction = NONE;
+			enemy->direction = NONE_DIRECTION;
 		}
 
 	}
@@ -316,7 +316,7 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 					x -= dx * deltaTime.asSeconds();
 					y -= dy * deltaTime.asSeconds();
 				}
-				direction = Direction::NONE;
+				direction = NONE_DIRECTION;
 				break;
 			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
 				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
@@ -351,7 +351,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
-				if (currentItem.isDestroy) {
+				bool isDestroy = currentItem.typeItem->features.isDestroy;
+				if (isDestroy) {
 					currentItem.currentToughness -= 1;
 				}
 
@@ -392,8 +393,11 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 					//printf("Time %f\n", currentTimeOutputDamage);
 					//if (currentTimeOutputDamage > timeOutputDamage) {
 					//	currentTimeOutputDamage = 0;
-						float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
-					float crashDamage = damageMultiplirer * currentItem.crushingDamage;
+					int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
+					int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
+
+					float cutDamage = damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
+					float crashDamage = damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
 
 					cutDamage *= findEnemy->protectionCut;
 					crashDamage *= findEnemy->protectionCrash;
@@ -430,7 +434,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 		bool findTool = true;
 
 		// useTool(mouse, world, currentItem);
-		switch (currentItem.categoryItem) {
+		int category = currentItem.typeItem->features.category;
+		switch (category) {
 			////////////////////////////////////////////////////////////////////////
 			// Лопата
 		case idCategoryItem::backhoe:
@@ -489,7 +494,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 		if (findTool == false)
 		{
-			switch (currentItem.categoryItem) {
+			switch (category) {
 			////////////////////////////////////////////////////////////////////////
 			// Еда
 		case idCategoryItem::food:
@@ -508,19 +513,19 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 				// Если используем ведро с водой
 				if (event.key.code == Mouse::Left) {
-					int fluid = currentItem.typeItem->idBlockForUse;
-					if (fluid) {
+					int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+					if (idUseBlock) {
 
 						// Пытаемся вылить на землю
 						int level = currentLevelFloor + 1;
 						if (field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
 							// Выливаем в яму если стена не мешает
 							if (field.dataMap[level - 1][y][x] == field.charBlocks[idBlocks::air]) {
-								field.dataMap[level - 1][y][x] = field.charBlocks[fluid];
+								field.dataMap[level - 1][y][x] = field.charBlocks[idUseBlock];
 							}
 							// 
 							else {
-								field.dataMap[level][y][x] = field.charBlocks[fluid];
+								field.dataMap[level][y][x] = field.charBlocks[idUseBlock];
 							}
 						}
 
@@ -535,8 +540,11 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 				if (event.key.code == Mouse::Left || event.key.code == Mouse::Right) {
 					// Опустошение бутылки
-					int defineType = currentItem.typeItem->idItem - 1;
-					currentItem.typeItem->idItem = defineType + 1;
+					int *idItem = &currentItem.typeItem->features.id;
+					int defineType = *idItem - 1;
+
+					*idItem = defineType + 1;
+
 					currentItem.setType(typesItems[defineType]);
 					currentItem.mainSprite->scale(normalSize);
 
@@ -552,8 +560,10 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 					currentThirst += currentItem.currentToughness;
 
 					// Опустошение бутылки
-					int defineType = currentItem.typeItem->idItem - 1;
-					currentItem.typeItem->idItem = defineType + 1;
+					int *idItem = &currentItem.typeItem->features.id;
+					int defineType = *idItem - 1;
+
+					*idItem = defineType + 1;
 					currentItem.setType(typesItems[defineType]);
 					currentItem.mainSprite->scale(normalSize);
 
@@ -578,14 +588,16 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 
 				if (level > -1) {
-					int fluid = currentItem.typeItem->idBlockForUse;
-					if (fluid) {
-						if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
+					int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+					if (idUseBlock) {
+						if (field.dataMap[level][y][x] == field.charBlocks[idUseBlock]) {
 
 							field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
 							// Опустошение бутылки
-							int defineType = currentItem.typeItem->idItem + 1;
-							currentItem.typeItem->idItem = defineType - 1;
+							int *idItem = &currentItem.typeItem->features.id;
+							int defineType = *idItem + 1;
+
+							*idItem = defineType - 1;
 							currentItem.setType(typesItems[defineType]);
 							currentItem.mainSprite->scale(normalSize);
 
@@ -612,13 +624,15 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 
 				if (level > -1) {
-					int fluid = currentItem.typeItem->idBlockForUse;
-					if (fluid) {
-						if (field.dataMap[level][y][x] == field.charBlocks[fluid]) {
+					int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+					if (idUseBlock) {
+						if (field.dataMap[level][y][x] == field.charBlocks[idUseBlock]) {
 
 							// Опустошение бутылки
-							int defineType = currentItem.typeItem->idItem + 1;
-							currentItem.typeItem->idItem = defineType - 1;
+							int *idItem = &currentItem.typeItem->features.id;
+							int defineType = *idItem + 1;
+
+							*idItem = defineType - 1;
 							currentItem.setType(typesItems[defineType]);
 							currentItem.mainSprite->scale(normalSize);
 
@@ -762,17 +776,19 @@ void MainPerson::useBlock(float & xMouse, float & yMouse, sf::Event & event, Fie
 			if (level > -1) {
 				bool successfullUse;
 
+				int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+				int idUseObject= currentItem.typeItem->idAdd.idUnlideOnjectForUse;
 				// Ставим блок
-				if (currentItem.typeItem->idBlockForUse > -1
+				if (idUseBlock > -1
 						&& field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
-					field.dataMap[level][y][x] = field.charBlocks[currentItem.typeItem->idBlockForUse];
+					field.dataMap[level][y][x] = field.charBlocks[idUseBlock];
 					successfullUse = true;
 				}
 				// Неживой объет
-				else if(currentItem.typeItem->idUnlideOnjectForUse > -1){
+				else if(idUseObject > -1){
 					UnlifeObject* addObject = new UnlifeObject;
 
-					addObject->setType(typesUnlifeObjects[currentItem.typeItem->idUnlideOnjectForUse]);
+					addObject->setType(typesUnlifeObjects[idUseObject]);
 					addObject->setPosition(x + 1, y + 1, currentLevelFloor + 1);
 					unlifeObjects->push_back(*addObject);
 

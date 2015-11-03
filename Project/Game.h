@@ -29,7 +29,7 @@ struct Game
 	Item* emptyItem;
 	UnlifeObject* emptyObject;
 
-	TypesItem *typesItem;
+	TypeItem *typesItem;
 	std::vector<Item>* items;
 
 	////////////////////////////////////

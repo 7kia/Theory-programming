@@ -32,6 +32,7 @@ const int PIXEL_Y_SEADLING_OAK = 0;
 
 typedef enum
 {
+	NONE_OBJECT = -1,
 	oakSeadling,
 	oakSmall,
 	oakGrow,
