@@ -148,6 +148,46 @@ void createGUI(barMainFeatures &gui, Texture *texture)
 	gui.levelMana->setTexture(*texture);
 	gui.levelMana->setTextureRect(IntRect(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI));
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+void barMainFeatures::renderBar(int& current, int& max, sf::Sprite* sprite, sizeMainSprite sizes, TextGame& textGame, sf::Vector2f& position, sf::RenderWindow& window)
+{
+	render(current, max, sprite,
+				sizes, position, window);
+	renderText(current, max,
+						 position, window, textGame);
+}
+
+
+void barMainFeatures::render( int &current, int& max, Sprite *sprite,
+														 sizeMainSprite sizes, Vector2f &position, RenderWindow &window)
+{
+	bar->setPosition(position);
+	window.draw(*bar);
+
+	float level = float(current) / max;
+
+	position.x += X_SHIFT_BARS;
+	position.y += Y_SHIFT_BARS;
+	int currentLevel = WIDTH_LEVEL_BAR_GUI * level;
+	sprite->setTextureRect(IntRect(sizes.pixelPosX, sizes.pixelPosY, currentLevel, sizes.height));
+	sprite->setPosition(position);
+	window.draw(*sprite);
+}
+
+void barMainFeatures::renderText(int &current, int& max, 
+																 Vector2f& position, RenderWindow& window, TextGame &textGame)
+{
+	Text* currentText = &textGame.texts[idText::levelBar];
+
+	currentText->setString(toStringCharacter(current, max));
+	////////////////
+	// Задание позиции
+	int middleString = computeMiddleString(*currentText);
+
+	position = { position.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, position.y - Y_SHIFT_BARS / 2 };
+	currentText->setPosition(position);
+	window.draw(*currentText);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void infoAboutSelect::render(Vector2f position, RenderWindow &window, TextGame &textGame)
@@ -235,7 +275,7 @@ void panelQuickAccess::renderItems(::MainPerson& mainPerson, sf::Vector2f center
 	}
 
 }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, Vector2f centerWindow,
 																			Vector2u sizeWindow, sf::RenderWindow& window, TextGame &textGame)
 {
@@ -250,8 +290,13 @@ void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, Ve
 }
 
 
-void itemFeatures::renderValueMiddle(Text* text, sf::Vector2f position)
+void itemFeatures::renderValueMiddle(string string, Text* text, sf::Vector2f &position, RenderWindow &window)
 {
+	position.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+	text->setString(string);
+	text->setOrigin(string.size() / 2, text->getCharacterSize() / 2);
+	text->setPosition(position);
+	window.draw(*text);
 }
 
 void itemFeatures::renderIconWithScale(Sprite* sprite, sf::Vector2f position, sf::RenderWindow& window)
@@ -335,33 +380,17 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, Vector2f centerWindow,
 		intToString(itemCutDam, itemCut);
 		intToString(itemCrashDam, itemCrash);
 
-		////////////////
-		// Режущий урон
+
 		renderIconWithScale(cutSprite, pos, window);
+		renderValueMiddle(itemCut, currentText, pos, window);
 
-		pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-		currentText->setString(itemCut);
-		currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-		currentText->setPosition(pos);
-		window.draw(*currentText);
-		////////////////
-		// Дробящий урон
 		pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
-		crashSprite->setPosition(pos);
-		crashSprite->setScale(SCALE_FEATURES);
-		window.draw(*crashSprite);
-
-		pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-		currentText->setString(itemCrash);
-		currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-		currentText->setPosition(pos);
-		window.draw(*currentText);
-		////////////////
+		renderIconWithScale(crashSprite, pos, window);
+		renderValueMiddle(itemCrash, currentText, pos, window);
 		//////////////////////////////////////////////////////////
 		// Отображение характеристик
 
 		pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
-		// Перевод из числа в строку
 		int itemToughness = currentItem.currentToughness;
 
 		string itemToug;
@@ -389,18 +418,12 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, Vector2f centerWindow,
 			itemToug = "";// ИСПРАВЬ
 		}
 
-		pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-		currentText->setString(itemToug);
-		currentText->setOrigin(itemToug.size() / 2, currentText->getCharacterSize() / 2);
-		currentText->setPosition(pos);
-		window.draw(*currentText);
+		renderValueMiddle(itemToug, currentText, pos, window);
 		//////////////////////////////////////////////////////////
 	}
-	////////////////////////////////
 
-	/////////////////////////////////////////////////////////////
 }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<Enemy>& enemy, TextGame &textGame)
 {
 
@@ -427,36 +450,21 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	pos.x -= sizeWindow.x / 2;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * 3;
 
-	bar->setPosition(pos);
-	window.draw(*bar);
 
-	float level = float(mainPerson.currentHealth) / mainPerson.maxHealth;
+	mainFeatures.bar->setPosition(pos);
+	window.draw(*mainFeatures.bar);
 
-	pos.x += X_SHIFT_BARS;
-	pos.y += Y_SHIFT_BARS;
-	int currentLevel = WIDTH_LEVEL_BAR_GUI * level;
-	levelHealth->setTextureRect(IntRect(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
-	levelHealth->setPosition(pos);
-	window.draw(*levelHealth);
-
-	////////////////////////////////
-	// Количество здоровья
-	currentText = &textGame.texts[idText::levelBar];
-
-	////////////////
-	// Перевод из числа в строку
 	int health = mainPerson.currentHealth;
 	int healthMax = mainPerson.maxHealth;
 
-	currentText->setString(toStringCharacter(health, healthMax));
-	////////////////
-	// Задание позиции
-	int middleString = computeMiddleString(*currentText);
+	pos.x += X_SHIFT_BARS;
+	pos.y += Y_SHIFT_BARS;
+	
+	sizeMainSprite sizes;
+	sizes.init(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
 
-	pos = { pos.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, pos.y - Y_SHIFT_BARS / 2 };
-	currentText->setPosition(pos);
-	window.draw(*currentText);
-	////////////////////////////////
+	mainFeatures.renderBar(health, healthMax, mainFeatures.levelHealth,
+												 sizes, textGame, pos, window);
 
 	////////////////////////////////////////////////////////////////
 	// для противников
@@ -473,26 +481,21 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
 
 
-			bar->setPosition(pos);
-			bar->setScale(scaleGuiForEnemy);
-			window.draw(*bar);
-			bar->setScale(normalSizeGuiForEnemy);
 
-			level = float(enemy[i].currentHealth) / enemy[i].maxHealth;
-
-			pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
-			pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
-			currentLevel = WIDTH_LEVEL_BAR_GUI * level;
-			levelHealth->setTextureRect(IntRect(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
-			levelHealth->setPosition(pos);
-
-			levelHealth->setScale(scaleGuiForEnemy);
-			window.draw(*levelHealth);
-			levelHealth->setScale(normalSizeGuiForEnemy);
+			mainFeatures.bar->setPosition(pos);
+			window.draw(*mainFeatures.bar);
 
 
+			int healthEnemy = enemy[i].currentHealth;
+			int healthMaxEnemy = enemy[i].maxHealth;
 
-			///*
+			pos.x += X_SHIFT_BARS;
+			pos.y += Y_SHIFT_BARS;
+
+			sizes.init(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
+			mainFeatures.renderBar(healthEnemy, healthMaxEnemy, mainFeatures.levelHealth,
+														 sizes, textGame, pos, window);
+
 			////////////////////////////////////////////////////////////
 			// Отображение урона
 			currentText = &textGame.texts[idText::inputDamage];

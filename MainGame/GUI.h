@@ -127,6 +127,14 @@ struct barMainFeatures
 	sf::Sprite* levelHealth;
 	sf::Sprite* levelStamina;
 	sf::Sprite* levelMana;
+	void renderBar(int &current, int& max, sf::Sprite *sprite, sizeMainSprite sizes,
+								 TextGame &textGame, sf::Vector2f &position, sf::RenderWindow &window);
+	void render(int &current, int& max, sf::Sprite *sprite,
+							sizeMainSprite sizes, sf::Vector2f &position, sf::RenderWindow &window);
+	void renderText(int &current, int& max,
+									sf::Vector2f &position, sf::RenderWindow &window, TextGame &textGame);
+
+	void renderDamageForEnemy();
 };
 
 struct infoAboutSelect
@@ -142,7 +150,7 @@ struct itemFeatures
 	sf::Sprite* crashSprite;
 	sf::Sprite* hungrySprite;
 	sf::Sprite* thirstSprite;
-	void renderValueMiddle(Text *text, sf::Vector2f position);
+	void renderValueMiddle(std::string string, Text* text, sf::Vector2f &position, sf::RenderWindow &window);
 	void renderIconWithScale(Sprite *sprite, sf::Vector2f position, sf::RenderWindow &window);
 	void renderBar(Sprite *sprite, sf::Vector2f position, sf::RenderWindow &window);
 	void renderNameItem(::MainPerson& mainPerson, Vector2f &position, Vector2f centerWindow,
