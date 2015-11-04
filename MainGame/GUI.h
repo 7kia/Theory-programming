@@ -108,44 +108,101 @@ const int Y_HUNGRY_ITEM_GUI = Y_CRASH_DAMAGE_GUI;
 const int X_THIRST_ITEM_GUI = X_HUNGRY_ITEM_GUI + WIDTH_DAMAGE_GUI;
 const int Y_THIRST_ITEM_GUI = Y_CRASH_DAMAGE_GUI;
 
-struct GUI
-{// добавление gui
-	// Информация о выделеном блоке
-	sf::Texture* infoSelectBlockTexture;
-	sf::Sprite* infoSelectBlockSprite;
-
-	// Панель быстрого доступа
-	sf::Texture* widgetsTexture;
-	sf::Sprite* panelQuickAccess;
-	sf::Sprite* selectInPanelQuickAccess;
-
-	// Шкала голода
-	sf::Texture* textureBar;
+struct barHungry
+{
 	sf::Sprite* lowHungry;
 	sf::Sprite* highHungry;
 	sf::Sprite* levelHungry;
+};
 
-	// Шкала жажды
+struct barThirst
+{
 	sf::Sprite* bottle;
 	sf::Sprite* levelThirst;
+};
 
-	// Шкала здоровья, выносливости, маны
+struct barMainFeatures
+{
 	sf::Sprite* bar;
 	sf::Sprite* levelHealth;
 	sf::Sprite* levelStamina;
 	sf::Sprite* levelMana;
+};
 
-	// Показатели предметов
-	sf::Sprite* itemInfoOverPanel;
+struct infoAboutSelect
+{
+	sf::Texture* Texture;
+	sf::Sprite* sprite;
+	void render(sf::Vector2f position, sf::RenderWindow &window, TextGame &textGame);
+};
+
+struct itemFeatures
+{
 	sf::Sprite* cutSprite;
 	sf::Sprite* crashSprite;
 	sf::Sprite* hungrySprite;
 	sf::Sprite* thirstSprite;
+	void renderValueMiddle(Text *text, sf::Vector2f position);
+	void renderIconWithScale(Sprite *sprite, sf::Vector2f position, sf::RenderWindow &window);
+	void renderBar(Sprite *sprite, sf::Vector2f position, sf::RenderWindow &window);
+	void renderNameItem(::MainPerson& mainPerson, Vector2f &position, Vector2f centerWindow,
+											Vector2u sizeWindow, sf::RenderWindow &window, TextGame &textGame);
+	void renderFeatures(::MainPerson& mainPerson, sf::Vector2f centerWindow,
+											sf::Vector2u sizeWindow, ::sf::RenderWindow& window,
+											TextGame &textGame, barMainFeatures &bars);
+};
+
+struct panelQuickAccess
+{
+	sf::Sprite* spritePanel;
+	sf::Sprite* spriteSelect;
+	void renderPanel(Vector2f position, RenderWindow& window);
+	void renderSelect(::MainPerson& mainPerson, sf::Vector2f centerWindow,
+										sf::Vector2u sizeWindow, ::sf::RenderWindow& window);
+	void renderItems(::MainPerson& mainPerson, sf::Vector2f centerWindow,
+									 sf::Vector2u sizeWindow, ::sf::RenderWindow& window,
+									 TextGame &textGame, barMainFeatures &bars, itemFeatures &itemFeatures);
+};
+
+struct panels
+{
+	infoAboutSelect infoAboutSelect;
+	panelQuickAccess panelQuickAccess;
+	sf::Sprite* itemInfoOverPanel;
+	void renderItemPanel(Vector2f position, RenderWindow& window);
+};
+
+
+struct GUI
+{// добавление gui
+
+	sf::Texture* widgetsTexture;
+	panels panels;
+
+	sf::Texture* textureBar;
+	barHungry hungry;
+	barThirst thirst;
+	barMainFeatures mainFeatures;
+	itemFeatures itemFeatures;
 
 	// Ссылки на текст
 	sf::Text *textGui[numberTextReference];
 
+	void renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::RenderWindow &window, TextGame &textGame);
 	void setPositionGui(sf::RenderWindow &window, MainPerson &mainPerson, std::vector<Enemy>& enemy, TextGame &textGame);
 };
 
+
 void initializeGUI(GUI &gui, TextGame &textGame);
+
+void createGUITexture(Texture *texture, sf::String fileName);
+
+void createGUI(sf::Sprite *itemInfoOverPanel, Texture *texture);
+void createGUI(infoAboutSelect &gui);
+void createGUI(panelQuickAccess &gui, Texture *texture);
+void createPanels(panels &gui, Texture *texture);
+
+void createGUI(barHungry &gui, Texture *texture);
+void createGUI(barThirst &gui, Texture *texture);
+void createGUI(barMainFeatures &gui, Texture *texture);
+void createGUI(itemFeatures &gui, Texture *textureWidgets, Texture *textureBars);
