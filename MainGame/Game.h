@@ -1,22 +1,22 @@
 #pragma once
-// Для динамических списков
-#include <list>
-#include <iterator>
-
 #include "Sound.h"
 
 #include "MainPerson.h"
 
 #include "Font.h"
 #include "GUI.h"
+#include "UnlifeObject.h"
+#include "TypeItems.h"
+#include "Items.h"
+#include "ListObjectsAndBlocks.h"
+#include "Map.h"
 
-#include <math.h>
 
-const sf::String TITLE_PROGRAM = "MainGame v1.3.9";
+const sf::String TITLE_PROGRAM = "MainGame v1.4.2";
 
 struct Game
 {
-	RenderWindow *window;
+	sf::RenderWindow *window;
 
 	GUI *gui;
 	TextGame *textGame;
@@ -24,23 +24,23 @@ struct Game
 	MainPerson *mainPerson;
 
 	TypesUnlifeObject *typesUnlifeObject;
-	std::list<UnlifeObject>* unlifeObjects;
+	std::vector<UnlifeObject>* unlifeObjects;
 
 	Item* emptyItem;
 	UnlifeObject* emptyObject;
 
-	TypesItem *typesItem;
-	std::list<Item>* items;
+	TypeItem *typesItem;
+	std::vector<Item>* items;
 
 	////////////////////////////////////
 	// Ходьба по карте(для противников
 	float minTimeWalk = 4.f;
-	float maxTimeWalk = 12.f;
+	float maxTimeWalk = 12.f;// TODO
 	////////////////////////////////////
 	// Остальные сущности
 	Enemy *emptyEnemy;
 	TypesEnemy *typesEnemy;
-	std::list<Enemy>* Enemys;// ДОБАВЛЕНИЕ СУЩНОСТИ
+	std::vector<Enemy>* Enemys;// ДОБАВЛЕНИЕ СУЩНОСТИ
 	////////////////////////////////////
 
 	destroyObjectsAndBlocks* listDestroy;

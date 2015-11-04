@@ -118,7 +118,7 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	//gui.textGui[idTextGui::infoWindowItemGui] = &textGame.texts[idText::infoWindowItemGui];
 }
 
-void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enemy>& enemy, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<Enemy>& enemy, TextGame &textGame)
 {
 
 	Vector2f centerWindow = mainPerson.view->getCenter();
@@ -187,9 +187,16 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	itemInfoOverPanel->setPosition(pos);
 	window.draw(*itemInfoOverPanel);
 
+	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
+	String nameEmptyItem = mainPerson.emptyItem->typeItem->features.name;
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != mainPerson.emptyItem->typeItem->name) {
+
+		nameCurrentItem = mainPerson.itemFromPanelQuickAccess[i].typeItem->features.name;
+		if (nameCurrentItem != nameEmptyItem) {
 			Item& currentItem = mainPerson.itemFromPanelQuickAccess[i];
+			TypeItem *typeItem = currentItem.typeItem;
+			featuresItem *features = &typeItem->features;
+			int categoryItem = typeItem->features.category;
 
 			int shift = shiftSelect * (i);
 			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ИСПРАВЬ
@@ -203,7 +210,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				currentText = &textGame.texts[idText::itemGui];
 				Vector2f posName;// Сначала выписываем характеристики, потом имя(так как имя перед ними)
 
-				currentText->setString(currentItem.typeItem->name);
+				currentText->setString(nameCurrentItem);
 
 				posName = { centerWindow.x - WIDTH_ITEM_OVER_PANEL_INFO / 2 + SHIFT_FEATURES_PANEL,
 										centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - HEIGHT_ITEM_OVER_PANEL_INFO / 2 };
@@ -219,7 +226,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 
 				/////////////////////////////////////////////////////////////
 				// Если предмет инструмент или оружие
-				if (currentItem.isDestroy) {
+				bool isDestroy = features->isDestroy;
+				if (isDestroy) {
 					pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 									centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };
 					// то отображаем прочность
@@ -231,7 +239,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 					window.draw(*bar);
 					bar->setScale(normalSizeGuiForEnemy);
 
-					float levelToughness = (float)currentItem.currentToughness / currentItem.typeItem->toughnessObject;// текущая на макс.
+					float levelToughness = float(currentItem.currentToughness) / currentItem.maxToughness;// текущая на макс.
 
 					pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 					pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -244,100 +252,90 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 					levelStamina->setScale(normalSizeGuiForEnemy);
 					//*/
 
-					///* TODO
-					////////////////////////////////
-					// и наносимый урон
-					if (idSelectItem == i) {
-
-						//////////////////////////////////////////////////////////
-						// Отображение характеристик
-						pos = { posName.x + halfSizeString,
-										centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
-						// Перевод из числа в строку
-						int itemCutDam = currentItem.cuttingDamage;
-						int itemCrashDam = currentItem.crushingDamage;
-
-						string itemCut;
-						string itemCrash;
-
-						intToString(itemCutDam, itemCut);
-						intToString(itemCrashDam, itemCrash);
-
-						////////////////
-						// Режущий урон
-						cutSprite->setPosition(pos);
-						cutSprite->setScale(SCALE_FEATURES);
-						window.draw(*cutSprite);
-
-						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-						currentText->setString(itemCut);
-						currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-						currentText->setPosition(pos);
-						window.draw(*currentText);
-						////////////////
-						// Дробящий урон
-						pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
-						crashSprite->setPosition(pos);
-						crashSprite->setScale(SCALE_FEATURES);
-						window.draw(*crashSprite);
-
-						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-						currentText->setString(itemCrash);
-						currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-						currentText->setPosition(pos);
-						window.draw(*currentText);
-						////////////////
-						//////////////////////////////////////////////////////////
-					}
-					////////////////////////////////
-					//*/
 				}
-				/////////////////////////////////////////////////////////////
-				// или что-то другое
-				else {
+				////////////////////////////////
+				// Характеристики
+				if (idSelectItem == i) {
 
-					if (idSelectItem == i) {
-						//////////////////////////////////////////////////////////
-						// Отображение характеристик
-						pos = { posName.x + halfSizeString,
-							centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
-						// Перевод из числа в строку
-						int itemToughness = currentItem.currentToughness;
+					//////////////////////////////////////////////////////////
+					// Отображение характеристик
+					pos = { posName.x + halfSizeString,
+						centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
+					// Перевод из числа в строку
+					int itemCutDam = typeItem->damageItem.cuttingDamage;
+					int itemCrashDam = typeItem->damageItem.crushingDamage;
 
-						string itemToug;
+					string itemCut;
+					string itemCrash;
 
-						intToString(itemToughness, itemToug);
+					intToString(itemCutDam, itemCut);
+					intToString(itemCrashDam, itemCrash);
 
-						////////////////
-						// Голод
-						if (currentItem.categoryItem == idCategoryItem::food) {
-							hungrySprite->setPosition(pos);
-							hungrySprite->setScale(SCALE_FEATURES);
-							window.draw(*hungrySprite);
-						}
-						////////////////
-						// Жажда
-						else if (currentItem.categoryItem == idCategoryItem::bottleWithWater
-										 || currentItem.categoryItem == idCategoryItem::bukketWithWater) {
-							thirstSprite->setPosition(pos);
-							thirstSprite->setScale(SCALE_FEATURES);
-							window.draw(*thirstSprite);
-						}
-						////////////////
-						// Другое не показываем
-						else {
-							itemToug = "";// ИСПРАВЬ
-						}
+					////////////////
+					// Режущий урон
+					cutSprite->setPosition(pos);
+					cutSprite->setScale(SCALE_FEATURES);
+					window.draw(*cutSprite);
 
-						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
-						currentText->setString(itemToug);
-						currentText->setOrigin(itemToug.size() / 2, currentText->getCharacterSize() / 2);
-						currentText->setPosition(pos);
-						window.draw(*currentText);
-						//////////////////////////////////////////////////////////
+					pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+					currentText->setString(itemCut);
+					currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
+					currentText->setPosition(pos);
+					window.draw(*currentText);
+					////////////////
+					// Дробящий урон
+					pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+					crashSprite->setPosition(pos);
+					crashSprite->setScale(SCALE_FEATURES);
+					window.draw(*crashSprite);
+
+					pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+					currentText->setString(itemCrash);
+					currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
+					currentText->setPosition(pos);
+					window.draw(*currentText);
+					////////////////
+					//////////////////////////////////////////////////////////
+					// Отображение характеристик
+
+					pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+					// Перевод из числа в строку
+					int itemToughness = currentItem.currentToughness;
+
+					string itemToug;
+
+					intToString(itemToughness, itemToug);
+
+					////////////////
+					// Голод
+					if (categoryItem == idCategoryItem::food) {
+						hungrySprite->setPosition(pos);
+						hungrySprite->setScale(SCALE_FEATURES);
+						window.draw(*hungrySprite);
+					}
+					////////////////
+					// Жажда
+					else if (categoryItem == idCategoryItem::bottleWithWater
+									 || categoryItem == idCategoryItem::bukketWithWater) {
+						thirstSprite->setPosition(pos);
+						thirstSprite->setScale(SCALE_FEATURES);
+						window.draw(*thirstSprite);
+					}
+					////////////////
+					// Другое не показываем
+					else {
+						itemToug = "";// ИСПРАВЬ
 					}
 
+					pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+					currentText->setString(itemToug);
+					currentText->setOrigin(itemToug.size() / 2, currentText->getCharacterSize() / 2);
+					currentText->setPosition(pos);
+					window.draw(*currentText);
+					//////////////////////////////////////////////////////////
 				}
+				////////////////////////////////
+
 				/////////////////////////////////////////////////////////////
 
 
@@ -352,12 +350,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	pos = centerWindow;
 
 	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI * 3;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * 3;
 
 	bar->setPosition(pos);
 	window.draw(*bar);
 
-	float level = (float)mainPerson.currentHealth / mainPerson.maxHealth;
+	float level = float(mainPerson.currentHealth) / mainPerson.maxHealth;
 
 	pos.x += X_SHIFT_BARS;
 	pos.y += Y_SHIFT_BARS;
@@ -389,13 +387,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	// для противников
 	int shiftBar;
 
-	for (std::list<Enemy>::iterator it = enemy.begin(); it != enemy.end(); ++it) {
-		if (it->currentLevelFloor == mainPerson.currentLevelFloor) {
+	for (int i = 0; i != enemy.size(); ++i) {
+		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
+				&& i == mainPerson.findEnemyFromList) {
 
-			shiftBar = it->maxMana > 0;
-			pos = it->spriteEntity->getPosition();
+			shiftBar = enemy[i].maxMana > 0;
+			pos = enemy[i].spriteEntity->getPosition();
 			pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-			pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
+			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
 
 
 			bar->setPosition(pos);
@@ -403,7 +403,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 			window.draw(*bar);
 			bar->setScale(normalSizeGuiForEnemy);
 
-			level = (float)it->currentHealth / it->maxHealth;
+			level = float(enemy[i].currentHealth) / enemy[i].maxHealth;
 
 			pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 			pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -423,11 +423,11 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 			currentText = &textGame.texts[idText::inputDamage];
 
 			// Позиция
-			pos = it->spriteEntity->getPosition();
-			pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shiftBar) + shiftEnemyDamage;
+			pos = enemy[i].spriteEntity->getPosition();
+			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shiftBar) + shiftEnemyDamage;
 
 			// Если нанесли урон то отображаем
-			int damage = it->inputDamage;
+			int damage = enemy[i].inputDamage;
 			if (damage) {
 				string stringDamage;
 				intToString(damage, stringDamage);
@@ -443,14 +443,14 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 			// Отображение текущего здоровья
 			currentText = &textGame.texts[idText::levelBar];
 		
-			pos = it->spriteEntity->getPosition();
+			pos = enemy[i].spriteEntity->getPosition();
 			pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-			pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
+			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
 
 			////////////////
 			// Перевод из числа в строку
-			int currentHealthEnemy = it->currentHealth;
-			int maxHealthEnemy = it->maxHealth;
+			int currentHealthEnemy = enemy[i].currentHealth;
+			int maxHealthEnemy = enemy[i].maxHealth;
 
 			currentText->setString(toStringCharacter(currentHealthEnemy, maxHealthEnemy));
 
@@ -468,12 +468,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	pos = centerWindow;
 
 	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI * 2;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * 2;
 
 	bar->setPosition(pos);
 	window.draw(*bar);
 
-	level = (float)mainPerson.currentStamina / mainPerson.maxStamina;
+	level = float(mainPerson.currentStamina) / mainPerson.maxStamina;
 
 	pos.x += X_SHIFT_BARS;
 	pos.y += Y_SHIFT_BARS;
@@ -487,22 +487,10 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	currentText = &textGame.texts[idText::levelBar];
 
 	////////////////
-	// Перевод из числа в строку
-	std::stringstream SP;
 	int stamina = mainPerson.currentStamina;
-	SP << stamina;
-
-	string staminaPerson;
-	SP >> staminaPerson;
-	////////////////
-	std::stringstream MS;
 	int staminaMax = mainPerson.maxStamina;
-	MS << staminaMax;
 
-	string staminaMaxPerson;
-	MS >> staminaMaxPerson;
-	////////////////
-	currentText->setString(staminaPerson + '/' + staminaMaxPerson);
+	currentText->setString(toStringCharacter(stamina, staminaMax));
 
 	middleString = currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 
@@ -513,15 +501,17 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 
 	////////////////////////////////////////////////////////////////
 	// для противников
-	for (std::list<Enemy>::iterator it = enemy.begin(); it != enemy.end(); ++it) {
-		if (it->currentLevelFloor == mainPerson.currentLevelFloor) {
+	for (int i = 0; i != enemy.size(); ++i) {
+		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
+				&& i == mainPerson.findEnemyFromList) {
 
-			if (it->maxStamina) {
-				shiftBar = it->maxMana > 0;
+			if (enemy[i].maxStamina) {
+				shiftBar = enemy[i].maxMana > 0;
 
-				pos = it->spriteEntity->getPosition();
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
 
 
 				bar->setPosition(pos);
@@ -529,7 +519,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				window.draw(*bar);
 				bar->setScale(normalSizeGuiForEnemy);
 
-				level = (float)it->currentStamina / it->maxStamina;
+				level = float(enemy[i].currentStamina) / enemy[i].maxStamina;
 
 				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -549,26 +539,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				// Отображение текущей выносливости
 				currentText = &textGame.texts[idText::levelBar];
 
-				pos = it->spriteEntity->getPosition();
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
 
 				////////////////
-				// Перевод из числа в строку
-				std::stringstream sSL;
-				std::stringstream sSH;
-				int currentStaminaEnemy = it->currentStamina;
-				int maxStaminaEnemy = it->maxStamina;
-				sSL << currentStaminaEnemy;
+				int currentStaminaEnemy = enemy[i].currentStamina;
+				int maxStaminaEnemy = enemy[i].maxStamina;
 
-				string stringStamina;
-				sSL >> stringStamina;
-
-				sSH << maxStaminaEnemy;
-				string stringMaxStamina;
-				sSH >> stringMaxStamina;
-				////////////////
-				currentText->setString(stringStamina + '/' + stringMaxStamina);
+				currentText->setString(toStringCharacter(currentStaminaEnemy, maxStaminaEnemy));
 
 				pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 				currentText->setPosition(pos);
@@ -587,12 +566,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	pos = centerWindow;
 
 	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_BARS_GUI;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI);
 
 	bar->setPosition(pos);
 	window.draw(*bar);
 
-	level = (float)mainPerson.currentMana / mainPerson.maxMana;
+	level = float(mainPerson.currentMana) / mainPerson.maxMana;
 
 	pos.x += X_SHIFT_BARS;
 	pos.y += Y_SHIFT_BARS;
@@ -606,22 +585,10 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	currentText = &textGame.texts[idText::levelBar];
 
 	////////////////
-	// Перевод из числа в строку
-	std::stringstream CM;
 	int mana = mainPerson.currentMana;
-	CM << mana;
-
-	string manaPerson;
-	CM >> manaPerson;
-	////////////////
-	std::stringstream MM;
 	int manaMax = mainPerson.maxMana;
-	MM << manaMax;
 
-	string manaMaxPerson;
-	MM >> manaMaxPerson;
-	////////////////
-	currentText->setString(manaPerson + '/' + manaMaxPerson);
+	currentText->setString(toStringCharacter(mana, manaMax));
 
 	middleString = currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 
@@ -631,13 +598,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	////////////////////////////////
 
 	// для противников
-	for (std::list<Enemy>::iterator it = enemy.begin(); it != enemy.end(); ++it) {
-		if (it->currentLevelFloor == mainPerson.currentLevelFloor) {
+	for (int i = 0; i != enemy.size(); ++i) {
+		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
+				&& i == mainPerson.findEnemyFromList) {
 
-			if (it->maxMana) {
-				pos = it->spriteEntity->getPosition();
+			if (enemy[i].maxMana) {
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
 
 
 				bar->setPosition(pos);
@@ -645,7 +614,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				window.draw(*bar);
 				bar->setScale(normalSizeGuiForEnemy);
 
-				level = (float)it->currentMana / it->maxMana;
+				level = float(enemy[i].currentMana) / enemy[i].maxMana;
 
 				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
@@ -665,26 +634,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 				// Отображение текущей маны
 				currentText = &textGame.texts[idText::levelBar];
 
-				pos = it->spriteEntity->getPosition();
+				pos = enemy[i].spriteEntity->getPosition();
 				pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				pos.y -= it->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
+				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
 
 				////////////////
-				// Перевод из числа в строку
-				std::stringstream sML;
-				std::stringstream sMH;
-				int currentManaEnemy = it->currentMana;
-				int maxManaEnemy = it->maxMana;
-				sML << currentManaEnemy;
+				int currentManaEnemy = enemy[i].currentMana;
+				int maxManaEnemy = enemy[i].maxMana;
 
-				string stringMana;
-				sML >> stringMana;
-
-				sMH << maxManaEnemy;
-				string stringMaxMana;
-				sMH >> stringMaxMana;
-				////////////////
-				currentText->setString(stringMana + '/' + stringMaxMana);
+				currentText->setString(toStringCharacter(currentManaEnemy, maxManaEnemy));
 
 				pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 				currentText->setPosition(pos);
@@ -701,15 +659,15 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	////////////////////////////////////////////////////////////////////////
 	// Индикатор голода
 	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
 
 	// Верхняя часть тарелки
 	highHungry->setPosition(pos);
 	window.draw(*highHungry);
 
 	// Уровень голода
-	level = (float)mainPerson.currentHungry / mainPerson.maxHungry;
+	level = float(mainPerson.currentHungry) / mainPerson.maxHungry;
 
 	pos.y += LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
 	currentLevel = LEVEL_HUNGY_GUI * level;
@@ -719,20 +677,20 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 
 	// Дно тарелки
 	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
 	lowHungry->setPosition(pos);
 	window.draw(*lowHungry);
 	////////////////////////////////////////////////////////////////////////
 	// Шкала жажды
 	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - (float)WIDTH_BARS_GUI;
-	pos.y += sizeWindow.y / 2 - (float)HEIGHT_HUNGY_GUI - (float)HEIGHT_THIRST_GUI;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI);
 
 	bottle->setPosition(pos);
 	window.draw(*bottle);
 
-	level = (float)mainPerson.currentThirst / mainPerson.maxThirst;
+	level = float(mainPerson.currentThirst) / mainPerson.maxThirst;
 
 	pos.y += LEVEL_SHIFT_THIRST + LEVEL_THIRST * (1 - level);
 	currentLevel = LEVEL_THIRST * level;

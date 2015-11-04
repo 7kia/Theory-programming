@@ -2,7 +2,11 @@
 #include <SFML\Audio.hpp>
 
 #include "TypeEnemy.h"
+#include "Items.h"
+#include "UnlifeObject.h"
 
+struct destroyObjectsAndBlocks;
+struct Field;
 const int AMOUNT_ENTITY = 100;
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
@@ -19,9 +23,13 @@ public:
 
 	// Для движения
 	Direction direction;
+	Direction directionLook;
 	float stepFirst;
 	float stepCurrent;
-	float timeAnimation;
+
+	bool atack;
+	float timeAnimation = 0.f;
+	float timeFightAnimation = 0.f;
 	sf::Vector2f movement;
 
 	// Ссылки на звуки
@@ -50,12 +58,12 @@ public:
 	/////////////////////////////////////////
 	// Для взаимодействия с объектом
 	UnlifeObject *findObject;
-	std::list<UnlifeObject>::iterator findObjectFromList;
+	int findObjectFromList;
 	UnlifeObject* emptyObject;
 	/////////////////////////////////////////
 	// Для взаимодействия с предметом
 	Item *findItem;
-	std::list<Item>::iterator findItemFromList;
+	int findItemFromList;
 	/////////////////////////////////////////
 	bool isMoveItem;
 	float dMoveItemX, dMoveItemY;
@@ -155,7 +163,7 @@ public:
 	
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
-	bool isInUseField(float x, float y);
+	bool isInUseField(float x, float y, bool under);
 	
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
@@ -167,5 +175,7 @@ public:
 
 };
 
-bool isObject(float x, float y, std::list<UnlifeObject> *unlifeObjects, UnlifeObject *&findObject, std::list<UnlifeObject>::iterator &findObjectFromList, std::list<UnlifeObject>::iterator &current, int currentLevel);
-bool isItem(float x, float y, std::list<Item> &items, Item *&findItem, std::list<Item>::iterator &findItemFromList, std::list<Item>::iterator &current, int currentLevel);
+bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
+							int &findObjectFromList, int &current, int currentLevel);
+bool isItem(float x, float y, std::vector<Item> &items, Item &findItem,
+						int &findItemFromList, int &current, int currentLevel);

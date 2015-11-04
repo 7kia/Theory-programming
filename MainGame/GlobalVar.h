@@ -7,12 +7,12 @@
 #include <string>
 #include <sstream>// Для перевода числа в строку
 
-#include "Paths.h"
+#include "Recourses.h"
 #include "ItemsVar.h"
 #include "BlocksVar.h"
 #include "UnlifeObjectVar.h"
 
-#include "MyMath.h"
+#include "MyFunctions.h"
 
 const sf::String stringDeathPerson = "DEATH";
 
@@ -38,7 +38,7 @@ const char DIVIDE_SYMBOL = '/';
 
 typedef enum
 {
-	NONE,
+	NONE_DIRECTION,
 	UP,
 	DOWN,
 	LEFT,

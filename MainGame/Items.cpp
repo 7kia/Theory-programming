@@ -1,89 +1,26 @@
 #include "Items.h"
+#include "ItemsVar.h"
 
 using namespace sf;
 using namespace std;
 
-void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
+void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 {
 
 	Item* addItem = new Item;
 
 	// Ïóñòîé ïðåäìåò
-	emptyItem.setType(typesItem->typesItem[idItem::emptyItem]);// ÈÑÏÐÀÂÜ
+	emptyItem.setType(typesItem[idItem::emptyItem]);// ÈÑÏÐÀÂÜ
 
-	for (size_t i = 0; i < 12; i++) {
-		addItem->setType(typesItem->typesItem[idItem::stoneItem]);
-		addItem->setPosition(3, 3, 1);
-		items.push_front(*addItem);
+	for (size_t i = idItem::airItem + 1; i < AMOUNT_TYPES_ITEM; i++) {
+		for (size_t countItem = 1; countItem <= 4; countItem++)
+		{
+				addItem->setType(typesItem[i]);
+		addItem->setPosition(i / 2 + 2, i % 3 + 2, 1);
+		items.push_back(*addItem);
+		// ÄÎÁÀÂËÅÍÈÅ ÏÐÅÄÌÅÒÀ	
+		}
 
-		addItem->setType(typesItem->typesItem[idItem::planksBlockItem]);
-		addItem->setPosition(3, 4, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::dirtItem]);
-		addItem->setPosition(3, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::grassItem]);
-		addItem->setPosition(3, 4, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::glassBottleItem]);
-		addItem->setPosition(2, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::glassbukketWithWater]);
-		addItem->setPosition(1, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::sandItem]);
-		addItem->setPosition(3, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::logOakItem]);
-		addItem->setPosition(3, 1, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stonePickaxItem]);
-		addItem->setPosition(2, 1, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stoneAxeItem]);
-		addItem->setPosition(4, 1, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::ironBackHoerIte]);
-		addItem->setPosition(2, 3, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodLadderItem]);
-		addItem->setPosition(3, 6, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stoneBrickItem]);
-		addItem->setPosition(12, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodBukketItem]);
-		addItem->setPosition(11, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodBukketWithWaterItem]);
-		addItem->setPosition(10, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::woodClubItem]);
-		addItem->setPosition(9, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::stoneKnifeItem]);
-		addItem->setPosition(8, 2, 1);
-		items.push_front(*addItem);
-
-		addItem->setType(typesItem->typesItem[idItem::mushroomItem]);// ÈÑÏÐÀÂÜ
-		addItem->setPosition(2, 3, 1);
-		items.push_front(*addItem);
-		// ÄÎÁÀÂËÅÍÈÅ ÏÐÅÄÌÅÒÀ
 	}
 
 	delete addItem;
@@ -128,28 +65,34 @@ float Item::getYPos()
 void Item::setType(TypeItem &type)
 {
 	mainSprite = new Sprite;
-	spriteForUse = new Sprite;
 
 	typeItem = &type;
-	categoryItem = type.category;
-	isDestroy = type.isDestroy;
-
-	cuttingDamage = type.cuttingDamage;
-	crushingDamage = type.crushingDamage;
 
 	mainSprite->setTexture(*type.textureItem);
-	mainSprite->setTextureRect(IntRect(type.pixelPosX, type.pixelPosY, type.width, type.height));
+
+	int pixelXPos = type.sizeMain.pixelPosX;
+	int pixelYPos = type.sizeMain.pixelPosY;
+	int width = type.sizeMain.width;
+	int height = type.sizeMain.height;
+	mainSprite->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
 	mainSprite->scale(scaleItems);// Âíå èíâåíòàðÿ ïðåäìåò áóäåò ìåíüøå
+	mainSprite->setOrigin(width / 2, height / 2);
 
+	/*
+	spriteForUse = new Sprite;
+
+	pixelXPos = type.sizeAlternative.pixelXForUse;
+	pixelYPos = type.sizeAlternative.pixelYForUse;
+	width = type.sizeAlternative.widthForUse;
+	height = type.sizeAlternative.heightForUse;
 	spriteForUse->setTexture(*type.textureItem);
-	spriteForUse->setTextureRect(IntRect(type.pixelXUse, type.pixelXUse, type.widthForUse, type.heightUse));
+	spriteForUse->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
+	spriteForUse->setOrigin(width / 2, height / 2);
+	*/
+	
 
-	mainSprite->setOrigin(type.width / 2, type.height / 2);
-	spriteForUse->setOrigin(type.widthForUse / 2, type.widthForUse / 2);
-
-	// Ïðî÷íîñòü 
-	currentToughness = type.toughnessObject;
-	maxToughness = type.toughnessObject;
+	maxToughness = type.features.toughness;
+	currentToughness = maxToughness;
 }
 
 void Item::setPosition(int xPos, int yPos, int Level)
@@ -157,10 +100,9 @@ void Item::setPosition(int xPos, int yPos, int Level)
 	float numberX = xPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 	float numberY = yPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 
-	// Ïîçèöèÿ è íàïðàâëåíèå
 	currentLevel = Level;
 	mainSprite->setPosition(numberX, numberY);
-	spriteForUse->setPosition(numberX, numberY - typeItem->heightUse / 2 + typeItem->height / 2);
-
-	//direction = NONE;// ÈÑÏÐÀÂÜ
+	// TODO
+	//spriteForUse->setPosition(numberX, numberY - typeItem->sizeAlternative.heightForUse / 2 + typeItem->sizeMainSprite.height / 2);
+	//direction = NONE_DIRECRION;
 }

@@ -82,6 +82,21 @@ const int PIXEL_Y_WOOD_CLUB = SIZE_ITEM * 3;
 const int PIXEL_X_IRON_BACKHOE = SIZE_ITEM * 2;
 const int PIXEL_Y_IRON_BACKHOE = SIZE_ITEM * 4;
 
+// raw meat wolf - сырое мясо волка
+const int PIXEL_X_RAW_MEAT_WOLF = SIZE_ITEM * 6;
+const int PIXEL_Y_RAW_MEAT_WOLF = SIZE_ITEM;
+
+// roast meat wolf - жаренное мясо волка
+const int PIXEL_X_ROAST_MEAT_WOLF = SIZE_ITEM * 7;
+const int PIXEL_Y_ROAST_MEAT_WOLF = SIZE_ITEM;
+
+// raw meat wolf - сырое мясо волка
+const int PIXEL_X_APPLE = SIZE_ITEM * 6;
+const int PIXEL_Y_APPLE = 0;
+
+// seedling oak - саженец дуба
+const int PIXEL_X_SEADLING_OAK_ITEM = SIZE_ITEM * 5;
+const int PIXEL_Y_SEADLING_OAK_ITEM = SIZE_ITEM;
 // ДОБАВЛЕНИЕ ПРЕДМЕТА
 
 namespace idItem {
@@ -99,8 +114,13 @@ namespace idItem {
 		stoneBrickItem,
 		planksBlockItem,
 		woodLadderItem,
+		// Саженцы
+		seadlingOakItem,
 		// Еда
 		mushroomItem,
+		rawMeatWolfItem,
+		roastMeatWolfItem,
+		appleItem,
 		// Инструменты
 		stonePickaxItem,
 		stoneAxeItem,
@@ -126,6 +146,7 @@ typedef enum
 	other,
 	food,
 	block,
+	unlifeObject,
 	pickax,
 	bottleEmpty,
 	bottleWithWater,

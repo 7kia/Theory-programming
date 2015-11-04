@@ -1,10 +1,7 @@
 #pragma once
-#include "EntityVar.h"
 #include "GlobalVar.h"
-#include "ListObjectsAndBlocks.h"
-#include "UnlifeObject.h"
-#include "Items.h"
-#include "Map.h"
+
+#include "MyFunctions.h"
 #include "Sound.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

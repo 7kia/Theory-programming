@@ -1,9 +1,11 @@
 #include "UnlifeObject.h"
+#include "BlocksVar.h"
+#include "UnlifeObjectVar.h"
 
 using namespace sf;
 using namespace std;
 
-void initializeUnlifeObjects(list<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
+void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
 {
 	//unlifeObjects->unlifeObject = new UnlifeObject[MAX_UNLIFE_OBJECT];
 
@@ -11,13 +13,20 @@ void initializeUnlifeObjects(list<UnlifeObject> &unlifeObjects, TypesUnlifeObjec
 
 	UnlifeObject addObject;
 
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakGrow]);
 	addObject.setPosition(4, 12, 1);
 	unlifeObjects.push_back(addObject);
 
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oak]);
-	addObject.setPosition(12, 12, 1);
+	///*
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSmall]);
+	addObject.setPosition(8, 12, 1);
 	unlifeObjects.push_back(addObject);
+
+	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSeadling]);
+	addObject.setPosition(12, 13, 1);
+	unlifeObjects.push_back(addObject);
+	//*/
+	
 
 	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
 	addObject.setPosition(8, 8, 1);
@@ -97,5 +106,5 @@ void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 	spriteObject->setPosition(numberX, numberY);
 	transparentSpiteObject->setPosition(numberX, numberY - typeObject->heightTransparent / 2 + typeObject->height / 2);
 
-	direction = NONE;
+	direction = NONE_DIRECTION;
 }

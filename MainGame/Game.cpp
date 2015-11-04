@@ -13,12 +13,12 @@ void initializeGame(Game & game)
 
 	// Неживые объекты
 	game.typesUnlifeObject = new TypesUnlifeObject;
-	game.unlifeObjects = new list<UnlifeObject>;
+	game.unlifeObjects = new vector<UnlifeObject>;
 	game.emptyObject = new UnlifeObject;
 
 	// Предметы
-	game.typesItem = new TypesItem;
-	game.items = new list<Item>;
+	game.typesItem = new TypeItem[AMOUNT_TYPES_ITEM];
+	game.items = new vector<Item>;
 	game.emptyItem = new Item;// Нужно для корректной работы инвентаря
 
 	// Список уничтожаемых объектов и блоков
@@ -35,19 +35,18 @@ void initializeGame(Game & game)
 	initializeField(*game.field);
 
 	// Неживые объекты
-	initializeTypeUnlifeObjects(game.typesUnlifeObject, *game.databaseSound);
+	initializeTypeUnlifeObjects(*game.typesUnlifeObject, *game.databaseSound);
 	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
 
 	// Предметы
-	initializeTypesItem(*game.typesItem, *game.databaseSound);
+	initializeTypesItem(game.typesItem, *game.databaseSound);
 	initializeItems(*game.items, game.typesItem, *game.emptyItem);
 
+	// TODO
 	// Категории ломаемых предметов
 	initializeCategorysBreakingObject(game);
 
-	////////////////////////////////////
-	// Остальные сущности
-	game.Enemys = new list<Enemy>;
+	game.Enemys = new vector<Enemy>;
 	game.typesEnemy = new TypesEnemy;
 
 	initializeTypeEnemy(*game.typesEnemy, *game.databaseSound);
@@ -81,7 +80,7 @@ void initializeCategorysBreakingObject(Game &game)
 	listDestroy.backoeBreakingBlock[2] = charBlocks[idBlocks::sand];
 	//////////////////////////////////////
 	// Объекты уничтожаемые лопатой TODO
-	//listDestroy.backoeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;;
+	listDestroy.backoeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oakSeadling].name;
 	//////////////////////////////////////
 	// Блоки уничтожаемые топором
 	listDestroy.axeBreakingBlock[SIZE_STRING - 1] = u'\0';
@@ -91,7 +90,8 @@ void initializeCategorysBreakingObject(Game &game)
 	listDestroy.axeBreakingBlock[2] = charBlocks[idBlocks::woodLadder];
 	//////////////////////////////////////
 	// Объекты уничтожаемые топором
-	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oak].name;
+	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oakGrow].name;
+	listDestroy.axeBreakingObject[1] = typesUnlifeObject[idUnlifeObject::oakSmall].name;
 	/////////////////////////////////////////////////////////////////////////
 	// Блоки уничтожаемые киркой
 	listDestroy.pickaxBreakingBlock[SIZE_STRING - 1] = u'\0';
@@ -132,15 +132,26 @@ void renderEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ
 {
 	RenderWindow& window = *game.window;
 
-	list<Enemy>* Enemys = game.Enemys;
+	vector<Enemy>& Enemys = *game.Enemys;
 
-	for (std::list<Enemy>::iterator it = Enemys->begin(); it != Enemys->end(); ++it) {
-		if (it->currentLevelFloor == game.mainPerson->currentLevelFloor) {
+	for (int i = 0; i != Enemys.size(); ++i) {
 
-			window.draw(*it->spriteEntity);
+
+		if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor - 1) {
+			Enemys[i].spriteEntity->setColor(DOWN_VIEW);
+			window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
 		}
-
+		else if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor) {
+			Enemys[i].spriteEntity->setColor(NORMAL_VIEW);
+			window.draw(*Enemys[i].spriteEntity);
+			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
+		}
+		else if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor + 1) {
+			Enemys[i].spriteEntity->setColor(UP_VIEW);
+			window.draw(*Enemys[i].spriteEntity);
+			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
+		}
 	}
 
 }
@@ -167,8 +178,8 @@ void informationAboutSelect(Game &game, float x, float y)
 	infoFloor.setString("Floor : not select");
 	for (int l = 0; l < HEIGHT_MAP; l++) {
 	// Рисуем только текущий уровень
-	if (l == game.mainPerson->currentLevelFloor
-		|| l == game.mainPerson->currentLevelFloor + 1) {
+	if (l >= game.mainPerson->currentLevelFloor - 1
+		&& l <= game.mainPerson->currentLevelFloor + 2) {
 		for (int i = 0; i < LONG_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 
@@ -189,28 +200,30 @@ void informationAboutSelect(Game &game, float x, float y)
 	}
 	///////////////////////////////////////////////////////////////////
 	// Осмотр неживых объектов
-	list<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
+	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
 	game.mainPerson->findObject = game.emptyObject;
+	game.mainPerson->findObjectFromList = -1;
 	infoUnlifeObject.setString("UnlifeObject : not select");
-	for (std::list<UnlifeObject>::iterator it = unlifeObjects.begin(); it != unlifeObjects.end(); ++it) {
+	for (int i = 0; i != unlifeObjects.size(); ++i) {
 
-		int level = it->currentLevel;
+		int level = unlifeObjects[i].currentLevel;
 
-		Sprite *spriteObject = it->spriteObject;
+		Sprite *spriteObject = unlifeObjects[i].spriteObject;
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
-		Sprite *transparentSpiteObject = it->transparentSpiteObject;
+		Sprite *transparentSpiteObject = unlifeObjects[i].transparentSpiteObject;
 		FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) || objectAltBound.contains(x, y)) {
-			if (level == game.mainPerson->currentLevelFloor + 1) {
-				String name = it->typeObject->name;
+			if (level >= game.mainPerson->currentLevelFloor
+					&& level <= game.mainPerson->currentLevelFloor + 1) {
+				String name = unlifeObjects[i].typeObject->name;
 				if (name != "") {
 
-					game.mainPerson->findObjectFromList = it;
-					game.mainPerson->findObject = &*it;
+					game.mainPerson->findObjectFromList = i;
+					game.mainPerson->findObject = &unlifeObjects[i];
 					infoUnlifeObject.setString("UnlifeObject : " + name);
 				}
 			}
@@ -219,27 +232,30 @@ void informationAboutSelect(Game &game, float x, float y)
 	}
 	///////////////////////////////////////////////////////////////////
 	// Осмотр предметов
-	list<Item> &items = *game.items;
+	vector<Item> &items = *game.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
 	game.mainPerson->findItem = game.emptyItem;
+	game.mainPerson->findItemFromList = -1;
 	infoItem.setString("Item : not select");
-	for (std::list<Item>::iterator it = items.begin(); it != items.end(); ++it) {
+	for (int i = 0; i != items.size(); ++i) {
 
-		int level = it->currentLevel;
+		int level = items[i].currentLevel;
 
-		Sprite *mainSprite = it->mainSprite;
+		Sprite *mainSprite = items[i].mainSprite;
 		FloatRect itemBound = mainSprite->getGlobalBounds();
 
-		Sprite *useSpiteObject = it->spriteForUse;// ИСПРАВЬ
-		FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
-
-		if (itemBound.contains(x, y) || itemUseBound.contains(x, y)) {
-			if (level == game.mainPerson->currentLevelFloor + 1) {
-				String name = it->typeItem->name;
+		// TODO
+		//Sprite *useSpiteObject = items[i].spriteForUse;// ИСПРАВЬ
+		//FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
+		//|| itemUseBound.contains(x, y)
+		if (itemBound.contains(x, y) ) {
+			if (level >= game.mainPerson->currentLevelFloor
+					&& level <= game.mainPerson->currentLevelFloor + 2) {
+				String name = items[i].typeItem->features.name;
 				if (name != "") {
-					game.mainPerson->findItemFromList = it;
-					game.mainPerson->findItem = &*it;
+					game.mainPerson->findItemFromList = i;
+					game.mainPerson->findItem = &items[i];
 					infoItem.setString("Item : " + name);
 				}
 			}
@@ -248,25 +264,27 @@ void informationAboutSelect(Game &game, float x, float y)
 	}
 	///////////////////////////////////////////////////////////////////
 	// Осмотр сущностей
-	list<Enemy>& Enemys = *game.Enemys;
+	vector<Enemy>& Enemys = *game.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
 	game.mainPerson->findEnemy = game.emptyEnemy;
+	game.mainPerson->findEnemyFromList = -1;
 	infoEnemys.setString("Entity : not select");
-	for (std::list<Enemy>::iterator it = Enemys.begin(); it != Enemys.end(); ++it) {
+	for (int i = 0; i != Enemys.size(); ++i) {
 
-		int level = it->currentLevelFloor;
+		int level = Enemys[i].currentLevelFloor;
 
-		Sprite *spriteObject = it->spriteEntity;
+		Sprite *spriteObject = Enemys[i].spriteEntity;
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y)) {
-			if (level == game.mainPerson->currentLevelFloor) {
-				String name = it->type->name;
+			if (level >= game.mainPerson->currentLevelFloor - 1
+					&& level <= game.mainPerson->currentLevelFloor + 1) {
+				String name = Enemys[i].type->name;
 				if (name != "") {
 
-					game.mainPerson->findEnemyFromList = it;
-					game.mainPerson->findEnemy = &*it;
+					game.mainPerson->findEnemyFromList = i;
+					game.mainPerson->findEnemy = &Enemys[i];
 					infoEnemys.setString("Entity : " + name);
 				}
 			}

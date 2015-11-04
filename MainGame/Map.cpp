@@ -1,4 +1,5 @@
 #include "Map.h"
+#include "Recourses.h"
 
 using namespace sf;
 using namespace std;
@@ -94,15 +95,28 @@ void Field::initializeDataBlocks()
 
 void Field::setTypeSprite(int personLevelFloor, int l, int i, int j)
 {
-	if (l == personLevelFloor)
-	{
+	if (l == personLevelFloor - 1) {
+		floorSprite->setColor(DOWN_VIEW);
 		setSprite(floorSprite, l, i, j);
+		wallSprite->setTextureRect(IntRect(0, 0, 0, 0));
+	}
+	else if (l == personLevelFloor)
+	{
+		floorSprite->setColor(NORMAL_VIEW);
+		setSprite(floorSprite, l, i, j);
+		wallSprite->setTextureRect(IntRect(0, 0, 0, 0));
 	}
 	else if (l == personLevelFloor + 1)
 	{
+		wallSprite->setColor(NORMAL_VIEW);
 		setSprite(wallSprite, l, i, j);
+		floorSprite->setTextureRect(IntRect(0, 0, 0, 0));
 	}
-
+	else if (l == personLevelFloor + 2) {
+		wallSprite->setColor(UP_VIEW);
+		setSprite(wallSprite, l, i, j);
+		floorSprite->setTextureRect(IntRect(0, 0, 0, 0));
+	}
 };
 
 String Field::findCharBlocks(wchar_t block)
@@ -116,6 +130,9 @@ String Field::findCharBlocks(wchar_t block)
 	return namesBlocks[idBlocks::unknow];
 }
 
+/*
+
+*/
 int Field::findIdBlock(wchar_t block)
 {
 	for (int i = 1; i < idBlocks::amountKnowBlocks; i++) {

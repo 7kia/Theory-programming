@@ -1,4 +1,6 @@
 #include "TypeEnemy.h"
+#include "EntityVar.h"
+#include "Recourses.h"
 
 using namespace sf;
 
@@ -35,8 +37,8 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	float view = RADIUSE_VIEW;
 
 	*minAmountForWolf = { 1 };
-	*maxAmountForWolf = { 2 };
-	*idItemsForWolf = { idItem::dirtItem };// ÈÑÏÐÀÂÜ
+	*maxAmountForWolf = { 4 };
+	*idItemsForWolf = { idItem::rawMeatWolfItem };// ÈÑÏÐÀÂÜ
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 
 									health, stamina, mana, protectCut, protectCrush,
@@ -73,8 +75,8 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 
 	view = RADIUSE_VIEW;
 
-	*minAmountForSkelet = { 1 };
-	*maxAmountForSkelet = { 2 };
+	*minAmountForSkelet = { 0 };
+	*maxAmountForSkelet = { 0 };
 	*idItemsForSkelet = { idItem::dirtItem };// ÈÑÏÐÀÂÜ
 
 	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_SKELET_SLOTS,

@@ -1,531 +1,547 @@
 #include "TypeItems.h"
+#include "ItemsVar.h"
+#include "UnlifeObjectVar.h"
+#include "Recourses.h"
+#include <iostream>
+
 
 using namespace sf;
+using namespace std;
 
-void initializeTypesItem(TypesItem &typesItem, dataSound &databaseSound)
+void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 {
-	typesItem.typesItem = new TypeItem[AMOUNT_TYPES_ITEM];
 
 	////////////////////////////////////////////////v
 	// Переменные для записывания данных
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	sizeMainSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
+
 	int numberItem = idItem::stoneItem;
 
 	String* pathTexture = new String;
-	*pathTexture =	texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::items];
 
-	String* nameItem = new String;
-	*nameItem = "Stone block";
+	featuresAddItem.init("Stone block", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	int categoryItem = idCategoryItem::block;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
 
-	bool canDestroy = false;
+	damage.init(0, 10);
 
-	int toughness = 0;
+	idCreated.init(idBlocks::stone, idUnlifeObject::NONE_OBJECT);
 
-	int pixelX = PIXEL_X_SMALL_STONE;
-	int pixelY = PIXEL_Y_SMALL_STONE;
-
-	int cuttingDamage = 0;
-	int crushingDamage = 1;
-
-	int block = idBlocks::stone;
-	int unlifeObject = 0;//idUnlifeObject::
-	////////////////////////////////////////////////
-
-	/////////////////////////////////////
-	// Камень
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+	
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Доски
 	numberItem = idItem::planksBlockItem;
-	*nameItem = "Planks";
 
-	categoryItem = idCategoryItem::block;
+	featuresAddItem.init("Planks", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_PLANKS, PIXEL_Y_PLANKS);
 
-	toughness = 0;
+	damage.init(0, 5);
 
-	pixelX = PIXEL_X_PLANKS;
-	pixelY = PIXEL_Y_PLANKS;
+	idCreated.init(idBlocks::planksBlock, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::planksBlock;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Земля
 	numberItem = idItem::dirtItem;
-	*nameItem = "Dirt block";
 
-	categoryItem = idCategoryItem::block;
+	featuresAddItem.init("Dirt block", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_DIRT, PIXEL_Y_DIRT);
 
-	toughness = 0;
+	damage.init(0, 1);
 
-	pixelX = PIXEL_X_DIRT;
-	pixelY = PIXEL_Y_DIRT;
+	idCreated.init(idBlocks::planksBlock, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::dirt;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Земля с травой
 	numberItem = idItem::grassItem;
-	*nameItem = "Grass";
 
-	categoryItem = idCategoryItem::block;
+	featuresAddItem.init("Grass", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GRASS_BRICK, PIXEL_Y_GRASS_BRICK);
 
-	toughness = 0;
+	damage.init(0, 1);
 
-	pixelX = PIXEL_X_GRASS_BRICK;
-	pixelY = PIXEL_Y_GRASS_BRICK;
+	idCreated.init(idBlocks::grass, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::grass;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Песок
 	numberItem = idItem::sandItem;
-	*nameItem = "Sand block";
 
-	categoryItem = idCategoryItem::block;
+	featuresAddItem.init("Sand block", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SAND, PIXEL_Y_SAND);
 
-	toughness = 0;
+	damage.init(0, 1);
 
-	pixelX = PIXEL_X_SAND;
-	pixelY = PIXEL_Y_SAND;
+	idCreated.init(idBlocks::sand, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::sand;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Деревянная лестница
 	numberItem = idItem::woodLadderItem;
-	*nameItem = "Wood ladder";
 
-	categoryItem = idCategoryItem::block;
+	featuresAddItem.init("Wood ladder", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_LADDER, PIXEL_Y_WOOD_LADDER);
 
-	toughness = 0;
+	damage.init(0, 4);
 
-	pixelX = PIXEL_X_WOOD_LADDER;
-	pixelY = PIXEL_Y_WOOD_LADDER;
+	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::woodLadder;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Каменные кирпичи
 	numberItem = idItem::stoneBrickItem;
-	*nameItem = "Stone brick";
 
-	categoryItem = idCategoryItem::block;
+	featuresAddItem.init("Stone brick", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_BRICK, PIXEL_Y_STONE_BRICK);
 
-	toughness = 0;
+	damage.init(0, 10);
 
-	pixelX = PIXEL_X_STONE_BRICK;
-	pixelY = PIXEL_Y_STONE_BRICK;
+	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::stoneBrick;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Дубовое бревно
 	numberItem = idItem::logOakItem;
-	*nameItem = "Log oak";
 
-	categoryItem = idCategoryItem::block;
+	featuresAddItem.init("Log oak", numberItem, idCategoryItem::block);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_LOG_OAK, PIXEL_Y_LOG_OAK);
 
-	toughness = 0;
+	damage.init(1, 5);
 
-	pixelX = PIXEL_X_LOG_OAK;
-	pixelY = PIXEL_Y_LOG_OAK;
-	
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	idCreated.init(idBlocks::logOak, idUnlifeObject::NONE_OBJECT);
 
-	block = idBlocks::logOak;
-	unlifeObject = 0;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
-	// Напитки
+	// Саженцы
 
+	/////////////////////////////
+	// Саженец дуба
+	numberItem = idItem::seadlingOakItem;
+
+	featuresAddItem.init("Seadling oak", numberItem, idCategoryItem::unlifeObject);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_OAK_ITEM, PIXEL_Y_SEADLING_OAK_ITEM);
+
+	damage.init(1, 1);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::oakSeadling);
+
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////////////////////////////////
+	// Напитки и сосуды
 
 	/////////////////////////////
 	// Деревянное ведро
 	numberItem = idItem::woodBukketItem;
-	*nameItem = "Wood bukket";
 
-	categoryItem = idCategoryItem::bukketEmpty;
+	featuresAddItem.init("Wood bukket", numberItem, idCategoryItem::bukketEmpty);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET, PIXEL_Y_WOOD_BUKKET);
 
-	toughness = 0;
+	damage.init(0, 3);
 
-	pixelX = PIXEL_X_WOOD_BUKKET;
-	pixelY = PIXEL_Y_WOOD_BUKKET;
+	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::water;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
-	// Деревянное ведро
+	// Деревянное ведро с водой
 	numberItem = idItem::woodBukketWithWaterItem;
-	*nameItem = "Wood bukket with water";
 
-	categoryItem = idCategoryItem::bukketWithWater;
+	featuresAddItem.init("Wood bukket with water", numberItem, idCategoryItem::bukketWithWater);
+	featuresAddItem.defineToughness(false, 20);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET_WITH_WATER, PIXEL_Y_WOOD_BUKKET_WITH_WATER);
 
-	toughness = 20;
+	damage.init(0, 4);
 
-	pixelX = PIXEL_X_WOOD_BUKKET_WITH_WATER;
-	pixelY = PIXEL_Y_WOOD_BUKKET_WITH_WATER;
+	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::water;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Стеклянная бытылка
 	numberItem = idItem::glassBottleItem;
-	*nameItem = "Glass bottle";
 
-	categoryItem = idCategoryItem::bottleEmpty;
+	featuresAddItem.init("Glass bottle", numberItem, idCategoryItem::bottleEmpty);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE, PIXEL_Y_GLASS_BOTTLE);
 
-	toughness = 0;
+	damage.init(0, 2);
 
-	pixelX = PIXEL_X_GLASS_BOTTLE;
-	pixelY = PIXEL_Y_GLASS_BOTTLE;
+	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::water;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Стеклянная бытылка с водой
 	numberItem = idItem::glassbukketWithWater;
-	*nameItem = "Glass bottle with water";
 
-	categoryItem = idCategoryItem::bottleWithWater;
+	featuresAddItem.init("Glass bottle with water", numberItem, idCategoryItem::bottleWithWater);
+	featuresAddItem.defineToughness(false, 5);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE_WITH_WATER, PIXEL_Y_GLASS_BOTTLE_WITH_WATER);
 
-	toughness = 5;
+	damage.init(0, 2);
 
-	pixelX = PIXEL_X_GLASS_BOTTLE_WITH_WATER;
-	pixelY = PIXEL_Y_GLASS_BOTTLE_WITH_WATER;
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = 0;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// Еда
 
 	/////////////////////////////////////
 	// Гриб
 	numberItem = idItem::mushroomItem;
-	*nameItem = "Mushroom";
 
-	categoryItem = idCategoryItem::food;
+	featuresAddItem.init("Mushroom", numberItem, idCategoryItem::food);
+	featuresAddItem.defineToughness(false, 4);
 
-	canDestroy = false;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_MUSHROOM, PIXEL_Y_MUSHROOM);
 
-	toughness = 4;
+	damage.init(0, 1);
 
-	pixelX = PIXEL_X_MUSHROOM;
-	pixelY = PIXEL_Y_MUSHROOM;
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = 0;
-	unlifeObject = 0;
+	typesItem[numberItem] = addType;
+	/////////////////////////////////////
+	// Мясо волка
+	numberItem = idItem::rawMeatWolfItem;
 
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	featuresAddItem.init("Raw meat wolf", numberItem, idCategoryItem::other);
+	featuresAddItem.defineToughness(false, 4);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_RAW_MEAT_WOLF, PIXEL_Y_RAW_MEAT_WOLF);
+
+	damage.init(0, 1);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////////////
+	// Жаренное мясо волка
+	numberItem = idItem::roastMeatWolfItem;
+
+	featuresAddItem.init("Roast meat wolf", numberItem, idCategoryItem::food);
+	featuresAddItem.defineToughness(false, 10);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_ROAST_MEAT_WOLF, PIXEL_Y_ROAST_MEAT_WOLF);
+
+	damage.init(0, 1);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////////////
+	// Яблоко
+	numberItem = idItem::appleItem;
+
+	featuresAddItem.init("Apple", numberItem, idCategoryItem::food);
+	featuresAddItem.defineToughness(false, 4);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_APPLE, PIXEL_Y_APPLE);
+
+	damage.init(0, 1);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// Мечи
 
 	/////////////////////////////
 	// Каменный нож
 	numberItem = idItem::stoneKnifeItem;
-	*nameItem = "Stone knife";
 
-	categoryItem = idCategoryItem::weapon;
+	featuresAddItem.init("Stone knife", numberItem, idCategoryItem::weapon);
+	featuresAddItem.defineToughness(true, 128);
 
-	canDestroy = true;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_KNIFE, PIXEL_Y_STONE_KNIFE);
 
-	toughness = 32;
+	damage.init(18, 1);
 
-	pixelX = PIXEL_X_STONE_KNIFE;
-	pixelY = PIXEL_Y_STONE_KNIFE;
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 18;
-	crushingDamage = 0;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = 0;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// Дубины
 
 	/////////////////////////////
 	// Деревянная дубина
 	numberItem = idItem::woodClubItem;
-	*nameItem = "Wood club";
 
-	categoryItem = idCategoryItem::weapon;
+	featuresAddItem.init("Wood club", numberItem, idCategoryItem::weapon);
+	featuresAddItem.defineToughness(true, 128);
 
-	canDestroy = true;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_CLUB, PIXEL_Y_WOOD_CLUB);
 
-	toughness = 32;
+	damage.init(0, 18);
 
-	pixelX = PIXEL_X_WOOD_CLUB;
-	pixelY = PIXEL_Y_WOOD_CLUB;
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 0;
-	crushingDamage = 18;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = 0;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// Лопаты
 
 	/////////////////////////////
 	// Железная лопата
 	numberItem = idItem::ironBackHoerIte;
-	*nameItem = "Iron backhoe";
 
-	categoryItem = idCategoryItem::backhoe;
+	featuresAddItem.init("Iron backhoe", numberItem, idCategoryItem::backhoe);
+	featuresAddItem.defineToughness(true, 512);
 
-	canDestroy = true;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_BACKHOE, PIXEL_Y_IRON_BACKHOE);
 
-	toughness = 128;
+	damage.init(1, 10);
 
-	pixelX = PIXEL_X_IRON_BACKHOE;
-	pixelY = PIXEL_Y_IRON_BACKHOE;
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 1;
-	crushingDamage = 10;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::air;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// Кирки
 
 	/////////////////////////////
 	// Каменная кирка
 	numberItem = idItem::stonePickaxItem;
-	*nameItem = "Stone pickax";
 
-	categoryItem = idCategoryItem::pickax;
+	featuresAddItem.init("Stone pickax", numberItem, idCategoryItem::pickax);
+	featuresAddItem.defineToughness(true, 128);
 
-	canDestroy = true;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_BACKHOE, PIXEL_Y_IRON_BACKHOE);
 
-	toughness = 32;
+	damage.init(10, 6);
 
-	pixelX = PIXEL_X_STONE_PICKAX;
-	pixelY = PIXEL_Y_STONE_PICKAX;
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 10;
-	crushingDamage = 6;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::air;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// Топоры
 
 	/////////////////////////////
 	// Каменный топор
 	numberItem = idItem::stoneAxeItem;
-	*nameItem = "Stone axe";
 
-	categoryItem = idCategoryItem::axe;
+	featuresAddItem.init("Stone axe", numberItem, idCategoryItem::axe);
+	featuresAddItem.defineToughness(true, 128);
 
-	canDestroy = true;
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_AXE, PIXEL_Y_STONE_AXE);
 
-	toughness = 32;
+	damage.init(8, 8);
 
-	pixelX = PIXEL_X_STONE_AXE;
-	pixelY = PIXEL_Y_STONE_AXE;
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
-	cuttingDamage = 8;
-	crushingDamage = 8;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	block = idBlocks::air;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// ДОБАВЛЕНИЕ ПРЕДМЕТА
 	/////////////////////////////
 	// Пустой предмет( нужен для работы с инвентарём
 	numberItem = idItem::emptyItem;
-	*nameItem = "Empty";
 
-	categoryItem = idCategoryItem::other;
+	featuresAddItem.init("Empty", numberItem, idCategoryItem::other);
+	featuresAddItem.defineToughness(false, 1);
 
-	canDestroy = false;
+	sizeMain.init(0, 0, 0, 0);
 
-	toughness = 0;
+	damage.init(0, 1);
 
-	int width = 0;
-	int height = 0;
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
-	pixelX = 0;
-	pixelY = 0;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
 
-	cuttingDamage = 0;
-	crushingDamage = 0;
-
-	block = 0;
-	unlifeObject = 0;
-
-	typesItem.typesItem[numberItem].Init(*pathTexture, *nameItem, numberItem, categoryItem, canDestroy, toughness, SIZE_ITEM, SIZE_ITEM, pixelX, pixelY, block, unlifeObject, cuttingDamage, crushingDamage);
-	typesItem.countTypeItem += 1;
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	delete pathTexture;
 }
 
-////////////////////////////////////////////////////////////////////
-// Виды объектов
-void TypeItem::Init(String filenameTexture, String typeName, int id, int idCategory, bool canDestroy, int toughness, int w, int h, int pixelX, int pixelY, int idBlock, int idUnlifeObject, int damCut, int damCrash)
+void sizeMainSprite::init(int w, int h, int xPixPos, int yPixPos)
 {
-	textureItem = new Texture;
-
-	name = typeName;
-	idItem = id;
-
-	// Задание размера
-	height = h;
 	width = w;
+	height = h;
+	pixelPosX = xPixPos;
+	pixelPosY = yPixPos;
+}
 
-	pixelPosX = pixelX;
-	pixelPosY = pixelY;
+void sizeAlternativeSprite::init(int w, int h, int xPixPos, int yPixPos)
+{
+	widthForUse = w;
+	heightForUse = h;
+	pixelXForUse = xPixPos;
+	pixelYForUse = yPixPos;
+}
 
-	// Разрушаемый или перетаскиваемый
-	isDestroy = canDestroy;
+void typeDamageItem::init(int cut, int crush)
+{
+	cuttingDamage = cut;
+	crushingDamage = crush;
+}
 
-	// Категория
+void idCreateObjects::init(int idBlock, int idObject)
+{
+	idBlockForUse = idBlock;
+	idUnlideOnjectForUse = idObject;
+}
+
+void featuresItem::init(String nameItem, int idItem, int idCategory)
+{
+	name = nameItem;
+	id = idItem;
 	category = idCategory;
 
-	// Урон
-	cuttingDamage = damCut;// Режущий
-	crushingDamage = damCrash;// Дробящий
+}
 
-	// Прочность 
-	toughnessObject = toughness;
-
-	// У разрушаемых предметов недолжно быть прочности
-	if (isDestroy == false) {
-		toughness = 0;
+void featuresItem::defineToughness(bool destroy, int toughnessItem)
+{
+	isDestroy = destroy;
+	toughness = toughnessItem;
+}
+////////////////////////////////////////////////////////////////////
+// Виды объектов
+void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
+										sizeMainSprite sizeMainSprite, idCreateObjects idCreated, typeDamageItem damage)
+{
+	textureItem = new Texture;
+	if (textureItem->loadFromFile(filenameTexture))
+	{
+		std::cout << string(filenameTexture) << std::endl;
+	}
+	else
+	{
+		std::cout << "error " << string(filenameTexture) << std::endl;
 	}
 
-	switch (idCategory) {
+	sizeMain.height = sizeMainSprite.height;
+	sizeMain.width = sizeMainSprite.width;
+	sizeMain.pixelPosX = sizeMainSprite.pixelPosX;
+	sizeMain.pixelPosY = sizeMainSprite.pixelPosY;
+
+	features.isDestroy = featuresAddItem.isDestroy;
+	features.category = featuresAddItem.category;
+	features.toughness = featuresAddItem.toughness;
+	features.name = featuresAddItem.name;
+	features.id = featuresAddItem.id;
+
+	damageItem.cuttingDamage = damage.cuttingDamage;// Режущий
+	damageItem.crushingDamage = damage.crushingDamage;// Дробящий
+
+	switch (features.category) {
 	case idCategoryItem::block:
 	case idCategoryItem::bukketEmpty:
 	case idCategoryItem::bottleEmpty:
 	case idCategoryItem::bottleWithWater:
 	case idCategoryItem::bukketWithWater:
-		idBlockForUse = idBlock;
+		idAdd.idBlockForUse = idCreated.idBlockForUse;
+		idAdd.idUnlideOnjectForUse = -1;
 		break;
+	case idCategoryItem::unlifeObject:
+		idAdd.idUnlideOnjectForUse = idCreated.idUnlideOnjectForUse;
+		idAdd.idBlockForUse = -1;
 	default:
 		break;
 	}
-
-	// Текстура
-	textureItem->loadFromFile(filenameTexture);
 
 	// Звуки 
 	//mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];// ИСПРАВЬ
 	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 };
 
-void TypeItem::InitForUse(String filenameTextureForUse, int w, int h, int pixelX, int pixelY)
+void TypeItem::InitForUse(String filenameTextureForUse, sizeAlternativeSprite size)
 {
 	textureItemForUse = new Texture;
-
+	textureItemForUse->loadFromFile(filenameTextureForUse);
 	// Задание размера
-	heightUse = h;
-	widthForUse = w;
+	sizeAlternative.heightForUse = size.heightForUse;
+	sizeAlternative.widthForUse = size.widthForUse;
 
-	pixelXUse = pixelX;
-	pixelYUse = pixelY;
+	sizeAlternative.pixelXForUse = size.pixelXForUse;
+	sizeAlternative.pixelYForUse = size.pixelYForUse;
 }
 ////////////////////////////////////////////////////////////////////

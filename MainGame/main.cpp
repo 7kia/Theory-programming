@@ -7,7 +7,7 @@ const Time TIME_PER_FRAME = seconds(1.f / 60.f);
 using namespace sf;
 using namespace std;
 
-void processEvents(Game &game)
+void processEvents(Game &game, const Time &deltaTime)
 {
 	Event event;
 	RenderWindow &window = *game.window;
@@ -21,8 +21,8 @@ void processEvents(Game &game)
 			Vector2i mousePos = Mouse::getPosition(window);
 			Vector2f pos = window.mapPixelToCoords(mousePos);
 
-			UnlifeObject* emptyObject = NULL;
-			Item* emptyItem = NULL;
+			UnlifeObject* emptyObject = nullptr;
+			Item* emptyItem = nullptr;
 
 			mainPerson.findObject = emptyObject;
 			mainPerson.findItem = emptyItem;
@@ -53,7 +53,7 @@ void processEvents(Game &game)
 			} else if (Keyboard::isKeyPressed(Keyboard::D)) {
 				mainPerson.direction = RIGHT;
 			} else {
-				mainPerson.direction = NONE;
+				mainPerson.direction = NONE_DIRECTION;
 			}
 			/////////////////////////////////////////////////////////////////////////////////////////
 			// Переключение режимов
@@ -130,7 +130,8 @@ void processEvents(Game &game)
 			// Оюработка щелчка мыши
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
-				mainPerson.useItem(*game.field, *game.listDestroy, game.typesItem->typesItem, game.Enemys,
+				mainPerson.useItem(*game.field, *game.listDestroy, deltaTime,
+													 game.typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
 													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 			} else if (event.type == Event::MouseMoved) {// ИСПРАВЬ
@@ -138,7 +139,7 @@ void processEvents(Game &game)
 				if (mainPerson.isMoveItem) {
 
 
-					if (mainPerson.isInUseField(pos.x, pos.y)) {
+					if (mainPerson.isInUseField(pos.x, pos.y, false)) {
 						Vector2f position = { pos.x - mainPerson.dMoveItemX, pos.y - mainPerson.dMoveItemY };
 						if (mainPerson.findObject != emptyObject) {
 							Sprite &spriteObject = *mainPerson.findObject->spriteObject;
@@ -205,8 +206,8 @@ void render(Game & game)
 	while (l < HEIGHT_MAP)
 	{
 		// Рисуем только текущий уровень
-		if (l == mainPerson.currentLevelFloor
-			|| l == mainPerson.currentLevelFloor + 1)
+		if (l >= mainPerson.currentLevelFloor - 1
+			&& l <= mainPerson.currentLevelFloor + 2)
 		{
 			for (int i = 0; i < LONG_MAP; i++)
 			{
@@ -214,8 +215,9 @@ void render(Game & game)
 				{
 					field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
-					window.draw(*field.floorSprite);
 					window.draw(*field.wallSprite);
+					window.draw(*field.floorSprite);
+
 				}
 			}
 		}
@@ -225,10 +227,24 @@ void render(Game & game)
 
 	//////////////////////////////////////////////
 	// Отрисовка предметов
-	for (std::list<Item>::iterator it = game.items->begin(); it != game.items->end(); ++it) {
-		if (it->currentLevel == game.mainPerson->currentLevelFloor + 1) {
+	vector<Item> &items = *game.items;
+	for (int i = 0; i != items.size(); ++i) {
+		if (items[i].currentLevel >= game.mainPerson->currentLevelFloor
+				&& items[i].currentLevel <= game.mainPerson->currentLevelFloor + 2) {
 
-			window.draw(*it->mainSprite);
+
+			if (items[i].currentLevel == game.mainPerson->currentLevelFloor)
+			{
+				items[i].mainSprite->setColor(DOWN_VIEW);
+			}
+			else if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 1) {
+				items[i].mainSprite->setColor(NORMAL_VIEW);
+			}
+			else if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 2) {
+				items[i].mainSprite->setColor(UP_VIEW);
+			}
+
+			window.draw(*items[i].mainSprite);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
 		}
 
@@ -244,13 +260,30 @@ void render(Game & game)
 
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
-	for (std::list<UnlifeObject>::iterator it = game.unlifeObjects->begin(); it != game.unlifeObjects->end(); ++it)
+	int currentLevel = game.mainPerson->currentLevelFloor;
+	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
+	for (int i = 0; i != unlifeObjects.size(); ++i)
 	{
-		if (it->currentLevel == game.mainPerson->currentLevelFloor + 1)
+		if (unlifeObjects[i].currentLevel >= currentLevel
+				&& unlifeObjects[i].currentLevel <= currentLevel + 2)
 		{
+			if (unlifeObjects[i].currentLevel == currentLevel)
+			{
+				unlifeObjects[i].spriteObject->setColor(DOWN_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(DOWN_VIEW);
+			}
+			else if (unlifeObjects[i].currentLevel == currentLevel + 1)
+			{
+				unlifeObjects[i].spriteObject->setColor(NORMAL_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(NORMAL_VIEW);
+			}
+			else if (unlifeObjects[i].currentLevel == currentLevel + 2) {
+				unlifeObjects[i].spriteObject->setColor(UP_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(UP_VIEW);
+			}
 
-			window.draw(*it->spriteObject);
-			window.draw(*it->transparentSpiteObject);
+			window.draw(*unlifeObjects[i].spriteObject);
+			window.draw(*unlifeObjects[i].transparentSpiteObject);
 		}
 		
 	}
@@ -279,10 +312,11 @@ void startGame()
 		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());// ИСПРАВЬ
 		while (timeSinceLastUpdate > TIME_PER_FRAME) {
 			timeSinceLastUpdate -= TIME_PER_FRAME;
-			processEvents(*game);
+			processEvents(*game, TIME_PER_FRAME);
 			////////////////////////////////////////////////////////////
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
+
 				mainPerson.update(TIME_PER_FRAME, *game->databaseSound);
 				mainPerson.interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
@@ -290,13 +324,13 @@ void startGame()
 
 				/////////////////////////////////////
 				// Взаимодействие существ с миром
-				list<Enemy>* Enemys = game->Enemys;
-				for (std::list<Enemy>::iterator it = Enemys->begin(); it != Enemys->end(); ++it) {
+				vector<Enemy>& Enemys = *game->Enemys;
+				for (int i = 0; i != Enemys.size(); ++i) {
 					
-					it->update(TIME_PER_FRAME, *game->databaseSound);
-					it->interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
-					it->randomWalk(TIME_PER_FRAME);
-					mainPerson.attractionEnemy(*it, TIME_PER_FRAME);
+					Enemys[i].update(TIME_PER_FRAME, *game->databaseSound);
+					Enemys[i].interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
+					mainPerson.attractionEnemy(&Enemys[i], TIME_PER_FRAME);
+					Enemys[i].randomWalk(TIME_PER_FRAME);
 
 				}
 				/////////////////////////////////////
@@ -309,7 +343,7 @@ void startGame()
 			////////////////////////////////////////////////////////////
 		}
 		render(*game);
-		writeMap(game->field->dataMap);
+		//writeMap(game->field->dataMap);
 	}
 	destroyGame(*game);
 }

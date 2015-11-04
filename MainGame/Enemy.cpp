@@ -1,6 +1,9 @@
 #include "Enemy.h"
+#include "Items.h"
+#include "UnlifeObject.h"
+#include "EntityVar.h"
 
-void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int countEnemy,
+void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject)// ДОБАВЛЕНИЕ СУЩНОСТИ 
 {
 
@@ -15,14 +18,14 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int coun
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 0; i < 4; i++) {
+	for (size_t i = 0; i < 1; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
 		}
 
-		int xPos = 5 + rand() % 5;
-		int yPos = 5 + rand() % 5;
+		int xPos = 9 + rand() % 5;
+		int yPos = 9 + rand() % 5;
 		int levelFloor = 0;
 
 		addEnemy->EnemyInit(*typeEnemy, emptyItem, emptyObject, xPos, yPos, levelFloor);
@@ -34,14 +37,14 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::list<Enemy> &enemy, int coun
 	// Скелеты
 	typeEnemy = &typesEnemy->typesEnemy[idEnemy::skeletEnemy];
 
-	for (size_t i = 0; i < 4; i++) {
+	for (size_t i = 0; i < 0; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
 		}
 
-		xPos = 7 + rand() % 5;
-		yPos = 7 + rand() % 5;
+		xPos = 9 + rand() % 5;
+		yPos = 9 + rand() % 5;
 		levelFloor = 0;
 
 		addEnemy->EnemyInit(*typeEnemy, emptyItem, emptyObject, xPos, yPos, levelFloor);
@@ -70,12 +73,11 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	// Дальность подбора предметов
 	radiusUse = 1;
 
-	mode = idEntityMode::walk;
+	currenMode = idEntityMode::walk;
 
 	// Скорость ходьбы
 	stepFirst = SPEED_ENTITY;
 	stepCurrent = SPEED_ENTITY;
-	timeAnimation = 0.f;
 
 	// Текстура
 	spriteEntity->setTexture(*type->textureEntity);
@@ -95,11 +97,15 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 
 	// Позиция и направление
 	currentLevelFloor = level;
-	currenMode = idEntityMode::fight;
+	currenMode = idEntityMode::walk;
 
 	spriteEntity->setOrigin(type->width / 2, type->height / 2);
 	spriteEntity->setPosition(xPos * SIZE_BLOCK - SIZE_BLOCK / 2, yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
-	direction = NONE;
+
+	timeAnimation = 0.f;
+	timeFightAnimation = 0.f;
+	direction = NONE_DIRECTION;
+	directionLook = DOWN;
 
 	////////////////////////////////////////////////////////////////////////
 	// Для случайного перемещения по карте
@@ -108,7 +114,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	currentTime = 0;
 
 	int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
-	direction = (Direction)randomDirection;
+	direction = Direction(randomDirection);
 	////////////////////////////////////////////////////////////////////////
 
 	// Показатели
@@ -144,8 +150,8 @@ Enemy::~Enemy()
 
 void Enemy::randomWalk(const Time &deltaTime) {
 
-	if (mode == idEntityMode::walk) {
-		if (currentTime < timeWalk && direction != Direction::NONE) {
+	if (currenMode == idEntityMode::walk) {
+		if (currentTime < timeWalk && direction != Direction::NONE_DIRECTION) {
 
 			currentTime += deltaTime.asSeconds();
 
@@ -155,7 +161,7 @@ void Enemy::randomWalk(const Time &deltaTime) {
 			timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
 
 			int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
-			direction = (Direction)randomDirection;
+			direction = Direction(randomDirection);
 		}
 	}
 	

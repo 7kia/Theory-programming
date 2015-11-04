@@ -1,11 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 
-// Для динамических списков
-#include <list>
-#include <iterator>
-
-#include "GlobalVar.h"
 #include "TypeItems.h"
 
 struct Item 
@@ -13,28 +8,17 @@ struct Item
 	sf::Sprite *mainSprite;
 	sf::Sprite *spriteForUse;
 
-	sf::String nameItem;
-	int categoryItem;
+	TypeItem *typeItem;
 
-	TypeItem *typeItem;// Пренадлежность типу
+	int currentToughness;
+	int maxToughness;
 
-	// Разрушаемый или нет
-	bool isDestroy;
-	int currentToughness;// Прочность
-	int maxToughness;// максимальная прочность
-
-	// Урон
-	int cuttingDamage;// Режущий
-	int crushingDamage;// Дробящий
-
-	// Текущий уровень размещения
 	int currentLevel;
 
-	// Для анимации
-	//Direction direction;// ИСПРАВЬ
-	float timeAnimation;
 
-	// Передвижение. Его анимация и озвучка
+
+	// TODO
+	float timeAnimation;
 	void update(const sf::Time & deltaTime, dataSound &databaseSound);
 	void playSound(float time, float start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
@@ -49,4 +33,4 @@ private:
 
 };
 
-void initializeItems(std::list<Item> &items, TypesItem *typesItem, Item &emptyItem);
+void initializeItems(std::vector<Item> &items, TypeItem *typesItem, Item &emptyItem);
