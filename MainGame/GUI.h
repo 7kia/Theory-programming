@@ -15,6 +15,9 @@ const int shiftXInfoText = 32;
 const int shiftYInfoText = 16;
 
 // Панель быстрого доступа
+const int SHIFT_START_ITEM_PANEL = 38;
+const int SHIFT_NAME_ITEM_PANEL = 10;
+
 const int widthPanelQuickAccess = 607;
 const int heightPanelQuickAccess = 66;
 
@@ -86,17 +89,25 @@ const int Y_ITEM_OVER_PANEL_INFO = heightPanelQuickAccess + heightSelectInPanelQ
 // Отображение характеристик предмета
 const int AMOUNT_DAMAGE_FEATURES = 2;
 
+const int SHIFT_FEATURES_PANEL = 10;
+
 const int WIDTH_DAMAGE_GUI = 58;
 const int HEIGHT_DAMAGE_GUI = 58;
 
-const sf::Vector2f SCALE_CHARACTER = { 0.5f, 0.5f };// TODO features
+const sf::Vector2f SCALE_FEATURES = { 0.5f, 0.5f };
 const int Y_SHIFT_OUT_PANEL = 32;
 
-const int X_CRASH_DAMAGE_GUI = 40;//X_CRASH_DAMAGE_GUI
-const int Y_CRASH_DAMAGE_GUI = 32;//Y_CRASH_DAMAGE_GUI
+const int X_CRASH_DAMAGE_GUI = 40;
+const int Y_CRASH_DAMAGE_GUI = 32;
 
 const int X_CUT_DAMAGE_GUI = X_CRASH_DAMAGE_GUI + WIDTH_DAMAGE_GUI;
 const int Y_CUT_DAMAGE_GUI = Y_CRASH_DAMAGE_GUI;
+
+const int X_HUNGRY_ITEM_GUI = X_CUT_DAMAGE_GUI + WIDTH_DAMAGE_GUI;
+const int Y_HUNGRY_ITEM_GUI = Y_CRASH_DAMAGE_GUI;
+
+const int X_THIRST_ITEM_GUI = X_HUNGRY_ITEM_GUI + WIDTH_DAMAGE_GUI;
+const int Y_THIRST_ITEM_GUI = Y_CRASH_DAMAGE_GUI;
 
 struct GUI
 {// добавление gui
@@ -129,6 +140,8 @@ struct GUI
 	sf::Sprite* itemInfoOverPanel;
 	sf::Sprite* cutSprite;
 	sf::Sprite* crashSprite;
+	sf::Sprite* hungrySprite;
+	sf::Sprite* thirstSprite;
 
 	// Ссылки на текст
 	sf::Text *textGui[numberTextReference];

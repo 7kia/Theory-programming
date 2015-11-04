@@ -49,6 +49,8 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 
 	gui.cutSprite = new Sprite;
 	gui.crashSprite = new Sprite;
+	gui.hungrySprite = new Sprite;
+	gui.thirstSprite = new Sprite;
 
 	///////////////////////////////////////////////////////////////////
 	// Шкалы
@@ -99,6 +101,14 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	gui.cutSprite->setTexture(*gui.textureBar); 
 	gui.cutSprite->setOrigin(WIDTH_DAMAGE_GUI / 2, HEIGHT_DAMAGE_GUI / 2);
 	gui.cutSprite->setTextureRect(IntRect(X_CUT_DAMAGE_GUI, Y_CUT_DAMAGE_GUI, WIDTH_DAMAGE_GUI, HEIGHT_DAMAGE_GUI));
+
+	gui.hungrySprite->setTexture(*gui.textureBar);
+	gui.hungrySprite->setOrigin(WIDTH_DAMAGE_GUI / 2, HEIGHT_DAMAGE_GUI / 2);
+	gui.hungrySprite->setTextureRect(IntRect(X_HUNGRY_ITEM_GUI, Y_HUNGRY_ITEM_GUI, WIDTH_DAMAGE_GUI, HEIGHT_DAMAGE_GUI));
+
+	gui.thirstSprite->setTexture(*gui.textureBar);
+	gui.thirstSprite->setOrigin(WIDTH_DAMAGE_GUI / 2, HEIGHT_DAMAGE_GUI / 2);
+	gui.thirstSprite->setTextureRect(IntRect(X_THIRST_ITEM_GUI, Y_THIRST_ITEM_GUI, WIDTH_DAMAGE_GUI, HEIGHT_DAMAGE_GUI));
 	///////////////////////////////////////////////////////////////////
 	// ИСПРАВЬ
 	// НЕРАБОТАЕТ
@@ -171,105 +181,170 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, list<Enem
 	selectInPanelQuickAccess->setPosition(pos);
 	window.draw(*selectInPanelQuickAccess);
 
+	//////////////////////////////////////////////////////////
+	// Окошко с информацией о выбранном предмете
+	pos = { centerWindow.x, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
+	itemInfoOverPanel->setPosition(pos);
+	window.draw(*itemInfoOverPanel);
+
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 		if (mainPerson.itemFromPanelQuickAccess[i].typeItem->name != mainPerson.emptyItem->typeItem->name) {
 			Item& currentItem = mainPerson.itemFromPanelQuickAccess[i];
 
 			int shift = shiftSelect * (i);
-			int shiftStart = 38;// ИСПРАВЬ
-			pos = { centerWindow.x - startPosition + shift + shiftStart, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
+			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ИСПРАВЬ
 			currentItem.mainSprite->setPosition(pos);
 			window.draw(*currentItem.mainSprite);
 
-			/////////////////////////////////////////////////////////////
-			// Если предмет инструмент или оружи
-			if (currentItem.isDestroy) {
-				///*
-				// то отображаем прочность
-				pos.x -= SIZE_ITEM / 2;
-				pos.y += SIZE_ITEM / 2 - HEIGHT_BARS_GUI * 0.5 * scaleItems.y;
+			
+			if (idSelectItem == i) {
+				//////////////////////////////////////////////
+				// Имя предмета
+				currentText = &textGame.texts[idText::itemGui];
+				Vector2f posName;// Сначала выписываем характеристики, потом имя(так как имя перед ними)
 
-				bar->setPosition(pos);
-				bar->setScale(scaleGuiForEnemy);
-				window.draw(*bar);
-				bar->setScale(normalSizeGuiForEnemy);
+				currentText->setString(currentItem.typeItem->name);
 
-				float levelToughness = (float)currentItem.currentToughness / currentItem.typeItem->toughnessObject;// текущая на макс.
+				posName = { centerWindow.x - WIDTH_ITEM_OVER_PANEL_INFO / 2 + SHIFT_FEATURES_PANEL,
+										centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - HEIGHT_ITEM_OVER_PANEL_INFO / 2 };
+				//posName.x -= computeSizeString(*currentText) / 2 + SHIFT_NAME_ITEM_PANEL;
 
-				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
-				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				int currentToughness = WIDTH_LEVEL_BAR_GUI * levelToughness;
-				levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
-				levelStamina->setPosition(pos);
+				currentText->setPosition(posName);
+				window.draw(*currentText);
 
-				levelStamina->setScale(scaleGuiForEnemy);
-				window.draw(*levelStamina);
-				levelStamina->setScale(normalSizeGuiForEnemy);
-				//*/
+				int paritySize = currentText->getString().getSize() % 2;
+				int shiftName = currentText->getCharacterSize();// TODO
+				int halfSizeString = shiftName * (2 - paritySize) + computeSizeString(*currentText) / 2;
+				//////////////////////////////////////////////
 
-				///* TODO
-				////////////////////////////////
-				// и наносимый урон
-				if (idSelectItem == i) {
-					currentText = &textGame.texts[idText::itemGui];
+				/////////////////////////////////////////////////////////////
+				// Если предмет инструмент или оружие
+				if (currentItem.isDestroy) {
+					pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
+									centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };
+					// то отображаем прочность
+					pos.x -= SIZE_ITEM / 2;
+					pos.y += SIZE_ITEM / 2 - HEIGHT_BARS_GUI * 0.5 * scaleItems.y;
 
-					//////////////////////////////////////////////////////////
-					// Окошко с информацией о выбранном предмете
-					pos = { centerWindow.x, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
-					itemInfoOverPanel->setPosition(pos);
-					window.draw(*itemInfoOverPanel);
-					//////////////////////////////////////////////////////////
-					// Отображение характеристик
-					pos = { centerWindow.x - (WIDTH_DAMAGE_GUI + currentText->getCharacterSize()) * (AMOUNT_DAMAGE_FEATURES - 1),
-									centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
+					bar->setPosition(pos);
+					bar->setScale(scaleGuiForEnemy);
+					window.draw(*bar);
+					bar->setScale(normalSizeGuiForEnemy);
 
-					// Перевод из числа в строку
-					int itemCutDam = currentItem.cuttingDamage;
-					int itemCrashDam = currentItem.crushingDamage;
+					float levelToughness = (float)currentItem.currentToughness / currentItem.typeItem->toughnessObject;// текущая на макс.
 
-					string itemCut;
-					string itemCrash;
+					pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
+					pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
+					int currentToughness = WIDTH_LEVEL_BAR_GUI * levelToughness;
+					levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
+					levelStamina->setPosition(pos);
 
-					intToString(itemCutDam, itemCut);
-					intToString(itemCrashDam, itemCrash);
+					levelStamina->setScale(scaleGuiForEnemy);
+					window.draw(*levelStamina);
+					levelStamina->setScale(normalSizeGuiForEnemy);
+					//*/
 
-					int shiftCharacter = 10;
-					////////////////
-					// Режущий урон
-					cutSprite->setPosition(pos);
-					cutSprite->setScale(SCALE_CHARACTER);
-					window.draw(*cutSprite);
-					
-					pos.x += WIDTH_DAMAGE_GUI * SCALE_CHARACTER.x;
-					currentText->setString(itemCut);
-					currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-					currentText->setPosition(pos);
-					window.draw(*currentText);
-					////////////////
-					// Дробящий урон
-					pos.x += computeSizeString(*currentText) + shiftCharacter;
-					crashSprite->setPosition(pos);
-					crashSprite->setScale(SCALE_CHARACTER);
-					window.draw(*crashSprite);
+					///* TODO
+					////////////////////////////////
+					// и наносимый урон
+					if (idSelectItem == i) {
 
-					pos.x += WIDTH_DAMAGE_GUI * SCALE_CHARACTER.x;
-					currentText->setString(itemCrash);
-					currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
-					currentText->setPosition(pos);
-					window.draw(*currentText);
-					////////////////
+						//////////////////////////////////////////////////////////
+						// Отображение характеристик
+						pos = { posName.x + halfSizeString,
+										centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
+						// Перевод из числа в строку
+						int itemCutDam = currentItem.cuttingDamage;
+						int itemCrashDam = currentItem.crushingDamage;
 
-					//////////////////////////////////////////////////////////
+						string itemCut;
+						string itemCrash;
+
+						intToString(itemCutDam, itemCut);
+						intToString(itemCrashDam, itemCrash);
+
+						////////////////
+						// Режущий урон
+						cutSprite->setPosition(pos);
+						cutSprite->setScale(SCALE_FEATURES);
+						window.draw(*cutSprite);
+
+						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+						currentText->setString(itemCut);
+						currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
+						currentText->setPosition(pos);
+						window.draw(*currentText);
+						////////////////
+						// Дробящий урон
+						pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+						crashSprite->setPosition(pos);
+						crashSprite->setScale(SCALE_FEATURES);
+						window.draw(*crashSprite);
+
+						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+						currentText->setString(itemCrash);
+						currentText->setOrigin(itemCut.size() / 2, currentText->getCharacterSize() / 2);
+						currentText->setPosition(pos);
+						window.draw(*currentText);
+						////////////////
+						//////////////////////////////////////////////////////////
+					}
+					////////////////////////////////
+					//*/
 				}
-				
+				/////////////////////////////////////////////////////////////
+				// или что-то другое
+				else {
 
-				////////////////////////////////
-				//*/
+					if (idSelectItem == i) {
+						//////////////////////////////////////////////////////////
+						// Отображение характеристик
+						pos = { posName.x + halfSizeString,
+							centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
+						// Перевод из числа в строку
+						int itemToughness = currentItem.currentToughness;
+
+						string itemToug;
+
+						intToString(itemToughness, itemToug);
+
+						////////////////
+						// Голод
+						if (currentItem.categoryItem == idCategoryItem::food) {
+							hungrySprite->setPosition(pos);
+							hungrySprite->setScale(SCALE_FEATURES);
+							window.draw(*hungrySprite);
+						}
+						////////////////
+						// Жажда
+						else if (currentItem.categoryItem == idCategoryItem::bottleWithWater
+										 || currentItem.categoryItem == idCategoryItem::bukketWithWater) {
+							thirstSprite->setPosition(pos);
+							thirstSprite->setScale(SCALE_FEATURES);
+							window.draw(*thirstSprite);
+						}
+						////////////////
+						// Другое не показываем
+						else {
+							itemToug = "";// ИСПРАВЬ
+						}
+
+						pos.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
+						currentText->setString(itemToug);
+						currentText->setOrigin(itemToug.size() / 2, currentText->getCharacterSize() / 2);
+						currentText->setPosition(pos);
+						window.draw(*currentText);
+						//////////////////////////////////////////////////////////
+					}
+
+				}
+				/////////////////////////////////////////////////////////////
+
+
 			}
-			/////////////////////////////////////////////////////////////
-
 
 		}
+
 	}
 
 	//////////////////////////////////////////////////////////////////////// 

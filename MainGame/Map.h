@@ -44,3 +44,4 @@ struct Field
 
 void initializeField(Field & field);
 void readMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP], const char *fileName);
+void writeMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP]);// TODO

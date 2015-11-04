@@ -52,6 +52,10 @@ void initializeItems(list<Item> &items, TypesItem *typesItem, Item &emptyItem)
 		addItem->setPosition(4, 1, 1);
 		items.push_front(*addItem);
 
+		addItem->setType(typesItem->typesItem[idItem::ironBackHoerIte]);
+		addItem->setPosition(2, 3, 1);
+		items.push_front(*addItem);
+
 		addItem->setType(typesItem->typesItem[idItem::woodLadderItem]);
 		addItem->setPosition(3, 6, 1);
 		items.push_front(*addItem);

@@ -77,6 +77,11 @@ const int PIXEL_Y_STONE_KNIFE = SIZE_ITEM * 3;
 // wood club - деревянная дубина
 const int PIXEL_X_WOOD_CLUB = SIZE_ITEM * 6;
 const int PIXEL_Y_WOOD_CLUB = SIZE_ITEM * 3;
+
+// iton backhoe - железная лопата
+const int PIXEL_X_IRON_BACKHOE = SIZE_ITEM * 2;
+const int PIXEL_Y_IRON_BACKHOE = SIZE_ITEM * 4;
+
 // ДОБАВЛЕНИЕ ПРЕДМЕТА
 
 namespace idItem {
@@ -84,6 +89,7 @@ namespace idItem {
 	{
 		// ДОБАВЛЕНИЕ ПРЕДМЕТА
 		emptyItem,
+		airItem,
 		// Блоки
 		grassItem,
 		dirtItem,
@@ -98,6 +104,7 @@ namespace idItem {
 		// Инструменты
 		stonePickaxItem,
 		stoneAxeItem,
+		ironBackHoerIte,
 		// Мечи
 		stoneKnifeItem,
 		// Дубины
@@ -126,5 +133,6 @@ typedef enum
 	bukketEmpty,
 	weapon,
 	axe,
+	backhoe,
 	amounCategory
 } idCategoryItem;
