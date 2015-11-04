@@ -3,16 +3,22 @@
 
 #include "Font.h"
 
-const int WIDTH_ARROW_GUI = 44;
-const int HEIGHT_ARROW_GUI = 44;
-const int PIXEL_X_ARROW_GUI = 0;
-const int PIXEL_Y_ARROW_GUI = 0;
+const int WIDTH_GUI_ELEMENT = 44;
+const int HEIGHT_GUI_ELEMENT = 44;
+const int PIXEL_X_GUI = 0;
+const int PIXEL_Y_GUI = 0;
 
 struct GUI
 {
 	sf::Texture* textureArrow;
 	sf::Sprite* arrowLeft;
 	sf::Sprite* arrowRight;
+
+	sf::Texture* texturePlus;
+	sf::Sprite* plus;
+
+	sf::Texture* textureMinus;
+	sf::Sprite* minus;
 };
 
 void initializeGUI(GUI &gui);

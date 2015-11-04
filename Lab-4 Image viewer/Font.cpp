@@ -15,8 +15,8 @@ void initializeTexts(TextProgram &textProgram)
 	pathImage.setFont(*textProgram.font);
 	pathImage.setCharacterSize(SIZE_NORMAL_TEXT);
 
-	Text& currentImageGui = textProgram.texts[idText::currentImageGui];
-	currentImageGui = textProgram.texts[idText::currentImageGui];
+	Text& currentImageGui = textProgram.texts[idText::errorText];
+	currentImageGui = textProgram.texts[idText::errorText];
 	currentImageGui.setColor(Color::Black);
 	currentImageGui.setStyle(Text::Regular | Text::Underlined);
 	currentImageGui.setFont(*textProgram.font);

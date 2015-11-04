@@ -1,6 +1,7 @@
 #pragma once
 // Äëÿ ïîèñêà ôàéëîâ
 #include <iostream>// ÈÑÏÐÀÂÜ
+#include <fstream>
 #include <windows.h>
 
 #include <string>
@@ -15,16 +16,16 @@
 const int DEFAULT_WIDTH_WINDOW = 800;
 const int DEFAULT_HEIGHT_WINDOW = 600;
 
-const int COLOR_GREY[4] = { 150, 150, 150, 255};
-const int AMOUNT_FORMATS = 3;
+const sf::Color COLOR_GREY(150, 150, 150, 255);
+const int AMOUNT_FORMATS = 4;
 const int SIZE_STRING = 256;
 const char MASK[] = "*.";
 const char formats[AMOUNT_FORMATS][SIZE_STRING] = {
 	"png",
 	"jpeg",
+	"jpg",
 	"bmp"
 };
-const char currentFolder[] = "c:\\Study\\ÈèÏ\\Programs\\Lab4\\Lab4\\";
 //const char* formats[AMOUNT_FORMATS] = { "png", "jpeg", "bmp" };
 typedef enum {
 	currentImage,
@@ -35,7 +36,12 @@ typedef enum {
 struct Program
 {
 	sf::RenderWindow *window;
+	sf::String currentTitle;
 	TextProgram *textProgram;
+
+	sf::View view;
+
+	char *currentFolder;
 
 	GUI* gui;
 	std::list<std::string>* pathsImages;
@@ -44,8 +50,10 @@ struct Program
 	void searchImage(const char *path);
 
 	std::list<std::string>::iterator currentPath;
+	sf::String newPath;
 	sf::Texture* textureCurrentImage;
 	sf::Sprite* currentImage;
+	int sizeFile;
 	sf::Vector2u* sizeImage;
 	sf::Vector2f* scaleImage;
 	sf::Vector2f* sourseScale;
@@ -59,5 +67,10 @@ void setPositionGui(Program & program);
 void actionLeft(Program & program);
 void actionRight(Program & program);
 
-void initializeProgram(Program & program);
+void updateView(Program & program);
+
+void actionZoomPlus(Program & program);
+void actionZoomMinus(Program & program);
+
+void initializeProgram(Program & program, char argv[256]);
 void destroyProgram(Program & program);
