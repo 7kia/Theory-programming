@@ -27,7 +27,6 @@ const int widthSelectInPanelQuickAccess = 72;
 const int heightSelectInPanelQuickAccess = 72;
 
 const int shiftSelect = 60;
-
 // Индикатор голода
 const int WIDTH_HUNGY_GUI = 47;// добавление gui
 const int HEIGHT_HUNGY_GUI = 33;
@@ -134,7 +133,17 @@ struct barMainFeatures
 	void renderText(int &current, int& max,
 									sf::Vector2f &position, sf::RenderWindow &window, TextGame &textGame);
 
-	void renderDamageForEnemy();
+	void renderTextEnemy(Enemy & enemy, int & current, int & max, int shift,
+											 sf::RenderWindow & window, TextGame & textGame);
+
+
+	void renderDamageForEnemy(Enemy & enemy, TextGame & textGame, sf::RenderWindow & window, int shift);
+
+	void renderBarMainPerson(int & current, int & max, int shift, sf::Sprite * sprite, sizeMainSprite & sizes,
+													 sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
+													 TextGame & textGame, sf::RenderWindow & window);
+	void renderBarEnemy(Enemy & enemy, int & current, int & max, int shift, Sprite * sprite,
+											sizeMainSprite & sizes, TextGame & textGame, RenderWindow & window);
 };
 
 struct infoAboutSelect
@@ -158,6 +167,7 @@ struct itemFeatures
 	void renderFeatures(::MainPerson& mainPerson, sf::Vector2f centerWindow,
 											sf::Vector2u sizeWindow, ::sf::RenderWindow& window,
 											TextGame &textGame, barMainFeatures &bars);
+
 };
 
 struct panelQuickAccess

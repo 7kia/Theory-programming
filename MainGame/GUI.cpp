@@ -180,14 +180,110 @@ void barMainFeatures::renderText(int &current, int& max,
 	Text* currentText = &textGame.texts[idText::levelBar];
 
 	currentText->setString(toStringCharacter(current, max));
-	////////////////
-	// Задание позиции
+
 	int middleString = computeMiddleString(*currentText);
 
 	position = { position.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, position.y - Y_SHIFT_BARS / 2 };
 	currentText->setPosition(position);
 	window.draw(*currentText);
 }
+
+void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, int shift,
+																			RenderWindow & window, TextGame & textGame)
+{
+	Text *currentText = &textGame.texts[idText::levelBar];
+	Vector2f pos;
+	pos = enemy.spriteEntity->getPosition();
+	pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
+	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shift);
+
+
+	currentText->setString(toStringCharacter(current, max));
+
+	pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
+	currentText->setPosition(pos);
+
+	window.draw(*currentText);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, RenderWindow &window, int shift)
+{
+	Text *currentText = &textGame.texts[idText::inputDamage];
+
+	Vector2f pos;
+	pos = enemy.spriteEntity->getPosition();
+	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shift) + shiftEnemyDamage;
+
+	// Если нанесли урон то отображаем
+	int damage = enemy.inputDamage;
+	if (damage) {
+		string stringDamage;
+		intToString(damage, stringDamage);
+
+		currentText->setString(stringDamage);
+
+
+		pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
+		currentText->setPosition(pos);
+		window.draw(*currentText);
+	}
+}
+
+void barMainFeatures::renderBarMainPerson(int &current, int &max, int shift, Sprite *sprite, sizeMainSprite &sizes,
+																								Vector2f centerWindow, Vector2u sizeWindow,
+																								TextGame &textGame, RenderWindow &window)
+{
+	Vector2f pos = centerWindow;
+	pos.x -= sizeWindow.x / 2;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * shift;
+
+
+	bar->setPosition(pos);
+	window.draw(*bar);
+
+	pos.x += X_SHIFT_BARS;
+	pos.y += Y_SHIFT_BARS;
+
+	renderBar(current, max, sprite,
+						sizes, textGame, pos, window);
+
+}
+
+void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite *sprite, sizeMainSprite &sizes,
+																					TextGame &textGame, RenderWindow &window)
+{
+	int shiftBar = enemy.maxMana > 0;
+	Vector2f pos = enemy.spriteEntity->getPosition();
+	pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
+	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
+
+
+	bar->setPosition(pos);
+	window.draw(*bar);
+
+	pos.x += X_SHIFT_BARS;
+	pos.y += Y_SHIFT_BARS;
+
+	renderBar(current, max, sprite,
+												 sizes, textGame, pos, window);
+
+
+	renderDamageForEnemy(enemy, textGame, window, shiftBar);
+
+	renderTextEnemy(enemy, current, max, shiftBar,
+															 window, textGame);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+void GUI::renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::RenderWindow& window, TextGame& textGame)
+{
+	Text *currentText = &textGame.texts[idText::mainPersonIsDeath];
+	currentText->setPosition(position);
+	if (mainPerson.isDeath) {
+		window.draw(*currentText);
+	}
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void infoAboutSelect::render(Vector2f position, RenderWindow &window, TextGame &textGame)
@@ -209,14 +305,6 @@ void infoAboutSelect::render(Vector2f position, RenderWindow &window, TextGame &
 	}
 }
 
-void GUI::renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::RenderWindow& window, TextGame& textGame)
-{
-	Text *currentText = &textGame.texts[idText::mainPersonIsDeath];
-	currentText->setPosition(position);
-	if (mainPerson.isDeath) {
-		window.draw(*currentText);
-	}
-}
 
 void panelQuickAccess::renderPanel(Vector2f position, RenderWindow& window)
 {
@@ -423,6 +511,7 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, Vector2f centerWindow,
 	}
 
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<Enemy>& enemy, TextGame &textGame)
 {
@@ -430,159 +519,102 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	Vector2f centerWindow = mainPerson.view->getCenter();
 	Vector2u sizeWindow = window.getSize();
 	Vector2f pos = { centerWindow.x + sizeWindow.x / 2 - widthInfo , centerWindow.y + sizeWindow.y / 2 - heightInfo};
+	//////////////////////////////////////////////////////////
+	// Окошко с информацией о выбранном предмете
 
 	panels.infoAboutSelect.render(pos, window, textGame);
 	renderTextDeath(mainPerson, centerWindow, window, textGame);
-
+	//////////////////////////////////////////////////////////
+	// Панель быстрого доступа
 	pos = { centerWindow.x , centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 	panels.panelQuickAccess.renderPanel(pos, window);
 	panels.panelQuickAccess.renderSelect(mainPerson, centerWindow, sizeWindow, window);
 
 	pos = { centerWindow.x, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
 	panels.renderItemPanel(pos, window);
-	//////////////////////////////////////////////////////////
-	// Окошко с информацией о выбранном предмете
 
 	//////////////////////////////////////////////////////////////////////// 
 	// Шкала здоровья
-	pos = centerWindow;
-
-	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * 3;
-
-
-	mainFeatures.bar->setPosition(pos);
-	window.draw(*mainFeatures.bar);
-
-	int health = mainPerson.currentHealth;
-	int healthMax = mainPerson.maxHealth;
-
-	pos.x += X_SHIFT_BARS;
-	pos.y += Y_SHIFT_BARS;
-	
 	sizeMainSprite sizes;
 	sizes.init(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
 
-	mainFeatures.renderBar(health, healthMax, mainFeatures.levelHealth,
-												 sizes, textGame, pos, window);
+	int health = mainPerson.currentHealth;
+	int healthMax = mainPerson.maxHealth;
+	int shiftHealth = 3;
+	mainFeatures.renderBarMainPerson(health, healthMax, shiftHealth, mainFeatures.levelHealth,
+																	 sizes, centerWindow, sizeWindow, textGame, window);
 
 	////////////////////////////////////////////////////////////////
 	// для противников
 	int shiftBar;
+	int shiftHelathEnemy = 2;
+	int healthEnemy;
+	int healthMaxEnemy;
 
+	bool isFindedEnemy;
+	bool isInView;
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
-				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
-				&& i == mainPerson.findEnemyFromList) {
 
-			shiftBar = enemy[i].maxMana > 0;
-			pos = enemy[i].spriteEntity->getPosition();
-			pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
+		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+						&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
+		if (isInView && isFindedEnemy) {
 
+			healthEnemy = enemy[i].currentHealth;
+			healthMaxEnemy = enemy[i].maxHealth;
 
-			mainFeatures.bar->setPosition(pos);
-			window.draw(*mainFeatures.bar);
-
-
-			int healthEnemy = enemy[i].currentHealth;
-			int healthMaxEnemy = enemy[i].maxHealth;
-
-			pos.x += X_SHIFT_BARS;
-			pos.y += Y_SHIFT_BARS;
-
-			sizes.init(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
-			mainFeatures.renderBar(healthEnemy, healthMaxEnemy, mainFeatures.levelHealth,
-														 sizes, textGame, pos, window);
-
-			////////////////////////////////////////////////////////////
-			// Отображение урона
-			currentText = &textGame.texts[idText::inputDamage];
-
-			// Позиция
-			pos = enemy[i].spriteEntity->getPosition();
-			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shiftBar) + shiftEnemyDamage;
-
-			// Если нанесли урон то отображаем
-			int damage = enemy[i].inputDamage;
-			if (damage) {
-				string stringDamage;
-				intToString(damage, stringDamage);
-
-				currentText->setString(stringDamage);
-
-
-				pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
-				currentText->setPosition(pos);
-				window.draw(*currentText);
-			}
-			////////////////////////////////////////////////////////////
-			// Отображение текущего здоровья
-			currentText = &textGame.texts[idText::levelBar];
-		
-			pos = enemy[i].spriteEntity->getPosition();
-			pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-			pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shiftBar);
-
-			////////////////
-			// Перевод из числа в строку
-			int currentHealthEnemy = enemy[i].currentHealth;
-			int maxHealthEnemy = enemy[i].maxHealth;
-
-			currentText->setString(toStringCharacter(currentHealthEnemy, maxHealthEnemy));
-
-			pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
-			currentText->setPosition(pos);
-
-			window.draw(*currentText);
-			////////////////////////////////////////////////////////////
-			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
-			//*/
+			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, mainFeatures.levelHealth,
+																	sizes, textGame, window);
 		}	
+
 	}
 	////////////////////////////////////////////////////////////////
 	// Шкала выносливости
-	pos = centerWindow;
+	sizeMainSprite sizes;
+	sizes.init(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
 
-	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * 2;
-
-	bar->setPosition(pos);
-	window.draw(*bar);
-
-	level = float(mainPerson.currentStamina) / mainPerson.maxStamina;
-
-	pos.x += X_SHIFT_BARS;
-	pos.y += Y_SHIFT_BARS;
-	currentLevel = WIDTH_LEVEL_BAR_GUI * level;
-	levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
-	levelStamina->setPosition(pos);
-	window.draw(*levelStamina);
-
-	////////////////////////////////
-	// Количество выносливости
-	currentText = &textGame.texts[idText::levelBar];
-
-	////////////////
 	int stamina = mainPerson.currentStamina;
 	int staminaMax = mainPerson.maxStamina;
+	int shiftStamina = 2;
+	mainFeatures.renderBarMainPerson(stamina, staminaMax, shiftStamina, mainFeatures.levelStamina,
+																	 sizes, centerWindow, sizeWindow, textGame, window);
 
-	currentText->setString(toStringCharacter(stamina, staminaMax));
-
-	middleString = currentText->getString().getSize() * currentText->getCharacterSize() / 4;
-
-	pos = { pos.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, pos.y - Y_SHIFT_BARS / 2 };
-	currentText->setPosition(pos);
-	window.draw(*currentText);
-	////////////////////////////////
 
 	////////////////////////////////////////////////////////////////
 	// для противников
+
+	int shiftStaminaEnemy = 2;
+	int staminaEnemy;
+	int staminaMaxEnemy;
+
+	for (int i = 0; i != enemy.size(); ++i) {
+
+		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
+
+		if (isInView && isFindedEnemy) {
+
+			staminaEnemy = enemy[i].currentStamina;
+			staminaMaxEnemy = enemy[i].maxStamina;
+
+			if (staminaMaxEnemy) {
+				mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, mainFeatures.levelStamina,
+																		sizes, textGame, window);
+			}
+			
+		}
+
+	}
 	for (int i = 0; i != enemy.size(); ++i) {
 		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
 				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
 				&& i == mainPerson.findEnemyFromList) {
+
+			isFindedEnemy = i == mainPerson.findEnemyFromList;
+			isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
 			if (enemy[i].maxStamina) {
 				shiftBar = enemy[i].maxMana > 0;
