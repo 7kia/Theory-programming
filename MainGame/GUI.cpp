@@ -149,6 +149,67 @@ void createGUI(barMainFeatures &gui, Texture *texture)
 	gui.levelMana->setTextureRect(IntRect(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI));
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+void barHungry::renderBar(int& current, int& max, Vector2f centerWindow, Vector2u sizeWindow,
+													RenderWindow& window)
+{
+	Vector2f pos;
+	pos = centerWindow;
+	
+	renderHigh(pos, sizeWindow, window);
+	renderLevel(current, max, pos, window);
+	renderLow(pos, centerWindow, sizeWindow, window);
+}
+
+void barHungry::renderHigh(Vector2f& pos, Vector2u sizeWindow, RenderWindow& window)
+{
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
+
+	highHungry->setPosition(pos);
+	window.draw(*highHungry);
+}
+
+void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow& window)
+{
+	float level = float(current) / max;
+
+	pos.y += LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
+	int currentLevel = LEVEL_HUNGY_GUI * level;
+	levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
+	levelHungry->setPosition(pos);
+	window.draw(*levelHungry);
+}
+
+void barHungry::renderLow(Vector2f& pos, Vector2f centerWindow, Vector2u sizeWindow, RenderWindow& window)
+{
+	pos = centerWindow;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
+	lowHungry->setPosition(pos);
+	window.draw(*lowHungry);
+
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow, sf::RenderWindow& window)
+{
+	Vector2f pos = centerWindow;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI);
+
+	bottle->setPosition(pos);
+	window.draw(*bottle);
+
+	float level = float(current) / max;
+
+	pos.y += LEVEL_SHIFT_THIRST + LEVEL_THIRST * (1 - level);
+	int currentLevel = LEVEL_THIRST * level;
+	int currentShift = LEVEL_THIRST * (1 - level);
+	levelThirst->setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
+	levelThirst->setPosition(pos);
+	window.draw(*levelThirst);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 void barMainFeatures::renderBar(int& current, int& max, sf::Sprite* sprite, sizeMainSprite sizes, TextGame& textGame, sf::Vector2f& position, sf::RenderWindow& window)
 {
 	render(current, max, sprite,
@@ -571,7 +632,6 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	}
 	////////////////////////////////////////////////////////////////
 	// Шкала выносливости
-	sizeMainSprite sizes;
 	sizes.init(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
 
 	int stamina = mainPerson.currentStamina;
@@ -584,7 +644,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	////////////////////////////////////////////////////////////////
 	// для противников
 
-	int shiftStaminaEnemy = 2;
+	int shiftStaminaEnemy = 1;
 	int staminaEnemy;
 	int staminaMaxEnemy;
 
@@ -600,214 +660,52 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			staminaMaxEnemy = enemy[i].maxStamina;
 
 			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, mainFeatures.levelStamina,
+				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, mainFeatures.levelStamina,
 																		sizes, textGame, window);
 			}
 			
 		}
 
 	}
-	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
-				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
-				&& i == mainPerson.findEnemyFromList) {
-
-			isFindedEnemy = i == mainPerson.findEnemyFromList;
-			isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
-				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
-
-			if (enemy[i].maxStamina) {
-				shiftBar = enemy[i].maxMana > 0;
-
-				pos = enemy[i].spriteEntity->getPosition();
-				pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
-
-
-				bar->setPosition(pos);
-				bar->setScale(scaleGuiForEnemy);
-				window.draw(*bar);
-				bar->setScale(normalSizeGuiForEnemy);
-
-				level = float(enemy[i].currentStamina) / enemy[i].maxStamina;
-
-				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
-				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				currentLevel = WIDTH_LEVEL_BAR_GUI * level;
-				levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
-				levelStamina->setPosition(pos);
-
-				levelStamina->setScale(scaleGuiForEnemy);
-				window.draw(*levelStamina);
-				levelStamina->setScale(normalSizeGuiForEnemy);
-
-
-
-				///*
-
-				////////////////////////////////////////////////////////////
-				// Отображение текущей выносливости
-				currentText = &textGame.texts[idText::levelBar];
-
-				pos = enemy[i].spriteEntity->getPosition();
-				pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (1 + shiftBar);
-
-				////////////////
-				int currentStaminaEnemy = enemy[i].currentStamina;
-				int maxStaminaEnemy = enemy[i].maxStamina;
-
-				currentText->setString(toStringCharacter(currentStaminaEnemy, maxStaminaEnemy));
-
-				pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
-				currentText->setPosition(pos);
-
-				window.draw(*currentText);
-				////////////////////////////////////////////////////////////
-				//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
-				//*/
-			}
-			
-		}
-
-	}
+	
 	////////////////////////////////////////////////////////////////
 	// Шкала маны
-	pos = centerWindow;
+	sizes.init(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
 
-	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI);
-
-	bar->setPosition(pos);
-	window.draw(*bar);
-
-	level = float(mainPerson.currentMana) / mainPerson.maxMana;
-
-	pos.x += X_SHIFT_BARS;
-	pos.y += Y_SHIFT_BARS;
-	currentLevel = WIDTH_LEVEL_BAR_GUI * level;
-	levelMana->setTextureRect(IntRect(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
-	levelMana->setPosition(pos);
-	window.draw(*levelMana);
-
-	////////////////////////////////
-	// Количество маны
-	currentText = &textGame.texts[idText::levelBar];
-
-	////////////////
 	int mana = mainPerson.currentMana;
 	int manaMax = mainPerson.maxMana;
+	int shiftMana = 0;
+	mainFeatures.renderBarMainPerson(mana, manaMax, shiftMana, mainFeatures.levelMana,
+																	 sizes, centerWindow, sizeWindow, textGame, window);
 
-	currentText->setString(toStringCharacter(mana, manaMax));
 
-	middleString = currentText->getString().getSize() * currentText->getCharacterSize() / 4;
+	int shiftManaEnemy = 0;
+	int manaEnemy;
+	int manaMaxEnemy;
 
-	pos = { pos.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, pos.y - Y_SHIFT_BARS / 2 };
-	currentText->setPosition(pos);
-	window.draw(*currentText);
-	////////////////////////////////
-
-	// для противников
 	for (int i = 0; i != enemy.size(); ++i) {
-		if (enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
-				&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1
-				&& i == mainPerson.findEnemyFromList) {
 
-			if (enemy[i].maxMana) {
-				pos = enemy[i].spriteEntity->getPosition();
-				pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
+		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
+			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
+		if (isInView && isFindedEnemy) {
 
-				bar->setPosition(pos);
-				bar->setScale(scaleGuiForEnemy);
-				window.draw(*bar);
-				bar->setScale(normalSizeGuiForEnemy);
+			manaEnemy = enemy[i].currentMana;
+			manaMaxEnemy = enemy[i].maxStamina;
 
-				level = float(enemy[i].currentMana) / enemy[i].maxMana;
-
-				pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
-				pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				currentLevel = WIDTH_LEVEL_BAR_GUI * level;
-				levelMana->setTextureRect(IntRect(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, currentLevel, HEIGHT_LEVEL_BAR_GUI));
-				levelMana->setPosition(pos);
-
-				levelMana->setScale(scaleGuiForEnemy);
-				window.draw(*levelMana);
-				levelMana->setScale(normalSizeGuiForEnemy);
-
-
-
-				///*
-
-				////////////////////////////////////////////////////////////
-				// Отображение текущей маны
-				currentText = &textGame.texts[idText::levelBar];
-
-				pos = enemy[i].spriteEntity->getPosition();
-				pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-				pos.y -= enemy[i].height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI;
-
-				////////////////
-				int currentManaEnemy = enemy[i].currentMana;
-				int maxManaEnemy = enemy[i].maxMana;
-
-				currentText->setString(toStringCharacter(currentManaEnemy, maxManaEnemy));
-
-				pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
-				currentText->setPosition(pos);
-
-				window.draw(*currentText);
-				////////////////////////////////////////////////////////////
-				//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
-				//*/
+			if (staminaMaxEnemy) {
+				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, mainFeatures.levelMana,
+																		sizes, textGame, window);
 			}
-			
+
 		}
 
 	}
+
 	////////////////////////////////////////////////////////////////////////
-	// Индикатор голода
-	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
-
-	// Верхняя часть тарелки
-	highHungry->setPosition(pos);
-	window.draw(*highHungry);
-
-	// Уровень голода
-	level = float(mainPerson.currentHungry) / mainPerson.maxHungry;
-
-	pos.y += LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level);
-	currentLevel = LEVEL_HUNGY_GUI * level;
-	levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
-	levelHungry->setPosition(pos);
-	window.draw(*levelHungry);
-
-	// Дно тарелки
-	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
-	lowHungry->setPosition(pos);
-	window.draw(*lowHungry);
-	////////////////////////////////////////////////////////////////////////
-	// Шкала жажды
-	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI);
-
-	bottle->setPosition(pos);
-	window.draw(*bottle);
-
-	level = float(mainPerson.currentThirst) / mainPerson.maxThirst;
-
-	pos.y += LEVEL_SHIFT_THIRST + LEVEL_THIRST * (1 - level);
-	currentLevel = LEVEL_THIRST * level;
-	int currentShift = LEVEL_THIRST * (1 - level);
-	levelThirst->setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
-	levelThirst->setPosition(pos);
-	window.draw(*levelThirst);
+	hungry.renderBar(mainPerson.currentHungry, mainPerson.maxHungry, centerWindow, sizeWindow, window);
+	thirst.renderBar(mainPerson.currentThirst, mainPerson.maxThirst, centerWindow, sizeWindow, window);
 	////////////////////////////////////////////////////////////////////////
 
 }

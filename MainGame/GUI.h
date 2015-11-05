@@ -112,12 +112,20 @@ struct barHungry
 	sf::Sprite* lowHungry;
 	sf::Sprite* highHungry;
 	sf::Sprite* levelHungry;
+	void renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
+								 sf::RenderWindow& window);
+	void renderHigh(sf::Vector2f &pos, sf::Vector2u sizeWindow, sf::RenderWindow &window);
+	void renderLevel(int& current, int& max, sf::Vector2f& pos, sf::RenderWindow& window);
+	void renderLow(sf::Vector2f& pos, sf::Vector2f centerWindow,
+								 sf::Vector2u sizeWindow, sf::RenderWindow& window);
 };
 
 struct barThirst
 {
 	sf::Sprite* bottle;
 	sf::Sprite* levelThirst;
+	void renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
+								 sf::RenderWindow& window);
 };
 
 struct barMainFeatures
