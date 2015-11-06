@@ -40,12 +40,12 @@ typedef enum
 {
 	NONE_DIRECTION,
 	UP,
-	UP_LEFT,
+	UP_RIGHT,
 	RIGHT,
 	DOWN_RIGHT,
 	DOWN,
 
-	UP_RIGHT,
+	UP_LEFT,
 	LEFT,
 	DOWN_LEFT,
 

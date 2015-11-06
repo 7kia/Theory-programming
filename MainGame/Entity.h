@@ -158,6 +158,7 @@ public:
 
 	// Передвижение. Его анимация и озвучка
 	void update(const Time & deltaTime, dataSound &databaseSound);
+	void playAnimation(const Time & deltaTime, dataSound &databaseSound);
 	void playSound(float time, float &start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 	
