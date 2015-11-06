@@ -5,15 +5,14 @@ using namespace std;
 
 void initializeGUI(GUI &gui, TextGame &textGame)
 {
-
 	createGUITexture(gui.widgetsTexture, texturePaths[idTexturePaths::widgets]);
 	createPanels(gui.panels, gui.widgetsTexture);
 
 	createGUITexture(gui.textureBar, texturePaths[idTexturePaths::bars]);
-	createGUI(gui.hungry, gui.textureBar);
-	createGUI(gui.thirst, gui.textureBar);
-	createGUI(gui.mainFeatures, gui.textureBar);
-	createGUI(gui.itemFeatures, gui.widgetsTexture, gui.textureBar);
+	createGUI(gui.hungry, &gui.textureBar);
+	createGUI(gui.thirst, &gui.textureBar);
+	createGUI(gui.mainFeatures, &gui.textureBar);
+	createGUI(gui.itemFeatures, &gui.widgetsTexture, &gui.textureBar);
 
 	///////////////////////////////////////////////////////////////////
 	// ÈÑÏÐÀÂÜ
@@ -24,10 +23,9 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	//gui.textGui[idTextGui::infoWindowItemGui] = &textGame.texts[idText::infoWindowItemGui];
 }
 
-void createGUITexture(Texture *texture, sf::String fileName)
+void createGUITexture(Texture &texture, sf::String fileName)
 {
-	texture = new Texture;
-	texture->loadFromFile(fileName);
+	texture.loadFromFile(fileName);
 }
 
 void createGUI(infoAboutSelect &gui)
@@ -40,22 +38,22 @@ void createGUI(infoAboutSelect &gui)
 	gui.sprite->setTextureRect(IntRect(0, 0, widthInfo, heightInfo));
 }
 
-void createGUI(panelQuickAccess &gui, Texture *texture)
+void createGUI(panelQuickAccess &gui, Texture &texture)
 {
 	gui.spritePanel = new Sprite;
 	gui.spriteSelect = new Sprite;
 
-	gui.spritePanel->setTexture(*texture);
+	gui.spritePanel->setTexture(texture);
 	gui.spritePanel->setOrigin(widthPanelQuickAccess / 2, heightPanelQuickAccess / 2);// ÈÑÏÐÀÂÜ
 	gui.spritePanel->setTextureRect(IntRect(0, 0, widthPanelQuickAccess, heightPanelQuickAccess));
 
-	gui.spriteSelect->setTexture(*texture);
+	gui.spriteSelect->setTexture(texture);
 	gui.spriteSelect->setOrigin(0, heightSelectInPanelQuickAccess / 2);// ÈÑÏÐÀÂÜ
 	gui.spriteSelect->setTextureRect(IntRect(shiftXSelectInPanelQuickAccess, shiftYSelectInPanelQuickAccess, widthSelectInPanelQuickAccess, heightSelectInPanelQuickAccess));
 
 }
 
-void createPanels(panels &gui, Texture *texture)
+void createPanels(panels &gui, Texture &texture)
 {
 	createGUI(gui.infoAboutSelect);
 	createGUI(gui.panelQuickAccess, texture);
@@ -92,13 +90,11 @@ void createGUI(barThirst &gui, Texture *texture)
 
 }
 
-void createGUI(sf::Sprite *itemInfoOverPanel, Texture *texture)
+void createGUI(sf::Sprite &itemInfoOverPanel, Texture &texture)
 {
-	itemInfoOverPanel = new Sprite;
-
-	itemInfoOverPanel->setTexture(*texture);
-	itemInfoOverPanel->setOrigin(WIDTH_ITEM_OVER_PANEL_INFO / 2, HEIGHT_ITEM_OVER_PANEL_INFO / 2);
-	itemInfoOverPanel->setTextureRect(IntRect(X_ITEM_OVER_PANEL_INFO, Y_ITEM_OVER_PANEL_INFO,
+	itemInfoOverPanel.setTexture(texture);
+	itemInfoOverPanel.setOrigin(WIDTH_ITEM_OVER_PANEL_INFO / 2, HEIGHT_ITEM_OVER_PANEL_INFO / 2);
+	itemInfoOverPanel.setTextureRect(IntRect(X_ITEM_OVER_PANEL_INFO, Y_ITEM_OVER_PANEL_INFO,
 																		WIDTH_ITEM_OVER_PANEL_INFO, HEIGHT_ITEM_OVER_PANEL_INFO));
 }
 
@@ -387,8 +383,8 @@ void panelQuickAccess::renderSelect(MainPerson& mainPerson, Vector2f centerWindo
 
 void panels::renderItemPanel(sf::Vector2f position, RenderWindow& window)
 {
-	itemInfoOverPanel->setPosition(position);
-	window.draw(*itemInfoOverPanel);
+	itemInfoOverPanel.setPosition(position);
+	window.draw(itemInfoOverPanel);
 }
 
 void panelQuickAccess::renderItems(::MainPerson& mainPerson, sf::Vector2f centerWindow,

@@ -4,14 +4,11 @@
 
 using namespace sf;
 
-void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
+void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 {
-	typesEnemy.typesEnemy = new TypeEnemy[idEnemy::amountEnemy];
-
-
 	////////////////////////////////////////////////////////////////
 	// Волк
-	TypeEnemy* typeEnemy = &typesEnemy.typesEnemy[idEnemy::wolfEnemy];
+	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::wolfEnemy];
 
 	String texturePath = texturePaths[idTexturePaths::wolf];
 	String name = "Wolf";
@@ -50,7 +47,7 @@ void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound)
 	delete idItemsForWolf;
 	////////////////////////////////////////////////////////////////
 	// Волк
-	typeEnemy = &typesEnemy.typesEnemy[idEnemy::skeletEnemy];
+	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
 
 	texturePath = texturePaths[idTexturePaths::skelet];
 	name = "Skelet";

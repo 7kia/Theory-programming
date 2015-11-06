@@ -1,67 +1,71 @@
 #include "Game.h"
+#include "EntityVar.h"
 
 using namespace std;
 
 void initializeGame(Game & game)
 {
 	// Карта и звуки
-	game.field = new Field;
-	game.databaseSound = new dataSound;
+//game.field = new Field;
+//game.databaseSound = new dataSound;
 
-	game.clock = new Clock;
-	game.mainPerson = new MainPerson;
+//game.clock = new Clock;
+//game.mainPerson = new MainPerson;
 
 	// Неживые объекты
-	game.typesUnlifeObject = new TypesUnlifeObject;
+//game.typesUnlifeObject = new TypesUnlifeObject;
 	game.unlifeObjects = new vector<UnlifeObject>;
-	game.emptyObject = new UnlifeObject;
+//game.emptyObject = new UnlifeObject;
 
 	// Предметы
-	game.typesItem = new TypeItem[AMOUNT_TYPES_ITEM];
+//game.typesItem = new TypeItem[AMOUNT_TYPES_ITEM];
 	game.items = new vector<Item>;
-	game.emptyItem = new Item;// Нужно для корректной работы инвентаря
+//game.emptyItem = new Item;// Нужно для корректной работы инвентаря
 
 	// Список уничтожаемых объектов и блоков
 	game.listDestroy = new destroyObjectsAndBlocks;
 
 	// GUI
-	game.gui = new GUI;
-	game.textGame = new TextGame;
+//game.gui = new GUI;
+//game.textGame = new TextGame;
 
-	game.window = new RenderWindow(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
+	game.window.create(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
 	// Карта и звуки
 	initializeSound(game.databaseSound);// На будущее
-	initializeField(*game.field);
+	initializeField(game.field);
 
 	// Неживые объекты
-	initializeTypeUnlifeObjects(*game.typesUnlifeObject, *game.databaseSound);
-	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, *game.emptyObject);
+	initializeTypeUnlifeObjects(*game.typesUnlifeObject, game.databaseSound);
+	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, game.emptyObject);
 
 	// Предметы
-	initializeTypesItem(game.typesItem, *game.databaseSound);
-	initializeItems(*game.items, game.typesItem, *game.emptyItem);
+	initializeTypesItem(game.typesItem, game.databaseSound);
+	initializeItems(*game.items, game.typesItem, game.emptyItem);
 
 	// TODO
 	// Категории ломаемых предметов
 	initializeCategorysBreakingObject(game);
 
 	game.Enemys = new vector<Enemy>;
-	game.typesEnemy = new TypesEnemy;
 
-	initializeTypeEnemy(*game.typesEnemy, *game.databaseSound);
-	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, *game.emptyItem, *game.emptyObject);
+	initializeTypeEnemy(game.typesEnemy, game.databaseSound);
+	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, game.emptyItem, game.emptyObject);
 	////////////////////////////////////
 
 	// Основной персонаж
-	initializeMainPerson(*game.mainPerson, *game.databaseSound, *game.emptyItem, *game.emptyObject, *game.emptyEnemy);
+	initializeMainPerson(game.mainPerson, game.databaseSound,game.emptyItem, game.emptyObject, game.emptyEnemy);
+
+	createTextsAndFonts(game.textGame);
+	initializeTexts(game.textGame);
 
 	// GUI
-	initializeGUI(*game.gui, *game.textGame);
-	initializeTexts(*game.textGame);
+	initializeGUI(game.gui, game.textGame);
+
+
 
 	// Часы
-	initializeClock(*game.clock);
+	initializeClock(game.clock);
 }
 
 ///*
@@ -69,7 +73,7 @@ void initializeCategorysBreakingObject(Game &game)
 {
 	destroyObjectsAndBlocks& listDestroy = *game.listDestroy;
 	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject->typeUnlifeObject;
-	wchar_t* charBlocks = game.field->charBlocks;
+	wchar_t* charBlocks = game.field.charBlocks;
 
 	//////////////////////////////////////
 	// Блоки уничтожаемые лопатой
@@ -130,24 +134,24 @@ void initializeCategorysBreakingObject(Game &game)
 
 void renderEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ
 {
-	RenderWindow& window = *game.window;
+	RenderWindow& window = game.window;
 
 	vector<Enemy>& Enemys = *game.Enemys;
 
 	for (int i = 0; i != Enemys.size(); ++i) {
 
 
-		if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor - 1) {
+		if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor - 1) {
 			Enemys[i].spriteEntity->setColor(DOWN_VIEW);
 			window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
 		}
-		else if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor) {
+		else if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor) {
 			Enemys[i].spriteEntity->setColor(NORMAL_VIEW);
 			window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
 		}
-		else if (Enemys[i].currentLevelFloor == game.mainPerson->currentLevelFloor + 1) {
+		else if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor + 1) {
 			Enemys[i].spriteEntity->setColor(UP_VIEW);
 			window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ИСПРАВЬ
@@ -165,8 +169,8 @@ void informationAboutSelect(Game &game, float x, float y)
 {
 	///////////////////////////////////////////////////////////////////
 	// Осмотр блоков
-	Field &field = *game.field;
-	TextGame &textGame = *game.textGame;
+	Field &field = game.field;
+	TextGame &textGame = game.textGame;
 
 	int xPosBlock = x / SIZE_BLOCK;
 	int yPosBlock = y / SIZE_BLOCK;
@@ -178,14 +182,14 @@ void informationAboutSelect(Game &game, float x, float y)
 	infoFloor.setString("Floor : not select");
 	for (int l = 0; l < HEIGHT_MAP; l++) {
 	// Рисуем только текущий уровень
-	if (l >= game.mainPerson->currentLevelFloor - 1
-		&& l <= game.mainPerson->currentLevelFloor + 2) {
+	if (l >= game.mainPerson.currentLevelFloor - 1
+		&& l <= game.mainPerson.currentLevelFloor + 2) {
 		for (int i = 0; i < LONG_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 
 
 				if ( (xPosBlock == j) && (yPosBlock == i) ) {
-					if (l == game.mainPerson->currentLevelFloor) {
+					if (l == game.mainPerson.currentLevelFloor) {
 						infoFloor.setString("Floor : " + field.findCharBlocks(field.dataMap[l][i][j]));
 					}
 					else {
@@ -203,8 +207,8 @@ void informationAboutSelect(Game &game, float x, float y)
 	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
-	game.mainPerson->findObject = game.emptyObject;
-	game.mainPerson->findObjectFromList = -1;
+	game.mainPerson.findObject = &game.emptyObject;
+	game.mainPerson.findObjectFromList = -1;
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
 
@@ -217,13 +221,13 @@ void informationAboutSelect(Game &game, float x, float y)
 		FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) || objectAltBound.contains(x, y)) {
-			if (level >= game.mainPerson->currentLevelFloor
-					&& level <= game.mainPerson->currentLevelFloor + 1) {
+			if (level >= game.mainPerson.currentLevelFloor
+					&& level <= game.mainPerson.currentLevelFloor + 1) {
 				String name = unlifeObjects[i].typeObject->name;
 				if (name != "") {
 
-					game.mainPerson->findObjectFromList = i;
-					game.mainPerson->findObject = &unlifeObjects[i];
+					game.mainPerson.findObjectFromList = i;
+					game.mainPerson.findObject = &unlifeObjects[i];
 					infoUnlifeObject.setString("UnlifeObject : " + name);
 				}
 			}
@@ -235,8 +239,8 @@ void informationAboutSelect(Game &game, float x, float y)
 	vector<Item> &items = *game.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
-	game.mainPerson->findItem = game.emptyItem;
-	game.mainPerson->findItemFromList = -1;
+	game.mainPerson.findItem = &game.emptyItem;
+	game.mainPerson.findItemFromList = -1;
 	infoItem.setString("Item : not select");
 	for (int i = 0; i != items.size(); ++i) {
 
@@ -250,12 +254,12 @@ void informationAboutSelect(Game &game, float x, float y)
 		//FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
 		//|| itemUseBound.contains(x, y)
 		if (itemBound.contains(x, y) ) {
-			if (level >= game.mainPerson->currentLevelFloor
-					&& level <= game.mainPerson->currentLevelFloor + 2) {
+			if (level >= game.mainPerson.currentLevelFloor
+					&& level <= game.mainPerson.currentLevelFloor + 2) {
 				String name = items[i].typeItem->features.name;
 				if (name != "") {
-					game.mainPerson->findItemFromList = i;
-					game.mainPerson->findItem = &items[i];
+					game.mainPerson.findItemFromList = i;
+					game.mainPerson.findItem = &items[i];
 					infoItem.setString("Item : " + name);
 				}
 			}
@@ -267,8 +271,8 @@ void informationAboutSelect(Game &game, float x, float y)
 	vector<Enemy>& Enemys = *game.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
-	game.mainPerson->findEnemy = game.emptyEnemy;
-	game.mainPerson->findEnemyFromList = -1;
+	game.mainPerson.findEnemy = &game.emptyEnemy;
+	game.mainPerson.findEnemyFromList = -1;
 	infoEnemys.setString("Entity : not select");
 	for (int i = 0; i != Enemys.size(); ++i) {
 
@@ -278,13 +282,13 @@ void informationAboutSelect(Game &game, float x, float y)
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y)) {
-			if (level >= game.mainPerson->currentLevelFloor - 1
-					&& level <= game.mainPerson->currentLevelFloor + 1) {
+			if (level >= game.mainPerson.currentLevelFloor - 1
+					&& level <= game.mainPerson.currentLevelFloor + 1) {
 				String name = Enemys[i].type->name;
 				if (name != "") {
 
-					game.mainPerson->findEnemyFromList = i;
-					game.mainPerson->findEnemy = &Enemys[i];
+					game.mainPerson.findEnemyFromList = i;
+					game.mainPerson.findEnemy = &Enemys[i];
 					infoEnemys.setString("Entity : " + name);
 				}
 			}

@@ -194,7 +194,7 @@ struct panels
 {
 	infoAboutSelect infoAboutSelect;
 	panelQuickAccess panelQuickAccess;
-	sf::Sprite* itemInfoOverPanel;
+	sf::Sprite itemInfoOverPanel;
 	void renderItemPanel(Vector2f position, RenderWindow& window);
 };
 
@@ -202,10 +202,10 @@ struct panels
 struct GUI
 {// добавление gui
 
-	sf::Texture* widgetsTexture;
+	sf::Texture widgetsTexture;
 	panels panels;
 
-	sf::Texture* textureBar;
+	sf::Texture textureBar;
 	barHungry hungry;
 	barThirst thirst;
 	barMainFeatures mainFeatures;
@@ -221,12 +221,12 @@ struct GUI
 
 void initializeGUI(GUI &gui, TextGame &textGame);
 
-void createGUITexture(Texture *texture, sf::String fileName);
+void createGUITexture(Texture &texture, sf::String fileName);
 
-void createGUI(sf::Sprite *itemInfoOverPanel, Texture *texture);
+void createGUI(sf::Sprite &itemInfoOverPanel, Texture &texture);
 void createGUI(infoAboutSelect &gui);
 void createGUI(panelQuickAccess &gui, Texture *texture);
-void createPanels(panels &gui, Texture *texture);
+void createPanels(panels &gui, Texture &texture);
 
 void createGUI(barHungry &gui, Texture *texture);
 void createGUI(barThirst &gui, Texture *texture);

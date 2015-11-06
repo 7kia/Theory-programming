@@ -10,11 +10,11 @@ using namespace std;
 void processEvents(Game &game, const Time &deltaTime)
 {
 	Event event;
-	RenderWindow &window = *game.window;
+	RenderWindow &window = game.window;
 	while (window.pollEvent(event)) {
 
 	
-		MainPerson &mainPerson = *game.mainPerson;
+		MainPerson &mainPerson = game.mainPerson;
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Если персонаж жив
 		if (mainPerson.isDeath == false) {
@@ -74,19 +74,19 @@ void processEvents(Game &game, const Time &deltaTime)
 			if (event.type == Event::KeyPressed) {
 				if (Keyboard::isKeyPressed(Keyboard::C)) 
 				{
-					mainPerson.actionAlternate(*game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);
+					mainPerson.actionAlternate(game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::Q)) 
 				{
-					mainPerson.throwItem(*game.field, *game.items);
+					mainPerson.throwItem(game.field, *game.items);
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::E)) 
 				{
-					mainPerson.actionMain(*game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);// ИСПРАВЬ
+					mainPerson.actionMain(game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);// ИСПРАВЬ
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::R)) 
 				{
-					mainPerson.takeItem(*game.field, *game.items, pos.x, pos.y);
+					mainPerson.takeItem(game.field, *game.items, pos.x, pos.y);
 				}
 				/////////////////////////////////////////////////////////////////////////////////////////
 				// Бег
@@ -130,7 +130,7 @@ void processEvents(Game &game, const Time &deltaTime)
 			// Оюработка щелчка мыши
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
-				mainPerson.useItem(*game.field, *game.listDestroy, deltaTime,
+				mainPerson.useItem(game.field, *game.listDestroy, deltaTime,
 													 game.typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
 													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
@@ -193,13 +193,13 @@ void processEvents(Game &game, const Time &deltaTime)
 
 void render(Game & game)
 {
-	RenderWindow &window = *game.window;
+	RenderWindow &window = game.window;
 	window.clear();
 
 	//////////////////////////////////////////////
 	// Отрисовка карты
-	MainPerson &mainPerson = *game.mainPerson;
-	Field &field = *game.field;
+	MainPerson &mainPerson = game.mainPerson;
+	Field &field = game.field;
 	bool isEmpty(false);
 	
 	int l = 0;
@@ -229,18 +229,18 @@ void render(Game & game)
 	// Отрисовка предметов
 	vector<Item> &items = *game.items;
 	for (int i = 0; i != items.size(); ++i) {
-		if (items[i].currentLevel >= game.mainPerson->currentLevelFloor
-				&& items[i].currentLevel <= game.mainPerson->currentLevelFloor + 2) {
+		if (items[i].currentLevel >= game.mainPerson.currentLevelFloor
+				&& items[i].currentLevel <= game.mainPerson.currentLevelFloor + 2) {
 
 
-			if (items[i].currentLevel == game.mainPerson->currentLevelFloor)
+			if (items[i].currentLevel == game.mainPerson.currentLevelFloor)
 			{
 				items[i].mainSprite->setColor(DOWN_VIEW);
 			}
-			else if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 1) {
+			else if (items[i].currentLevel == game.mainPerson.currentLevelFloor + 1) {
 				items[i].mainSprite->setColor(NORMAL_VIEW);
 			}
-			else if (items[i].currentLevel == game.mainPerson->currentLevelFloor + 2) {
+			else if (items[i].currentLevel == game.mainPerson.currentLevelFloor + 2) {
 				items[i].mainSprite->setColor(UP_VIEW);
 			}
 
@@ -260,7 +260,7 @@ void render(Game & game)
 
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
-	int currentLevel = game.mainPerson->currentLevelFloor;
+	int currentLevel = game.mainPerson.currentLevelFloor;
 	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
 	for (int i = 0; i != unlifeObjects.size(); ++i)
 	{
@@ -290,7 +290,7 @@ void render(Game & game)
 
 	//////////////////////////////////////////////
 	// GUI
-	game.gui->setPositionGui(window, *game.mainPerson, *game.Enemys, *game.textGame);
+	game.gui.setPositionGui(window, game.mainPerson, *game.Enemys, game.textGame);
 	//////////////////////////////////////////////
 	window.display();
 }
@@ -301,14 +301,14 @@ void startGame()
 	Game *game = new Game();
 	initializeGame(*game);
 
-	RenderWindow &window = *game->window;
-	MainPerson &mainPerson = *game->mainPerson;
+	RenderWindow &window = game->window;
+	MainPerson &mainPerson = game->mainPerson;
 
 	Time timeSinceLastUpdate = Time::Zero;
 
 	while (window.isOpen())
 	{
-		timeSinceLastUpdate += game->clock->restart();
+		timeSinceLastUpdate += game->clock.restart();
 		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());// ИСПРАВЬ
 		while (timeSinceLastUpdate > TIME_PER_FRAME) {
 			timeSinceLastUpdate -= TIME_PER_FRAME;
@@ -317,8 +317,8 @@ void startGame()
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
 
-				mainPerson.update(TIME_PER_FRAME, *game->databaseSound);
-				mainPerson.interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
+				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
+				mainPerson.interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
@@ -327,15 +327,15 @@ void startGame()
 				vector<Enemy>& Enemys = *game->Enemys;
 				for (int i = 0; i != Enemys.size(); ++i) {
 					
-					Enemys[i].update(TIME_PER_FRAME, *game->databaseSound);
-					Enemys[i].interactionWithMap(*game->field, *game->listDestroy, TIME_PER_FRAME);
+					Enemys[i].update(TIME_PER_FRAME, game->databaseSound);
+					Enemys[i].interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
 					mainPerson.attractionEnemy(&Enemys[i], TIME_PER_FRAME);
 					Enemys[i].randomWalk(TIME_PER_FRAME);
 
 				}
 				/////////////////////////////////////
 
-				mainPerson.updateView(*game->window);
+				mainPerson.updateView(game->window);
 				window.setView(*mainPerson.view);
 
 				//printf("Angle %f \n", game->mainPerson->rotation);// ИСПРАВЬ

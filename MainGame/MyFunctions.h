@@ -9,3 +9,4 @@ std::string toStringCharacter(int firstNumber, int secondNumber);
 
 int computeMiddleString(sf::Text &text);
 int computeSizeString(sf::Text &text);
+void defineOriginInMiddleString(sf::Text &text);

@@ -21,6 +21,12 @@ typedef enum {
 struct TextGame {
 	sf::Font *font;
 	sf::Text *texts;
+
+	void InitText(int id, sf::Color color, sf::Uint32 style, int charSize);
 };
 
+void createTextsAndFonts(TextGame &textGame);
 void initializeTexts(TextGame &textGame);
+
+void initTextAboutSelect(TextGame& textGame);
+void initDeathText(TextGame &textGame);

@@ -12,9 +12,9 @@ const int sizeBuffer = sizeof(idSoundEntity);
 
 struct dataSound
 {
-	float *startSounds;
-	sf::Sound *sounds;
-	sf::SoundBuffer *soundBuffer;
+	float startSounds[sizeBuffer];
+	sf::Sound sounds[sizeBuffer];
+	sf::SoundBuffer soundBuffer[sizeBuffer];
 };
 
-void initializeSound(dataSound *soundBuffer);
+void initializeSound(dataSound &soundBuffer);

@@ -40,5 +40,5 @@ private:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ќбъ€вление сущности
-void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
+void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject);

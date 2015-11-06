@@ -62,10 +62,4 @@ struct TypeEnemy
 						int* idItems, int* minAmountItems, int* maxAmountItems, int count);
 };
 
-struct TypesEnemy
-{
-	TypeEnemy* typesEnemy;
-	int countType = 0;
-};
-
-void initializeTypeEnemy(TypesEnemy &typesEnemy, dataSound &databaseSound);
+void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound);

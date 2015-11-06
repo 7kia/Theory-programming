@@ -3,7 +3,7 @@
 #include "UnlifeObject.h"
 #include "EntityVar.h"
 
-void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
+void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject)// ƒŒ¡¿¬À≈Õ»≈ —”ŸÕŒ—“» 
 {
 
@@ -12,7 +12,7 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int co
 									// ¬ÓÎÍË
 	Enemy* addEnemy = new Enemy();
 
-	TypeEnemy* typeEnemy = &typesEnemy->typesEnemy[idEnemy::wolfEnemy];
+	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::wolfEnemy];
 	
 	int xPos;
 	int yPos;
@@ -35,7 +35,7 @@ void initializeEntitys(TypesEnemy *typesEnemy, std::vector<Enemy> &enemy, int co
 	}
 	//////////////////////////////////////////////////////////////
 	// —ÍÂÎÂÚ˚
-	typeEnemy = &typesEnemy->typesEnemy[idEnemy::skeletEnemy];
+	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
 
 	for (size_t i = 0; i < 0; i++) {
 		countEnemy++;

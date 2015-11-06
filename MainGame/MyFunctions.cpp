@@ -40,3 +40,10 @@ int computeSizeString(Text &text)
 {
 	return text.getString().getSize() * text.getCharacterSize();// TODO
 }
+
+void defineOriginInMiddleString(Text& text)
+{
+	int widthText = text.getCharacterSize() * text.getString().getSize();
+	Vector2f origin = { float(widthText) / 4 , float(text.getCharacterSize()) };
+	text.setOrigin(origin);
+}
