@@ -206,32 +206,38 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, sizeMainSprite &sizes, TextGame& textGame, sf::Vector2f& position, sf::RenderWindow& window)
+void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vector2f scale, sizeMainSprite &sizes, TextGame& textGame,
+																sf::Vector2f& position, sf::RenderWindow& window)
 {
-	render(current, max, sprite,
+	render(current, max, sprite, scale,
 				sizes, position, window);
-	renderText(current, max,
+	renderText(current, max, scale,
 						 position, window, textGame);
 }
 
 
-void barMainFeatures::render( int &current, int& max, Sprite &sprite,
+void barMainFeatures::render( int &current, int& max, Sprite &sprite, Vector2f scale,
 														 sizeMainSprite &sizes, Vector2f &position, RenderWindow &window)
 {
+
 	bar->setPosition(position);
+	bar->setScale(scale);
 	window.draw(*bar);
+	bar->setScale(normalSize);
 
 	float level = float(current) / max;
 
-	position.x += X_SHIFT_BARS;
-	position.y += Y_SHIFT_BARS;
+	position.x += X_SHIFT_BARS * scale.x;
+	position.y += Y_SHIFT_BARS * scale.y;
 	int currentLevel = int(WIDTH_LEVEL_BAR_GUI * level);
 	sprite.setTextureRect(IntRect(sizes.pixelPosX, sizes.pixelPosY, currentLevel, sizes.height));
 	sprite.setPosition(position);
+	sprite.setScale(scale);
 	window.draw(sprite);
+	sprite.setScale(normalSize);
 }
 
-void barMainFeatures::renderText(int &current, int& max, 
+void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 																 Vector2f& position, RenderWindow& window, TextGame &textGame)
 {
 	Text* currentText = &textGame.texts[idText::levelBar];
@@ -240,9 +246,11 @@ void barMainFeatures::renderText(int &current, int& max,
 
 	int middleString = computeMiddleString(*currentText);
 
-	position = { position.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, position.y - Y_SHIFT_BARS / 2 };
-	currentText->setPosition(position);
+	position.y -= (HEIGHT_BARS_GUI / 2) * scale.y;
+	currentText->setScale(scale);
+	//currentText->setPosition(position);
 	window.draw(*currentText);
+	//currentText->setScale(normalSize);
 }
 
 void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, int shift,
@@ -294,7 +302,7 @@ void barMainFeatures::renderBarMainPerson(int &current, int &max, int shift, Spr
 	pos.x -= sizeWindow.x / 2;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * shift;
 
-	renderBar(current, max, sprite,
+	renderBar(current, max, sprite, scaleGuiForEnemy,
 						sizes, textGame, pos, window);
 
 }
@@ -308,17 +316,9 @@ void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int s
 	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
 
 
-	bar->setPosition(pos);
-	window.draw(*bar);
-
-	pos.x += X_SHIFT_BARS;
-	pos.y += Y_SHIFT_BARS;
-
-	sprite.setScale(scaleGuiForEnemy);
-	renderBar(current, max, sprite,
+	renderBar(current, max, sprite, scaleGuiForEnemy,
 												 sizes, textGame, pos, window);
 
-	sprite.setScale(normalSize);
 	renderDamageForEnemy(enemy, textGame, window, shiftBar);
 
 	renderTextEnemy(enemy, current, max, shiftBar,

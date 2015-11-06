@@ -134,11 +134,11 @@ struct barMainFeatures
 	sf::Sprite* levelHealth;
 	sf::Sprite* levelStamina;
 	sf::Sprite* levelMana;
-	void renderBar(int &current, int& max, sf::Sprite &sprite, sizeMainSprite &sizes,
+	void renderBar(int &current, int& max, sf::Sprite &sprite, sf::Vector2f scale, sizeMainSprite &sizes,
 								 TextGame &textGame, sf::Vector2f &position, sf::RenderWindow &window);
-	void render(int &current, int& max, sf::Sprite &sprite,
+	void render(int &current, int& max, sf::Sprite &sprite, sf::Vector2f scale,
 							sizeMainSprite &sizes, sf::Vector2f &position, sf::RenderWindow &window);
-	void renderText(int &current, int& max,
+	void renderText(int &current, int& max, sf::Vector2f scale,
 									sf::Vector2f &position, sf::RenderWindow &window, TextGame &textGame);
 
 	void renderTextEnemy(Enemy & enemy, int & current, int & max, int shift,
