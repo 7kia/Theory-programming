@@ -134,10 +134,10 @@ struct barMainFeatures
 	sf::Sprite* levelHealth;
 	sf::Sprite* levelStamina;
 	sf::Sprite* levelMana;
-	void renderBar(int &current, int& max, sf::Sprite *sprite, sizeMainSprite sizes,
+	void renderBar(int &current, int& max, sf::Sprite &sprite, sizeMainSprite &sizes,
 								 TextGame &textGame, sf::Vector2f &position, sf::RenderWindow &window);
-	void render(int &current, int& max, sf::Sprite *sprite,
-							sizeMainSprite sizes, sf::Vector2f &position, sf::RenderWindow &window);
+	void render(int &current, int& max, sf::Sprite &sprite,
+							sizeMainSprite &sizes, sf::Vector2f &position, sf::RenderWindow &window);
 	void renderText(int &current, int& max,
 									sf::Vector2f &position, sf::RenderWindow &window, TextGame &textGame);
 
@@ -147,10 +147,10 @@ struct barMainFeatures
 
 	void renderDamageForEnemy(Enemy & enemy, TextGame & textGame, sf::RenderWindow & window, int shift);
 
-	void renderBarMainPerson(int & current, int & max, int shift, sf::Sprite * sprite, sizeMainSprite & sizes,
+	void renderBarMainPerson(int & current, int & max, int shift, sf::Sprite &sprite, sizeMainSprite & sizes,
 													 sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
 													 TextGame & textGame, sf::RenderWindow & window);
-	void renderBarEnemy(Enemy & enemy, int & current, int & max, int shift, Sprite * sprite,
+	void renderBarEnemy(Enemy & enemy, int & current, int & max, int shift, Sprite &sprite,
 											sizeMainSprite & sizes, TextGame & textGame, RenderWindow & window);
 };
 

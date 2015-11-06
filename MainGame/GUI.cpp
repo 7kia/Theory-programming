@@ -206,7 +206,7 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barMainFeatures::renderBar(int& current, int& max, sf::Sprite* sprite, sizeMainSprite sizes, TextGame& textGame, sf::Vector2f& position, sf::RenderWindow& window)
+void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, sizeMainSprite &sizes, TextGame& textGame, sf::Vector2f& position, sf::RenderWindow& window)
 {
 	render(current, max, sprite,
 				sizes, position, window);
@@ -215,8 +215,8 @@ void barMainFeatures::renderBar(int& current, int& max, sf::Sprite* sprite, size
 }
 
 
-void barMainFeatures::render( int &current, int& max, Sprite *sprite,
-														 sizeMainSprite sizes, Vector2f &position, RenderWindow &window)
+void barMainFeatures::render( int &current, int& max, Sprite &sprite,
+														 sizeMainSprite &sizes, Vector2f &position, RenderWindow &window)
 {
 	bar->setPosition(position);
 	window.draw(*bar);
@@ -225,10 +225,10 @@ void barMainFeatures::render( int &current, int& max, Sprite *sprite,
 
 	position.x += X_SHIFT_BARS;
 	position.y += Y_SHIFT_BARS;
-	int currentLevel = WIDTH_LEVEL_BAR_GUI * level;
-	sprite->setTextureRect(IntRect(sizes.pixelPosX, sizes.pixelPosY, currentLevel, sizes.height));
-	sprite->setPosition(position);
-	window.draw(*sprite);
+	int currentLevel = int(WIDTH_LEVEL_BAR_GUI * level);
+	sprite.setTextureRect(IntRect(sizes.pixelPosX, sizes.pixelPosY, currentLevel, sizes.height));
+	sprite.setPosition(position);
+	window.draw(sprite);
 }
 
 void barMainFeatures::renderText(int &current, int& max, 
@@ -286,7 +286,7 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 	}
 }
 
-void barMainFeatures::renderBarMainPerson(int &current, int &max, int shift, Sprite *sprite, sizeMainSprite &sizes,
+void barMainFeatures::renderBarMainPerson(int &current, int &max, int shift, Sprite &sprite, sizeMainSprite &sizes,
 																								Vector2f centerWindow, Vector2u sizeWindow,
 																								TextGame &textGame, RenderWindow &window)
 {
@@ -294,19 +294,12 @@ void barMainFeatures::renderBarMainPerson(int &current, int &max, int shift, Spr
 	pos.x -= sizeWindow.x / 2;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * shift;
 
-
-	bar->setPosition(pos);
-	window.draw(*bar);
-
-	pos.x += X_SHIFT_BARS;
-	pos.y += Y_SHIFT_BARS;
-
 	renderBar(current, max, sprite,
 						sizes, textGame, pos, window);
 
 }
 
-void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite *sprite, sizeMainSprite &sizes,
+void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, sizeMainSprite &sizes,
 																					TextGame &textGame, RenderWindow &window)
 {
 	int shiftBar = enemy.maxMana > 0;
@@ -321,10 +314,11 @@ void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int s
 	pos.x += X_SHIFT_BARS;
 	pos.y += Y_SHIFT_BARS;
 
+	sprite.setScale(scaleGuiForEnemy);
 	renderBar(current, max, sprite,
 												 sizes, textGame, pos, window);
 
-
+	sprite.setScale(normalSize);
 	renderDamageForEnemy(enemy, textGame, window, shiftBar);
 
 	renderTextEnemy(enemy, current, max, shiftBar,
@@ -394,6 +388,8 @@ void panelQuickAccess::renderItems(::MainPerson& mainPerson, sf::Vector2f center
 	Text *currentText;
 	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
 	String nameEmptyItem = mainPerson.emptyItem->typeItem->features.name;
+
+	int startPosition = widthPanelQuickAccess / 2;
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 
 		nameCurrentItem = mainPerson.itemFromPanelQuickAccess[i].typeItem->features.name;
@@ -401,9 +397,9 @@ void panelQuickAccess::renderItems(::MainPerson& mainPerson, sf::Vector2f center
 
 			Item& currentItem = mainPerson.itemFromPanelQuickAccess[i];
 
-			int shift = shiftSelect * (i);
+			int shift = shiftSelect * i;
 			Vector2f pos;
-			pos = { centerWindow.x - SHIFT_START_ITEM_PANEL + shift + SHIFT_START_ITEM_PANEL,
+			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 				centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ИСПРАВЬ
 			currentItem.mainSprite->setPosition(pos);
 			window.draw(*currentItem.mainSprite);
@@ -424,13 +420,14 @@ void panelQuickAccess::renderItems(::MainPerson& mainPerson, sf::Vector2f center
 void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, Vector2f centerWindow,
 																			Vector2u sizeWindow, sf::RenderWindow& window, TextGame &textGame)
 {
-	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
+	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[mainPerson.idSelectItem].typeItem->features.name;
 	Text *currentText = &textGame.texts[idText::itemGui];
 
 	currentText->setString(nameCurrentItem);
 	position = { centerWindow.x - WIDTH_ITEM_OVER_PANEL_INFO / 2 + SHIFT_FEATURES_PANEL,
 		centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - HEIGHT_ITEM_OVER_PANEL_INFO / 2 };
 	currentText->setPosition(position);
+	std::cout << string(currentText->getString()) << std::endl;
 	window.draw(*currentText);
 }
 
@@ -485,12 +482,13 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, Vector2f centerWindow,
 	int categoryItem = typeItem->features.category;
 	Vector2f pos;
 
-	int shift = 20;// TODO
+	int startPosition = widthPanelQuickAccess / 2;
+	int shift = shiftSelect * i;// TODO
 	/////////////////////////////////////////////////////////////
 	// Если предмет инструмент или оружие
 	bool isDestroy = features->isDestroy;
 	if (isDestroy) {
-		pos = { centerWindow.x - SHIFT_START_ITEM_PANEL + shift + SHIFT_START_ITEM_PANEL,
+		pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 			centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };
 		// то отображаем прочность
 		pos.x -= SIZE_ITEM / 2;
@@ -509,8 +507,6 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, Vector2f centerWindow,
 	}
 	////////////////////////////////
 	// Характеристики
-	if (mainPerson.idSelectItem == i) {
-
 		//////////////////////////////////////////////////////////
 		// Отображение характеристик
 		pos = { posName.x + halfSizeString,
@@ -565,7 +561,6 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, Vector2f centerWindow,
 
 		renderValueMiddle(itemToug, currentText, pos, window);
 		//////////////////////////////////////////////////////////
-	}
 
 }
 
@@ -590,15 +585,18 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	pos = { centerWindow.x, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
 	panels.renderItemPanel(pos, window);
 
+	panels.panelQuickAccess.renderItems(mainPerson, centerWindow, sizeWindow, window,
+																			textGame, mainFeatures, itemFeatures);
+
 	//////////////////////////////////////////////////////////////////////// 
 	// Шкала здоровья
 	sizeMainSprite sizes;
-	sizes.init(X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
+	sizes.init(WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI);
 
 	int health = mainPerson.currentHealth;
 	int healthMax = mainPerson.maxHealth;
 	int shiftHealth = 3;
-	mainFeatures.renderBarMainPerson(health, healthMax, shiftHealth, mainFeatures.levelHealth,
+	mainFeatures.renderBarMainPerson(health, healthMax, shiftHealth, *mainFeatures.levelHealth,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
 
 	////////////////////////////////////////////////////////////////
@@ -621,19 +619,19 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			healthEnemy = enemy[i].currentHealth;
 			healthMaxEnemy = enemy[i].maxHealth;
 
-			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, mainFeatures.levelHealth,
+			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, *mainFeatures.levelHealth,
 																	sizes, textGame, window);
 		}	
 
 	}
 	////////////////////////////////////////////////////////////////
 	// Шкала выносливости
-	sizes.init(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
+	sizes.init(0, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI);
 
 	int stamina = mainPerson.currentStamina;
 	int staminaMax = mainPerson.maxStamina;
 	int shiftStamina = 2;
-	mainFeatures.renderBarMainPerson(stamina, staminaMax, shiftStamina, mainFeatures.levelStamina,
+	mainFeatures.renderBarMainPerson(stamina, staminaMax, shiftStamina, *mainFeatures.levelStamina,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
 
 
@@ -656,7 +654,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			staminaMaxEnemy = enemy[i].maxStamina;
 
 			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, mainFeatures.levelStamina,
+				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, *mainFeatures.levelStamina,
 																		sizes, textGame, window);
 			}
 			
@@ -666,12 +664,12 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	
 	////////////////////////////////////////////////////////////////
 	// Шкала маны
-	sizes.init(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, 0, HEIGHT_LEVEL_BAR_GUI);
+	sizes.init(0, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI);
 
 	int mana = mainPerson.currentMana;
 	int manaMax = mainPerson.maxMana;
-	int shiftMana = 0;
-	mainFeatures.renderBarMainPerson(mana, manaMax, shiftMana, mainFeatures.levelMana,
+	int shiftMana = 1;
+	mainFeatures.renderBarMainPerson(mana, manaMax, shiftMana, *mainFeatures.levelMana,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
 
 
@@ -691,7 +689,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			manaMaxEnemy = enemy[i].maxStamina;
 
 			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, mainFeatures.levelMana,
+				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, *mainFeatures.levelMana,
 																		sizes, textGame, window);
 			}
 
