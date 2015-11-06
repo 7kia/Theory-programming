@@ -1,7 +1,8 @@
 #pragma once
-#include "Entity.h"
-#include "Items.h"
+#include <SFML\Graphics.hpp>
+#include "TypeEnemy.h"
 
+struct TypeEnemy;
 class UnlifeObject;
 ////////////////////////////////////
 // Ходьба по карте(для противников

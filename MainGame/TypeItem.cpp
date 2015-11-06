@@ -16,7 +16,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 	TypeItem addType;
 
 	featuresItem featuresAddItem;
-	sizeMainSprite sizeMain;
+	sizeSprite sizeMain;
 	idCreateObjects idCreated;
 	typeDamageItem damage;
 
@@ -36,7 +36,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
-	
+
 	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Доски
@@ -442,20 +442,12 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 	delete pathTexture;
 }
 
-void sizeMainSprite::init(int w, int h, int xPixPos, int yPixPos)
+void sizeSprite::init(int w, int h, int xPixPos, int yPixPos)
 {
 	width = w;
 	height = h;
 	pixelPosX = xPixPos;
 	pixelPosY = yPixPos;
-}
-
-void sizeAlternativeSprite::init(int w, int h, int xPixPos, int yPixPos)
-{
-	widthForUse = w;
-	heightForUse = h;
-	pixelXForUse = xPixPos;
-	pixelYForUse = yPixPos;
 }
 
 void typeDamageItem::init(int cut, int crush)
@@ -486,22 +478,19 @@ void featuresItem::defineToughness(bool destroy, int toughnessItem)
 ////////////////////////////////////////////////////////////////////
 // Виды объектов
 void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
-										sizeMainSprite sizeMainSprite, idCreateObjects idCreated, typeDamageItem damage)
+										sizeSprite sizeSprite, idCreateObjects idCreated, typeDamageItem damage)
 {
 	textureItem = new Texture;
-	if (textureItem->loadFromFile(filenameTexture))
-	{
-		std::cout << string(filenameTexture) << std::endl;
-	}
-	else
-	{
+	if (textureItem->loadFromFile(filenameTexture)) {
+		//std::cout << string(filenameTexture) << std::endl;
+	} else {
 		std::cout << "error " << string(filenameTexture) << std::endl;
 	}
 
-	sizeMain.height = sizeMainSprite.height;
-	sizeMain.width = sizeMainSprite.width;
-	sizeMain.pixelPosX = sizeMainSprite.pixelPosX;
-	sizeMain.pixelPosY = sizeMainSprite.pixelPosY;
+	sizeMain.height = sizeSprite.height;
+	sizeMain.width = sizeSprite.width;
+	sizeMain.pixelPosX = sizeSprite.pixelPosX;
+	sizeMain.pixelPosY = sizeSprite.pixelPosY;
 
 	features.isDestroy = featuresAddItem.isDestroy;
 	features.category = featuresAddItem.category;
@@ -533,15 +522,15 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 };
 
-void TypeItem::InitForUse(String filenameTextureForUse, sizeAlternativeSprite size)
+void TypeItem::InitForUse(String filenameTextureForUse, sizeSprite size)
 {
 	textureItemForUse = new Texture;
 	textureItemForUse->loadFromFile(filenameTextureForUse);
 	// Задание размера
-	sizeAlternative.heightForUse = size.heightForUse;
-	sizeAlternative.widthForUse = size.widthForUse;
+	sizeAlternative.height = size.height;
+	sizeAlternative.width = size.width;
 
-	sizeAlternative.pixelXForUse = size.pixelXForUse;
-	sizeAlternative.pixelYForUse = size.pixelYForUse;
+	sizeAlternative.pixelPosX = size.pixelPosX;
+	sizeAlternative.pixelPosY = size.pixelPosY;
 }
 ////////////////////////////////////////////////////////////////////

@@ -206,7 +206,7 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vector2f scale, sizeMainSprite &sizes, TextGame& textGame,
+void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vector2f scale, sizeSprite &sizes, TextGame& textGame,
 																sf::Vector2f& position, sf::RenderWindow& window)
 {
 	render(current, max, sprite, scale,
@@ -217,7 +217,7 @@ void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vect
 
 
 void barMainFeatures::render( int &current, int& max, Sprite &sprite, Vector2f scale,
-														 sizeMainSprite &sizes, Vector2f &position, RenderWindow &window)
+														 sizeSprite &sizes, Vector2f &position, RenderWindow &window)
 {
 
 	bar->setPosition(position);
@@ -298,7 +298,7 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 	}
 }
 
-void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, sizeMainSprite &sizes,
+void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, sizeSprite &sizes,
 																								Vector2f centerWindow, Vector2u sizeWindow,
 																								TextGame &textGame, RenderWindow &window)
 {
@@ -311,7 +311,7 @@ void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, 
 
 }
 
-void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, sizeMainSprite &sizes,
+void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, sizeSprite &sizes,
 																					TextGame &textGame, RenderWindow &window)
 {
 	int shiftBar = enemy.mana.maxMana > 0;
@@ -432,7 +432,7 @@ void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, Ve
 	position = { centerWindow.x - WIDTH_ITEM_OVER_PANEL_INFO / 2 + SHIFT_FEATURES_PANEL,
 		centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - HEIGHT_ITEM_OVER_PANEL_INFO / 2 };
 	currentText->setPosition(position);
-	std::cout << string(currentText->getString()) << std::endl;
+	//std::cout << string(currentText->getString()) << std::endl;
 	window.draw(*currentText);
 }
 
@@ -595,7 +595,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	//////////////////////////////////////////////////////////////////////// 
 	// Ўкала здоровь€
-	sizeMainSprite sizes;
+	sizeSprite sizes;
 	sizes.init(WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI);
 
 	int health = mainPerson.health.currentHealth;

@@ -1,8 +1,8 @@
 #include "TypeEnemy.h"
 #include "EntityVar.h"
 #include "Recourses.h"
-
 using namespace sf;
+using namespace std;
 
 void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 {
@@ -13,38 +13,25 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	String texturePath = texturePaths[idTexturePaths::wolf];
 	String name = "Wolf";
 
-	int width = WIDTH_WOLF;
-	int height = HEIGHT_WOLF;
+	vector<int> minAmount;
+	vector<int> maxAmount;
+	vector<int> idItems;
 
-	int* minAmountForWolf = new int[1];
-	int* maxAmountForWolf = new int[1];
-	int* idItemsForWolf = new int[1];
+	minAmount.push_back(1);
+	maxAmount.push_back(4);
+	idItems.push_back(idItem::rawMeatWolfItem);// ИСПРАВЬ
 
-	int health = 50;
-	int stamina = 50;
-	int mana = 0;
+	typeEnemy->size.init(WIDTH_WOLF, HEIGHT_WOLF, 0, 0);
+	typeEnemy->protection.init(1.5f, 1.f);
+	typeEnemy->step.init(SPEED_ENTITY);
+	typeEnemy->features.init(100, 25, 0);
+	typeEnemy->damage.init(5, 0, 1.f);
+	typeEnemy->drop.init(idItems, minAmount, maxAmount);
+	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS, RADIUSE_VIEW);
 
-	float timeOutputDamage = 1.f;
-	int damCut = 5;
-	int damCrash = 0;
-
-	float protectCut = 1.5f;
-	float protectCrush = 1.f;
-
-	float view = RADIUSE_VIEW;
-
-	*minAmountForWolf = { 1 };
-	*maxAmountForWolf = { 4 };
-	*idItemsForWolf = { idItem::rawMeatWolfItem };// ИСПРАВЬ
-
-	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_WOLF_SLOTS, 
-									health, stamina, mana, protectCut, protectCrush,
-									view, damCut, damCrash, timeOutputDamage,
-									idItemsForWolf, minAmountForWolf, maxAmountForWolf, 1);
-
-	delete minAmountForWolf;
-	delete maxAmountForWolf;
-	delete idItemsForWolf;
+	minAmount.clear();
+	maxAmount.clear();
+	idItems.clear();
 	////////////////////////////////////////////////////////////////
 	// Волк
 	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
@@ -52,93 +39,57 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	texturePath = texturePaths[idTexturePaths::skelet];
 	name = "Skelet";
 
-	width = WIDTH_SKELET;
-	height = HEIGHT_SKELET;
+	minAmount.push_back(1);
+	maxAmount.push_back(2);
+	idItems.push_back(idItem::dirtItem);// ИСПРАВЬ
 
-	int* minAmountForSkelet = new int[1];
-	int* maxAmountForSkelet = new int[1];
-	int* idItemsForSkelet = new int[1];
+	typeEnemy->size.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
+	typeEnemy->protection.init(0.f, 1.f);
+	typeEnemy->step.init(SPEED_ENTITY);
+	typeEnemy->features.init(75, 0, 0);
+	typeEnemy->damage.init(0, 5, 1.f);
+	typeEnemy->drop.init(idItems, minAmount, maxAmount);
+	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS, RADIUSE_VIEW);
 
-	health = 50;
-	stamina = 50;
-	mana = 0;
-
-	timeOutputDamage = 1.f;
-	damCut = 0;
-	damCrash = 5;
-
-	protectCut = 0.f;
-	protectCrush = 1.f;
-
-	view = RADIUSE_VIEW;
-
-	*minAmountForSkelet = { 0 };
-	*maxAmountForSkelet = { 0 };
-	*idItemsForSkelet = { idItem::dirtItem };// ИСПРАВЬ
-
-	typeEnemy->Init(texturePath, name, databaseSound, width, height, AMOUNT_SKELET_SLOTS,
-									health, stamina, mana, protectCut, protectCrush,
-									view, damCut, damCrash, timeOutputDamage,
-									idItemsForSkelet, minAmountForSkelet, maxAmountForSkelet, 1);
-
-	delete minAmountForSkelet;
-	delete maxAmountForSkelet;
-	delete idItemsForSkelet;
+	minAmount.clear();
+	maxAmount.clear();
+	idItems.clear();
 	////////////////////////////////////////////////////////////////
 }
 
-void TypeEnemy::Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
-										 int widthEnemy, int heightEnemy, int amountEnemySlots,
-										 int health, int stamina, int mana, float protectCut, float protectCrush,
-										 float view, int damCut, int damCrash, float timeDam,
-										 int * idItems, int * minAmountItems, int * maxAmountItems, int count)
+void enemyDropItems::init(vector<int> idItems, vector<int> minAmountItems, vector<int> maxAmountItems)
+{
+	int size = idItems.size();
+	for (int i = 0; i < size; i++) {
+		dropItems.push_back(idItems[i]);
+		minCountItems.push_back(minAmountItems[i]);
+		maxCountItems.push_back(maxAmountItems[i]);
+	}
+
+}
+
+void enemyFeatures::init(int health, int stamina, int mana)
+{
+	maxHealth = health;
+	maxMana = mana;
+	maxStamina = stamina;
+}
+
+void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
+																	int amountEnemySlots, float view)
 {
 	textureEntity = new Texture;
+	textureEntity->loadFromFile(texturePath);
+
+	amountSlots = amountEnemySlots;
 
 	name = nameEnemy;
 
-	// Задание размера
-	height = widthEnemy;
-	width = heightEnemy;
-
-	// Дальность подбора предметов
 	radiusUse = 1;
 	radiuseView = view;
 
-	// Скорость ходьбы
-	stepFirst = SPEED_ENTITY;
-	stepCurrent = SPEED_ENTITY;
-	timeAnimation = 0.f;
-
-	// Текстура
-	textureEntity->loadFromFile(texturePath);
-
-	// Звуки 
+	// TODO
 	soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
 	soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
-
-	// Показатели
-	maxHealth = health;
-	maxStamina = stamina;
-	maxMana = mana;
-
-	timeOutputDamage = timeDam;
-
-	cuttingDamage = damCut;
-	crushingDamage = damCrash;
-
-	protectionCut = protectCut;
-	protectionCrash = protectCrush;
-
-	// Выпадающие предметы
-	dropItems = new int[count];
-	minCountItems = new int[count];
-	maxCountItems = new int[count];
-
-	for (size_t i = 0; i < count; i++) {
-		dropItems[i] = idItems[i];
-		minCountItems[i] = minAmountItems[i];
-		maxCountItems[i] = maxAmountItems[i];
-	}
 
 }

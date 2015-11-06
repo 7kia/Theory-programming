@@ -135,10 +135,10 @@ struct barMainFeatures
 	sf::Sprite* levelHealth;
 	sf::Sprite* levelStamina;
 	sf::Sprite* levelMana;
-	void renderBar(int &current, int& max, sf::Sprite &sprite, sf::Vector2f scale, sizeMainSprite &sizes,
+	void renderBar(int &current, int& max, sf::Sprite &sprite, sf::Vector2f scale, sizeSprite &sizes,
 								 TextGame &textGame, sf::Vector2f &position, sf::RenderWindow &window);
 	void render(int &current, int& max, sf::Sprite &sprite, sf::Vector2f scale,
-							sizeMainSprite &sizes, sf::Vector2f &position, sf::RenderWindow &window);
+							sizeSprite &sizes, sf::Vector2f &position, sf::RenderWindow &window);
 	void renderText(int &current, int& max, sf::Vector2f scale,
 									sf::Vector2f &position, sf::RenderWindow &window, TextGame &textGame);
 
@@ -148,11 +148,11 @@ struct barMainFeatures
 
 	void renderDamageForEnemy(Enemy & enemy, TextGame & textGame, sf::RenderWindow & window, int shift);
 
-	void renderBarMainPerson(MainPerson &mainPerson, int & current, int & max, int shift, sf::Sprite &sprite, sizeMainSprite & sizes,
+	void renderBarMainPerson(MainPerson &mainPerson, int & current, int & max, int shift, sf::Sprite &sprite, sizeSprite & sizes,
 													 sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
 													 TextGame & textGame, sf::RenderWindow & window);
 	void renderBarEnemy(Enemy & enemy, int & current, int & max, int shift, Sprite &sprite,
-											sizeMainSprite & sizes, TextGame & textGame, RenderWindow & window);
+											sizeSprite & sizes, TextGame & textGame, RenderWindow & window);
 };
 
 struct infoAboutSelect

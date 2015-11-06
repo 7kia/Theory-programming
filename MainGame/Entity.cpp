@@ -1,13 +1,21 @@
-#include "Entity.h"
+
 #include <list>
 #include "Items.h"
 #include "Map.h"
 #include "ListObjectsAndBlocks.h"
 #include "EntityVar.h"
+#include "Entity.h"
 #include "Font.h"
 
 using namespace sf;
 using namespace std;
+
+
+void entityProtection::init(float cut, float crash)
+{
+	protectionCut = cut;
+	protectionCrash = crash;
+}
 
 void entityMana::update(const sf::Time deltaTime)
 {
@@ -30,9 +38,22 @@ void entityMana::update(const sf::Time deltaTime)
 	}
 }
 
+void Step::init(float first)
+{
+	stepFirst = first;
+	stepCurrent = stepFirst;
+}
+
+void DamageInputAndOutput::init(int cut, int crush, float time)
+{
+	cuttingDamage = cut;
+	crushingDamage = crush;
+	timeOutputDamage = time;
+}
+
 void DamageInputAndOutput::updateInputDamage(const sf::Time deltaTime)
 {
-		if (inputDamage) {
+	if (inputDamage) {
 		timeInputDamage += deltaTime.asSeconds();
 		printf("damage %d time %f\n", inputDamage, timeInputDamage);
 
@@ -138,12 +159,12 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 	/*
 	if (outputDamage) {
-		currentTimeOutputDamage += deltaTime.asSeconds();
-		if (currentTimeOutputDamage > timeOutputDamage) {
-			currentTimeOutputDamage = 0;
+	currentTimeOutputDamage += deltaTime.asSeconds();
+	if (currentTimeOutputDamage > timeOutputDamage) {
+	currentTimeOutputDamage = 0;
 
-			outputDamage = 0;
-		}
+	outputDamage = 0;
+	}
 	}
 	*/
 
@@ -204,89 +225,87 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 			break;
 		}
 
-		if (directions.directionWalk)
-		{
+		if (directions.directionWalk) {
 			playAnimationWalk(deltaTime, databaseSound);
 		}
-		
+
 	}
 
 
-	if(animation.currentTimeOutputDamage > 0)
-	{
+	if (animation.currentTimeOutputDamage > 0) {
 		playAnimationAtack(deltaTime, databaseSound);
 
 		/*
-				resetAnimation = 3;
+		resetAnimation = 3;
 		int shiftAnimation = 4;
 		switch (directions.directionLook) {
 		case UP_LEFT:
-			// TODO
-			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		// TODO
+		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(2 * width, height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+		break;
 		case UP_RIGHT:
-			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		break;
 		case UP:
-			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(0, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(0, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		break;
 		case DOWN_LEFT:
-			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+		break;
 		case DOWN_RIGHT:
-			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		break;
 		case DOWN:
-			//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		break;
 		case LEFT:
-			//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+		break;
 		case RIGHT:
-			//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
-			break;
+		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		break;
 		default:
-			break;
+		break;
 		}
 		*/
 
@@ -308,8 +327,7 @@ void Entity::playAnimationWalk(const Time& deltaTime, dataSound& databaseSound)
 	int currentWidth = width;
 	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
 
-	if (shiftWidth)
-	{
+	if (shiftWidth) {
 		currentWidth *= -1;
 	}
 
@@ -339,16 +357,14 @@ void Entity::playAnimationAtack(const Time& deltaTime, dataSound& databaseSound)
 
 void Entity::playSound(float time, float &start, const int idSound)
 {
-	if (time == start)
-	{
+	if (time == start) {
 		soundsEntity[idSound]->play();
 	}
 }
 
 void Entity::resetTimeAnimation(float &time, float &reset)
 {
-	if (time > reset)
-	{
+	if (time > reset) {
 		time = 0;
 	}
 }
@@ -371,7 +387,7 @@ float Entity::getYPos()
 // Взаимодейтсвие с миром
 void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime)
 {
-	
+
 	float dx(movement.x);
 	float dy(movement.y);
 
@@ -380,22 +396,18 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 
 	bool isCollision(false);
 
-	if (directions.directionWalk >= Direction::UP_LEFT)
-	{
+	if (directions.directionWalk >= Direction::UP_LEFT) {
 		// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
 		x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
 		y = getYPos() + DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
-	}
-	else
-	{
+	} else {
 		x = getXPos() + dx * deltaTime.asSeconds();
 		y = getYPos() + dy * deltaTime.asSeconds();
 	}
 
 	// Проверка на выход за карту
-	if ( ((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
-		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0)) )
-	{
+	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
+			&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
 		wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
@@ -430,35 +442,33 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 
 		/////////////////////////////////////////////
 		// Проверяем пол
-		
-			for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
-				for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
 
-					
-					// Замедляющие блоки
-					if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {// ИСПРАВЬ
-						step.stepCurrent = step.stepFirst / slowingStep;
-						stamina.needMinusStamina = false;
-						break;
-					} else if (step.stepCurrent == step.stepFirst / slowingStep && !isSlowingBlock) {
-						step.stepCurrent = step.stepFirst;
-					}
-					
-					// Является непроходимым
-					if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
-						x = getXPos();
-						y = getYPos();
-						directions.directionWalk = NONE_DIRECTION;
-						break;
-					}
+		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
 
+
+				// Замедляющие блоки
+				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {// ИСПРАВЬ
+					step.stepCurrent = step.stepFirst / slowingStep;
+					stamina.needMinusStamina = false;
+					break;
+				} else if (step.stepCurrent == step.stepFirst / slowingStep && !isSlowingBlock) {
+					step.stepCurrent = step.stepFirst;
 				}
+
+				// Является непроходимым
+				if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
+					x = getXPos();
+					y = getYPos();
+					directions.directionWalk = NONE_DIRECTION;
+					break;
+				}
+
 			}
-		
+		}
+
 		/////////////////////////////////////////////
-	}
-	else
-	{
+	} else {
 		x = getXPos();
 		y = getYPos();
 		directions.directionWalk = NONE_DIRECTION;
@@ -477,6 +487,8 @@ bool Entity::isEmptySlot()
 	}
 	return false;
 }
+
+
 //////////////////////////////////////////////////////
 // Поиск неживого объекта
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
@@ -542,38 +554,27 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 	wchar_t *charBlocks = field.charBlocks;
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
-	for (int i = -1; i < 2; i++)
-	{
-		for (int j = -1; j < 2; j++)
-		{
+	for (int i = -1; i < 2; i++) {
+		for (int j = -1; j < 2; j++) {
 			// Если над лестницей стена не переходим
-			if (i == 0 && j == 0)
-			{// Если спускаемся блок лестницы не проверяем
-				if (isExitFromBorder(x, y) == false && Level != currentLevelFloor)
-				{
-					if (map[Level][y][x] != charBlocks[idBlocks::air])
-					{
+			if (i == 0 && j == 0) {// Если спускаемся блок лестницы не проверяем
+				if (isExitFromBorder(x, y) == false && Level != currentLevelFloor) {
+					if (map[Level][y][x] != charBlocks[idBlocks::air]) {
 						return{ -1, -1 };
 					}
 				}
-			}
-			else
-			{
-				if (isExitFromBorder(x + i, y + j) == false)
-				{
+			} else {
+				if (isExitFromBorder(x + i, y + j) == false) {
 					// Проверка стены
-					if (Level != currentLevelFloor)
-					{
+					if (Level != currentLevelFloor) {
 						// Проверяем пол и стену над ним
 						if (map[Level][y + j][x + i] != charBlocks[idBlocks::air]
-							&& (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air]
-							||	map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]))// ИСПРАВЬ
+								&& (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air]
+								|| map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]))// ИСПРАВЬ
 						{
 							return{ x + i, y + j };
 						}
-					}
-					else
-					{// Проверяем пол
+					} else {// Проверяем пол
 						if (map[Level][y + j][x + i] == charBlocks[idBlocks::air]
 								|| map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder])// ИСПРАВЬ
 						{
@@ -592,8 +593,7 @@ bool Entity::isExitFromBorder(int x, int y)
 {
 
 	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
-		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0)))
-	{
+			&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
 		return false;
 	}
 	return true;

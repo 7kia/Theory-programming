@@ -1,65 +1,48 @@
 #pragma once
 #include "GlobalVar.h"
 
-#include "MyFunctions.h"
-#include "Sound.h"
+#include "Entity.h"
+
+struct enemyDropItems
+{
+	std::vector<int> minCountItems;
+	std::vector<int> maxCountItems;
+	std::vector<int> dropItems;
+	void init(std::vector<int> idItems, std::vector<int> minAmountItems, std::vector<int> maxAmountItems);
+};
+
+struct enemyFeatures
+{
+	int maxHealth;
+	int maxStamina;
+	int maxMana;
+
+	void init(int health, int stamina, int mana);
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Сущность
 struct TypeEnemy
 {
 	sf::Texture *textureEntity;
-
-	// Имя
 	sf::String name;
 
-	// Ссылки на звуки
 	sf::Sound *soundsEntity[sizeBuffer];
 
-	// Для взаимодействия с миром
 	int radiusUse;
 	float radiuseView;
 
-	// Ходьба
-	float stepFirst;
-	float stepCurrent;
-	float timeAnimation;
-
-	int maxHealth;
-	int maxStamina;
-	int maxMana;
-
-	// Урон
-	float timeOutputDamage;
-	float timeInputDamage;
-	int cuttingDamage;// Значение по умолчанию
-	int crushingDamage;// Значение по умолчанию
-
-	// Защита
-	float protectionCut;
-	float protectionCrash;
-
-	// Для отрисовки
-	int width;
-	int height;
-	int widthForAnimation;
-	int heightForAnimation;
-
-	// Количество ячеек инвентаря
 	int amountSlots;
 
-	float damageMultiplirer;
+	Step step;
+	enemyFeatures features;
+	entityProtection protection;
+	DamageInputAndOutput damage;
+	sizeSprite size;
+	enemyDropItems drop;
 
-	int* minCountItems;
-	int* maxCountItems;
-	int* dropItems;// ИСПРАВЬ
-
-
-	void Init(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
-						int widthEnemy, int heightEnemy, int amountEnemySlots,
-						int health, int stamina, int mana, float protectCut, float protectCrush,
-						float view, int damCut, int damCrash, float timeDam,
-						int* idItems, int* minAmountItems, int* maxAmountItems, int count);
+	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
+												 int amountEnemySlots, float view);
 };
 
 void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound);

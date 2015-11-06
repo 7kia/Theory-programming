@@ -1,7 +1,6 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
-#include "TypeEnemy.h"
 #include "Items.h"
 #include "UnlifeObject.h"
 
@@ -28,6 +27,8 @@ struct Step
 
 	float timeWalk = 0;
 	float currentTime = 0;
+
+	void init(float first);
 };
 
 struct entityAnimation
@@ -43,10 +44,9 @@ struct entityAnimation
 struct DamageInputAndOutput
 {
 	float damageMultiplirer;
+	float timeOutputDamage;
 	int cuttingDamage = 0;// Значение по умолчанию
 	int crushingDamage = 1;// Значение по умолчанию
-
-
 
 	int outputDamage;
 
@@ -56,6 +56,7 @@ struct DamageInputAndOutput
 
 	float timeInputDamage;// Показывает урон в течении ... секунд
 
+	void init(int cut, int crush, float time);
 	void updateInputDamage(const sf::Time deltaTime);
 };
 
@@ -130,9 +131,10 @@ struct entityProtection
 {
 	float protectionCut;
 	float protectionCrash;
+	void init(float cut, float crash);
 };
 
-class Entity 
+class Entity
 {
 public:
 	// Текструра
@@ -143,7 +145,7 @@ public:
 	DamageInputAndOutput damage;
 	entityAnimation animation;
 	bool atack;
-	
+
 	sf::Vector2f movement;
 
 	// Ссылки на звуки
@@ -202,18 +204,18 @@ public:
 	void playAnimationAtack(const Time& deltaTime, dataSound& databaseSound);
 	void playSound(float time, float &start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
-	
+
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
 	bool isInUseField(float x, float y, bool under);
-	
+
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
-	//Вспомагательные функции
+																			//Вспомагательные функции
 	float getXPos();
 	float getYPos();
 
-//private:
+	//private:
 
 };
 

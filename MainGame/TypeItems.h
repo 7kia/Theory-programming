@@ -3,7 +3,7 @@
 
 #include "Sound.h"
 
-struct sizeMainSprite
+struct sizeSprite
 {
 	int width;
 	int height;
@@ -12,14 +12,6 @@ struct sizeMainSprite
 	void init(int w, int h, int xPixPos, int yPixPos);
 };
 
-struct sizeAlternativeSprite
-{
-	int widthForUse;
-	int heightForUse;
-	int pixelXForUse;
-	int pixelYForUse;
-	void init(int w, int h, int xPixPos, int yPixPos);
-};
 
 struct typeDamageItem
 {
@@ -56,14 +48,14 @@ public:
 	//Sound *soundsEntity[sizeBuffer];// ÈÑÏÐÀÂÜ
 	featuresItem features;
 
-	sizeMainSprite sizeMain;
-	sizeAlternativeSprite sizeAlternative;
+	sizeSprite sizeMain;
+	sizeSprite sizeAlternative;
 	typeDamageItem damageItem;
 	idCreateObjects idAdd;
 
 	void Init(sf::String filenameTexture, featuresItem featuresAddItem,
-						sizeMainSprite sizeMainSprite, idCreateObjects idCreated, typeDamageItem damage);
-	void InitForUse(sf::String filenameTextureForUse, sizeAlternativeSprite size);
+						sizeSprite sizeSprite, idCreateObjects idCreated, typeDamageItem damage);
+	void InitForUse(sf::String filenameTextureForUse, sizeSprite size);
 };
 
 void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound);

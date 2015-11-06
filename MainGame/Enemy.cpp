@@ -67,8 +67,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 
 	type = &typesEnemy;
 
-	width = type->width;
-	height = type->height;
+	width = type->size.width;
+	height = type->size.height;
 
 	// Дальность подбора предметов
 	radiusUse = 1;
@@ -81,7 +81,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 
 	// Текстура
 	spriteEntity->setTexture(*type->textureEntity);
-	spriteEntity->setTextureRect(IntRect(0, 0, type->width, type->height));
+	spriteEntity->setTextureRect(IntRect(0, 0, width, height));
 
 	// Звуки 
 	soundsEntity[idSoundEntity::stepGrass] = type->soundsEntity[idSoundEntity::stepGrass];
@@ -99,7 +99,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	currentLevelFloor = level;
 	currenMode = idEntityMode::walk;
 
-	spriteEntity->setOrigin(type->width / 2, type->height / 2);
+	spriteEntity->setOrigin(width / 2, height / 2);
 	spriteEntity->setPosition(xPos * SIZE_BLOCK - SIZE_BLOCK / 2, yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
 
 	animation.timeAnimation = 0.f;
@@ -118,27 +118,27 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	////////////////////////////////////////////////////////////////////////
 
 	// Показатели
-	health.maxHealth = type->maxHealth;
+	health.maxHealth = type->features.maxHealth;
 	health.currentHealth = health.maxHealth;
 
-	stamina.maxStamina = type->maxStamina;
+	stamina.maxStamina = type->features.maxStamina;
 	stamina.currentStamina = stamina.maxStamina;
 
-	mana.maxMana = type->maxMana;
+	mana.maxMana = type->features.maxMana;
 	mana.currentMana = mana.maxMana;
 
 	thirst.currentThirst = thirst.maxThirst;
 	hungry.currentHungry = hungry.maxHungry;
 
-	protection.protectionCut = type->protectionCut;
-	protection.protectionCrash = type->protectionCrash;
+	protection.protectionCut = type->protection.protectionCut;
+	protection.protectionCrash = type->protection.protectionCrash;
 
-	animation.timeOutputDamage = type->timeOutputDamage;
+	animation.timeOutputDamage = type->damage.timeOutputDamage;
 	animation.currentTimeOutputDamage = 0.f;
 
 	damage.timeInputDamage = 0.f;
-	damage.cuttingDamage = type->cuttingDamage;
-	damage.crushingDamage = type->crushingDamage;
+	damage.cuttingDamage = type->damage.cuttingDamage;
+	damage.crushingDamage = type->damage.crushingDamage;
 	damage.damageMultiplirer = 1.f;
 
 }

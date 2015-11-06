@@ -202,7 +202,7 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 		}
 		else {
 			//printf("vector %f %f\n", movemoment.x, movemoment.y);// TODO
-			printf("%f %d\n", distanse, enemy->directions.directionWalk);
+			//printf("%f %d\n", distanse, enemy->directions.directionWalk);
 
 
 			animation.currentTimeOutputDamage += deltaTime.asSeconds();
@@ -241,7 +241,7 @@ void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 
 				if (objectItem.contains(x, y) && levelItem == currentLevelFloor + 1) {
 					// Перемещаем в инвентарь
-					printf("added!1\n");
+					//printf("added!1\n");
 					itemFromPanelQuickAccess[emptySlot] = items[findItemFromList];
 					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
 					// Удаляем из мира
@@ -366,18 +366,19 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 					Item* addItem = new Item;
 					TypeEnemy& typeEnemy = *findEnemy->type;
-					int countItem = sizeof(typeEnemy.minCountItems) / sizeof(int);
+					int countItem = typeEnemy.drop.minCountItems.size();
 
-					int* minAmount = typeEnemy.minCountItems;
-					int* maxAmount = typeEnemy.maxCountItems;
-					int* idItems = typeEnemy.dropItems;
+					vector<int> &minAmount = typeEnemy.drop.minCountItems;
+					vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
+					vector<int> &idItems = typeEnemy.drop.dropItems;
 
 					int currentAmount;
 					for (int i = 0; i < countItem; i++) {
 
 						currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
 						for (int j = 0; j < currentAmount; j++) {
-							addItem->setType(typesItems[idItems[i]]);
+							printf("%d\n", idItems[i]);
+							addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
 							addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
 							items->push_back(*addItem);
 
