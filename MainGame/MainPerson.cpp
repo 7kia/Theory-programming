@@ -353,75 +353,79 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
-				currenMode = idEntityMode::fight;
+				if (animation.currentTimeOutputDamage == 0.f) {
+					currenMode = idEntityMode::fight;
 
-				bool isDestroy = currentItem.typeItem->features.isDestroy;
-				if (isDestroy) {
-					currentItem.currentToughness -= 1;
-				}
+					bool isDestroy = currentItem.typeItem->features.isDestroy;
+					if (isDestroy) {
+						currentItem.currentToughness -= 1;
+					}
 
-				//////////////////////////////////////////////////
-				// Смерть и выпадение предметов
-				if (findEnemy->isDeath) {
+					//////////////////////////////////////////////////
+					// Смерть и выпадение предметов
+					if (findEnemy->isDeath) {
 
-					Item* addItem = new Item;
-					TypeEnemy& typeEnemy = *findEnemy->type;
-					int countItem = typeEnemy.drop.minCountItems.size();
+						Item* addItem = new Item;
+						TypeEnemy& typeEnemy = *findEnemy->type;
+						int countItem = typeEnemy.drop.minCountItems.size();
 
-					vector<int> &minAmount = typeEnemy.drop.minCountItems;
-					vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
-					vector<int> &idItems = typeEnemy.drop.dropItems;
+						vector<int> &minAmount = typeEnemy.drop.minCountItems;
+						vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
+						vector<int> &idItems = typeEnemy.drop.dropItems;
 
-					int currentAmount;
-					for (int i = 0; i < countItem; i++) {
+						int currentAmount;
+						for (int i = 0; i < countItem; i++) {
 
-						currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
-						for (int j = 0; j < currentAmount; j++) {
-							printf("%d\n", idItems[i]);
-							addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
-							addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-							items->push_back(*addItem);
+							currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+							for (int j = 0; j < currentAmount; j++) {
+								addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
+								addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+								items->push_back(*addItem);
+
+							}
 
 						}
+						delete addItem;
+						enemy->erase(enemy->begin() + findEnemyFromList);
 
 					}
-					delete addItem;
-					enemy->erase(enemy->begin() + findEnemyFromList);
+					//////////////////////////////////////////////////
+					// Иначе наносим урон
+					else {
+
+						animation.currentTimeOutputDamage += deltaTime.asSeconds();
+						// TODO
+						//printf("Time %f\n", currentTimeOutputDamage);
+						//if (currentTimeOutputDamage > timeOutputDamage) {
+						//	currentTimeOutputDamage = 0;
+						int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
+						int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
+
+						float cutDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
+						float crashDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
+
+						cutDamage *= findEnemy->protection.protectionCut;
+						crashDamage *= findEnemy->protection.protectionCrash;
+
+						findEnemy->damage.inputDamage = cutDamage + crashDamage;
+						findEnemy->health.currentHealth -= findEnemy->damage.inputDamage;
+
+						findEnemy->damage.timeInputDamage = 0.f;
+						//}
+
+					}
+					//////////////////////////////////////////////////
+
+
+
+					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+					}
+
+
 
 				}
-				//////////////////////////////////////////////////
-				// Иначе наносим урон
-				else {
-					
-					animation.currentTimeOutputDamage += deltaTime.asSeconds();
-					// TODO
-					//printf("Time %f\n", currentTimeOutputDamage);
-					//if (currentTimeOutputDamage > timeOutputDamage) {
-					//	currentTimeOutputDamage = 0;
-					int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
-					int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
-
-					float cutDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
-					float crashDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
-
-					cutDamage *= findEnemy->protection.protectionCut;
-					crashDamage *= findEnemy->protection.protectionCrash;
-
-					findEnemy->damage.inputDamage = cutDamage + crashDamage;
-					findEnemy->health.currentHealth -= findEnemy->damage.inputDamage;
-
-					findEnemy->damage.timeInputDamage = 0.f;
-					//}
-					
-				}
-				//////////////////////////////////////////////////
-
-
-
-				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-					itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
-				}
-
+				
 
 			}
 

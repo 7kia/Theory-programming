@@ -51,6 +51,18 @@ void DamageInputAndOutput::init(int cut, int crush, float time)
 	timeOutputDamage = time;
 }
 
+void entityAnimation::updateFight(const sf::Time deltaTime)
+{
+	if (currentTimeOutputDamage) {
+		currentTimeOutputDamage += deltaTime.asSeconds();
+
+		if (currentTimeOutputDamage > timeOutputDamage) {
+			currentTimeOutputDamage = 0;
+		}
+
+	}
+};
+
 void DamageInputAndOutput::updateInputDamage(const sf::Time deltaTime)
 {
 	if (inputDamage) {
@@ -167,7 +179,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	}
 	}
 	*/
-
+	animation.updateFight(deltaTime);
 	damage.updateInputDamage(deltaTime);
 	mana.update(deltaTime);
 	stamina.update(deltaTime, directions.directionWalk, step);

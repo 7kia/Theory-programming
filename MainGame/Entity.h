@@ -39,6 +39,8 @@ struct entityAnimation
 	float timeOutputDamage;
 	float currentTimeOutputDamage;
 
+	void updateFight(const sf::Time deltaTime);
+
 };
 
 struct DamageInputAndOutput
@@ -57,6 +59,7 @@ struct DamageInputAndOutput
 	float timeInputDamage;// Показывает урон в течении ... секунд
 
 	void init(int cut, int crush, float time);
+	void updateOutputDamage(const sf::Time deltaTime);
 	void updateInputDamage(const sf::Time deltaTime);
 };
 
