@@ -246,9 +246,13 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 
 	int middleString = computeMiddleString(*currentText);
 
+	// TODO
+	//position.x -= middleString * scale.x;
 	position.y -= (HEIGHT_BARS_GUI / 2) * scale.y;
-	currentText->setScale(scale);
-	//currentText->setPosition(position);
+
+	currentText->setPosition(position);
+
+	//currentText->setScale(scale);
 	window.draw(*currentText);
 	//currentText->setScale(normalSize);
 }
@@ -280,7 +284,7 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shift) + shiftEnemyDamage;
 
 	// Если нанесли урон то отображаем
-	int damage = enemy.inputDamage;
+	int damage = enemy.damage.inputDamage;
 	if (damage) {
 		string stringDamage;
 		intToString(damage, stringDamage);
@@ -310,19 +314,20 @@ void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, 
 void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, sizeMainSprite &sizes,
 																					TextGame &textGame, RenderWindow &window)
 {
-	int shiftBar = enemy.maxMana > 0;
+	int shiftBar = enemy.mana.maxMana > 0;
 	Vector2f pos = enemy.spriteEntity->getPosition();
 	pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
 	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
 
 
-	renderBar(current, max, sprite, scaleGuiForEnemy,
-												 sizes, textGame, pos, window);
-
 	renderDamageForEnemy(enemy, textGame, window, shiftBar);
 
-	renderTextEnemy(enemy, current, max, shiftBar,
-															 window, textGame);
+	if(max)
+	{
+		renderBar(current, max, sprite, scaleGuiForEnemy,
+												 sizes, textGame, pos, window);
+	}
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -593,8 +598,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	sizeMainSprite sizes;
 	sizes.init(WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI);
 
-	int health = mainPerson.currentHealth;
-	int healthMax = mainPerson.maxHealth;
+	int health = mainPerson.health.currentHealth;
+	int healthMax = mainPerson.health.maxHealth;
 	int shiftHealth = 3;
 	mainFeatures.renderBarMainPerson(mainPerson, health, healthMax, shiftHealth, *mainFeatures.levelHealth,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
@@ -616,8 +621,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 		if (isInView && isFindedEnemy) {
 
-			healthEnemy = enemy[i].currentHealth;
-			healthMaxEnemy = enemy[i].maxHealth;
+			healthEnemy = enemy[i].health.currentHealth;
+			healthMaxEnemy = enemy[i].health.maxHealth;
 
 			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, *mainFeatures.levelHealth,
 																	sizes, textGame, window);
@@ -628,8 +633,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	// Шкала выносливости
 	sizes.init(0, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI);
 
-	int stamina = mainPerson.currentStamina;
-	int staminaMax = mainPerson.maxStamina;
+	int stamina = mainPerson.stamina.currentStamina;
+	int staminaMax = mainPerson.stamina.maxStamina;
 	int shiftStamina = 2;
 	mainFeatures.renderBarMainPerson(mainPerson, stamina, staminaMax, shiftStamina, *mainFeatures.levelStamina,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
@@ -650,8 +655,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 		if (isInView && isFindedEnemy) {
 
-			staminaEnemy = enemy[i].currentStamina;
-			staminaMaxEnemy = enemy[i].maxStamina;
+			staminaEnemy = enemy[i].stamina.currentStamina;
+			staminaMaxEnemy = enemy[i].stamina.maxStamina;
 
 			if (staminaMaxEnemy) {
 				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, *mainFeatures.levelStamina,
@@ -666,8 +671,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	// Шкала маны
 	sizes.init(0, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI);
 
-	int mana = mainPerson.currentMana;
-	int manaMax = mainPerson.maxMana;
+	int mana = mainPerson.mana.currentMana;
+	int manaMax = mainPerson.mana.maxMana;
 	int shiftMana = 1;
 	mainFeatures.renderBarMainPerson(mainPerson, mana, manaMax, shiftMana, *mainFeatures.levelMana,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
@@ -685,8 +690,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 		if (isInView && isFindedEnemy) {
 
-			manaEnemy = enemy[i].currentMana;
-			manaMaxEnemy = enemy[i].maxStamina;
+			manaEnemy = enemy[i].mana.currentMana;
+			manaMaxEnemy = enemy[i].mana.maxMana;
 
 			if (staminaMaxEnemy) {
 				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, *mainFeatures.levelMana,
@@ -698,8 +703,8 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	}
 
 	////////////////////////////////////////////////////////////////////////
-	hungry.renderBar(mainPerson.currentHungry, mainPerson.maxHungry, centerWindow, sizeWindow, window);
-	thirst.renderBar(mainPerson.currentThirst, mainPerson.maxThirst, centerWindow, sizeWindow, window);
+	hungry.renderBar(mainPerson.hungry.currentHungry, mainPerson.hungry.maxHungry, centerWindow, sizeWindow, window);
+	thirst.renderBar(mainPerson.thirst.currentThirst, mainPerson.thirst.maxThirst, centerWindow, sizeWindow, window);
 	////////////////////////////////////////////////////////////////////////
 
 }

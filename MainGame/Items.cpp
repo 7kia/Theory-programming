@@ -104,5 +104,5 @@ void Item::setPosition(int xPos, int yPos, int Level)
 	mainSprite->setPosition(numberX, numberY);
 	// TODO
 	//spriteForUse->setPosition(numberX, numberY - typeItem->sizeAlternative.heightForUse / 2 + typeItem->sizeMainSprite.height / 2);
-	//direction = NONE_DIRECRION;
+	//directionWalk = NONE_DIRECRION;
 }

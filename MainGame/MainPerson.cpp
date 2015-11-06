@@ -3,6 +3,7 @@
 #include "EntityVar.h"
 #include "ListObjectsAndBlocks.h"
 #include "Map.h"
+#include "Font.h"
 
 using namespace sf;
 using namespace std;
@@ -22,9 +23,9 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.radiusUse = 1;
 
 	// Скорость ходьбы
-	mainPerson.stepFirst = SPEED_ENTITY;
-	mainPerson.stepCurrent = SPEED_ENTITY;
-	mainPerson.timeAnimation = 0.f;
+	mainPerson.step.stepFirst = SPEED_ENTITY;
+	mainPerson.step.stepCurrent = SPEED_ENTITY;
+	mainPerson.animation.timeAnimation = 0.f;
 
 	// Камера
 	int posX(64), posY(64);
@@ -62,27 +63,28 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.currenMode = idEntityMode::walk;
 	mainPerson.spriteEntity->setPosition(posX, posY);
 
-	mainPerson.timeAnimation = 0.f;
-	mainPerson.timeFightAnimation = 0.f;
+	entityAnimation &animation = mainPerson.animation;
+	animation.timeAnimation = 0.f;
+	animation.timeFightAnimation = 0.f;
+	animation.currentTimeOutputDamage = 0.f;
+	animation.timeOutputDamage = 1.f;
 
-	mainPerson.currentTimeOutputDamage = 0.f;
-	mainPerson.timeOutputDamage = 1.f;
+	Directions &directions = mainPerson.directions;
+	directions.directionWalk = NONE_DIRECTION;
+	directions.directionLook = DOWN;
 
-	mainPerson.direction = NONE_DIRECTION;
-	mainPerson.directionLook = DOWN;
+	mainPerson.health.currentHealth = 45;
+	mainPerson.stamina.currentStamina = 35;
+	mainPerson.mana.currentMana = 10;
 
-	// Показатели
-	mainPerson.currentHealth = 45;
-	mainPerson.currentStamina = 35;
-	mainPerson.currentMana = 10;
+	mainPerson.thirst.currentThirst = 5;
+	mainPerson.hungry.currentHungry = 5;
 
-	mainPerson.currentThirst = 5;
-	mainPerson.currentHungry = 5;
+	entityProtection &protection = mainPerson.protection;
+	protection.protectionCut = 1.5f;
+	protection.protectionCrash = 1.f;
 
-	mainPerson.protectionCut = 1.5f;
-	mainPerson.protectionCrash = 1.f;
-
-	mainPerson.damageMultiplirer = 1;
+	mainPerson.damage.damageMultiplirer = 1;
 
 }
 ////////////////////////////////////////////////////////////////////
@@ -118,18 +120,18 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	float cutDamage;
 	float crashDamage;
 
-	inputCutDamage = enemy.damageMultiplirer * enemy.cuttingDamage;
-	inputCrashDamage = enemy.damageMultiplirer * enemy.crushingDamage;
+	damage.inputCutDamage = enemy.damage.damageMultiplirer * enemy.damage.cuttingDamage;
+	damage.inputCrashDamage = enemy.damage.damageMultiplirer * enemy.damage.crushingDamage;
 	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
 	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
-	inputCutDamage *= protectionCut;
-	inputCrashDamage *= protectionCrash;
+	damage.inputCutDamage *= protection.protectionCut;
+	damage.inputCrashDamage *= protection.protectionCrash;
 
-	inputDamage = inputCutDamage + inputCrashDamage;
-	currentHealth -= inputDamage;
+	damage.inputDamage = damage.inputCutDamage + damage.inputCrashDamage;
+	health.currentHealth -= inputDamage;
 
-	inputDamage = 0;// TODO
+	damage.inputDamage = 0;// TODO
 }
 
 void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
@@ -143,10 +145,12 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 
 	distanse = distansePoints(personPoint, enemyPoint);
 	// Если увидел
+	Directions &directions = enemy->directions;
+	entityAnimation &animation = enemy->animation;
 	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy->currentLevelFloor) {
 		enemy->currenMode = idEntityMode::fight;
 		if (distanse >= SIZE_BLOCK) {
-			enemy->currentTimeOutputDamage = 0.f;
+			enemy->animation.currentTimeOutputDamage = 0.f;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
 
@@ -157,39 +161,39 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 			bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
 
 			if (movemoment.x > zero && movemoment.y > zero) {
-				enemy->direction = DOWN_RIGHT;
-				enemy->directionLook = DOWN_RIGHT;
+				directions.directionWalk = DOWN_RIGHT;
+				directions.directionLook = DOWN_RIGHT;
 			}
 			else if (movemoment.x < -zero && movemoment.y > zero) {
-				enemy->direction = DOWN_LEFT;
-				enemy->directionLook = DOWN_LEFT;
+				directions.directionWalk = DOWN_LEFT;
+				directions.directionLook = DOWN_LEFT;
 			}
 			else if (movemoment.x < -zero && movemoment.y < -zero) {
-				enemy->direction = UP_LEFT;
-				enemy->directionLook = UP_LEFT;
+				directions.directionWalk = UP_LEFT;
+				directions.directionLook = UP_LEFT;
 			}
 			else if (movemoment.x > zero && movemoment.y < zero) {
-				enemy->direction = UP_RIGHT;
-				enemy->directionLook = UP_RIGHT;
+				directions.directionWalk = UP_RIGHT;
+				directions.directionLook = UP_RIGHT;
 			}
 			else if (movemoment.y >= zero && xAboutZero) {
-				enemy->direction = DOWN;
-				enemy->directionLook = DOWN;
+				directions.directionWalk = DOWN;
+				directions.directionLook = DOWN;
 			}
 			else if (movemoment.y <= -zero && xAboutZero) {
-				enemy->direction = UP;
-				enemy->directionLook = UP;
+				directions.directionWalk = UP;
+				directions.directionLook = UP;
 			}
 			else if (movemoment.x >= zero && yAboutZero) {
-				enemy->direction = RIGHT;
-				enemy->directionLook = RIGHT;
+				directions.directionWalk = RIGHT;
+				directions.directionLook = RIGHT;
 			}
 			else if (movemoment.x <= -zero && yAboutZero) {
-				enemy->direction = LEFT;
-				enemy->directionLook = LEFT;
+				directions.directionWalk = LEFT;
+				directions.directionLook = LEFT;
 			}
 			else {
-				enemy->direction = NONE_DIRECTION;
+				directions.directionWalk = NONE_DIRECTION;
 			}
 
 			/*
@@ -198,20 +202,22 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 		}
 		else {
 			//printf("vector %f %f\n", movemoment.x, movemoment.y);// TODO
-			printf("%f %d\n", distanse, enemy->direction);
-			enemy->currentTimeOutputDamage += deltaTime.asSeconds();
-			if (enemy->currentTimeOutputDamage > enemy->timeOutputDamage) {
-				enemy->currentTimeOutputDamage = 0.f;
+			printf("%f %d\n", distanse, enemy->directions.directionWalk);
+
+
+			animation.currentTimeOutputDamage += deltaTime.asSeconds();
+			if (animation.currentTimeOutputDamage > animation.timeOutputDamage) {
+				animation.currentTimeOutputDamage = 0.f;
 				givenForPersonDamage(*enemy);
 			}
-			enemy->currenMode = idEntityMode::fight;
-			enemy->direction = NONE_DIRECTION;
+			currenMode = idEntityMode::fight;
+			directions.directionWalk = NONE_DIRECTION;
 		}
 
 	}
 	// Идём дальше
 	else {
-		enemy->currenMode = idEntityMode::walk;
+		currenMode = idEntityMode::walk;
 	}
 
 }
@@ -304,7 +310,7 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 			entityBound = spriteEntity->getGlobalBounds();
 
 			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-				if (direction >= Direction::UP_LEFT) {
+				if (directions.directionWalk >= Direction::UP_LEFT) {
 					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
 					x -= DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
 					y -= DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
@@ -312,7 +318,7 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 					x -= dx * deltaTime.asSeconds();
 					y -= dy * deltaTime.asSeconds();
 				}
-				direction = NONE_DIRECTION;
+				directions.directionWalk = NONE_DIRECTION;
 				break;
 			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
 				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
@@ -386,7 +392,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 				// Иначе наносим урон
 				else {
 					
-					currentTimeOutputDamage += deltaTime.asSeconds();
+					animation.currentTimeOutputDamage += deltaTime.asSeconds();
 					// TODO
 					//printf("Time %f\n", currentTimeOutputDamage);
 					//if (currentTimeOutputDamage > timeOutputDamage) {
@@ -394,16 +400,16 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 					int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
 					int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
 
-					float cutDamage = damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
-					float crashDamage = damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
+					float cutDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
+					float crashDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
 
-					cutDamage *= findEnemy->protectionCut;
-					crashDamage *= findEnemy->protectionCrash;
+					cutDamage *= findEnemy->protection.protectionCut;
+					crashDamage *= findEnemy->protection.protectionCrash;
 
-					findEnemy->inputDamage = cutDamage + crashDamage;
-					findEnemy->currentHealth -= findEnemy->inputDamage;
+					findEnemy->damage.inputDamage = cutDamage + crashDamage;
+					findEnemy->health.currentHealth -= findEnemy->damage.inputDamage;
 
-					findEnemy->timeInputDamage = 0.f;
+					findEnemy->damage.timeInputDamage = 0.f;
 					//}
 					
 				}
@@ -500,8 +506,8 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 		case idCategoryItem::food:
 			if (event.key.code == Mouse::Right) {
 				// Утоление голода
-				if (currentHungry < maxHungry) {
-					currentHungry += currentItem.currentToughness;
+				if (hungry.currentHungry < hungry.maxHungry) {
+					hungry.currentHungry += currentItem.currentToughness;
 					currentItem = *emptyItem;
 				}
 			}
@@ -509,7 +515,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 			////////////////////////////////////////////////////////////////////////
 			// Напитки
 		case idCategoryItem::bukketWithWater:
-			if (currentThirst < maxThirst) {
+			if (thirst.currentThirst < thirst.maxThirst) {
 
 				// Если используем ведро с водой
 				if (event.key.code == Mouse::Left) {
@@ -535,7 +541,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 				// Утоление жажды
 				if (event.key.code == Mouse::Right) {
-					currentThirst += currentItem.currentToughness;
+					thirst.currentThirst += currentItem.currentToughness;
 				}
 
 				if (event.key.code == Mouse::Left || event.key.code == Mouse::Right) {
@@ -555,9 +561,9 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 		case idCategoryItem::bottleWithWater:
 			if (event.key.code == Mouse::Right) {
 				// Утоление жажды
-				if (currentThirst < maxThirst) {
+				if (thirst.currentThirst < thirst.maxThirst) {
 					// Утоление жажды
-					currentThirst += currentItem.currentToughness;
+					thirst.currentThirst += currentItem.currentToughness;
 
 					// Опустошение бутылки
 					int *idItem = &currentItem.typeItem->features.id;

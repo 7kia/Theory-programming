@@ -76,8 +76,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	currenMode = idEntityMode::walk;
 
 	// Скорость ходьбы
-	stepFirst = SPEED_ENTITY;
-	stepCurrent = SPEED_ENTITY;
+	step.stepFirst = SPEED_ENTITY;
+	step.stepCurrent = SPEED_ENTITY;
 
 	// Текстура
 	spriteEntity->setTexture(*type->textureEntity);
@@ -102,45 +102,44 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	spriteEntity->setOrigin(type->width / 2, type->height / 2);
 	spriteEntity->setPosition(xPos * SIZE_BLOCK - SIZE_BLOCK / 2, yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
 
-	timeAnimation = 0.f;
-	timeFightAnimation = 0.f;
-	direction = NONE_DIRECTION;
-	directionLook = DOWN;
+	animation.timeAnimation = 0.f;
+	animation.timeFightAnimation = 0.f;
+	directions.directionWalk = NONE_DIRECTION;
+	directions.directionLook = DOWN;
 
 	////////////////////////////////////////////////////////////////////////
 	// Для случайного перемещения по карте
-	timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
+	step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
 
-	currentTime = 0;
+	step.currentTime = 0;
 
 	int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
-	direction = Direction(randomDirection);
+	directions.directionWalk = Direction(randomDirection);
 	////////////////////////////////////////////////////////////////////////
 
 	// Показатели
-	maxHealth = type->maxHealth;
-	currentHealth = maxHealth;
+	health.maxHealth = type->maxHealth;
+	health.currentHealth = health.maxHealth;
 
-	maxStamina = type->maxStamina;
-	currentStamina = maxStamina;
+	stamina.maxStamina = type->maxStamina;
+	stamina.currentStamina = stamina.maxStamina;
 
-	maxMana = type->maxMana;
-	currentMana = maxMana;
+	mana.maxMana = type->maxMana;
+	mana.currentMana = mana.maxMana;
 
-	currentThirst = maxThirst;
-	currentHungry = maxHungry;
+	thirst.currentThirst = thirst.maxThirst;
+	hungry.currentHungry = hungry.maxHungry;
 
-	protectionCut = type->protectionCut;
-	protectionCrash = type->protectionCrash;
+	protection.protectionCut = type->protectionCut;
+	protection.protectionCrash = type->protectionCrash;
 
-	timeOutputDamage = type->timeOutputDamage;
-	currentTimeOutputDamage = 0.f;
+	animation.timeOutputDamage = type->timeOutputDamage;
+	animation.currentTimeOutputDamage = 0.f;
 
-	timeInputDamage = 0.f;
-
-	cuttingDamage = type->cuttingDamage;
-	crushingDamage = type->crushingDamage;
-	damageMultiplirer = 1.f;
+	damage.timeInputDamage = 0.f;
+	damage.cuttingDamage = type->cuttingDamage;
+	damage.crushingDamage = type->crushingDamage;
+	damage.damageMultiplirer = 1.f;
 
 }
 
@@ -151,17 +150,17 @@ Enemy::~Enemy()
 void Enemy::randomWalk(const Time &deltaTime) {
 
 	if (currenMode == idEntityMode::walk) {
-		if (currentTime < timeWalk && direction != Direction::NONE_DIRECTION) {
+		if (step.currentTime < step.timeWalk && directions.directionWalk != Direction::NONE_DIRECTION) {
 
-			currentTime += deltaTime.asSeconds();
+			step.currentTime += deltaTime.asSeconds();
 
 		} else {
 
-			currentTime = 0;
-			timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
+			step.currentTime = 0;
+			step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
 
 			int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
-			direction = Direction(randomDirection);
+			directions.directionWalk = Direction(randomDirection);
 		}
 	}
 	

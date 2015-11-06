@@ -66,7 +66,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 
 	damage.init(0, 1);
 
-	idCreated.init(idBlocks::planksBlock, idUnlifeObject::NONE_OBJECT);
+	idCreated.init(idBlocks::dirt, idUnlifeObject::NONE_OBJECT);
 
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
@@ -134,7 +134,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 
 	damage.init(0, 10);
 
-	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
+	idCreated.init(idBlocks::stoneBrick, idUnlifeObject::NONE_OBJECT);
 
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);

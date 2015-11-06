@@ -4,41 +4,13 @@
 #include "Map.h"
 #include "ListObjectsAndBlocks.h"
 #include "EntityVar.h"
+#include "Font.h"
 
 using namespace sf;
 using namespace std;
 
-////////////////////////////////////////////////////////////////////
-// Передвижение. Его анимация и озвучка
-void Entity::update(const Time & deltaTime, dataSound &databaseSound)
+void entityMana::update(const sf::Time deltaTime)
 {
-
-	////////////////////////////////////////////////////////////////////
-	// Обновление показателей 
-	if (inputDamage) {
-		timeInputDamage += deltaTime.asSeconds();
-		printf("damage %d time %f\n", inputDamage, timeInputDamage);
-
-		if (timeInputDamage > TIME_ATTENTION_SHOW_DAMAGE) {
-			timeInputDamage = 0;
-			inputDamage = 0;
-		}
-
-	}
-
-	/*
-	if (outputDamage) {
-		currentTimeOutputDamage += deltaTime.asSeconds();
-		if (currentTimeOutputDamage > timeOutputDamage) {
-			currentTimeOutputDamage = 0;
-
-			outputDamage = 0;
-		}
-	}
-	*/
-
-	///////////////////////////////////////
-	// Маны
 	timeForMana += deltaTime.asSeconds();
 
 	if (timeForMana > timeUpdateMana) {
@@ -56,14 +28,30 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	} else if (currentMana > maxMana) {
 		currentMana = maxMana;
 	}
-	///////////////////////////////////////
-	// Выносливости
+}
+
+void DamageInputAndOutput::updateInputDamage(const sf::Time deltaTime)
+{
+		if (inputDamage) {
+		timeInputDamage += deltaTime.asSeconds();
+		printf("damage %d time %f\n", inputDamage, timeInputDamage);
+
+		if (timeInputDamage > TIME_ATTENTION_SHOW_DAMAGE) {
+			timeInputDamage = 0;
+			inputDamage = 0;
+		}
+
+	}
+};
+
+void entityStamina::update(const sf::Time deltaTime, Direction directionWalk, Step &step)
+{
 	timeForStamina += deltaTime.asSeconds();
 
 	if (timeForStamina > timeUpdateStamina) {
 		timeForStamina = 0;
 
-		if (needMinusStamina && direction != NONE_DIRECTION) {
+		if (needMinusStamina && directionWalk != NONE_DIRECTION) {
 			currentStamina -= delStamina;
 		} else {
 			currentStamina += addStamina;
@@ -73,13 +61,15 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	if (currentStamina < 1) {
 		currentStamina = 0;
 		needMinusStamina = false;
-		stepCurrent = stepFirst;// Персонаж не может бегать
-	}
-	else if (currentStamina > maxStamina){
+		step.stepCurrent = step.stepFirst;// Персонаж не может бегать
+	} else if (currentStamina > maxStamina) {
 		currentStamina = maxStamina;
 	}
-	///////////////////////////////////////////////////
-	// Здоровья
+
+};
+
+void entityHealth::update(const sf::Time deltaTime, bool &isDeath)
+{
 	timeForHealth += deltaTime.asSeconds();
 
 	if (timeForHealth > timeUpdateHealth) {
@@ -87,8 +77,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 		if (needMinusHealth) {
 			currentHealth -= delHealth;
-		}
-		else {
+		} else {
 			currentHealth += addHealth;
 		}
 	}
@@ -98,12 +87,36 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	} else if (currentHealth > maxHealth) {
 		currentHealth = maxHealth;
 	}
-	///////////////////////////////////////
-	// жажды
+
+};
+
+void entityHungry::update(const sf::Time deltaTime, bool &needMinusHealth)
+{
 	timeForHungry += deltaTime.asSeconds();
-	
-	if (timeForHungry > timeUpdateThirst) {
+
+	if (timeForHungry > timeUpdateHungry) {
 		timeForHungry = 0;
+		currentHungry--;
+		//printf("%d\n", currentThirst);// ИСПРАВЬ
+	}
+
+	if (currentHungry > maxHungry) {
+		currentHungry = maxHungry;
+	}
+
+	if (currentHungry > 0) {
+		needMinusHealth = false;
+	} else {
+		needMinusHealth = true;
+	}
+};
+
+void entityThirst::update(const sf::Time deltaTime, bool &needMinusHealth)
+{
+	timeForThirst += deltaTime.asSeconds();
+
+	if (timeForThirst > timeUpdateThirst) {
+		timeForThirst = 0;
 		currentThirst--;
 		//printf("%d\n", currentThirst);// ИСПРАВЬ
 	}
@@ -111,81 +124,77 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	if (currentThirst > maxThirst) {
 		currentThirst = maxThirst;
 	}
-	///////////////////////////////////////
-	// голода
-	timeForThirst += deltaTime.asSeconds();
-	if (timeForThirst > timeUpdateHungry) {
-		timeForThirst = 0;
-		currentHungry--;
-		//printf("%d\n", currentHungry);// ИСПРАВЬ
-	}
 
-	if (currentHungry > maxHungry) {
-		currentHungry = maxHungry;
-	}
-	// Персонаж умирает от голода или жажды
-	if (currentHungry > 0 && currentThirst > 0) {
+	if (currentThirst > 0) {
 		needMinusHealth = false;
-	}
-	else {
+	} else {
 		needMinusHealth = true;
 	}
-	///////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////
+};
+////////////////////////////////////////////////////////////////////
+// Передвижение. Его анимация и озвучка
+void Entity::update(const Time & deltaTime, dataSound &databaseSound)
+{
+
+	/*
+	if (outputDamage) {
+		currentTimeOutputDamage += deltaTime.asSeconds();
+		if (currentTimeOutputDamage > timeOutputDamage) {
+			currentTimeOutputDamage = 0;
+
+			outputDamage = 0;
+		}
+	}
+	*/
+
+	damage.updateInputDamage(deltaTime);
+	mana.update(deltaTime);
+	stamina.update(deltaTime, directions.directionWalk, step);
+	health.update(deltaTime, isDeath);
+	hungry.update(deltaTime, health.needMinusHealth);
+	thirst.update(deltaTime, health.needMinusHealth);
+
+	///////////////////////////////////////
 
 	float pauseStep = 5, resetAnimation = 4;
 
 	if (currenMode == idEntityMode::walk) {
-		switch (direction) {
+		switch (directions.directionWalk) {
 		case UP_LEFT:
-			directionLook = UP_LEFT;
-			movement.y = -stepCurrent;
-			movement.x = -stepCurrent;
-
+			directions.directionLook = UP_LEFT;
+			movement.y = -step.stepCurrent;
+			movement.x = -step.stepCurrent;
 			break;
 		case UP_RIGHT:
-			directionLook = UP_RIGHT;
-			movement.y = -stepCurrent;
-			movement.x = stepCurrent;
-
+			directions.directionLook = UP_RIGHT;
+			movement.y = -step.stepCurrent;
+			movement.x = step.stepCurrent;
 			break;
 		case UP:
-			directionLook = UP;
-			movement.y = -stepCurrent;
-
-		
+			directions.directionLook = UP;
+			movement.y = -step.stepCurrent;
 			break;
 		case DOWN_LEFT:
-			directionLook = DOWN_LEFT;
-			movement.y = stepCurrent;
-			movement.x = -stepCurrent;
-
-	
+			directions.directionLook = DOWN_LEFT;
+			movement.y = step.stepCurrent;
+			movement.x = -step.stepCurrent;
 			break;
 		case DOWN_RIGHT:
-			directionLook = DOWN_RIGHT;
-			movement.y = stepCurrent;
-			movement.x = stepCurrent;
-
-	
+			directions.directionLook = DOWN_RIGHT;
+			movement.y = step.stepCurrent;
+			movement.x = step.stepCurrent;
 			break;
 		case DOWN:
-			directionLook = DOWN;
-			movement.y = stepCurrent;
-
-			
+			directions.directionLook = DOWN;
+			movement.y = step.stepCurrent;
 			break;
 		case LEFT:
-			directionLook = LEFT;
-			movement.x = -stepCurrent;
-
-		
+			directions.directionLook = LEFT;
+			movement.x = -step.stepCurrent;
 			break;
 		case RIGHT:
-			directionLook = RIGHT;
-			movement.x = stepCurrent;
-
-	
+			directions.directionLook = RIGHT;
+			movement.x = step.stepCurrent;
 			break;
 		case NONE_DIRECTION:
 			movement.x = 0;
@@ -195,19 +204,22 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 			break;
 		}
 
-		if (direction)
+		if (directions.directionWalk)
 		{
-			playAnimation(deltaTime, databaseSound);
+			playAnimationWalk(deltaTime, databaseSound);
 		}
 		
 	}
 
 
-	if(currentTimeOutputDamage > 0)
+	if(animation.currentTimeOutputDamage > 0)
 	{
-		resetAnimation = 3;
+		playAnimationAtack(deltaTime, databaseSound);
+
+		/*
+				resetAnimation = 3;
 		int shiftAnimation = 4;
-		switch (directionLook) {
+		switch (directions.directionLook) {
 		case UP_LEFT:
 			// TODO
 			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
@@ -215,7 +227,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 			//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
 			//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
 
-			spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+			spriteEntity->setTextureRect(IntRect(2 * width, height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
 			break;
 		case UP_RIGHT:
 			//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
@@ -276,30 +288,53 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		default:
 			break;
 		}
+		*/
+
 	}
 }
 
-void Entity::playAnimation(const Time& deltaTime, dataSound& databaseSound)
+void Entity::playAnimationWalk(const Time& deltaTime, dataSound& databaseSound)
 {
 	float pauseStep = 5, resetAnimation = 4;
 
-	playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+	//playSound(animation.timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-	timeAnimation += deltaTime.asSeconds() * pauseStep;
-	resetTimeAnimation(timeAnimation, resetAnimation);
+	animation.timeAnimation += deltaTime.asSeconds() * pauseStep;
+	resetTimeAnimation(animation.timeAnimation, resetAnimation);
+	playSound(animation.timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-
-	int shiftWidth = directionLook / 6;// TODO
+	int shiftWidth = directions.directionLook / 6;// TODO
 
 	int currentWidth = width;
-	int xPos = currentWidth * (directionLook - 1 - shiftWidth * 3);//
+	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
 
 	if (shiftWidth)
 	{
 		currentWidth *= -1;
 	}
 
-	spriteEntity->setTextureRect(IntRect(xPos, height * int(timeAnimation), currentWidth, height));
+	spriteEntity->setTextureRect(IntRect(xPos, height * int(animation.timeAnimation), currentWidth, height));
+}
+
+void Entity::playAnimationAtack(const Time& deltaTime, dataSound& databaseSound)
+{
+	float pauseStep = 5, resetAnimation = 3;
+	int shiftAnimation = 4;
+
+
+	animation.timeAnimation += deltaTime.asSeconds() * pauseStep;
+	resetTimeAnimation(animation.timeAnimation, resetAnimation);
+
+	int shiftWidth = directions.directionLook / 6;// TODO
+
+	int currentWidth = width;
+	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
+
+	if (shiftWidth) {
+		currentWidth *= -1;
+	}
+
+	spriteEntity->setTextureRect(IntRect(xPos, height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation), currentWidth, height));
 }
 
 void Entity::playSound(float time, float &start, const int idSound)
@@ -345,7 +380,7 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 
 	bool isCollision(false);
 
-	if (direction >= Direction::UP_LEFT)
+	if (directions.directionWalk >= Direction::UP_LEFT)
 	{
 		// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
 		x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
@@ -371,12 +406,12 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
 				// Замедляющие блоки
 				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {// ИСПРАВЬ
-					stepCurrent = stepFirst / slowingStep;
+					step.stepCurrent = step.stepFirst / slowingStep;
 					isSlowingBlock = true;
-					needMinusStamina = false;
+					stamina.needMinusStamina = false;
 					break;
-				} else if (stepCurrent == stepFirst / slowingStep) {
-					stepCurrent = stepFirst;
+				} else if (step.stepCurrent == step.stepFirst / slowingStep) {
+					step.stepCurrent = step.stepFirst;
 				}
 
 
@@ -385,7 +420,7 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == NULL) {
 					x = getXPos();
 					y = getYPos();
-					direction = NONE_DIRECTION;
+					directions.directionWalk = NONE_DIRECTION;
 					break;
 				}
 
@@ -402,18 +437,18 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 					
 					// Замедляющие блоки
 					if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {// ИСПРАВЬ
-						stepCurrent = stepFirst / slowingStep;
-						needMinusStamina = false;
+						step.stepCurrent = step.stepFirst / slowingStep;
+						stamina.needMinusStamina = false;
 						break;
-					} else if (stepCurrent == stepFirst / slowingStep && !isSlowingBlock) {
-						stepCurrent = stepFirst;
+					} else if (step.stepCurrent == step.stepFirst / slowingStep && !isSlowingBlock) {
+						step.stepCurrent = step.stepFirst;
 					}
 					
 					// Является непроходимым
 					if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
 						x = getXPos();
 						y = getYPos();
-						direction = NONE_DIRECTION;
+						directions.directionWalk = NONE_DIRECTION;
 						break;
 					}
 
@@ -426,7 +461,7 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 	{
 		x = getXPos();
 		y = getYPos();
-		direction = NONE_DIRECTION;
+		directions.directionWalk = NONE_DIRECTION;
 	}
 
 	spriteEntity->setPosition(x, y);

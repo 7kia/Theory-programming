@@ -106,5 +106,5 @@ void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 	spriteObject->setPosition(numberX, numberY);
 	transparentSpiteObject->setPosition(numberX, numberY - typeObject->heightTransparent / 2 + typeObject->height / 2);
 
-	direction = NONE_DIRECTION;
+	directionWalk = NONE_DIRECTION;
 }

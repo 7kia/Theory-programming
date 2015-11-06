@@ -33,27 +33,27 @@ void processEvents(Game &game, const Time &deltaTime)
 			/////////////////////////////////////////////////////////////////////////////////////////
 			// Проверяем случаи нажатия нескольких стрелок
 			if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::A)) {
-				mainPerson.direction = Direction::UP_LEFT;
+				mainPerson.directions.directionWalk = Direction::UP_LEFT;
 			} else if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D)) {
-				mainPerson.direction = Direction::UP_RIGHT;
+				mainPerson.directions.directionWalk = Direction::UP_RIGHT;
 			} else if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::A)) {
-				mainPerson.direction = Direction::DOWN_LEFT;
+				mainPerson.directions.directionWalk = Direction::DOWN_LEFT;
 			} else if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::D)) {
-				mainPerson.direction = Direction::DOWN_RIGHT;
+				mainPerson.directions.directionWalk = Direction::DOWN_RIGHT;
 			}
 
 			/////////////////////////////////////////////////////////////////////////////////////////
 			// Проверяем одну стрелку
 			else if (Keyboard::isKeyPressed(Keyboard::W)) {
-				mainPerson.direction = UP;
+				mainPerson.directions.directionWalk = UP;
 			} else if (Keyboard::isKeyPressed(Keyboard::S)) {
-				mainPerson.direction = DOWN;
+				mainPerson.directions.directionWalk = DOWN;
 			} else if (Keyboard::isKeyPressed(Keyboard::A)) {
-				mainPerson.direction = LEFT;
+				mainPerson.directions.directionWalk = LEFT;
 			} else if (Keyboard::isKeyPressed(Keyboard::D)) {
-				mainPerson.direction = RIGHT;
+				mainPerson.directions.directionWalk = RIGHT;
 			} else {
-				mainPerson.direction = NONE_DIRECTION;
+				mainPerson.directions.directionWalk = NONE_DIRECTION;
 			}
 			/////////////////////////////////////////////////////////////////////////////////////////
 			// Переключение режимов
@@ -91,12 +91,12 @@ void processEvents(Game &game, const Time &deltaTime)
 				/////////////////////////////////////////////////////////////////////////////////////////
 				// Бег
 				else if (Keyboard::isKeyPressed(Keyboard::LShift)) {
-					if (mainPerson.stepCurrent > mainPerson.stepFirst) {
-						mainPerson.stepCurrent = mainPerson.stepFirst;
-						mainPerson.needMinusStamina = false;
+					if (mainPerson.step.stepCurrent > mainPerson.step.stepFirst) {
+						mainPerson.step.stepCurrent = mainPerson.step.stepFirst;
+						mainPerson.stamina.needMinusStamina = false;
 					} else {
-						mainPerson.stepCurrent = mainPerson.stepFirst * 3;
-						mainPerson.needMinusStamina = true;
+						mainPerson.step.stepCurrent = mainPerson.step.stepFirst * 3;
+						mainPerson.stamina.needMinusStamina = true;
 					}
 				}
 				/////////////////////////////////////////////////////////////////////////////////////////

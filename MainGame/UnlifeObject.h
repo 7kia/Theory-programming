@@ -27,7 +27,7 @@ public:
 	int currentLevel;
 
 	// Для анимации
-	Direction direction;
+	Direction directionWalk;
 	float timeAnimation;
 
 	// Передвижение. Его анимация и озвучка
