@@ -294,15 +294,15 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 	}
 }
 
-void barMainFeatures::renderBarMainPerson(int &current, int &max, int shift, Sprite &sprite, sizeMainSprite &sizes,
+void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, sizeMainSprite &sizes,
 																								Vector2f centerWindow, Vector2u sizeWindow,
 																								TextGame &textGame, RenderWindow &window)
 {
-	Vector2f pos = centerWindow;
-	pos.x -= sizeWindow.x / 2;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * shift;
+	Vector2f pos;
+	pos.x = mainPerson.getXPos();
+	pos.y += mainPerson.getYPos() - float(HEIGHT_BARS_GUI) * scaleGuiForEnemy.y * shift;
 
-	renderBar(current, max, sprite, scaleGuiForEnemy,
+	renderBar(current, max, sprite, scaleGuiForMainPerson,
 						sizes, textGame, pos, window);
 
 }
@@ -596,7 +596,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int health = mainPerson.currentHealth;
 	int healthMax = mainPerson.maxHealth;
 	int shiftHealth = 3;
-	mainFeatures.renderBarMainPerson(health, healthMax, shiftHealth, *mainFeatures.levelHealth,
+	mainFeatures.renderBarMainPerson(mainPerson, health, healthMax, shiftHealth, *mainFeatures.levelHealth,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
 
 	////////////////////////////////////////////////////////////////
@@ -631,7 +631,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int stamina = mainPerson.currentStamina;
 	int staminaMax = mainPerson.maxStamina;
 	int shiftStamina = 2;
-	mainFeatures.renderBarMainPerson(stamina, staminaMax, shiftStamina, *mainFeatures.levelStamina,
+	mainFeatures.renderBarMainPerson(mainPerson, stamina, staminaMax, shiftStamina, *mainFeatures.levelStamina,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
 
 
@@ -669,7 +669,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int mana = mainPerson.currentMana;
 	int manaMax = mainPerson.maxMana;
 	int shiftMana = 1;
-	mainFeatures.renderBarMainPerson(mana, manaMax, shiftMana, *mainFeatures.levelMana,
+	mainFeatures.renderBarMainPerson(mainPerson, mana, manaMax, shiftMana, *mainFeatures.levelMana,
 																	 sizes, centerWindow, sizeWindow, textGame, window);
 
 

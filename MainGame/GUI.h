@@ -73,6 +73,7 @@ const int X_LEVEL_MANA_GUI = WIDTH_BARS_GUI + WIDTH_LEVEL_BAR_GUI;// добавление 
 const int Y_LEVEL_MANA_GUI = 0;
 
 const Vector2f scaleGuiForEnemy = { 0.4f, 0.4f };
+const Vector2f scaleGuiForMainPerson = { 0.3f, 0.3f };
 const Vector2f normalSizeGuiForEnemy = { 1.f, 1.f };
 
 // Отображение нанесйнного урона
@@ -147,7 +148,7 @@ struct barMainFeatures
 
 	void renderDamageForEnemy(Enemy & enemy, TextGame & textGame, sf::RenderWindow & window, int shift);
 
-	void renderBarMainPerson(int & current, int & max, int shift, sf::Sprite &sprite, sizeMainSprite & sizes,
+	void renderBarMainPerson(MainPerson &mainPerson, int & current, int & max, int shift, sf::Sprite &sprite, sizeMainSprite & sizes,
 													 sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
 													 TextGame & textGame, sf::RenderWindow & window);
 	void renderBarEnemy(Enemy & enemy, int & current, int & max, int shift, Sprite &sprite,
