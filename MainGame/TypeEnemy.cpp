@@ -13,25 +13,18 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	String texturePath = texturePaths[idTexturePaths::wolf];
 	String name = "Wolf";
 
-	vector<int> minAmount;
-	vector<int> maxAmount;
-	vector<int> idItems;
-
-	minAmount.push_back(1);
-	maxAmount.push_back(4);
-	idItems.push_back(idItem::rawMeatWolfItem);// ÈÑÏÐÀÂÜ
+	objectDropItems drop;
+	drop.addItem(1, 4, idItem::rawMeatWolfItem);
 
 	typeEnemy->size.init(WIDTH_WOLF, HEIGHT_WOLF, 0, 0);
 	typeEnemy->protection.init(1.5f, 1.f);
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(100, 25, 0);
 	typeEnemy->damage.init(5, 0, 1.f);
-	typeEnemy->drop.init(idItems, minAmount, maxAmount);
+	typeEnemy->drop.init(drop);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS, RADIUSE_VIEW);
 
-	minAmount.clear();
-	maxAmount.clear();
-	idItems.clear();
+	drop.clear();
 	////////////////////////////////////////////////////////////////
 	// Âîëê
 	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
@@ -39,33 +32,18 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	texturePath = texturePaths[idTexturePaths::skelet];
 	name = "Skelet";
 
-	minAmount.push_back(1);
-	maxAmount.push_back(2);
-	idItems.push_back(idItem::dirtItem);// ÈÑÏÐÀÂÜ
+	drop.addItem(1, 2, idItem::dirtItem);
 
 	typeEnemy->size.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f);
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(75, 0, 0);
 	typeEnemy->damage.init(0, 5, 1.f);
-	typeEnemy->drop.init(idItems, minAmount, maxAmount);
+	typeEnemy->drop.init(drop);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS, RADIUSE_VIEW);
 
-	minAmount.clear();
-	maxAmount.clear();
-	idItems.clear();
+	drop.clear();
 	////////////////////////////////////////////////////////////////
-}
-
-void enemyDropItems::init(vector<int> idItems, vector<int> minAmountItems, vector<int> maxAmountItems)
-{
-	int size = idItems.size();
-	for (int i = 0; i < size; i++) {
-		dropItems.push_back(idItems[i]);
-		minCountItems.push_back(minAmountItems[i]);
-		maxCountItems.push_back(maxAmountItems[i]);
-	}
-
 }
 
 void enemyFeatures::init(int health, int stamina, int mana)

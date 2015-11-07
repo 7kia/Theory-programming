@@ -442,14 +442,6 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 	delete pathTexture;
 }
 
-void sizeSprite::init(int w, int h, int xPixPos, int yPixPos)
-{
-	width = w;
-	height = h;
-	pixelPosX = xPixPos;
-	pixelPosY = yPixPos;
-}
-
 void typeDamageItem::init(int cut, int crush)
 {
 	cuttingDamage = cut;

@@ -704,11 +704,11 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 					//////////////////////////////////////////////////
 					// Выпадение предметов
 					Item* addItem = new Item;
-					int countItem = sizeof(findObject->typeObject->minCountItems) / sizeof(int);
+					int countItem = findObject->typeObject->drop.minCountItems.size();
 
-					int* minAmount = findObject->typeObject->minCountItems;
-					int* maxAmount = findObject->typeObject->maxCountItems;
-					int* idItems = findObject->typeObject->dropItems;
+					vector<int> &minAmount = findObject->typeObject->drop.minCountItems;
+					vector<int> &maxAmount = findObject->typeObject->drop.maxCountItems;
+					vector<int> &idItems = findObject->typeObject->drop.dropItems;
 
 					int currentAmount;
 					for (int i = 0; i < countItem; i++) {

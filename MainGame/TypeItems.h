@@ -2,16 +2,7 @@
 #include <SFML\Graphics.hpp>
 
 #include "Sound.h"
-
-struct sizeSprite
-{
-	int width;
-	int height;
-	int pixelPosX;
-	int pixelPosY;
-	void init(int w, int h, int xPixPos, int yPixPos);
-};
-
+#include "CommonStructs.h"
 
 struct typeDamageItem
 {

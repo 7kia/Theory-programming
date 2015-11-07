@@ -3,14 +3,6 @@
 
 #include "Entity.h"
 
-struct enemyDropItems
-{
-	std::vector<int> minCountItems;
-	std::vector<int> maxCountItems;
-	std::vector<int> dropItems;
-	void init(std::vector<int> idItems, std::vector<int> minAmountItems, std::vector<int> maxAmountItems);
-};
-
 struct enemyFeatures
 {
 	int maxHealth;
@@ -39,7 +31,7 @@ struct TypeEnemy
 	entityProtection protection;
 	DamageInputAndOutput damage;
 	sizeSprite size;
-	enemyDropItems drop;
+	objectDropItems drop;
 
 	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 												 int amountEnemySlots, float view);
