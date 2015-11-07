@@ -16,7 +16,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 	TypeItem addType;
 
 	featuresItem featuresAddItem;
-	sizeSprite sizeMain;
+	featuresSprite sizeMain;
 	idCreateObjects idCreated;
 	typeDamageItem damage;
 
@@ -470,7 +470,7 @@ void featuresItem::defineToughness(bool destroy, int toughnessItem)
 ////////////////////////////////////////////////////////////////////
 // Виды объектов
 void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
-										sizeSprite sizeSprite, idCreateObjects idCreated, typeDamageItem damage)
+										featuresSprite featuresSprite, idCreateObjects idCreated, typeDamageItem damage)
 {
 	textureItem = new Texture;
 	if (textureItem->loadFromFile(filenameTexture)) {
@@ -479,10 +479,10 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 		std::cout << "error " << string(filenameTexture) << std::endl;
 	}
 
-	sizeMain.height = sizeSprite.height;
-	sizeMain.width = sizeSprite.width;
-	sizeMain.pixelPosX = sizeSprite.pixelPosX;
-	sizeMain.pixelPosY = sizeSprite.pixelPosY;
+	sizeMain.height = featuresSprite.height;
+	sizeMain.width = featuresSprite.width;
+	sizeMain.pixelPosX = featuresSprite.pixelPosX;
+	sizeMain.pixelPosY = featuresSprite.pixelPosY;
 
 	features.isDestroy = featuresAddItem.isDestroy;
 	features.category = featuresAddItem.category;
@@ -514,7 +514,7 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 };
 
-void TypeItem::InitForUse(String filenameTextureForUse, sizeSprite size)
+void TypeItem::InitForUse(String filenameTextureForUse, featuresSprite size)
 {
 	textureItemForUse = new Texture;
 	textureItemForUse->loadFromFile(filenameTextureForUse);

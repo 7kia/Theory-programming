@@ -328,8 +328,8 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 
 		}
 	} else {
-		x = (int)getXPos();
-		y = (int)getYPos();
+		x = int(getXPos());
+		y = int(getYPos());
 	}
 
 	spriteEntity->setPosition(x, y);
@@ -376,7 +376,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 						int currentAmount;
 						for (int i = 0; i < countItem; i++) {
 
-							currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+							currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
 							for (int j = 0; j < currentAmount; j++) {
 								addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
 								addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);

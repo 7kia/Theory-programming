@@ -30,7 +30,7 @@ struct TypeEnemy
 	enemyFeatures features;
 	entityProtection protection;
 	DamageInputAndOutput damage;
-	sizeSprite size;
+	featuresSprite size;
 	objectDropItems drop;
 
 	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,

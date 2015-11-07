@@ -16,8 +16,8 @@ public:
 	bool isDestroy;
 	int toughnessObject;
 
-	sizeSprite mainSize;
-	sizeSprite transparentSize;
+	featuresSprite mainSize;
+	featuresSprite transparentSize;
 	objectDropItems drop;
 
 	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness);

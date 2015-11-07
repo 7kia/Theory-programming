@@ -32,7 +32,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	texturePath = texturePaths[idTexturePaths::skelet];
 	name = "Skelet";
 
-	drop.addItem(1, 2, idItem::dirtItem);
+	drop.addItem( 1, 2, idItem::dirtItem );
 
 	typeEnemy->size.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f);

@@ -206,7 +206,7 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vector2f scale, sizeSprite &sizes, TextGame& textGame,
+void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vector2f scale, featuresSprite &sizes, TextGame& textGame,
 																sf::Vector2f& position, sf::RenderWindow& window)
 {
 	render(current, max, sprite, scale,
@@ -217,7 +217,7 @@ void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vect
 
 
 void barMainFeatures::render( int &current, int& max, Sprite &sprite, Vector2f scale,
-														 sizeSprite &sizes, Vector2f &position, RenderWindow &window)
+														 featuresSprite &sizes, Vector2f &position, RenderWindow &window)
 {
 
 	bar->setPosition(position);
@@ -298,20 +298,20 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 	}
 }
 
-void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, sizeSprite &sizes,
+void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																								Vector2f centerWindow, Vector2u sizeWindow,
 																								TextGame &textGame, RenderWindow &window)
 {
 	Vector2f pos;
-	pos.x = mainPerson.getXPos();
-	pos.y += mainPerson.getYPos() - float(HEIGHT_BARS_GUI) * scaleGuiForEnemy.y * shift;
+	pos.x = centerWindow.x - sizeWindow.x / 2;//mainPerson.getXPos() mainPerson.getYPos()
+	pos.y = centerWindow.y + sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * scaleGuiForEnemy.y * shift;
 
 	renderBar(current, max, sprite, scaleGuiForMainPerson,
 						sizes, textGame, pos, window);
 
 }
 
-void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, sizeSprite &sizes,
+void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																					TextGame &textGame, RenderWindow &window)
 {
 	int shiftBar = enemy.mana.maxMana > 0;
@@ -595,7 +595,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	//////////////////////////////////////////////////////////////////////// 
 	// Ўкала здоровь€
-	sizeSprite sizes;
+	featuresSprite sizes;
 	sizes.init(WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI);
 
 	int health = mainPerson.health.currentHealth;

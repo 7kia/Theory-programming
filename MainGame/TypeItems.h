@@ -39,14 +39,14 @@ public:
 	//Sound *soundsEntity[sizeBuffer];// ÈÑÏÐÀÂÜ
 	featuresItem features;
 
-	sizeSprite sizeMain;
-	sizeSprite sizeAlternative;
+	featuresSprite sizeMain;
+	featuresSprite sizeAlternative;
 	typeDamageItem damageItem;
 	idCreateObjects idAdd;
 
 	void Init(sf::String filenameTexture, featuresItem featuresAddItem,
-						sizeSprite sizeSprite, idCreateObjects idCreated, typeDamageItem damage);
-	void InitForUse(sf::String filenameTextureForUse, sizeSprite size);
+						featuresSprite featuresSprite, idCreateObjects idCreated, typeDamageItem damage);
+	void InitForUse(sf::String filenameTextureForUse, featuresSprite size);
 };
 
 void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound);

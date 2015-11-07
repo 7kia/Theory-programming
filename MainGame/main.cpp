@@ -272,11 +272,13 @@ void render(Game & game)
 				unlifeObjects[i].spriteObject->setColor(DOWN_VIEW);
 				unlifeObjects[i].transparentSpiteObject->setColor(DOWN_VIEW);
 			}
+			/*
 			else if (unlifeObjects[i].currentLevel == currentLevel + 1)
 			{
 				unlifeObjects[i].spriteObject->setColor(NORMAL_VIEW);
 				unlifeObjects[i].transparentSpiteObject->setColor(NORMAL_VIEW);
 			}
+			*/
 			else if (unlifeObjects[i].currentLevel == currentLevel + 2) {
 				unlifeObjects[i].spriteObject->setColor(UP_VIEW);
 				unlifeObjects[i].transparentSpiteObject->setColor(UP_VIEW);
