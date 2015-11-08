@@ -24,10 +24,6 @@ void processEvents(Game &game, const Time &deltaTime)
 			UnlifeObject* emptyObject = nullptr;
 			Item* emptyItem = nullptr;
 
-			mainPerson.findObject = emptyObject;
-			mainPerson.findItem = emptyItem;
-
-
 			informationAboutSelect(game, pos.x, pos.y);
 
 			/////////////////////////////////////////////////////////////////////////////////////////
@@ -141,11 +137,11 @@ void processEvents(Game &game, const Time &deltaTime)
 
 					if (mainPerson.isInUseField(pos.x, pos.y, false)) {
 						Vector2f position = { pos.x - mainPerson.dMoveItemX, pos.y - mainPerson.dMoveItemY };
-						if (mainPerson.findObject != emptyObject) {
-							Sprite &spriteObject = *mainPerson.findObject->spriteObject;
+						if (mainPerson.founds.findObject != emptyObject) {
+							Sprite &spriteObject = *mainPerson.founds.findObject->spriteObject;
 							spriteObject.setPosition(position);
-						} else if (mainPerson.findItem != emptyItem) {
-							Sprite &spriteItem = *mainPerson.findItem->mainSprite;
+						} else if (mainPerson.founds.findItem != emptyItem) {
+							Sprite &spriteItem = *mainPerson.founds.findItem->mainSprite;
 							spriteItem.setPosition(position);
 						}
 						// Объект должен находиться в центре клетки

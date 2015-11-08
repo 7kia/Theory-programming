@@ -31,20 +31,20 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.view->setSize(640, 480);
 	mainPerson.view->setCenter(posX, posY);
 
+	// TODO
+	sf::Listener::setUpVector(0.f, 1.f, 0.f);
+	sf::Listener::setGlobalVolume(100.f);
+
 	// Текстура
 	mainPerson.textureEntity->loadFromFile(texturePaths[idTexturePaths::mainPerson]);
 	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
-
+	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.size.width, mainPerson.size.height));
 	// Звуки 
 	mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
 	mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 
-	mainPerson.findItem = new Item;
-	mainPerson.findObject = new UnlifeObject;
 
-	// Текущий выбранный тип блока
-	mainPerson.emptyObject = &emptyObject;
-	mainPerson.emptyItem = &emptyItem;
+	mainPerson.founds.init(&emptyItem, &emptyObject);
 	mainPerson.emptyEnemy = &emptyEnemy;
 	mainPerson.idSelectItem = 0;
 
@@ -63,7 +63,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	entityAnimation &animation = mainPerson.animation;
 	animation.timeAnimation = 0.f;
 	animation.timeFightAnimation = 0.f;
-	animation.currentTimeOutputDamage = 0.f;
+	animation.currentTimeFightAnimation = 0.f;
 	animation.timeOutputDamage = 1.f;
 
 	Directions &directions = mainPerson.directions;
@@ -95,6 +95,9 @@ void MainPerson::updateView(RenderWindow & window)
 
 	float tempX = getXPos();
 	float tempY = getYPos();//считываем коорд игрока и проверяем их, чтобы убрать края
+
+	// TODO
+	sf::Listener::setPosition(tempX, tempY, 0);
 
 	float x = getXPos();
 	float y = getYPos();
@@ -147,7 +150,7 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy->currentLevelFloor) {
 		enemy->currenMode = idEntityMode::fight;
 		if (distanse >= SIZE_BLOCK) {
-			enemy->animation.currentTimeOutputDamage = 0.f;
+			enemy->animation.currentTimeFightAnimation = 0.f;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
 
@@ -202,9 +205,9 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 			//printf("%f %d\n", distanse, enemy->directions.directionWalk);
 
 
-			animation.currentTimeOutputDamage += deltaTime.asSeconds();
-			if (animation.currentTimeOutputDamage > animation.timeOutputDamage) {
-				animation.currentTimeOutputDamage = 0.f;
+			animation.currentTimeFightAnimation += deltaTime.asSeconds();
+			if (animation.currentTimeFightAnimation > animation.timeOutputDamage) {
+				animation.currentTimeFightAnimation = 0.f;
 				givenForPersonDamage(*enemy);
 			}
 			currenMode = idEntityMode::fight;
@@ -222,7 +225,7 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 
 void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 {
-	if (findItem->typeItem != emptyItem->typeItem) {
+	if (founds.findItem->typeItem->features.name != founds.emptyItem->typeItem->features.name) {
 		if (isInUseField(x, y, true)) {
 			//////////////////////////////////////////////////////////////////////////////////////////////////////
 			// Если есть место
@@ -231,18 +234,18 @@ void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 
 				////////////////////////////////////////////////////////////////////
 				// Если нашли предмет
-				int levelItem = items[findItemFromList].currentLevel;
+				int levelItem = items[founds.findItemFromList].currentLevel;
 
-				Sprite *spriteItem = items[findItemFromList].mainSprite;
+				Sprite *spriteItem = items[founds.findItemFromList].mainSprite;
 				FloatRect objectItem = spriteItem->getGlobalBounds();
 
 				if (objectItem.contains(x, y) && levelItem == currentLevelFloor + 1) {
 					// Перемещаем в инвентарь
 					//printf("added!1\n");
-					itemFromPanelQuickAccess[emptySlot] = items[findItemFromList];
+					itemFromPanelQuickAccess[emptySlot] = items[founds.findItemFromList];
 					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
 					// Удаляем из мира
-					items.erase(items.begin() + findItemFromList);
+					items.erase(items.begin() + founds.findItemFromList);
 				}
 				////////////////////////////////////////////////////////////////////
 
@@ -256,7 +259,7 @@ void MainPerson::takeItem(Field &field, vector<Item> &items, float x, float y)
 void MainPerson::throwItem(Field &field, vector<Item> &items)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
-	if (currentItem.typeItem != emptyItem->typeItem) {
+	if (currentItem.typeItem != founds.emptyItem->typeItem) {
 		// Определяем позицию
 
 
@@ -270,7 +273,7 @@ void MainPerson::throwItem(Field &field, vector<Item> &items)
 		items.push_back(*addItem);
 		delete addItem;
 
-		itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+		itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
 	}
 }
 
@@ -350,7 +353,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
-				if (animation.currentTimeOutputDamage == 0.f) {
+				if (animation.currentTimeFightAnimation == 0.f) {
 					currenMode = idEntityMode::fight;
 
 					bool isDestroy = currentItem.typeItem->features.isDestroy;
@@ -390,11 +393,11 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 					// Иначе наносим урон
 					else {
 
-						animation.currentTimeOutputDamage += deltaTime.asSeconds();
+						animation.currentTimeFightAnimation += deltaTime.asSeconds();
 						// TODO
-						//printf("Time %f\n", currentTimeOutputDamage);
-						//if (currentTimeOutputDamage > timeOutputDamage) {
-						//	currentTimeOutputDamage = 0;
+						//printf("Time %f\n", currentTimeFightAnimation);
+						//if (currentTimeFightAnimation > timeOutputDamage) {
+						//	currentTimeFightAnimation = 0;
 						int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
 						int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
 
@@ -416,7 +419,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 
 					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *emptyItem;
+						itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
 					}
 
 
@@ -510,7 +513,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 				// Утоление голода
 				if (hungry.currentHungry < hungry.maxHungry) {
 					hungry.currentHungry += currentItem.currentToughness;
-					currentItem = *emptyItem;
+					currentItem = *founds.emptyItem;
 				}
 			}
 			break;
@@ -693,7 +696,7 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 			///*
 			wchar_t* block = &field.dataMap[level][y][x];
 			// Ставим блок
-			if (findObject != emptyObject) {
+			if (founds.findObject != founds.emptyObject) {
 				if (isInListObjects(listObjects, sizeListObjects)) {
 
 					currentItem.currentToughness -= 1;
@@ -701,11 +704,11 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 					//////////////////////////////////////////////////
 					// Выпадение предметов
 					Item* addItem = new Item;
-					int countItem = findObject->typeObject->drop.minCountItems.size();
+					int countItem = founds.findObject->typeObject->drop.minCountItems.size();
 
-					vector<int> &minAmount = findObject->typeObject->drop.minCountItems;
-					vector<int> &maxAmount = findObject->typeObject->drop.maxCountItems;
-					vector<int> &idItems = findObject->typeObject->drop.dropItems;
+					vector<int> &minAmount = founds.findObject->typeObject->drop.minCountItems;
+					vector<int> &maxAmount = founds.findObject->typeObject->drop.maxCountItems;
+					vector<int> &idItems = founds.findObject->typeObject->drop.dropItems;
 
 					int currentAmount;
 					for (int i = 0; i < countItem; i++) {
@@ -722,10 +725,10 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 					delete addItem;
 					//////////////////////////////////////////////////
 
-					unlifeObjects->erase(unlifeObjects->begin() + findObjectFromList);
+					unlifeObjects->erase(unlifeObjects->begin() + founds.findObjectFromList);
 
 					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						currentItem = *emptyItem;
+						currentItem = *founds.emptyItem;
 					}
 
 
@@ -747,7 +750,7 @@ void MainPerson::useTool(float &xMouse, float &yMouse, Event &event, Field &fiel
 				*block = field.charBlocks[idBlocks::air];
 
 				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-					currentItem = *emptyItem;
+					currentItem = *founds.emptyItem;
 				}
 
 			}
@@ -814,7 +817,7 @@ void MainPerson::useBlock(float & xMouse, float & yMouse, sf::Event & event, Fie
 					// В данном случае обазначает количество// ИСПРАВЬ
 					currentItem.currentToughness -= 1;
 					if (currentItem.currentToughness < 1) {
-						currentItem = *emptyItem;
+						currentItem = *founds.emptyItem;
 					}
 				}
 				////////////////////////////////
@@ -837,7 +840,7 @@ bool MainPerson::isInListBlocks(wchar_t block, wchar_t *listBlocks) {
 }
 bool MainPerson::isInListObjects(String* listObjects, int sizeString) {
 	for (size_t i = 0; i < sizeString; i++) {
-		if (findObject->typeObject->name == listObjects[i]) {
+		if (founds.findObject->typeObject->name == listObjects[i]) {
 			return true;
 		}
 	}

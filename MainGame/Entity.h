@@ -37,8 +37,9 @@ struct entityAnimation
 	float timeFightAnimation = 0.f;
 
 	float timeOutputDamage;
-	float currentTimeOutputDamage;
+	float currentTimeFightAnimation;
 
+	void init(float input, float output);
 	void updateFight(const sf::Time deltaTime);
 
 };
@@ -136,6 +137,18 @@ struct entityProtection
 	void init(float cut, float crash);
 };
 
+struct foundObjects
+{
+	UnlifeObject *findObject;
+	int findObjectFromList;
+	UnlifeObject* emptyObject;
+
+	Item *findItem;
+	Item *emptyItem;
+	int findItemFromList;
+	void init(Item *item, UnlifeObject *object);
+};
+
 class Entity
 {
 public:
@@ -157,27 +170,17 @@ public:
 	int currentLevelFloor;
 
 	sizeSprite size;
-
+	foundObjects founds;
 	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
 	int currenMode;
 	Item *itemFromPanelQuickAccess;
-	Item *emptyItem;// ИСПРАВЬ
 	int idSelectItem;
 
 	bool isEmptySlot();
 	int emptySlot;
 
-	/////////////////////////////////////////
-	// Для взаимодействия с объектом
-	UnlifeObject *findObject;
-	int findObjectFromList;
-	UnlifeObject* emptyObject;
-	/////////////////////////////////////////
-	// Для взаимодействия с предметом
-	Item *findItem;
-	int findItemFromList;
-	/////////////////////////////////////////
+
 	bool isMoveItem;
 	float dMoveItemX, dMoveItemY;
 

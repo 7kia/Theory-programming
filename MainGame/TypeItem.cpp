@@ -389,7 +389,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 	featuresAddItem.init("Stone pickax", numberItem, idCategoryItem::pickax);
 	featuresAddItem.defineToughness(true, 128);
 
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_BACKHOE, PIXEL_Y_IRON_BACKHOE);
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_PICKAX, PIXEL_Y_STONE_PICKAX);
 
 	damage.init(10, 6);
 

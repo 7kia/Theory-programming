@@ -389,13 +389,13 @@ void panels::renderItemPanel(sf::Vector2f position, RenderWindow& window)
 	window.draw(itemInfoOverPanel);
 }
 
-void panelQuickAccess::renderItems(::MainPerson& mainPerson, sf::Vector2f centerWindow,
+void panelQuickAccess::renderItems(MainPerson& mainPerson, sf::Vector2f centerWindow,
 																	 sf::Vector2u sizeWindow, ::sf::RenderWindow& window,
 																	 TextGame &textGame, barMainFeatures &bars, itemFeatures &itemFeatures)
 {
 	Text *currentText;
 	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
-	String nameEmptyItem = mainPerson.emptyItem->typeItem->features.name;
+	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
 
 	int startPosition = widthPanelQuickAccess / 2;
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
@@ -470,7 +470,7 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, Vector2f centerWindow,
 {
 
 	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
-	String nameEmptyItem = mainPerson.emptyItem->typeItem->features.name;
+	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
 	Text *currentText = &textGame.texts[idText::itemGui];
 
 	Vector2f posName;// Сначала выписываем характеристики, потом имя(так как имя перед ними)

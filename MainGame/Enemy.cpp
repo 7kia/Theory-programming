@@ -18,7 +18,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 0; i < 2; i++) {
+	for (size_t i = 0; i < 1; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -37,7 +37,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	// Скелеты
 	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
 
-	for (size_t i = 0; i < 2; i++) {
+	for (size_t i = 0; i < 0; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -76,8 +76,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	currenMode = idEntityMode::walk;
 
 	// Скорость ходьбы
-	step.stepFirst = SPEED_ENTITY;
-	step.stepCurrent = SPEED_ENTITY;
+	step.init(SPEED_ENTITY);
 
 	// Текстура
 	spriteEntity->setTexture(*type->textureEntity);
@@ -87,13 +86,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	soundsEntity[idSoundEntity::stepGrass] = type->soundsEntity[idSoundEntity::stepGrass];
 	soundsEntity[idSoundEntity::stepStone] = type->soundsEntity[idSoundEntity::stepStone];
 
-	findItem = new Item;
-	findObject = new UnlifeObject;
-
-	// Текущий выбранный тип блока
-	this->emptyObject = &emptyObject;
-	this->emptyItem = &emptyItem;
-	idSelectItem = 0;
+	founds.init(&emptyItem, &emptyObject);
 
 	// Позиция и направление
 	currentLevelFloor = level;
@@ -102,8 +95,6 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	spriteEntity->setOrigin(size.width / 2, size.height / 2);
 	spriteEntity->setPosition(xPos * SIZE_BLOCK - SIZE_BLOCK / 2, yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
 
-	animation.timeAnimation = 0.f;
-	animation.timeFightAnimation = 0.f;
 	directions.directionWalk = NONE_DIRECTION;
 	directions.directionLook = DOWN;
 
@@ -130,17 +121,12 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	thirst.currentThirst = thirst.maxThirst;
 	hungry.currentHungry = hungry.maxHungry;
 
-	protection.protectionCut = type->protection.protectionCut;
-	protection.protectionCrash = type->protection.protectionCrash;
+	protection.init(type->protection.protectionCut,
+									type->protection.protectionCrash);
 
-	animation.timeOutputDamage = type->damage.timeOutputDamage;
-	animation.currentTimeOutputDamage = 0.f;
-
-	damage.timeInputDamage = 0.f;
-	damage.cuttingDamage = type->damage.cuttingDamage;
-	damage.crushingDamage = type->damage.crushingDamage;
-	damage.damageMultiplirer = 1.f;
-
+	float timeAtack = 1.f;
+	animation.init(type->damage.timeOutputDamage, timeAtack);
+	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, timeAtack, 1.f);
 }
 
 Enemy::~Enemy()

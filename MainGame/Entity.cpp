@@ -17,6 +17,14 @@ void entityProtection::init(float cut, float crash)
 	protectionCrash = crash;
 }
 
+void foundObjects::init(Item *item, UnlifeObject *object)
+{
+	emptyItem = item;
+	emptyObject = object;
+	findItem = emptyItem;
+	findObject = emptyObject;
+}
+
 void entityMana::update(const sf::Time deltaTime)
 {
 	timeForMana += deltaTime.asSeconds();
@@ -50,15 +58,26 @@ void DamageInputAndOutput::init(int cut, int crush, float time, float mult)
 	crushingDamage = crush;
 	timeOutputDamage = time;
 	damageMultiplirer = mult;
+
+	timeInputDamage = 0.f;
+}
+
+void entityAnimation::init(float input, float output)
+{
+	timeAnimation = 0.f;
+	timeFightAnimation = 0.f;
+
+	timeOutputDamage = input;
+	currentTimeFightAnimation = output;
 }
 
 void entityAnimation::updateFight(const sf::Time deltaTime)
 {
-	if (currentTimeOutputDamage) {
-		currentTimeOutputDamage += deltaTime.asSeconds();
+	if (currentTimeFightAnimation) {
+		currentTimeFightAnimation += deltaTime.asSeconds();
 
-		if (currentTimeOutputDamage > timeOutputDamage) {
-			currentTimeOutputDamage = 0;
+		if (currentTimeFightAnimation > timeOutputDamage) {
+			currentTimeFightAnimation = 0;
 		}
 
 	}
@@ -172,9 +191,9 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 	/*
 	if (outputDamage) {
-	currentTimeOutputDamage += deltaTime.asSeconds();
-	if (currentTimeOutputDamage > timeOutputDamage) {
-	currentTimeOutputDamage = 0;
+	currentTimeFightAnimation += deltaTime.asSeconds();
+	if (currentTimeFightAnimation > timeOutputDamage) {
+	currentTimeFightAnimation = 0;
 
 	outputDamage = 0;
 	}
@@ -245,7 +264,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	}
 
 
-	if (animation.currentTimeOutputDamage > 0) {
+	if (animation.currentTimeFightAnimation > 0) {
 		playAnimationAtack(deltaTime, databaseSound);
 
 		/*
@@ -256,66 +275,66 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 		// TODO
 		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(animation.currentTimeFightAnimation * resetAnimation) + shiftAnimation), -width, height));
 		break;
 		case UP_RIGHT:
 		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		spriteEntity->setTextureRect(IntRect(width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
 		break;
 		case UP:
 		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(0, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		spriteEntity->setTextureRect(IntRect(0, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
 		break;
 		case DOWN_LEFT:
 		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), -width, height));
 		break;
 		case DOWN_RIGHT:
 		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
 		break;
 		case DOWN:
-		//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(currentTimeFightAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
 		break;
 		case LEFT:
-		//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(currentTimeFightAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), -width, height));
+		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), -width, height));
 		break;
 		case RIGHT:
-		//playSound(currentTimeOutputDamage, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+		//playSound(currentTimeFightAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-		//currentTimeOutputDamage += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeOutputDamage, resetAnimation);
+		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
+		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
 
-		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeOutputDamage * resetAnimation) + shiftAnimation), width, height));
+		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
 		break;
 		default:
 		break;
@@ -365,7 +384,7 @@ void Entity::playAnimationAtack(const Time& deltaTime, dataSound& databaseSound)
 		currentWidth *= -1;
 	}
 
-	spriteEntity->setTextureRect(IntRect(xPos, size.height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation),
+	spriteEntity->setTextureRect(IntRect(xPos, size.height * (int(animation.currentTimeFightAnimation * resetAnimation) + shiftAnimation),
 															 currentWidth, size.height));
 }
 
@@ -373,6 +392,7 @@ void Entity::playSound(float time, float &start, const int idSound)
 {
 	if (time == start) {
 		soundsEntity[idSound]->play();
+		soundsEntity[idSound]->setPosition(getXPos(), getYPos(), 0);
 	}
 }
 
@@ -494,7 +514,7 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 bool Entity::isEmptySlot()
 {
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		if (itemFromPanelQuickAccess[i].typeItem == emptyItem->typeItem) {
+		if (itemFromPanelQuickAccess[i].typeItem == founds.emptyItem->typeItem) {
 			emptySlot = i;
 			return true;
 		}
