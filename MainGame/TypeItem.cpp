@@ -479,10 +479,10 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 		std::cout << "error " << string(filenameTexture) << std::endl;
 	}
 
-	sizeMain.height = featuresSprite.height;
-	sizeMain.width = featuresSprite.width;
-	sizeMain.pixelPosX = featuresSprite.pixelPosX;
-	sizeMain.pixelPosY = featuresSprite.pixelPosY;
+	sizeMain.size.height = featuresSprite.size.height;
+	sizeMain.size.width = featuresSprite.size.width;
+	sizeMain.pixPos.x = featuresSprite.pixPos.x;
+	sizeMain.pixPos.y = featuresSprite.pixPos.y;
 
 	features.isDestroy = featuresAddItem.isDestroy;
 	features.category = featuresAddItem.category;
@@ -514,15 +514,15 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 };
 
-void TypeItem::InitForUse(String filenameTextureForUse, featuresSprite size)
+void TypeItem::InitForUse(String filenameTextureForUse, featuresSprite features)
 {
 	textureItemForUse = new Texture;
 	textureItemForUse->loadFromFile(filenameTextureForUse);
 	// Задание размера
-	sizeAlternative.height = size.height;
-	sizeAlternative.width = size.width;
+	sizeAlternative.size.height = features.size.height;
+	sizeAlternative.size.width = features.size.width;
 
-	sizeAlternative.pixelPosX = size.pixelPosX;
-	sizeAlternative.pixelPosY = size.pixelPosY;
+	sizeAlternative.pixPos.x = features.pixPos.x;
+	sizeAlternative.pixPos.y = features.pixPos.y;
 }
 ////////////////////////////////////////////////////////////////////

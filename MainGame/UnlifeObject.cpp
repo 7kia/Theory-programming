@@ -7,10 +7,6 @@ using namespace std;
 
 void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
 {
-	//unlifeObjects->unlifeObject = new UnlifeObject[MAX_UNLIFE_OBJECT];
-
-	//int &countObject = unlifeObjects->countObject;
-
 	UnlifeObject addObject;
 
 	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakGrow]);
@@ -25,8 +21,6 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypesUnlifeObj
 	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSeadling]);
 	addObject.setPosition(12, 13, 1);
 	unlifeObjects.push_back(addObject);
-	//*/
-	
 
 	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
 	addObject.setPosition(8, 8, 1);
@@ -80,19 +74,21 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 	typeObject = &type;
 	isDestroy = type.isDestroy;
 
-	//width = type.width;
-	//height = type.height;
-
+	int width = type.mainSize.size.width;
+	int height = type.mainSize.size.height;
+	int pixelXPos = type.mainSize.pixPos.x;
+	int pixelYPos = type.mainSize.pixPos.y;
 	spriteObject->setTexture(*type.textureObject);
-	spriteObject->setTextureRect(IntRect(type.mainSize.pixelPosX, type.mainSize.pixelPosY,
-															 type.mainSize.width, type.mainSize.height));
-	spriteObject->setOrigin(type.mainSize.width / 2, type.mainSize.height / 2);
+	spriteObject->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
+	spriteObject->setOrigin(width / 2, height / 2);
 
-
+	width = type.transparentSize.size.width;
+	height = type.transparentSize.size.height;
+	pixelXPos = type.transparentSize.pixPos.x;
+	pixelYPos = type.transparentSize.pixPos.y;
 	transparentSpiteObject->setTexture(*type.textureObject);
-	transparentSpiteObject->setTextureRect(IntRect(type.transparentSize.pixelPosX, type.transparentSize.pixelPosY,
-																				 type.transparentSize.width, type.transparentSize.height));
-	transparentSpiteObject->setOrigin(type.transparentSize.width / 2, type.transparentSize.height / 2);
+	transparentSpiteObject->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
+	transparentSpiteObject->setOrigin(width / 2, height / 2);
 
 	// Прочность 
 	currentToughness = type.toughnessObject;
@@ -103,11 +99,12 @@ void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 	float numberX = xPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 	float numberY = yPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 
-	// Позиция и направление
+	int width = typeObject->mainSize.size.width;
+	int height = typeObject->mainSize.size.height;
 	currentLevel = Level;
 	spriteObject->setPosition(numberX, numberY);
-	transparentSpiteObject->setPosition(numberX, numberY - typeObject->transparentSize.width / 2
-																			+ typeObject->transparentSize.height / 2);
+	transparentSpiteObject->setPosition(numberX, numberY - width / 2 - height / 2);
+
 	// TODO
 	directionWalk = NONE_DIRECTION;
 }

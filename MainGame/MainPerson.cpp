@@ -16,15 +16,13 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.textureEntity = new Texture;
 
 	// Задание размера
-	mainPerson.height = 32;
-	mainPerson.width = 32;
+	mainPerson.size.init(32, 32);
 
 	// Дальность подбора предметов
 	mainPerson.radiusUse = 1;
 
 	// Скорость ходьбы
-	mainPerson.step.stepFirst = SPEED_ENTITY;
-	mainPerson.step.stepCurrent = SPEED_ENTITY;
+	mainPerson.step.init(SPEED_ENTITY);
 	mainPerson.animation.timeAnimation = 0.f;
 
 	// Камера
@@ -36,7 +34,6 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	// Текстура
 	mainPerson.textureEntity->loadFromFile(texturePaths[idTexturePaths::mainPerson]);
 	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
-	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.width, mainPerson.height));
 
 	// Звуки 
 	mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
@@ -267,7 +264,7 @@ void MainPerson::throwItem(Field &field, vector<Item> &items)
 		*addItem = itemFromPanelQuickAccess[idSelectItem];
 		// Задаём уровень расположения
 		addItem->setPosition(getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK, currentLevelFloor + 1);
-		Vector2f posHero = { getXPos() + width / 2, getYPos() + height / 2 };// Начало отсчёта не в центре спрайта
+		Vector2f posHero = { getXPos() + size.width / 2, getYPos() + size.height / 2 };// Начало отсчёта не в центре спрайта
 		addItem->mainSprite->setPosition(posHero);
 		addItem->mainSprite->scale(scaleItems);
 		items.push_back(*addItem);
@@ -908,8 +905,8 @@ void MainPerson::computeAngle(RenderWindow &window)
 	Vector2i pixelPos = Mouse::getPosition(window);//забираем коорд курсора
 	Vector2f pos = window.mapPixelToCoords(pixelPos);//переводим их в игровые (уходим от коорд окна)
 
-	float dX = pos.x - spriteEntity->getPosition().x - width / 2;//вектор , колинеарный прямой, которая пересекает спрайт и курсор
-	float dY = pos.y - spriteEntity->getPosition().y - height / 2;//он же, координата y
+	float dX = pos.x - spriteEntity->getPosition().x - size.width / 2;//вектор , колинеарный прямой, которая пересекает спрайт и курсор
+	float dY = pos.y - spriteEntity->getPosition().y - size.height / 2;//он же, координата y
 	rotation = (atan2(dY, dX)) * 180 / PI;//получаем угол в радианах и переводим его в градусы
 }
 ////////////////////////////////////////////////////////////////////

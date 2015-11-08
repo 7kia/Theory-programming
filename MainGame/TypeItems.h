@@ -46,7 +46,7 @@ public:
 
 	void Init(sf::String filenameTexture, featuresItem featuresAddItem,
 						featuresSprite featuresSprite, idCreateObjects idCreated, typeDamageItem damage);
-	void InitForUse(sf::String filenameTextureForUse, featuresSprite size);
+	void InitForUse(sf::String filenameTextureForUse, featuresSprite features);
 };
 
 void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound);

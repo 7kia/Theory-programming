@@ -70,10 +70,10 @@ void Item::setType(TypeItem &type)
 
 	mainSprite->setTexture(*type.textureItem);
 
-	int pixelXPos = type.sizeMain.pixelPosX;
-	int pixelYPos = type.sizeMain.pixelPosY;
-	int width = type.sizeMain.width;
-	int height = type.sizeMain.height;
+	int pixelXPos = type.sizeMain.pixPos.x;
+	int pixelYPos = type.sizeMain.pixPos.y;
+	int width = type.sizeMain.size.width;
+	int height = type.sizeMain.size.height;
 	mainSprite->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
 	mainSprite->scale(scaleItems);// Вне инвентаря предмет будет меньше
 	mainSprite->setOrigin(width / 2, height / 2);

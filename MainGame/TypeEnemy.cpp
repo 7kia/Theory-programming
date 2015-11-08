@@ -16,11 +16,11 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	objectDropItems drop;
 	drop.addItem(1, 4, idItem::rawMeatWolfItem);
 
-	typeEnemy->size.init(WIDTH_WOLF, HEIGHT_WOLF, 0, 0);
+	typeEnemy->featuresSprite.init(WIDTH_WOLF, HEIGHT_WOLF, 0, 0);
 	typeEnemy->protection.init(1.5f, 1.f);
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(100, 25, 0);
-	typeEnemy->damage.init(5, 0, 1.f);
+	typeEnemy->damage.init(5, 0, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS, RADIUSE_VIEW);
 
@@ -34,11 +34,11 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 
 	drop.addItem( 1, 2, idItem::dirtItem );
 
-	typeEnemy->size.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
+	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f);
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(75, 0, 0);
-	typeEnemy->damage.init(0, 5, 1.f);
+	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS, RADIUSE_VIEW);
 

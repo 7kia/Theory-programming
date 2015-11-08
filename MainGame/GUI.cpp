@@ -217,7 +217,7 @@ void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vect
 
 
 void barMainFeatures::render( int &current, int& max, Sprite &sprite, Vector2f scale,
-														 featuresSprite &sizes, Vector2f &position, RenderWindow &window)
+														 featuresSprite &featuresSprite, Vector2f &position, RenderWindow &window)
 {
 
 	bar->setPosition(position);
@@ -230,7 +230,10 @@ void barMainFeatures::render( int &current, int& max, Sprite &sprite, Vector2f s
 	position.x += X_SHIFT_BARS * scale.x;
 	position.y += Y_SHIFT_BARS * scale.y;
 	int currentLevel = int(WIDTH_LEVEL_BAR_GUI * level);
-	sprite.setTextureRect(IntRect(sizes.pixelPosX, sizes.pixelPosY, currentLevel, sizes.height));
+	int pixelXpos = featuresSprite.pixPos.x;
+	int pixelYpos = featuresSprite.pixPos.y;
+	int height = featuresSprite.size.height;
+	sprite.setTextureRect(IntRect(pixelXpos, pixelYpos, currentLevel, height));
 	sprite.setPosition(position);
 	sprite.setScale(scale);
 	window.draw(sprite);
@@ -264,7 +267,7 @@ void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, in
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
 	pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shift);
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shift);
 
 
 	currentText->setString(toStringCharacter(current, max));
@@ -281,7 +284,7 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
-	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shift) + shiftEnemyDamage;
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shift) + shiftEnemyDamage;
 
 	// Если нанесли урон то отображаем
 	int damage = enemy.damage.inputDamage;
@@ -317,7 +320,7 @@ void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int s
 	int shiftBar = enemy.mana.maxMana > 0;
 	Vector2f pos = enemy.spriteEntity->getPosition();
 	pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-	pos.y -= enemy.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
 
 
 	renderDamageForEnemy(enemy, textGame, window, shiftBar);

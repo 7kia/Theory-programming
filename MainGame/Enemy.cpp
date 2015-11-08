@@ -67,9 +67,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 
 	type = &typesEnemy;
 
-
-	width = type->size.width;
-	height = type->size.height;
+	size.width = type->featuresSprite.size.width;
+	size.height = type->featuresSprite.size.height;
 
 	// Дальность подбора предметов
 	radiusUse = 1;
@@ -82,7 +81,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 
 	// Текстура
 	spriteEntity->setTexture(*type->textureEntity);
-	spriteEntity->setTextureRect(IntRect(0, 0, width, height));
+	spriteEntity->setTextureRect(IntRect(0, 0, size.width, size.height));
 
 	// Звуки 
 	soundsEntity[idSoundEntity::stepGrass] = type->soundsEntity[idSoundEntity::stepGrass];
@@ -100,7 +99,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	currentLevelFloor = level;
 	currenMode = idEntityMode::walk;
 
-	spriteEntity->setOrigin(width / 2, height / 2);
+	spriteEntity->setOrigin(size.width / 2, size.height / 2);
 	spriteEntity->setPosition(xPos * SIZE_BLOCK - SIZE_BLOCK / 2, yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
 
 	animation.timeAnimation = 0.f;

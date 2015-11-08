@@ -44,11 +44,12 @@ void Step::init(float first)
 	stepCurrent = stepFirst;
 }
 
-void DamageInputAndOutput::init(int cut, int crush, float time)
+void DamageInputAndOutput::init(int cut, int crush, float time, float mult)
 {
 	cuttingDamage = cut;
 	crushingDamage = crush;
 	timeOutputDamage = time;
+	damageMultiplirer = mult;
 }
 
 void entityAnimation::updateFight(const sf::Time deltaTime)
@@ -336,14 +337,14 @@ void Entity::playAnimationWalk(const Time& deltaTime, dataSound& databaseSound)
 
 	int shiftWidth = directions.directionLook / 6;// TODO
 
-	int currentWidth = width;
+	int currentWidth = size.width;
 	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
 
 	if (shiftWidth) {
 		currentWidth *= -1;
 	}
 
-	spriteEntity->setTextureRect(IntRect(xPos, height * int(animation.timeAnimation), currentWidth, height));
+	spriteEntity->setTextureRect(IntRect(xPos, size.height * int(animation.timeAnimation), currentWidth, size.height));
 }
 
 void Entity::playAnimationAtack(const Time& deltaTime, dataSound& databaseSound)
@@ -357,14 +358,15 @@ void Entity::playAnimationAtack(const Time& deltaTime, dataSound& databaseSound)
 
 	int shiftWidth = directions.directionLook / 6;// TODO
 
-	int currentWidth = width;
+	int currentWidth = size.width;
 	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
 
 	if (shiftWidth) {
 		currentWidth *= -1;
 	}
 
-	spriteEntity->setTextureRect(IntRect(xPos, height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation), currentWidth, height));
+	spriteEntity->setTextureRect(IntRect(xPos, size.height * (int(animation.currentTimeOutputDamage * resetAnimation) + shiftAnimation),
+															 currentWidth, size.height));
 }
 
 void Entity::playSound(float time, float &start, const int idSound)
@@ -426,8 +428,8 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 		bool isSlowingBlock = false;
 		/////////////////////////////////////////////
 		// Проверяем окружающие объекты
-		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
+		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
 				// Замедляющие блоки
 				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
@@ -455,8 +457,8 @@ void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestr
 		/////////////////////////////////////////////
 		// Проверяем пол
 
-		for (int i = y / SIZE_BLOCK; i < (y + height) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + width) / SIZE_BLOCK; j++) {
+		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
 
 
 				// Замедляющие блоки
@@ -539,11 +541,11 @@ bool Entity::isInUseField(float x, float y, bool under)
 	int xPosBlock = x / SIZE_BLOCK;
 	int yPosBlock = y / SIZE_BLOCK;
 
-	bool checkX = (((getXPos() + width / 2) / SIZE_BLOCK) + radiusUse > xPosBlock)
-		&& (((getXPos() + width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= xPosBlock);
+	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + radiusUse > xPosBlock)
+		&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= xPosBlock);
 
-	bool checkY = (((getYPos() + height / 2) / SIZE_BLOCK) + radiusUse > yPosBlock)
-		&& (((getYPos() + height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= yPosBlock);
+	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + radiusUse > yPosBlock)
+		&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= yPosBlock);
 
 	bool checkUnderPerson = xPosBlock == (((int)getXPos() + SIZE_BLOCK / 2) / SIZE_BLOCK)
 		&& yPosBlock == (((int)getYPos() + SIZE_BLOCK / 2) / SIZE_BLOCK);

@@ -58,7 +58,7 @@ struct DamageInputAndOutput
 
 	float timeInputDamage;// Показывает урон в течении ... секунд
 
-	void init(int cut, int crush, float time);
+	void init(int cut, int crush, float time, float mult);
 	void updateInputDamage(const sf::Time deltaTime);
 };
 
@@ -156,8 +156,7 @@ public:
 	int radiusUse;
 	int currentLevelFloor;
 
-	int width;
-	int height;
+	sizeSprite size;
 
 	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
