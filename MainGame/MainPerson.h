@@ -20,7 +20,7 @@ public:
 
 	void givenForPersonDamage(Enemy & enemy);
 	void updateAtack(std::vector<Enemy>* enemy, std::vector<Item>* items, TypeItem* typesItems);
-	void attractionEnemy(Enemy *enemy, const Time &deltaTime);
+	void attractionEnemy(Enemy &enemy, const Time &deltaTime);
 	/*
 		///////////////////////////////////////////////////////
 	// Основные характерисктики

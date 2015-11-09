@@ -181,17 +181,20 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 				enemy->clear();//TODO
 			}
 
+			currenMode = idEntityMode::walk;
+			giveDamage = false;
+			currentItem.currentToughness -= 1;
 
 			if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 				itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
 			}
 		} 
 		else {
-			printf("time %f != %f \n", animation.currentTimeFightAnimation, animation.timeFightAnimation);
+
 			if (giveDamage) {
 				findEnemy->takeDamage(damage, currentItem);
 				animation.currentTimeFightAnimation = 0.f;
-				printf("time!!!!!!!!!!!!!!!! %f\n", animation.currentTimeFightAnimation);
+
 				currenMode = idEntityMode::walk;
 				giveDamage = false;
 				currentItem.currentToughness -= 1;
@@ -202,37 +205,40 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 }
 
 
-void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
+void MainPerson::attractionEnemy(Enemy &enemy, const Time &deltaTime)
 {
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
 	Vector2f movemoment;
 	float distanse;
 
-	enemyPoint = enemy->spriteEntity->getPosition();
+	enemyPoint = enemy.spriteEntity->getPosition();
 
 	distanse = distansePoints(personPoint, enemyPoint);
 	// Если увидел
-	Directions &directions = enemy->directions;
-	entityAnimation &animation = enemy->animation;
-	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy->currentLevelFloor) {
-		enemy->currenMode = idEntityMode::fight;
+	Directions &directions = enemy.directions;
+	entityAnimation &animation = enemy.animation;
+	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
+		enemy.currenMode = idEntityMode::fight;
 		if (distanse >= SIZE_BLOCK) {
-			enemy->animation.currentTimeFightAnimation = 0.f;
+			enemy.animation.currentTimeFightAnimation = 0.f;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
-			findEnemy->choiceDirections(movemoment);
+			enemy.choiceDirections(movemoment);
 
 		}
 		else {
+			enemy.currenMode = idEntityMode::atack;
+			enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
+			// TODO //enemy.giveDamage
+			if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+				enemy.animation.currentTimeFightAnimation = 0.f;
 
-			//animation.currentTimeFightAnimation += deltaTime.asSeconds();
-			if (giveDamage) {
-				animation.currentTimeFightAnimation = 0.f;
-				giveDamage = false;
-				givenForPersonDamage(*enemy);
+				enemy.currenMode = idEntityMode::fight;
+				enemy.giveDamage = false;
+				givenForPersonDamage(enemy);
 			}
-			currenMode = idEntityMode::atack;
+
 			directions.directionWalk = NONE_DIRECTION;
 		}
 

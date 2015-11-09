@@ -314,7 +314,6 @@ void startGame()
 			////////////////////////////////////////////////////////////
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
-
 				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
 				mainPerson.updateAtack(game->Enemys, game->items, game->typesItem);
 				mainPerson.interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
@@ -328,9 +327,8 @@ void startGame()
 					
 					Enemys[i].update(TIME_PER_FRAME, game->databaseSound);
 					Enemys[i].interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
-					mainPerson.attractionEnemy(&Enemys[i], TIME_PER_FRAME);
+					mainPerson.attractionEnemy(Enemys[i], TIME_PER_FRAME);
 					Enemys[i].randomWalk(TIME_PER_FRAME);
-
 				}
 				/////////////////////////////////////
 
