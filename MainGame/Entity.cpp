@@ -65,10 +65,10 @@ void DamageInputAndOutput::init(int cut, int crush, float time, float mult)
 void entityAnimation::init(float input, float output)
 {
 	timeAnimation = 0.f;
-	timeFightAnimation = 0.f;
+	timeFightAnimation = output;
 
 	timeOutputDamage = input;
-	currentTimeFightAnimation = output;
+	currentTimeFightAnimation = 0.f;
 }
 
 void entityAnimation::updateFight(const sf::Time deltaTime)
@@ -76,7 +76,7 @@ void entityAnimation::updateFight(const sf::Time deltaTime)
 	if (currentTimeFightAnimation) {
 		currentTimeFightAnimation += deltaTime.asSeconds();
 
-		if (currentTimeFightAnimation > timeOutputDamage) {
+		if (currentTimeFightAnimation > timeFightAnimation) {
 			currentTimeFightAnimation = 0;
 		}
 
