@@ -27,7 +27,7 @@ void initializeGame(Game & game)
 	game.Enemys = new vector<Enemy>;
 
 	initializeTypeEnemy(game.typesEnemy, game.databaseSound);
-	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, game.emptyItem, game.emptyObject);
+	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, game.emptyItem, game.emptyObject, game.emptyEnemy);
 
 	initializeMainPerson(game.mainPerson, game.databaseSound, game.emptyItem, game.emptyObject, game.emptyEnemy);
 

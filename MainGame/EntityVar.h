@@ -19,6 +19,7 @@ enum idEnemy
 {
 	wolfEnemy,
 	skeletEnemy,
+	emptyEnemy,
 	amountEnemy
 };
 
@@ -26,6 +27,7 @@ enum idEntityMode
 {
 	walk,
 	fight,
+	atack,
 	panic,
 	amountEnemyMode
 };

@@ -141,6 +141,67 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	damage.inputDamage = 0;// TODO
 }
 
+
+void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem *typesItems)
+{
+	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+
+
+	std::cout << string(findEnemy->type->name) << std::endl;
+	if (currenMode == idEntityMode::atack
+			&& findEnemy->type->name != emptyEnemy->type->name) {
+		if (findEnemy->isDeath) {
+
+			Item* addItem = new Item;
+			TypeEnemy& typeEnemy = *findEnemy->type;
+			int countItem = typeEnemy.drop.minCountItems.size();
+
+			vector<int> &minAmount = typeEnemy.drop.minCountItems;
+			vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
+			vector<int> &idItems = typeEnemy.drop.dropItems;
+
+			int currentAmount;
+			for (int i = 0; i < countItem; i++) {
+
+				currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
+				for (int j = 0; j < currentAmount; j++) {
+					addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
+					addItem->setPosition(founds.currentTarget.x + 1, founds.currentTarget.y + 1, currentLevelFloor + 1);
+					items->push_back(*addItem);
+
+				}
+
+			}
+			delete addItem;
+			if (findEnemyFromList) {
+				enemy->erase(enemy->begin() + findEnemyFromList);
+			}
+			else
+			{
+				enemy->clear();//TODO
+			}
+
+
+			if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
+				itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
+			}
+		} 
+		else {
+			printf("time %f != %f \n", animation.currentTimeFightAnimation, animation.timeFightAnimation);
+			if (giveDamage) {
+				findEnemy->takeDamage(damage, currentItem);
+				animation.currentTimeFightAnimation = 0.f;
+				printf("time!!!!!!!!!!!!!!!! %f\n", animation.currentTimeFightAnimation);
+				currenMode = idEntityMode::walk;
+				giveDamage = false;
+				currentItem.currentToughness -= 1;
+			}
+
+		}
+	}
+}
+
+
 void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 {
 	Vector2f personPoint = { getXPos(), getYPos() };
@@ -160,64 +221,18 @@ void MainPerson::attractionEnemy(Enemy *enemy, const Time &deltaTime)
 			enemy->animation.currentTimeFightAnimation = 0.f;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
+			findEnemy->choiceDirections(movemoment);
 
-			// TODO:
-			float zero = SIZE_BLOCK / 2;
-
-			bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
-			bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
-
-			if (movemoment.x > zero && movemoment.y > zero) {
-				directions.directionWalk = DOWN_RIGHT;
-				directions.directionLook = DOWN_RIGHT;
-			}
-			else if (movemoment.x < -zero && movemoment.y > zero) {
-				directions.directionWalk = DOWN_LEFT;
-				directions.directionLook = DOWN_LEFT;
-			}
-			else if (movemoment.x < -zero && movemoment.y < -zero) {
-				directions.directionWalk = UP_LEFT;
-				directions.directionLook = UP_LEFT;
-			}
-			else if (movemoment.x > zero && movemoment.y < zero) {
-				directions.directionWalk = UP_RIGHT;
-				directions.directionLook = UP_RIGHT;
-			}
-			else if (movemoment.y >= zero && xAboutZero) {
-				directions.directionWalk = DOWN;
-				directions.directionLook = DOWN;
-			}
-			else if (movemoment.y <= -zero && xAboutZero) {
-				directions.directionWalk = UP;
-				directions.directionLook = UP;
-			}
-			else if (movemoment.x >= zero && yAboutZero) {
-				directions.directionWalk = RIGHT;
-				directions.directionLook = RIGHT;
-			}
-			else if (movemoment.x <= -zero && yAboutZero) {
-				directions.directionWalk = LEFT;
-				directions.directionLook = LEFT;
-			}
-			else {
-				directions.directionWalk = NONE_DIRECTION;
-			}
-
-			/*
-			
-			*/
 		}
 		else {
-			//printf("vector %f %f\n", movemoment.x, movemoment.y);// TODO
-			//printf("%f %d\n", distanse, enemy->directions.directionWalk);
 
-
-			animation.currentTimeFightAnimation += deltaTime.asSeconds();
-			if (animation.currentTimeFightAnimation > animation.timeOutputDamage) {
+			//animation.currentTimeFightAnimation += deltaTime.asSeconds();
+			if (giveDamage) {
 				animation.currentTimeFightAnimation = 0.f;
+				giveDamage = false;
 				givenForPersonDamage(*enemy);
 			}
-			currenMode = idEntityMode::fight;
+			currenMode = idEntityMode::atack;
 			directions.directionWalk = NONE_DIRECTION;
 		}
 
@@ -289,6 +304,8 @@ void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects
 	movement = { 0.f, 0.f };
 }
 
+
+
 void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
 												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, vector<Enemy> *enemy,
 												 vector<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
@@ -297,93 +314,23 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 
 	int x = xMouse / SIZE_BLOCK;
 	int y = yMouse / SIZE_BLOCK;
-
+	founds.currentTarget = { x, y };
 	// Сначала наносим урон
-	if (findEnemy != emptyEnemy //&& event.type == Event::MouseButtonPressed
-			//&& event.type == Event::MouseMoved
+	if (findEnemy != emptyEnemy //&& event.type == Event::MouseButtonPressed//&& event.type == Event::MouseMoved
+
 			&& event.key.code == Mouse::Left) {
 
 		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
 				if (animation.currentTimeFightAnimation == 0.f) {
-					currenMode = idEntityMode::fight;
-
-					bool isDestroy = currentItem.typeItem->features.isDestroy;
-					if (isDestroy) {
-						currentItem.currentToughness -= 1;
-					}
-
-					//////////////////////////////////////////////////
-					// Смерть и выпадение предметов
-					if (findEnemy->isDeath) {
-
-						Item* addItem = new Item;
-						TypeEnemy& typeEnemy = *findEnemy->type;
-						int countItem = typeEnemy.drop.minCountItems.size();
-
-						vector<int> &minAmount = typeEnemy.drop.minCountItems;
-						vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
-						vector<int> &idItems = typeEnemy.drop.dropItems;
-
-						int currentAmount;
-						for (int i = 0; i < countItem; i++) {
-
-							currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
-							for (int j = 0; j < currentAmount; j++) {
-								addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
-								addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-								items->push_back(*addItem);
-
-							}
-
-						}
-						delete addItem;
-						enemy->erase(enemy->begin() + findEnemyFromList);
-
-					}
-					//////////////////////////////////////////////////
-					// Иначе наносим урон
-					else {
-
-						animation.currentTimeFightAnimation += deltaTime.asSeconds();
-						// TODO
-						//printf("Time %f\n", currentTimeFightAnimation);
-						//if (currentTimeFightAnimation > timeOutputDamage) {
-						//	currentTimeFightAnimation = 0;
-						int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
-						int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
-
-						float cutDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
-						float crashDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
-
-						cutDamage *= findEnemy->protection.protectionCut;
-						crashDamage *= findEnemy->protection.protectionCrash;
-
-						findEnemy->damage.inputDamage = cutDamage + crashDamage;
-						findEnemy->health.currentHealth -= findEnemy->damage.inputDamage;
-
-						findEnemy->damage.timeInputDamage = 0.f;
-						//}
-
-					}
-					//////////////////////////////////////////////////
-
-
-
-					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
-					}
-
-
-
+					currenMode = idEntityMode::atack;
 				}
-				
 
 			}
 
-			//*/					
 		}
+
 
 	}
 	// Если это не противник

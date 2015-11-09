@@ -44,6 +44,14 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
+	typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
+
+	name = "Empty";
+
+	typeEnemy->featuresSprite.init(0, 0, 0, 0);
+	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, 0, 0);
+
+	drop.clear();
 }
 
 void enemyFeatures::init(int health, int stamina, int mana, int thirst, int hungry)

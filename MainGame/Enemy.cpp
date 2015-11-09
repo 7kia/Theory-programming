@@ -4,7 +4,7 @@
 #include "EntityVar.h"
 
 void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
-											 Item &emptyItem, UnlifeObject &emptyObject)// ДОБАВЛЕНИЕ СУЩНОСТИ 
+											 Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy)// ДОБАВЛЕНИЕ СУЩНОСТИ 
 {
 
 	srand(time(0)); // автоматическая случайность
@@ -53,6 +53,9 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 
 	}
 	//////////////////////////////////////////////////////////////
+	typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
+	emptyEnemy.EnemyInit(*typeEnemy, emptyItem, emptyObject, -1, -1, -1);//TODO
+
 	delete addEnemy;
 
 }
@@ -158,4 +161,60 @@ void Enemy::randomWalk(const Time &deltaTime) {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
+{
+	bool isDestroy = currentItem.typeItem->features.isDestroy;
+	if (isDestroy) {
+		currentItem.currentToughness -= 1;
+	}
+
+	int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
+	int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
+
+	float cutDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
+	float crashDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
+
+	cutDamage *= protection.protectionCut;
+	crashDamage *= protection.protectionCrash;
+
+	damage.inputDamage = cutDamage + crashDamage;
+	health.currentHealth -= damage.inputDamage;
+}
+
+void Enemy::choiceDirections(Vector2f movemoment)
+{
+	float zero = SIZE_BLOCK / 2;
+
+	bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
+	bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
+
+	if (movemoment.x > zero && movemoment.y > zero) {
+		directions.directionWalk = DOWN_RIGHT;
+		directions.directionLook = DOWN_RIGHT;
+	} else if (movemoment.x < -zero && movemoment.y > zero) {
+		directions.directionWalk = DOWN_LEFT;
+		directions.directionLook = DOWN_LEFT;
+	} else if (movemoment.x < -zero && movemoment.y < -zero) {
+		directions.directionWalk = UP_LEFT;
+		directions.directionLook = UP_LEFT;
+	} else if (movemoment.x > zero && movemoment.y < zero) {
+		directions.directionWalk = UP_RIGHT;
+		directions.directionLook = UP_RIGHT;
+	} else if (movemoment.y >= zero && xAboutZero) {
+		directions.directionWalk = DOWN;
+		directions.directionLook = DOWN;
+	} else if (movemoment.y <= -zero && xAboutZero) {
+		directions.directionWalk = UP;
+		directions.directionLook = UP;
+	} else if (movemoment.x >= zero && yAboutZero) {
+		directions.directionWalk = RIGHT;
+		directions.directionLook = RIGHT;
+	} else if (movemoment.x <= -zero && yAboutZero) {
+		directions.directionWalk = LEFT;
+		directions.directionLook = LEFT;
+	} else {
+		directions.directionWalk = NONE_DIRECTION;
+	}
+}

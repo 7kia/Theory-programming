@@ -41,7 +41,7 @@ struct entityAnimation
 	float currentTimeFightAnimation;
 
 	void init(float input, float output);
-	void updateFight(const sf::Time deltaTime);
+	void updateFight(const sf::Time deltaTime, bool &giveDamage);
 
 };
 
@@ -144,6 +144,8 @@ struct foundObjects
 	int findObjectFromList;
 	UnlifeObject* emptyObject;
 
+	sf::Vector2i currentTarget;
+
 	Item *findItem;
 	Item *emptyItem;
 	int findItemFromList;
@@ -163,7 +165,7 @@ public:
 	std::vector<sf::Sound*> soundsEntity;
 
 	DamageInputAndOutput damage;
-	bool atack;//TODO
+	bool giveDamage;
 
 	int radiusUse;
 	int currentLevelFloor;

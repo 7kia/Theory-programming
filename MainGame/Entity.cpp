@@ -71,16 +71,16 @@ void entityAnimation::init(float input, float output)
 	currentTimeFightAnimation = 0.f;
 }
 
-void entityAnimation::updateFight(const sf::Time deltaTime)
+void entityAnimation::updateFight(const sf::Time deltaTime, bool &giveDamage)
 {
-	if (currentTimeFightAnimation) {
+
 		currentTimeFightAnimation += deltaTime.asSeconds();
 
 		if (currentTimeFightAnimation > timeFightAnimation) {
+			giveDamage = true;
 			currentTimeFightAnimation = 0;
 		}
 
-	}
 };
 
 void DamageInputAndOutput::updateInputDamage(const sf::Time deltaTime)
@@ -200,7 +200,9 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	}
 	}
 	*/
-	animation.updateFight(deltaTime);
+	if (currenMode == idEntityMode::atack) {
+		animation.updateFight(deltaTime, giveDamage);
+	}
 	damage.updateInputDamage(deltaTime);
 	mana.update(deltaTime);
 	stamina.update(deltaTime, directions.directionWalk, step);

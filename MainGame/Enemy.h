@@ -37,6 +37,9 @@ public:
 
 
 	void randomWalk(const sf::Time &deltaTime);
+
+	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
+	void choiceDirections(Vector2f movemoment);
 private:
 
 };
@@ -51,4 +54,4 @@ struct foundsByEnemy
 };
 
 void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
-											 Item &emptyItem, UnlifeObject &emptyObject);
+											 Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy);

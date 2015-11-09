@@ -316,6 +316,7 @@ void startGame()
 			if (mainPerson.isDeath == false) {
 
 				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
+				mainPerson.updateAtack(game->Enemys, game->items, game->typesItem);
 				mainPerson.interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
