@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 struct sizeSprite
@@ -30,4 +31,11 @@ struct objectDropItems
 	void addItem( int min, int max, int id);
 	void init(objectDropItems drop);
 	void clear();
+};
+
+struct featuresWindow
+{
+	sf::Vector2u size;
+	sf::Vector2f center;
+	sf::RenderWindow *window;
 };

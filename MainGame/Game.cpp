@@ -5,68 +5,37 @@ using namespace std;
 
 void initializeGame(Game & game)
 {
-	// Карта и звуки
-//game.field = new Field;
-//game.databaseSound = new dataSound;
-
-//game.clock = new Clock;
-//game.mainPerson = new MainPerson;
-
-	// Неживые объекты
-//game.typesUnlifeObject = new TypesUnlifeObject;
+	
 	game.unlifeObjects = new vector<UnlifeObject>;
-//game.emptyObject = new UnlifeObject;
-
-	// Предметы
-//game.typesItem = new TypeItem[AMOUNT_TYPES_ITEM];
 	game.items = new vector<Item>;
-//game.emptyItem = new Item;// Нужно для корректной работы инвентаря
-
-	// Список уничтожаемых объектов и блоков
 	game.listDestroy = new destroyObjectsAndBlocks;
-
-	// GUI
-//game.gui = new GUI;
-//game.textGame = new TextGame;
 
 	game.window.create(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
-	// Карта и звуки
-	initializeSound(game.databaseSound);// На будущее
+	initializeSound(game.databaseSound);
 	initializeField(game.field);
 
-	// Предметы
 	initializeTypesItem(game.typesItem, game.databaseSound);
 	initializeItems(*game.items, game.typesItem, game.emptyItem);
 
-
-	// Неживые объекты
 	initializeTypeUnlifeObjects(*game.typesUnlifeObject, game.databaseSound);
 	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, game.emptyObject);
 
-
 	// TODO
-	// Категории ломаемых предметов
 	initializeCategorysBreakingObject(game);
 
 	game.Enemys = new vector<Enemy>;
 
 	initializeTypeEnemy(game.typesEnemy, game.databaseSound);
 	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, game.emptyItem, game.emptyObject);
-	////////////////////////////////////
 
-	// Основной персонаж
 	initializeMainPerson(game.mainPerson, game.databaseSound, game.emptyItem, game.emptyObject, game.emptyEnemy);
 
 	createTextsAndFonts(game.textGame);
 	initializeTexts(game.textGame);
 
-	// GUI
 	initializeGUI(game.gui, game.textGame);
 
-
-
-	// Часы
 	initializeClock(game.clock);
 }
 
@@ -134,14 +103,13 @@ void initializeCategorysBreakingObject(Game &game)
 //*/
 
 
-void renderEntitys(Game &game)// ДОБАВЛЕНИЕ СУЩНОСТИ
+void renderEntitys(Game &game)
 {
 	RenderWindow& window = game.window;
 
 	vector<Enemy>& Enemys = *game.Enemys;
 
 	for (int i = 0; i != Enemys.size(); ++i) {
-
 
 		if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor - 1) {
 			Enemys[i].spriteEntity->setColor(DOWN_VIEW);
@@ -169,8 +137,7 @@ void destroyGame(Game & game)
 
 void informationAboutSelect(Game &game, float x, float y)
 {
-	///////////////////////////////////////////////////////////////////
-	// Осмотр блоков
+
 	Field &field = game.field;
 	TextGame &textGame = game.textGame;
 	MainPerson &mainPerson = game.mainPerson;
@@ -206,8 +173,7 @@ void informationAboutSelect(Game &game, float x, float y)
 			}
 		}
 	}
-	///////////////////////////////////////////////////////////////////
-	// Осмотр неживых объектов
+
 	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
@@ -239,8 +205,7 @@ void informationAboutSelect(Game &game, float x, float y)
 		}
 
 	}
-	///////////////////////////////////////////////////////////////////
-	// Осмотр предметов
+
 	vector<Item> &items = *game.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
@@ -270,8 +235,7 @@ void informationAboutSelect(Game &game, float x, float y)
 		}
 
 	}
-	///////////////////////////////////////////////////////////////////
-	// Осмотр сущностей
+
 	vector<Enemy>& Enemys = *game.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
@@ -299,7 +263,7 @@ void informationAboutSelect(Game &game, float x, float y)
 		}
 
 	}
-	///////////////////////////////////////////////////////////////////
+	
 }
 
 void initializeClock(Clock &clock)// ИСПРАВЬ
