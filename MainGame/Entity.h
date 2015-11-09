@@ -152,24 +152,21 @@ struct foundObjects
 class Entity
 {
 public:
-	// Текструра
 	sf::Sprite *spriteEntity;
-
+	sizeSprite size;
+	entityAnimation animation;
 	Directions directions;
 	Step step;
-	DamageInputAndOutput damage;
-	entityAnimation animation;
-	bool atack;
-
 	sf::Vector2f movement;
 
-	// Ссылки на звуки
-	sf::Sound *soundsEntity[sizeBuffer];
+	std::vector<sf::Sound*> soundsEntity;
+
+	DamageInputAndOutput damage;
+	bool atack;//TODO
 
 	int radiusUse;
 	int currentLevelFloor;
 
-	sizeSprite size;
 	foundObjects founds;
 	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
@@ -201,11 +198,11 @@ public:
 	entityThirst thirst;
 	entityProtection protection;
 
-
+	void initStepSounds(dataSound& databaseSound);
 	// Передвижение. Его анимация и озвучка
 	void update(const Time & deltaTime, dataSound &databaseSound);
 	void playAnimationWalk(const Time & deltaTime, dataSound & databaseSound);
-	void playAnimationAtack(const Time& deltaTime, dataSound& databaseSound);
+	void playAnimationAtack(const Time & deltaTime, dataSound & databaseSound);
 	void playSound(float time, float &start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 

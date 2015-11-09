@@ -39,16 +39,13 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.textureEntity->loadFromFile(texturePaths[idTexturePaths::mainPerson]);
 	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
 	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.size.width, mainPerson.size.height));
-	// Звуки 
-	mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
-	mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 
+	mainPerson.initStepSounds(databaseSound);
 
-	mainPerson.founds.init(&emptyItem, &emptyObject);
-	mainPerson.emptyEnemy = &emptyEnemy;
-	mainPerson.idSelectItem = 0;
+	mainPerson.initFounds(emptyItem, emptyObject, emptyEnemy);
 
 	// Создайм и заполняем панель
+	mainPerson.idSelectItem = 0;
 	mainPerson.amountSlots = AMOUNT_ACTIVE_SLOTS;
 	mainPerson.itemFromPanelQuickAccess = new Item[AMOUNT_ACTIVE_SLOTS];
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
@@ -61,14 +58,12 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.spriteEntity->setPosition(posX, posY);
 
 	entityAnimation &animation = mainPerson.animation;
-	animation.timeAnimation = 0.f;
-	animation.timeFightAnimation = 0.f;
-	animation.currentTimeFightAnimation = 0.f;
-	animation.timeOutputDamage = 1.f;
+	animation.init(1.5f, 1.f);
 
 	Directions &directions = mainPerson.directions;
 	directions.directionWalk = NONE_DIRECTION;
 	directions.directionLook = DOWN;
+
 
 	mainPerson.health.currentHealth = 45;
 	mainPerson.stamina.currentStamina = 35;
@@ -84,6 +79,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	mainPerson.damage.damageMultiplirer = 1;
 
 }
+
 ////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////
@@ -113,6 +109,18 @@ void MainPerson::updateView(RenderWindow & window)
 	else if (y > lowBorder) tempY = lowBorder;//нижнюю сторону	
 
 	view->setCenter(tempX, tempY);
+}
+
+void MainPerson::initFounds(::Item &item, UnlifeObject& object, ::Enemy& enemy)
+{
+	founds.init(&item, &object);
+	emptyEnemy = &enemy;
+}
+
+void MainPerson::initStepSounds(dataSound& databaseSound)
+{
+	soundsEntity.push_back(&databaseSound.sounds[idSoundEntity::stepGrass]);
+	soundsEntity.push_back(&databaseSound.sounds[idSoundEntity::stepStone]);
 }
 
 void MainPerson::givenForPersonDamage(Enemy &enemy)

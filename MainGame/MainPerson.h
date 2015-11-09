@@ -1,31 +1,27 @@
 #pragma once
 #include "Enemy.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Основной персонаж
 class MainPerson : public Entity
 {
 public:
 	sf::Texture *textureEntity;
 
-	// режимы персонажа
-	//void modeProcess(Field &field, std::list<UnlifeObject> *unlifeObjects, std::list<Item> *items, sf::Event &eventPerson, float x, float y);
-	// Камера
+	void initStepSounds(dataSound& databaseSound);
+
 	sf::View *view;
 	void updateView(sf::RenderWindow & window);
 
-	// Для инвентаря
 	int amountSlots;
 
-	///////////////////////////////////////////////////////
-	// Для уничтожения врагов
 	Enemy *findEnemy;
 	Enemy *emptyEnemy;
 	int findEnemyFromList;
+	void initFounds(Item& item, UnlifeObject& object, Enemy& enemy);
 
 	void givenForPersonDamage(Enemy & enemy);
 	void attractionEnemy(Enemy *enemy, const Time &deltaTime);
-	///////////////////////////////////////////////////////
+	/*
+		///////////////////////////////////////////////////////
 	// Основные характерисктики
 	int strength;// сила
 	int expStrength;// опыт
@@ -35,11 +31,12 @@ public:
 	int expEndurace;
 	int expEnduracehUp;
 	///////////////////////////////////////////////////////
+	*/
+
 	void getCoordinateForView(float x, float y);
 	void viewmap(float time);
 	void changeview();
 
-	// Для направления взгляда
 	float rotation;
 	void computeAngle(sf::RenderWindow &window);
 
@@ -72,4 +69,5 @@ private:
 
 };
 
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy);
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound,
+													Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy);

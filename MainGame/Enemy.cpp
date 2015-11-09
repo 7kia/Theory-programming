@@ -58,6 +58,12 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 }
 
 
+void Enemy::initStepSounds()
+{
+	soundsEntity.push_back(type->soundsEntity[idSoundEntity::stepGrass]);
+	soundsEntity.push_back(type->soundsEntity[idSoundEntity::stepStone]);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Сущности
 void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject,
@@ -82,9 +88,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	spriteEntity->setTexture(*type->textureEntity);
 	spriteEntity->setTextureRect(IntRect(0, 0, size.width, size.height));
 
-	// Звуки 
-	soundsEntity[idSoundEntity::stepGrass] = type->soundsEntity[idSoundEntity::stepGrass];
-	soundsEntity[idSoundEntity::stepStone] = type->soundsEntity[idSoundEntity::stepStone];
+
+	initStepSounds();
 
 	founds.init(&emptyItem, &emptyObject);
 

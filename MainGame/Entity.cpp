@@ -184,6 +184,7 @@ void entityThirst::update(const sf::Time deltaTime, bool &needMinusHealth)
 		needMinusHealth = true;
 	}
 };
+
 ////////////////////////////////////////////////////////////////////
 // Передвижение. Его анимация и озвучка
 void Entity::update(const Time & deltaTime, dataSound &databaseSound)
@@ -208,9 +209,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	thirst.update(deltaTime, health.needMinusHealth);
 
 	///////////////////////////////////////
-
-	float pauseStep = 5, resetAnimation = 4;
-
 	if (currenMode == idEntityMode::walk) {
 		switch (directions.directionWalk) {
 		case UP_LEFT:
@@ -266,80 +264,6 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 
 	if (animation.currentTimeFightAnimation > 0) {
 		playAnimationAtack(deltaTime, databaseSound);
-
-		/*
-		resetAnimation = 3;
-		int shiftAnimation = 4;
-		switch (directions.directionLook) {
-		case UP_LEFT:
-		// TODO
-		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(animation.currentTimeFightAnimation * resetAnimation) + shiftAnimation), -width, height));
-		break;
-		case UP_RIGHT:
-		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
-		break;
-		case UP:
-		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(0, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
-		break;
-		case DOWN_LEFT:
-		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), -width, height));
-		break;
-		case DOWN_RIGHT:
-		//playSound(timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
-		break;
-		case DOWN:
-		//playSound(currentTimeFightAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(4 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
-		break;
-		case LEFT:
-		//playSound(currentTimeFightAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(3 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), -width, height));
-		break;
-		case RIGHT:
-		//playSound(currentTimeFightAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-		//currentTimeFightAnimation += deltaTime.asSeconds() * pauseStep;
-		//resetTimeAnimation(currentTimeFightAnimation, resetAnimation);
-
-		spriteEntity->setTextureRect(IntRect(2 * width, height * (int(currentTimeFightAnimation * resetAnimation) + shiftAnimation), width, height));
-		break;
-		default:
-		break;
-		}
-		*/
 
 	}
 }

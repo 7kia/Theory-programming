@@ -4,17 +4,18 @@
 
 struct TypeEnemy;
 class UnlifeObject;
-////////////////////////////////////
-// Ходьба по карте(для противников
+
+
 const float minTimeWalk = 4.f;
 const float maxTimeWalk = 12.f;
-////////////////////////////////////
 
 class Enemy : public Entity
 {
 public:
 	// Для направления взгляда
 	float rotation;
+
+	void initStepSounds();
 
 	// Для взаимодействия с миром
 	int currenMode;
@@ -39,7 +40,15 @@ public:
 private:
 
 };
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Объявление сущности
+
+struct foundsByEnemy
+{
+	foundObjects foundsObjects;
+	Enemy *findEnemy;
+	Enemy *emptyEnemy;
+	int findEnemyFromList;
+	void init(Item &item, UnlifeObject &object, Enemy &enemy);
+};
+
 void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject);
