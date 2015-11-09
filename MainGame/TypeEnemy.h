@@ -26,6 +26,7 @@ struct TypeEnemy
 	int radiusUse;
 	float radiuseView;
 
+	bool useItem;
 	int amountSlots;
 
 	Step step;

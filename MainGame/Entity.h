@@ -1,6 +1,7 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
+#include "ListObjectsAndBlocks.h"
 #include "Items.h"
 #include "UnlifeObject.h"
 
@@ -216,6 +217,25 @@ public:
 	float getXPos();
 	float getYPos();
 
+	//////////////////////////////////////////////////////////////////////////////////////////vv
+	// ITEMS
+	// Использование предметов
+	bool isInListBlocks(wchar_t block, wchar_t * listBlocks);
+	bool isInListObjects(String * listObjects, int sizeString);
+
+
+	void takeItem(Field &field, std::vector<Item> &items, float x, float y);
+	void throwItem(Field &field, std::vector<Item> &items);
+
+
+	void useTool(float &xMouse, float &yMouse, Event &event, Field &field,
+							 sf::String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
+							 Item &currentItem,
+							 TypeItem *typesItems, std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects);
+	void useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,
+								Item & currentItem, TypeItem * typesItems, std::vector<Item>* items,
+								TypeUnlifeObject * typesUnlifeObjects, std::vector<UnlifeObject>* unlifeObjects);
+	//////////////////////////////////////////////////////////////////////////////////////////
 	//private:
 
 };
