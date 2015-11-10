@@ -18,7 +18,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 0; i < 1; i++) {
+	for (size_t i = 0; i < 4; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -37,7 +37,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	// Скелеты
 	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
 
-	for (size_t i = 0; i < 0; i++) {
+	for (size_t i = 0; i < 4; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;

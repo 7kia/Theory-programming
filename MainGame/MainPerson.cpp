@@ -142,7 +142,7 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 }
 
 
-void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem *typesItems)
+void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem *typesItems, const Time &deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -190,14 +190,15 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 			}
 		} 
 		else {
-
+			currenMode = idEntityMode::atack;
+			//animation.currentTimeFightAnimation += deltaTime.asSeconds();
+			// TODO //enemy->giveDamage//
 			if (giveDamage) {
-				findEnemy->takeDamage(damage, currentItem);
 				animation.currentTimeFightAnimation = 0.f;
 
 				currenMode = idEntityMode::walk;
 				giveDamage = false;
-				currentItem.currentToughness -= 1;
+				findEnemy->takeDamage(damage, currentItem);
 			}
 
 		}
@@ -230,7 +231,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, const Time &deltaTime)
 		else {
 			enemy.currenMode = idEntityMode::atack;
 			enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
-			// TODO //enemy.giveDamage
+			// TODO //enemy->giveDamage//
 			if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
 				enemy.animation.currentTimeFightAnimation = 0.f;
 
@@ -245,7 +246,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, const Time &deltaTime)
 	}
 	// Идём дальше
 	else {
-		currenMode = idEntityMode::walk;
+		enemy.currenMode = idEntityMode::walk;
 	}
 
 }
@@ -342,7 +343,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 	// Если это не противник
 	else {
 
-		currenMode = idEntityMode::walk;
+		//currenMode = idEntityMode::walk;
 
 		String* listObjects;
 		wchar_t* listBlocks;

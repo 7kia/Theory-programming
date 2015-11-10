@@ -19,7 +19,7 @@ public:
 	void initFounds(Item& item, UnlifeObject& object, Enemy& enemy);
 
 	void givenForPersonDamage(Enemy & enemy);
-	void updateAtack(std::vector<Enemy>* enemy, std::vector<Item>* items, TypeItem* typesItems);
+	void updateAtack(std::vector<Enemy>* enemy, std::vector<Item>* items, TypeItem* typesItems, const sf::Time &deltaTime);
 	void attractionEnemy(Enemy &enemy, const Time &deltaTime);
 	/*
 		///////////////////////////////////////////////////////

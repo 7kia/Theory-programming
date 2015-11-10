@@ -130,28 +130,6 @@ void processEvents(Game &game, const Time &deltaTime)
 													 game.typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
 													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
-			} else if (event.type == Event::MouseMoved) {// ИСПРАВЬ
-				// Передвижение предмета
-				if (mainPerson.isMoveItem) {
-
-
-					if (mainPerson.isInUseField(pos.x, pos.y, false)) {
-						Vector2f position = { pos.x - mainPerson.dMoveItemX, pos.y - mainPerson.dMoveItemY };
-						if (mainPerson.founds.findObject != emptyObject) {
-							Sprite &spriteObject = *mainPerson.founds.findObject->spriteObject;
-							spriteObject.setPosition(position);
-						} else if (mainPerson.founds.findItem != emptyItem) {
-							Sprite &spriteItem = *mainPerson.founds.findItem->mainSprite;
-							spriteItem.setPosition(position);
-						}
-						// Объект должен находиться в центре клетки
-						// position = { (float)( (int)position.x/ SIZE_BLOCK) * SIZE_BLOCK - SIZE_BLOCK / 2,
-						//	(float)( (int)position.y/ SIZE_BLOCK)* SIZE_BLOCK - SIZE_BLOCK / 2 };
-
-					}
-				}
-			} else if (event.type == Event::MouseButtonReleased) {
-				mainPerson.isMoveItem = false;
 			}
 			//////////////////////////////////////////////////////////////////////////////////
 
@@ -314,22 +292,17 @@ void startGame()
 			////////////////////////////////////////////////////////////
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
+				printf("TIMEPERSON %f\n", mainPerson.animation.currentTimeFightAnimation);
 				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
-				mainPerson.updateAtack(game->Enemys, game->items, game->typesItem);
+				mainPerson.updateAtack(game->Enemys, game->items, game->typesItem, TIME_PER_FRAME);
 				mainPerson.interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
 				/////////////////////////////////////
 				// Взаимодействие существ с миром
-				vector<Enemy>& Enemys = *game->Enemys;
-				for (int i = 0; i != Enemys.size(); ++i) {
-					
-					Enemys[i].update(TIME_PER_FRAME, game->databaseSound);
-					Enemys[i].interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
-					mainPerson.attractionEnemy(Enemys[i], TIME_PER_FRAME);
-					Enemys[i].randomWalk(TIME_PER_FRAME);
-				}
+				updateEntity(*game, TIME_PER_FRAME);
+				
 				/////////////////////////////////////
 
 				mainPerson.updateView(game->window);

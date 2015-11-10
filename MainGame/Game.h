@@ -13,7 +13,7 @@
 #include "EntityVar.h"
 
 
-const sf::String TITLE_PROGRAM = "MainGame v1.4.2";
+const sf::String TITLE_PROGRAM = "MainGame v1.4.3.12";
 
 struct Game
 {
@@ -62,6 +62,7 @@ void initializeGame(Game & game);
 
 void initializeCategorysBreakingObject(Game &game);
 
+void updateEntity(Game &game, const sf::Time deltaTime);
 void renderEntitys(Game &game);
 
 void destroyGame(Game & game);

@@ -100,6 +100,18 @@ void initializeCategorysBreakingObject(Game &game)
 	listDestroy.ladder[0] = charBlocks[idBlocks::woodLadder];
 	/////////////////////////////////////////////////////////////////////////
 }
+
+void updateEntity(Game& game, const Time deltaTime)
+{
+	vector<Enemy>& Enemys = *game.Enemys;
+	for (int i = 0; i < Enemys.size(); ++i) {
+		Enemys[i].update(deltaTime, game.databaseSound);
+		Enemys[i].interactionWithMap(game.field, *game.listDestroy, deltaTime);
+		game.mainPerson.attractionEnemy(Enemys[i], deltaTime);
+		Enemys[i].randomWalk(deltaTime);
+	}
+}
+
 //*/
 
 
@@ -109,7 +121,7 @@ void renderEntitys(Game &game)
 
 	vector<Enemy>& Enemys = *game.Enemys;
 
-	for (int i = 0; i != Enemys.size(); ++i) {
+	for (int i = 0; i < Enemys.size(); ++i) {
 
 		if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor - 1) {
 			Enemys[i].spriteEntity->setColor(DOWN_VIEW);
