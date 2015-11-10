@@ -20,7 +20,7 @@ public:
 
 	void givenForPersonDamage(Enemy & enemy);
 	void updateAtack(std::vector<Enemy>* enemy, std::vector<Item>* items, TypeItem* typesItems, const sf::Time &deltaTime);
-	void attractionEnemy(Enemy &enemy, const Time &deltaTime);
+	void attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTime);
 	/*
 		///////////////////////////////////////////////////////
 	// Основные характерисктики
@@ -44,8 +44,6 @@ public:
 	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, const sf::Time &deltaTime,
 							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, std::vector<Enemy> *enemy,
 							 std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
-
-	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 
 	// кнопка "Дествие" и "Другое действие"
 	void actionMain(Field &field, std::vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,

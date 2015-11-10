@@ -177,6 +177,8 @@ public:
 	Item *itemFromPanelQuickAccess;
 	int idSelectItem;
 
+	bool wasCollision;
+
 	bool isEmptySlot();
 	int emptySlot;
 
@@ -215,6 +217,7 @@ public:
 
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
+	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 	bool isInUseField(float x, float y, bool under);
 
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки

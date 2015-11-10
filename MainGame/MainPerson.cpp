@@ -63,8 +63,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 	directions.directionWalk = NONE_DIRECTION;
 	directions.directionLook = DOWN;
 
-
-	mainPerson.health.currentHealth = 45;
+	mainPerson.health.maxHealth = 1000;
+	mainPerson.health.currentHealth = 900;
 	mainPerson.stamina.currentStamina = 35;
 	mainPerson.mana.currentMana = 10;
 
@@ -220,7 +220,7 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 }
 
 
-void MainPerson::attractionEnemy(Enemy &enemy, const Time &deltaTime)
+void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTime)
 {
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
@@ -235,27 +235,40 @@ void MainPerson::attractionEnemy(Enemy &enemy, const Time &deltaTime)
 	entityAnimation &animation = enemy.animation;
 	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
 		enemy.currenMode = idEntityMode::fight;
-		if (distanse >= SIZE_BLOCK) {
-			enemy.animation.currentTimeFightAnimation = 0.f;
 
-			movemoment = vectorDirection(enemyPoint, personPoint);
-			enemy.choiceDirections(movemoment);
+
+		movemoment = vectorDirection(enemyPoint, personPoint);
+		enemy.choiceDirections(movemoment);
+
+		if (enemy.wasCollision) {
+
+			enemy.choiceBlock(field);
 
 		}
-		else {
-			enemy.currenMode = idEntityMode::atack;
-			enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
-			// TODO //enemy->giveDamage//
-			if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+		else
+		{
+			if (distanse >= SIZE_BLOCK) {
+
 				enemy.animation.currentTimeFightAnimation = 0.f;
 
-				enemy.currenMode = idEntityMode::fight;
-				enemy.giveDamage = false;
-				givenForPersonDamage(enemy);
+			} 
+			else {
+				enemy.currenMode = idEntityMode::atack;
+				enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
+				// TODO //enemy->giveDamage//
+				if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+					enemy.animation.currentTimeFightAnimation = 0.f;
+
+					enemy.currenMode = idEntityMode::fight;
+					enemy.giveDamage = false;
+					givenForPersonDamage(enemy);
+				}
+
+				directions.directionWalk = NONE_DIRECTION;
 			}
 
-			directions.directionWalk = NONE_DIRECTION;
 		}
+
 
 	}
 	// Идём дальше
@@ -265,67 +278,6 @@ void MainPerson::attractionEnemy(Enemy &enemy, const Time &deltaTime)
 
 }
 ////////////////////////////////////////////////////////////////////
-
-void MainPerson::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const Time & deltaTime)// ИСПРАВЬ for enity and mainPerson
-{
-	float dx(movement.x);
-	float dy(movement.y);
-
-	float x;
-	float y;
-	x = getXPos();
-	y = getYPos();
-
-	// Проверка на выход за карту
-	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x >  0))
-			&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y >  0))) {
-		Sprite *spriteObject;
-		FloatRect objectBound;
-
-		int levelUnlifeObject;
-		Sprite *transparentSpiteObject;
-		FloatRect objectAltBound;
-		FloatRect entityBound;
-
-		vector<UnlifeObject> &objects = *unlifeObjects;
-		for (int i = 0; i != objects.size(); ++i) {
-			levelUnlifeObject = objects[i].currentLevel;
-
-			spriteObject = objects[i].spriteObject;
-			objectBound = spriteObject->getGlobalBounds();
-
-			transparentSpiteObject = objects[i].transparentSpiteObject;
-			objectAltBound = transparentSpiteObject->getGlobalBounds();
-			entityBound = spriteEntity->getGlobalBounds();
-
-			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-				if (directions.directionWalk >= Direction::UP_LEFT) {
-					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-					x -= DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
-					y -= DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
-				} else {
-					x -= dx * deltaTime.asSeconds();
-					y -= dy * deltaTime.asSeconds();
-				}
-				directions.directionWalk = NONE_DIRECTION;
-				break;
-			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
-			} else {
-				transparentSpiteObject->setColor(NORMAL_COLOR);
-			}
-
-		}
-	} else {
-		x = int(getXPos());
-		y = int(getYPos());
-	}
-
-	spriteEntity->setPosition(x, y);
-	movement = { 0.f, 0.f };
-}
-
-
 
 void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
 												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, vector<Enemy> *enemy,

@@ -2,6 +2,7 @@
 #include "Items.h"
 #include "UnlifeObject.h"
 #include "EntityVar.h"
+#include "Map.h"
 
 void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy)// днаюбкемхе ясымнярх 
@@ -174,6 +175,13 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 		currentItem.currentToughness -= 1;
 	}
 
+
+	typeDamageItem damagePersonItem = currentItem.typeItem->damageItem;
+	float multiplirer = damage.damageMultiplirer;
+
+
+	damage.inputCutDamage = multiplirer * (damage.cuttingDamage + damagePersonItem.cuttingDamage);
+	damage.inputCrashDamage = multiplirer * (damage.crushingDamage + damagePersonItem.crushingDamage);
 	int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
 	int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
 
@@ -221,4 +229,75 @@ void Enemy::choiceDirections(Vector2f movemoment)
 	} else {
 		directions.directionWalk = NONE_DIRECTION;
 	}
+}
+
+void Enemy::choiceBlock(Field &field)
+{
+	int x;
+	int y;
+	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
+	int level = currentLevelFloor + 1;
+	switch(directions.directionLook)
+	{
+	case DOWN_LEFT:
+		x = getXPos() / SIZE_BLOCK - 1;
+		y = getYPos() / SIZE_BLOCK + 1;
+		if (!isExitFromBorder(x, y))
+		{
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	case DOWN_RIGHT:
+		x = getXPos() / SIZE_BLOCK + 1;
+		y = getYPos() / SIZE_BLOCK + 1;
+		if (!isExitFromBorder(x, y)) {
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	case UP_LEFT:
+		x = getXPos() / SIZE_BLOCK - 1;
+		y = getYPos() / SIZE_BLOCK - 1;
+		if (isExitFromBorder(x, y)) {
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	case UP_RIGHT:
+		x = getXPos() / SIZE_BLOCK + 1;
+		y = getYPos() / SIZE_BLOCK - 1;
+		if (!isExitFromBorder(x, y)) {
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	case LEFT:
+		x = getXPos() / SIZE_BLOCK - 1;
+		y = getYPos() / SIZE_BLOCK;
+		if (!isExitFromBorder(x, y)) {
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	case RIGHT:
+		x = getXPos() / SIZE_BLOCK + 1;
+		y = getYPos() / SIZE_BLOCK;
+		if (!isExitFromBorder(x, y)) {
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	case UP:
+		x = getXPos() / SIZE_BLOCK;
+		y = getYPos() / SIZE_BLOCK - 1;
+		if (!isExitFromBorder(x, y)) {
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	case DOWN:
+		x = getXPos() / SIZE_BLOCK;
+		y = getYPos() / SIZE_BLOCK + 1;
+		if (!isExitFromBorder(x, y)) {
+			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
+		}
+		break;
+	default:
+		break;
+	}
+	
 }
