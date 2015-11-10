@@ -295,7 +295,7 @@ void startGame()
 			////////////////////////////////////////////////////////////
 			// Если персонаж жив
 			if (mainPerson.isDeath == false) {
-				printf("TIMEPERSON %f\n", mainPerson.animation.currentTimeFightAnimation);
+				//printf("TIMEPERSON %f\n", mainPerson.animation.currentTimeFightAnimation);
 				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
 				mainPerson.updateAtack(game->Enemys, game->items, game->typesItem, TIME_PER_FRAME);
 				mainPerson.interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);

@@ -44,8 +44,6 @@ public:
 	void useItem(Field &field, destroyObjectsAndBlocks& listDestroy, const sf::Time &deltaTime,
 							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, std::vector<Enemy> *enemy,
 							 std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
-	void choceShiftUseItem(int &shiftX, int &shiftY);
-	void renderCurrentItem(sf::RenderWindow &window);
 
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 

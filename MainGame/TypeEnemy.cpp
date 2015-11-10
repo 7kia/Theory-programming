@@ -4,7 +4,7 @@
 using namespace sf;
 using namespace std;
 
-void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
+void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &databaseSound)
 {
 	////////////////////////////////////////////////////////////////
 	// Волк
@@ -22,6 +22,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	typeEnemy->features.init(100, 25, 0, 20, 20);
 	typeEnemy->damage.init(5, 0, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
+	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS, RADIUSE_VIEW);
 
 	drop.clear();
@@ -40,6 +41,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	typeEnemy->features.init(75, 0, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
+	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS, RADIUSE_VIEW);
 
 	drop.clear();
@@ -49,6 +51,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound)
 	name = "Empty";
 
 	typeEnemy->featuresSprite.init(0, 0, 0, 0);
+	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, 0, 0);
 
 	drop.clear();
@@ -61,6 +64,11 @@ void enemyFeatures::init(int health, int stamina, int mana, int thirst, int hung
 	maxStamina = stamina;
 	maxThirst = thirst;
 	maxHungry = hungry;
+}
+
+void TypeEnemy::initCurrentItem(TypeItem *typesItem, int id)
+{
+	typeItem = typesItem[id];
 }
 
 void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,

@@ -791,3 +791,101 @@ bool Entity::isInListObjects(String* listObjects, int sizeString) {
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////
+
+void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
+{
+	float percentTime = 1.f - 2.f * animation.currentTimeFightAnimation / animation.timeFightAnimation;
+	shiftX = -spriteEntity->getOrigin().x;
+	shiftY = -spriteEntity->getOrigin().y;
+
+
+	switch (directions.directionLook) {
+	case UP:
+		shiftX -= size.width / 4;
+		shiftY -= size.width / 3;
+		shiftY -= size.width / 4 * percentTime;
+		break;
+	case DOWN:
+		shiftX += size.width / 4;
+		shiftY += size.width / 3;
+		shiftY += size.width / 4 * percentTime;
+		break;
+	case RIGHT:
+		shiftX += size.width / 3;
+		shiftY -= size.width / 4;
+		shiftX -= size.width / 4 * percentTime;
+		break;
+	case LEFT:
+		shiftX -= size.width / 3;
+		shiftY += size.width / 4;
+		shiftX += size.width / 4 * percentTime;
+		break;
+	case UP_RIGHT:
+		shiftX = 0;
+		shiftY -= size.width / 4;
+
+		shiftX -= size.width / 4 * percentTime;
+		shiftY += size.width / 4 * percentTime;
+		break;
+	case UP_LEFT:
+		shiftX -= size.width / 4;
+		shiftY = 0;
+
+		shiftX += size.width / 4 * percentTime;
+		shiftY -= size.width / 4 * percentTime;
+		break;
+	case DOWN_RIGHT:
+		shiftX += size.width / 4;
+		shiftY = 0;
+
+		shiftX -= size.width / 4 * percentTime;
+		shiftY += size.width / 4 * percentTime;
+		break;
+	case DOWN_LEFT:
+		shiftX = 0;
+		shiftY += size.width / 3;
+
+		shiftX += size.width / 4 * percentTime;
+		shiftY += size.width / 4 * percentTime;
+		break;
+	default:
+		break;
+
+	}
+}
+
+void Entity::renderCurrentItem(sf::RenderWindow& window)
+{
+
+	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+	bool isEmptyItem = currentItem.typeItem->features.name == founds.emptyItem->typeItem->features.name;
+	if (!isEmptyItem) {
+		Sprite& spriteItem = *currentItem.mainSprite;
+
+
+		bool condition = directions.directionLook < DOWN_LEFT;
+		bool condition2 = directions.directionLook != UP_LEFT;
+		int shiftAngle = shiftAngleUseItem * (condition && condition2) + !condition * 4;
+		// TODO
+		int shiftX;
+		int shiftY;
+
+		bool prickBlow = rand() % 2;
+		choceShiftUseItem(shiftX, shiftY, prickBlow);
+
+
+
+		Vector2f pos = { getXPos() + size.width / 2 + shiftX,
+			getYPos() + size.width / 2 + shiftY };
+		spriteItem.setOrigin(0, 0);
+		spriteItem.setRotation(45.f * (directions.directionLook - shiftAngle));
+		spriteItem.setScale(scaleUseItems);
+
+		spriteItem.setPosition(pos);
+		window.draw(spriteItem);
+
+		spriteItem.setRotation(0);
+		spriteItem.setScale(normalSize);
+		spriteItem.setOrigin(SIZE_ITEM / 2, SIZE_ITEM / 2);
+	}
+}

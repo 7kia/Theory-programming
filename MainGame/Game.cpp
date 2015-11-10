@@ -26,7 +26,7 @@ void initializeGame(Game & game)
 
 	game.Enemys = new vector<Enemy>;
 
-	initializeTypeEnemy(game.typesEnemy, game.databaseSound);
+	initializeTypeEnemy(game.typesEnemy, game.typesItem, game.databaseSound);
 	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, game.emptyItem, game.emptyObject, game.emptyEnemy);
 
 	initializeMainPerson(game.mainPerson, game.databaseSound, game.emptyItem, game.emptyObject, game.emptyEnemy);
@@ -121,23 +121,23 @@ void renderEntitys(Game &game)
 
 	vector<Enemy>& Enemys = *game.Enemys;
 
+	int enemyLevel;
+	const int personLevel = game.mainPerson.currentLevelFloor;
 	for (int i = 0; i < Enemys.size(); ++i) {
+		enemyLevel = Enemys[i].currentLevelFloor;
+		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
+			printf("ID  %d\n", Enemys[i].idSelectItem);
+			Enemys[i].renderCurrentItem(window);
 
-		if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor - 1) {
-			Enemys[i].spriteEntity->setColor(DOWN_VIEW);
+			Color currentColor;
+			if(personLevel) currentColor = NORMAL_COLOR;
+			else if(personLevel - 1) currentColor = DOWN_VIEW;
+			else if(personLevel + 1) currentColor = UP_VIEW;
+			Enemys[i].spriteEntity->setColor(NORMAL_COLOR);
 			window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
 		}
-		else if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor) {
-			Enemys[i].spriteEntity->setColor(NORMAL_VIEW);
-			window.draw(*Enemys[i].spriteEntity);
-			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
-		}
-		else if (Enemys[i].currentLevelFloor == game.mainPerson.currentLevelFloor + 1) {
-			Enemys[i].spriteEntity->setColor(UP_VIEW);
-			window.draw(*Enemys[i].spriteEntity);
-			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
-		}
+
 	}
 
 }

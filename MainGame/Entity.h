@@ -202,6 +202,10 @@ public:
 	entityProtection protection;
 
 	void initStepSounds(dataSound& databaseSound);
+
+	void choceShiftUseItem(int &shiftX, int &shiftY, bool prickBlow);
+	void renderCurrentItem(sf::RenderWindow &window);
+
 	// Передвижение. Его анимация и озвучка
 	void update(const Time & deltaTime, dataSound &databaseSound);
 	void playAnimationWalk(const Time & deltaTime, dataSound & databaseSound);

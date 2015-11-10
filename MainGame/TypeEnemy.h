@@ -26,8 +26,8 @@ struct TypeEnemy
 	int radiusUse;
 	float radiuseView;
 
-	bool useItem;
-	int amountSlots;
+	TypeItem typeItem;
+	int amountSlots;//TODO
 
 	Step step;
 	enemyFeatures features;
@@ -36,8 +36,9 @@ struct TypeEnemy
 	featuresSprite featuresSprite;
 	objectDropItems drop;
 
+	void initCurrentItem(TypeItem *typesItem, int id);
 	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
 												 int amountEnemySlots, float view);
 };
 
-void initializeTypeEnemy(TypeEnemy *typesEnemy, dataSound &databaseSound);
+void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &databaseSound);

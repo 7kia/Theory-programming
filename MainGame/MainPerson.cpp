@@ -124,11 +124,16 @@ void MainPerson::initStepSounds(dataSound& databaseSound)
 
 void MainPerson::givenForPersonDamage(Enemy &enemy)
 {
+	Item& itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+	typeDamageItem damageEnemyItem = itemEnemy.typeItem->damageItem;
+	DamageInputAndOutput &enemyDamege = enemy.damage;
 	float cutDamage;
 	float crashDamage;
+	float multiplirer = enemyDamege.damageMultiplirer;
 
-	damage.inputCutDamage = enemy.damage.damageMultiplirer * enemy.damage.cuttingDamage;
-	damage.inputCrashDamage = enemy.damage.damageMultiplirer * enemy.damage.crushingDamage;
+
+	damage.inputCutDamage = multiplirer * (enemyDamege.cuttingDamage + damageEnemyItem.cuttingDamage);
+	damage.inputCrashDamage = multiplirer * (enemyDamege.crushingDamage + damageEnemyItem.crushingDamage);
 	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
 	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
@@ -136,7 +141,7 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	damage.inputCrashDamage *= protection.protectionCrash;
 
 	damage.inputDamage = damage.inputCutDamage + damage.inputCrashDamage;
-	health.currentHealth -= inputDamage;
+	health.currentHealth -= damage.inputDamage;
 
 	damage.inputDamage = 0;// TODO
 }
@@ -147,7 +152,7 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
 
-	std::cout << string(findEnemy->type->name) << std::endl;
+
 	if (currenMode == idEntityMode::atack
 			&& findEnemy->type->name != emptyEnemy->type->name) {
 		if (findEnemy->isDeath) {
@@ -582,83 +587,6 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 	}
 
 }
-
-void MainPerson::choceShiftUseItem(int& shiftX, int& shiftY)
-{
-	switch(directions.directionLook)
-	{
-	case UP:
-		shiftX = -size.width / 4;
-		shiftY = -size.width / 3;
-		break;
-	case DOWN:
-		shiftX = size.width / 4;
-		shiftY = size.width / 3;
-		break;
-	case RIGHT:
-		shiftX = +size.width / 3;
-		shiftY = -size.width / 4;
-		break;
-	case LEFT:
-		shiftX = -size.width / 3;
-		shiftY = +size.width / 4;
-		break;
-	case UP_RIGHT:
-		shiftX = 0;
-		shiftY = -size.width / 4;
-		break;
-	case UP_LEFT:
-		shiftX = -size.width / 4;
-		shiftY = 0;
-		break;
-	case DOWN_RIGHT:
-		shiftX = size.width / 4;
-		shiftY = 0;
-		break;
-	case DOWN_LEFT:
-		shiftX = 0;
-		shiftY = size.width / 3;
-		break;
-	default:
-		shiftX = 0;
-		shiftY = 0;
-		break;
-
-	}
-}
-
-void MainPerson::renderCurrentItem(sf::RenderWindow& window)
-{
-
-	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
-	bool isEmptyItem = currentItem.typeItem->features.name == founds.emptyItem->typeItem->features.name;
-	if (!isEmptyItem) {
-		Sprite& spriteItem = *currentItem.mainSprite;
-
-		// TODO
-		int shiftX;
-		int shiftY;
-		choceShiftUseItem(shiftX, shiftY);
-
-		bool condition = directions.directionLook < DOWN_LEFT;
-		bool condition2 = directions.directionLook != UP_LEFT;
-		int shiftAngle = shiftAngleUseItem * (condition && condition2) + !condition * 4;
-
-		Vector2f pos = { getXPos() + size.width / 2 + shiftX,
-										getYPos() + size.width / 2 + shiftY };
-		spriteItem.setOrigin(0, 0);
-		spriteItem.setRotation(45.f * (directions.directionLook - shiftAngle));
-		spriteItem.setScale(scaleUseItems);
-
-		spriteItem.setPosition(pos);
-		window.draw(spriteItem);
-
-		spriteItem.setRotation(0);
-		spriteItem.setScale(normalSize);
-		spriteItem.setOrigin(SIZE_ITEM / 2, SIZE_ITEM / 2);
-	}
-}
-
 
 // Взаимодействие с лестницами
 void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
