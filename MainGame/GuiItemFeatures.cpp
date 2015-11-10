@@ -82,7 +82,7 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 			centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };
 		// то отображаем прочность
 		pos.x -= SIZE_ITEM / 2;
-		pos.y += SIZE_ITEM / 2 - HEIGHT_BARS_GUI * 0.5 * scaleItems.y;
+		pos.y += SIZE_ITEM / 2 - HEIGHT_BARS_GUI * 0.5 * scaleOutItems.y;
 
 		renderBar(bars.bar, pos, window);
 

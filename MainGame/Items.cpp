@@ -64,10 +64,9 @@ float Item::getYPos()
 
 void Item::setType(TypeItem &type)
 {
-	mainSprite = new Sprite;
-
 	typeItem = &type;
 
+	mainSprite = new Sprite;
 	mainSprite->setTexture(*type.textureItem);
 
 	int pixelXPos = type.sizeMain.pixPos.x;
@@ -75,20 +74,20 @@ void Item::setType(TypeItem &type)
 	int width = type.sizeMain.size.width;
 	int height = type.sizeMain.size.height;
 	mainSprite->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
-	mainSprite->scale(scaleItems);// Вне инвентаря предмет будет меньше
+	mainSprite->scale(scaleOutItems);// Вне инвентаря предмет будет меньше
 	mainSprite->setOrigin(width / 2, height / 2);
 
-	/*
+	///*
 	spriteForUse = new Sprite;
 
-	pixelXPos = type.sizeAlternative.pixelXForUse;
-	pixelYPos = type.sizeAlternative.pixelYForUse;
-	width = type.sizeAlternative.widthForUse;
-	height = type.sizeAlternative.heightForUse;
+	pixelXPos = type.sizeAlternative.pixPos.x;
+	pixelYPos = type.sizeAlternative.pixPos.y;
+	width = type.sizeAlternative.size.width;
+	height = type.sizeAlternative.size.width;
 	spriteForUse->setTexture(*type.textureItem);
 	spriteForUse->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
 	spriteForUse->setOrigin(width / 2, height / 2);
-	*/
+	//*/
 	
 
 	maxToughness = type.features.toughness;

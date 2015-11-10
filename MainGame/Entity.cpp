@@ -606,7 +606,7 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		addItem->setPosition(getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK, currentLevelFloor + 1);
 		Vector2f posHero = { getXPos() + size.width / 2, getYPos() + size.height / 2 };// Начало отсчёта не в центре спрайта
 		addItem->mainSprite->setPosition(posHero);
-		addItem->mainSprite->scale(scaleItems);
+		addItem->mainSprite->scale(scaleOutItems);
 		items.push_back(*addItem);
 		delete addItem;
 
