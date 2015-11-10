@@ -181,9 +181,14 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 				enemy->clear();//TODO
 			}
 
-			currenMode = idEntityMode::walk;
-			giveDamage = false;
-			currentItem.currentToughness -= 1;
+			//if (giveDamage) {
+				animation.currentTimeFightAnimation = 0.f;
+
+				currenMode = idEntityMode::walk;
+				giveDamage = false;
+				currentItem.currentToughness -= 1;
+			//}
+			
 
 			if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
 				itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
@@ -193,7 +198,11 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 			currenMode = idEntityMode::atack;
 			//animation.currentTimeFightAnimation += deltaTime.asSeconds();
 			// TODO //enemy->giveDamage//
-			if (giveDamage) {
+			Vector2f posPerson = { getXPos(), getYPos() };
+			Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
+			float distanse = distansePoints(posPerson, posEnemy);
+
+			if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
 				animation.currentTimeFightAnimation = 0.f;
 
 				currenMode = idEntityMode::walk;
