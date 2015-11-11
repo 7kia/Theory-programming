@@ -19,7 +19,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 0; i < 0; i++) {
+	for (size_t i = 1; i <= 0; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -38,7 +38,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	// Скелеты
 	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
 
-	for (size_t i = 0; i < 1; i++) {
+	for (size_t i = 1; i <= 1; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -300,4 +300,104 @@ void Enemy::choiceBlock(Field &field)
 		break;
 	}
 	
+}
+
+void Enemy::checkBlock(Field& field)
+{
+	if(currenMode == idEntityMode::fight)
+	{
+		int x = 0;
+		int y = 0;
+		int level = currentLevelFloor + 1;
+
+		int countCheckingBlocks = RADIUSE_VIEW / SIZE_BLOCK;
+		int count = 1;
+
+		int xShift = 0;
+		int yShift = 0;
+		switch (directions.directionLook) {
+		case DOWN_LEFT:
+			x = getXPos() / SIZE_BLOCK - 1;
+			y = getYPos() / SIZE_BLOCK + 1;
+			xShift = -1;
+			yShift = 1;
+			break;
+		case DOWN_RIGHT:
+			x = getXPos() / SIZE_BLOCK + 1;
+			y = getYPos() / SIZE_BLOCK + 1;
+			xShift = 1;
+			yShift = 1;
+			break;
+		case UP_LEFT:
+			x = getXPos() / SIZE_BLOCK - 1;
+			y = getYPos() / SIZE_BLOCK - 1;
+			xShift = -1;
+			yShift = -1;
+			break;
+		case UP_RIGHT:
+			x = getXPos() / SIZE_BLOCK + 1;
+			y = getYPos() / SIZE_BLOCK - 1;
+			xShift = 1;
+			yShift = -1;
+			break;
+		case LEFT:
+			x = getXPos() / SIZE_BLOCK - 1;
+			y = getYPos() / SIZE_BLOCK;
+			xShift = -1;
+			yShift = 0;
+			break;
+		case RIGHT:
+			x = getXPos() / SIZE_BLOCK + 1;
+			y = getYPos() / SIZE_BLOCK;
+			xShift = 1;
+			yShift = 0;
+			break;
+		case UP:
+			x = getXPos() / SIZE_BLOCK;
+			y = getYPos() / SIZE_BLOCK - 1;
+			xShift = 0;
+			yShift = -1;
+			break;
+		case DOWN:
+			x = getXPos() / SIZE_BLOCK;
+			y = getYPos() / SIZE_BLOCK + 1;
+			xShift = 0;
+			yShift = 1;
+			break;
+		default:
+			break;
+		}
+
+		while (!isExitFromBorder(x, y) && count < countCheckingBlocks) {
+			bool checkX = field.dataMap[level][y + xShift][x] != field.charBlocks[idBlocks::air]
+				|| field.dataMap[level][y][x] != field.charBlocks[idBlocks::air]
+				|| field.dataMap[level][y - xShift][x] != field.charBlocks[idBlocks::air];
+			bool checkY = field.dataMap[level][y][x + yShift] != field.charBlocks[idBlocks::air]
+				|| field.dataMap[level][y][x - yShift] != field.charBlocks[idBlocks::air]
+				|| field.dataMap[level][y][x] != field.charBlocks[idBlocks::air];
+			bool checkXY = field.dataMap[level][y + yShift][x + xShift] != field.charBlocks[idBlocks::air];
+
+			bool summaryCondition = true;
+			if(xShift != 0 && yShift != 0)
+			{
+				summaryCondition &= checkXY;
+			}
+			else if(xShift != 0)
+			{
+				summaryCondition &= checkX;
+			}
+			else if (yShift != 0) {
+				summaryCondition &= checkY;
+			}
+
+			if (summaryCondition) {
+				currenMode = idEntityMode::walk;
+				break;
+			}
+			x += xShift;
+			y += yShift;
+			count++;
+		}
+	}
+
 }

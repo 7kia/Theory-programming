@@ -41,6 +41,7 @@ public:
 	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
 	void choiceDirections(Vector2f movemoment);
 	void choiceBlock(Field &field);
+	void checkBlock(Field &field);
 private:
 
 };

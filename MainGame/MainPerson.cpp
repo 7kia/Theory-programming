@@ -233,49 +233,52 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 	// Если увидел
 	Directions &directions = enemy.directions;
 	entityAnimation &animation = enemy.animation;
-	if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
-		enemy.currenMode = idEntityMode::fight;
 
 
-		movemoment = vectorDirection(enemyPoint, personPoint);
-		enemy.choiceDirections(movemoment);
+		if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
 
-		if (enemy.wasCollision) {
+			enemy.currenMode = idEntityMode::fight;
+			enemy.checkBlock(field);
+			if (enemy.currenMode == idEntityMode::fight) {
+			movemoment = vectorDirection(enemyPoint, personPoint);
+			enemy.choiceDirections(movemoment);
 
-			enemy.choiceBlock(field);
 
-		}
-		else
-		{
-			if (distanse >= SIZE_BLOCK) {
+			if (enemy.wasCollision) {
 
-				enemy.animation.currentTimeFightAnimation = 0.f;
+				enemy.choiceBlock(field);
 
 			} 
-			else {
-				enemy.currenMode = idEntityMode::atack;
-				enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
-				// TODO //enemy->giveDamage//
-				if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+			else 
+			{
+				if (distanse >= SIZE_BLOCK) 
+				{
 					enemy.animation.currentTimeFightAnimation = 0.f;
+				}
+				else 
+				{
+					enemy.currenMode = idEntityMode::atack;
+					enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
+					// TODO //enemy->giveDamage//
+					if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+						enemy.animation.currentTimeFightAnimation = 0.f;
 
-					enemy.currenMode = idEntityMode::fight;
-					enemy.giveDamage = false;
-					givenForPersonDamage(enemy);
+						enemy.currenMode = idEntityMode::fight;
+						enemy.giveDamage = false;
+						givenForPersonDamage(enemy);
+					}
+
+					directions.directionWalk = NONE_DIRECTION;
 				}
 
-				directions.directionWalk = NONE_DIRECTION;
 			}
+
 
 		}
 
 
 	}
-	// Идём дальше
-	else {
-		enemy.currenMode = idEntityMode::walk;
-	}
-
+	
 }
 ////////////////////////////////////////////////////////////////////
 
