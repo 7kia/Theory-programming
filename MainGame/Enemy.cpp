@@ -19,7 +19,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 1; i <= 0; i++) {
+	for (size_t i = 1; i <= 20; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -225,7 +225,7 @@ void Enemy::choiceDirections(Vector2f movemoment)
 	}
 }
 
-void Enemy::choiceDirectionLook(Vector2f movemoment)
+void Enemy::defineDirectionLook(Vector2f movemoment)
 {
 	//TODO
 	float zero = SIZE_BLOCK / 3;
@@ -261,6 +261,13 @@ void Enemy::choiceBlock(Field &field)
 	int y;
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 	int level = currentLevelFloor + 1;
+
+	int xShift = 0;
+	int yShift = 0;
+	choiceDirectionLook(xShift, yShift);
+
+
+	wchar_t air = field.charBlocks[idBlocks::air];
 	switch(directions.directionLook)
 	{
 	case DOWN_LEFT:

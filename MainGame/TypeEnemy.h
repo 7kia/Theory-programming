@@ -14,6 +14,13 @@ struct enemyFeatures
 	void init(int health, int stamina, int mana, int thirst, int hungry);
 };
 
+
+struct viewEnemy
+{
+	bool feelEnemy;
+	float radiuseView;
+	void init(float radiuse, bool feel);
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Сущность
 struct TypeEnemy
@@ -23,8 +30,7 @@ struct TypeEnemy
 
 	sf::Sound *soundsEntity[sizeBuffer];
 
-	int radiusUse;
-	float radiuseView;
+	viewEnemy view;
 
 	TypeItem typeItem;
 	int amountSlots;//TODO
@@ -38,7 +44,7 @@ struct TypeEnemy
 
 	void initCurrentItem(TypeItem *typesItem, int id);
 	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
-												 int amountEnemySlots, float view);
+												 int amountEnemySlots);
 };
 
 void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &databaseSound);

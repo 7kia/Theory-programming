@@ -228,6 +228,7 @@ public:
 	float getXPos();
 	float getYPos();
 
+	void choiceDirectionLook(int &xShift, int &yShift);
 	//////////////////////////////////////////////////////////////////////////////////////////vv
 	// ITEMS
 	// Использование предметов

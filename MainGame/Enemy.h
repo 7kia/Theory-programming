@@ -23,8 +23,6 @@ public:
 	Item *emptyItem;// ИСПРАВЬ
 	int idSelectItem;
 
-	float radiuseView;
-
 	TypeEnemy *type;
 	///////////////////////////////////////////////////////
 	// Для уничтожения врагов
@@ -40,7 +38,7 @@ public:
 
 	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
 	void choiceDirections(Vector2f movemoment);
-	void choiceDirectionLook(Vector2f movemoment);
+	void defineDirectionLook(Vector2f movemoment);
 	void choiceBlock(Field &field);
 	void checkBlock(Field &field);
 private:

@@ -22,8 +22,9 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->features.init(100, 25, 0, 20, 20);
 	typeEnemy->damage.init(5, 0, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
+	typeEnemy->view.init(RADIUSE_VIEW * 2, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS, RADIUSE_VIEW);
+	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -41,8 +42,9 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->features.init(75, 0, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
+	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS, RADIUSE_VIEW);
+	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -52,9 +54,16 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 
 	typeEnemy->featuresSprite.init(0, 0, 0, 0);
 	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, 0, 0);
+	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, 0);
 
 	drop.clear();
+}
+
+
+void viewEnemy::init(float radiuse, bool feel)
+{
+	radiuseView = radiuse;
+	feelEnemy = feel;
 }
 
 void enemyFeatures::init(int health, int stamina, int mana, int thirst, int hungry)
@@ -72,7 +81,7 @@ void TypeEnemy::initCurrentItem(TypeItem *typesItem, int id)
 }
 
 void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
-																	int amountEnemySlots, float view)
+																	int amountEnemySlots)
 {
 	textureEntity = new Texture;
 	textureEntity->loadFromFile(texturePath);
@@ -80,9 +89,6 @@ void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, 
 	amountSlots = amountEnemySlots;
 
 	name = nameEnemy;
-
-	radiusUse = 1;
-	radiuseView = view;
 
 	// TODO
 	soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];

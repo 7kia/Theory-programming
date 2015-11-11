@@ -152,7 +152,6 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
 
-
 	if (currenMode == idEntityMode::atack
 			&& findEnemy->type->name != emptyEnemy->type->name) {
 		if (findEnemy->isDeath) {
@@ -234,15 +233,18 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 	Directions &directions = enemy.directions;
 	entityAnimation &animation = enemy.animation;
 
-
-		if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
+	float radiuseView = enemy.type->view.radiuseView;
+	bool feelEnemy = enemy.type->view.feelEnemy;
+		if (distanse <= radiuseView && currentLevelFloor == enemy.currentLevelFloor) {
 
 			enemy.currenMode = idEntityMode::fight;
 
 			movemoment = vectorDirection(enemyPoint, personPoint);
 
-			enemy.choiceDirectionLook(movemoment);
-			enemy.checkBlock(field);
+			enemy.defineDirectionLook(movemoment);
+
+			if(feelEnemy != true)
+				enemy.checkBlock(field);
 
 
 			if (enemy.currenMode == idEntityMode::fight) {
@@ -251,7 +253,10 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 
 				if (enemy.wasCollision) {
 
-					enemy.choiceBlock(field);
+					String nameCurrentItem = enemy.itemFromPanelQuickAccess[idSelectItem].typeItem->features.name;
+					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+					if (nameCurrentItem != nameEmptyItem)
+						enemy.choiceBlock(field);
 
 				} 
 				else 

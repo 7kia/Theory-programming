@@ -341,6 +341,47 @@ float Entity::getYPos()
 {
 	return spriteEntity->getPosition().y;
 }
+
+void Entity::choiceDirectionLook(int& xShift, int& yShift)
+{
+	switch (directions.directionLook) {
+	case DOWN_LEFT:
+		xShift = -1;
+		yShift = 1;
+		break;
+	case DOWN_RIGHT:
+		xShift = 1;
+		yShift = 1;
+		break;
+	case UP_LEFT:
+		xShift = -1;
+		yShift = -1;
+		break;
+	case UP_RIGHT:
+		xShift = 1;
+		yShift = -1;
+		break;
+	case LEFT:
+		xShift = -1;
+		yShift = 0;
+		break;
+	case RIGHT:
+		xShift = 1;
+		yShift = 0;
+		break;
+	case UP:
+		xShift = 0;
+		yShift = -1;
+		break;
+	case DOWN:
+		xShift = 0;
+		yShift = 1;
+		break;
+	default:
+		break;
+	}
+}
+
 ////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////
