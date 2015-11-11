@@ -26,6 +26,8 @@ struct Step
 	float stepFirst;
 	float stepCurrent;
 
+	Direction direction;
+
 	float timeWalk = 0;
 	float currentTime = 0;
 
@@ -216,7 +218,7 @@ public:
 	void resetTimeAnimation(float &time, float &reset);
 
 	// Взаимодейтсвие с миром
-	void interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
+	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const Time & deltaTime);
 	bool isInUseField(float x, float y, bool under);
 

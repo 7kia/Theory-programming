@@ -38,7 +38,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	// Скелеты
 	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
 
-	for (size_t i = 1; i <= 1; i++) {
+	for (size_t i = 1; i <= 20; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -160,6 +160,7 @@ void Enemy::randomWalk(const Time &deltaTime) {
 
 			int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
 			directions.directionWalk = Direction(randomDirection);
+			step.direction = directions.directionWalk;
 		}
 	}
 	
@@ -197,39 +198,62 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 
 void Enemy::choiceDirections(Vector2f movemoment)
 {
-	float zero = SIZE_BLOCK / 2;
+	//TODO
+	float zero = SIZE_BLOCK / 3;
 
 	bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
 	bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
 
 	if (movemoment.x > zero && movemoment.y > zero) {
 		directions.directionWalk = DOWN_RIGHT;
-		directions.directionLook = DOWN_RIGHT;
 	} else if (movemoment.x < -zero && movemoment.y > zero) {
 		directions.directionWalk = DOWN_LEFT;
-		directions.directionLook = DOWN_LEFT;
 	} else if (movemoment.x < -zero && movemoment.y < -zero) {
 		directions.directionWalk = UP_LEFT;
-		directions.directionLook = UP_LEFT;
 	} else if (movemoment.x > zero && movemoment.y < zero) {
 		directions.directionWalk = UP_RIGHT;
-		directions.directionLook = UP_RIGHT;
 	} else if (movemoment.y >= zero && xAboutZero) {
 		directions.directionWalk = DOWN;
-		directions.directionLook = DOWN;
 	} else if (movemoment.y <= -zero && xAboutZero) {
 		directions.directionWalk = UP;
-		directions.directionLook = UP;
 	} else if (movemoment.x >= zero && yAboutZero) {
 		directions.directionWalk = RIGHT;
-		directions.directionLook = RIGHT;
 	} else if (movemoment.x <= -zero && yAboutZero) {
 		directions.directionWalk = LEFT;
-		directions.directionLook = LEFT;
 	} else {
 		directions.directionWalk = NONE_DIRECTION;
 	}
 }
+
+void Enemy::choiceDirectionLook(Vector2f movemoment)
+{
+	//TODO
+	float zero = SIZE_BLOCK / 3;
+
+	bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
+	bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
+
+	if (movemoment.x > zero && movemoment.y > zero) {
+		directions.directionLook = DOWN_RIGHT;
+	} else if (movemoment.x < -zero && movemoment.y > zero) {
+		directions.directionLook = DOWN_LEFT;
+	} else if (movemoment.x < -zero && movemoment.y < -zero) {
+		directions.directionLook = UP_LEFT;
+	} else if (movemoment.x > zero && movemoment.y < zero) {
+		directions.directionLook = UP_RIGHT;
+	} else if (movemoment.y >= zero && xAboutZero) {
+		directions.directionLook = DOWN;
+	} else if (movemoment.y <= -zero && xAboutZero) {
+		directions.directionLook = UP;
+	} else if (movemoment.x >= zero && yAboutZero) {
+		directions.directionLook = RIGHT;
+	} else if (movemoment.x <= -zero && yAboutZero) {
+		directions.directionLook = LEFT;
+	} else {
+		directions.directionLook = NONE_DIRECTION;
+	}
+}
+
 
 void Enemy::choiceBlock(Field &field)
 {
@@ -369,29 +393,37 @@ void Enemy::checkBlock(Field& field)
 		}
 
 		while (!isExitFromBorder(x, y) && count < countCheckingBlocks) {
-			bool checkX = field.dataMap[level][y + xShift][x] != field.charBlocks[idBlocks::air]
-				|| field.dataMap[level][y][x] != field.charBlocks[idBlocks::air]
-				|| field.dataMap[level][y - xShift][x] != field.charBlocks[idBlocks::air];
-			bool checkY = field.dataMap[level][y][x + yShift] != field.charBlocks[idBlocks::air]
-				|| field.dataMap[level][y][x - yShift] != field.charBlocks[idBlocks::air]
-				|| field.dataMap[level][y][x] != field.charBlocks[idBlocks::air];
+			bool checkX = field.dataMap[level][y][x + xShift] != field.charBlocks[idBlocks::air];
+
+			bool checkY = field.dataMap[level][y + yShift][x] != field.charBlocks[idBlocks::air];
+
 			bool checkXY = field.dataMap[level][y + yShift][x + xShift] != field.charBlocks[idBlocks::air];
 
 			bool summaryCondition = true;
 			if(xShift != 0 && yShift != 0)
 			{
-				summaryCondition &= checkXY;
+				summaryCondition = checkXY;
 			}
-			else if(xShift != 0)
+			if(xShift != 0)
 			{
-				summaryCondition &= checkX;
+				summaryCondition = checkX;
 			}
 			else if (yShift != 0) {
-				summaryCondition &= checkY;
+				summaryCondition = checkY;
 			}
 
 			if (summaryCondition) {
 				currenMode = idEntityMode::walk;
+
+				if(wasCollision)
+				{
+					step.currentTime = 0;
+					step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
+
+					int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
+					directions.directionWalk = Direction(randomDirection);
+				}
+			
 				break;
 			}
 			x += xShift;

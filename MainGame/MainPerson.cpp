@@ -238,51 +238,53 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 		if (distanse <= RADIUSE_VIEW && currentLevelFloor == enemy.currentLevelFloor) {
 
 			enemy.currenMode = idEntityMode::fight;
-			enemy.checkBlock(field);
-			if (enemy.currenMode == idEntityMode::fight) {
+
 			movemoment = vectorDirection(enemyPoint, personPoint);
+
+			enemy.choiceDirectionLook(movemoment);
+			enemy.checkBlock(field);
+
+
+			if (enemy.currenMode == idEntityMode::fight) {
 			enemy.choiceDirections(movemoment);
+				step.currentTime = 0;
 
+				if (enemy.wasCollision) {
 
-			if (enemy.wasCollision) {
+					enemy.choiceBlock(field);
 
-				enemy.choiceBlock(field);
-
-			} 
-			else 
-			{
-				if (distanse >= SIZE_BLOCK) 
-				{
-					enemy.animation.currentTimeFightAnimation = 0.f;
-				}
+				} 
 				else 
 				{
-					enemy.currenMode = idEntityMode::atack;
-					enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
-					// TODO //enemy->giveDamage//
-					if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+					if (distanse >= SIZE_BLOCK) {
 						enemy.animation.currentTimeFightAnimation = 0.f;
+					}
+					else {
+						enemy.currenMode = idEntityMode::atack;
+						enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
+						// TODO //enemy->giveDamage//
+						if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+							enemy.animation.currentTimeFightAnimation = 0.f;
 
-						enemy.currenMode = idEntityMode::fight;
-						enemy.giveDamage = false;
-						givenForPersonDamage(enemy);
+							enemy.currenMode = idEntityMode::fight;
+							enemy.giveDamage = false;
+							givenForPersonDamage(enemy);
+						}
+
+						directions.directionWalk = NONE_DIRECTION;
 					}
 
-					directions.directionWalk = NONE_DIRECTION;
 				}
 
+
 			}
-
-
-		}
-
 
 	}
 	
 }
 ////////////////////////////////////////////////////////////////////
 
-void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
+void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
 												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, vector<Enemy> *enemy,
 												 vector<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
 {
@@ -372,12 +374,15 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 			useBlock(xMouse, yMouse, event, field,
 							 currentItem, typesItems, items,
 							 typesUnlifeObjects, unlifeObjects);
+			findTool = false;
 			break;
 			////////////////////////////////////////////////////////////////////////
 		default:
 			findTool = false;
 			break;
 		}
+
+
 
 		if (findTool == false)
 		{
@@ -544,7 +549,7 @@ void MainPerson::useItem(Field &field, destroyObjectsAndBlocks& listDestroy, con
 }
 
 // Взаимодействие с лестницами
-void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
+void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, listDestroyObjectsAndBlocks& listDestroy,
 														vector<Item> *items, float xPos, float yPos)
 {
 	if (isInUseField(xPos, yPos, true)) {
@@ -571,7 +576,7 @@ void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, d
 	
 }
 
-void MainPerson::actionAlternate(Field &field, vector<UnlifeObject> *unlifeObjects, destroyObjectsAndBlocks& listDestroy,
+void MainPerson::actionAlternate(Field &field, vector<UnlifeObject> *unlifeObjects, listDestroyObjectsAndBlocks& listDestroy,
 																 vector<Item> *items, float xPos, float yPos)
 {
 	if (isInUseField(xPos, yPos, true)) {
@@ -602,10 +607,13 @@ void MainPerson::computeAngle(RenderWindow &window)
 {
 	Vector2i pixelPos = Mouse::getPosition(window);//забираем коорд курсора
 	Vector2f pos = window.mapPixelToCoords(pixelPos);//переводим их в игровые (уходим от коорд окна)
-
 	float dX = pos.x - spriteEntity->getPosition().x - size.width / 2;//вектор , колинеарный прямой, которая пересекает спрайт и курсор
 	float dY = pos.y - spriteEntity->getPosition().y - size.height / 2;//он же, координата y
-	rotation = (atan2(dY, dX)) * 180 / PI;//получаем угол в радианах и переводим его в градусы
+	rotation = (atan2(dX, dY)) * 180 / PI - 90;//получаем угол в радианах и переводим его в градусы
+	if(rotation < 0)
+	{
+		rotation += 360;
+	}
 }
 ////////////////////////////////////////////////////////////////////
 // View

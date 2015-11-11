@@ -8,7 +8,7 @@
 using namespace sf;
 using namespace std;
 
-void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
+void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list, dataSound &databaseSound)
 {
 
 	////////////////////////////////////////////////v
@@ -19,6 +19,7 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 	featuresSprite sizeMain;
 	idCreateObjects idCreated;
 	typeDamageItem damage;
+	destroyObjectsAndBlocks destriy;
 
 	int numberItem = idItem::stoneItem;
 
@@ -373,6 +374,9 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 
 	damage.init(1, 10);
 
+	destriy.init(AMOUNT_BACKHOE_BREAKING_OBJECTS, AMOUNT_BACKHOE_BREAKING_BLOCKS,
+							 list.backoeBreakingObject, list.backoeBreakingBlock);
+
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
 	addType.Init(*pathTexture, featuresAddItem,
@@ -393,6 +397,9 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 
 	damage.init(10, 6);
 
+	destriy.init(AMOUNT_PICKAX_BREAKING_OBJECTS, AMOUNT_PICKAX_BREAKING_BLOCKS,
+							 list.pickaxBreakingObject, list.pickaxBreakingBlock);
+
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
 	addType.Init(*pathTexture, featuresAddItem,
@@ -412,6 +419,9 @@ void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_AXE, PIXEL_Y_STONE_AXE);
 
 	damage.init(8, 8);
+
+	destriy.init(AMOUNT_AXE_BREAKING_OBJECTS, AMOUNT_AXE_BREAKING_BLOCKS,
+							 list.axeBreakingObject, list.axeBreakingBlock);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -467,6 +477,21 @@ void featuresItem::defineToughness(bool destroy, int toughnessItem)
 	isDestroy = destroy;
 	toughness = toughnessItem;
 }
+
+void destroyObjectsAndBlocks::init(int countObjects, int countBlock, sf::String* namesObjects, wchar_t* charBlocks)
+{
+	objects = new String[countObjects];
+	for (int i = 0; i < countObjects; i++)
+	{
+		objects[i] = namesObjects[i];
+	}
+
+	blocks = new wchar_t[countBlock];
+	for (int i = 0; i < countBlock; i++) {
+		blocks[i] = charBlocks[i];
+	}
+}
+
 ////////////////////////////////////////////////////////////////////
 // Виды объектов
 void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,

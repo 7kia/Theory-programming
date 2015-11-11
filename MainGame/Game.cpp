@@ -8,14 +8,14 @@ void initializeGame(Game & game)
 	
 	game.unlifeObjects = new vector<UnlifeObject>;
 	game.items = new vector<Item>;
-	game.listDestroy = new destroyObjectsAndBlocks;
+	game.listDestroy = new listDestroyObjectsAndBlocks;
 
 	game.window.create(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
 	initializeSound(game.databaseSound);
 	initializeField(game.field);
 
-	initializeTypesItem(game.typesItem, game.databaseSound);
+	initializeTypesItem(game.typesItem, *game.listDestroy, game.databaseSound);
 	initializeItems(*game.items, game.typesItem, game.emptyItem);
 
 	initializeTypeUnlifeObjects(*game.typesUnlifeObject, game.databaseSound);
@@ -42,7 +42,7 @@ void initializeGame(Game & game)
 ///*
 void initializeCategorysBreakingObject(Game &game) 
 {
-	destroyObjectsAndBlocks& listDestroy = *game.listDestroy;
+	listDestroyObjectsAndBlocks &listDestroy = *game.listDestroy;
 	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject->typeUnlifeObject;
 	wchar_t* charBlocks = game.field.charBlocks;
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 
+#include "ListObjectsAndBlocks.h"
 #include "Sound.h"
 #include "CommonStructs.h"
 
@@ -29,6 +30,13 @@ struct featuresItem
 	void defineToughness(bool destroy, int toughnessItem);
 };
 
+struct destroyObjectsAndBlocks
+{
+	sf::String *objects;
+	wchar_t *blocks;
+	void init(int countObjects, int countBlock, sf::String *namesObjects, wchar_t *charBlocks);
+};
+
 struct TypeItem {
 public:
 	// Текструра
@@ -39,6 +47,7 @@ public:
 	//Sound *soundsEntity[sizeBuffer];// ИСПРАВЬ
 	featuresItem features;
 
+	destroyObjectsAndBlocks destroy;
 	featuresSprite sizeMain;
 	featuresSprite sizeAlternative;
 	typeDamageItem damageItem;
@@ -49,4 +58,4 @@ public:
 	void InitForUse(sf::String filenameTextureForUse, featuresSprite features);
 };
 
-void initializeTypesItem(TypeItem *typesItem, dataSound &databaseSound);
+void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list, dataSound &databaseSound);

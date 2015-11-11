@@ -42,7 +42,7 @@ struct Game
 	TypeEnemy typesEnemy[amountEnemy];
 	std::vector<Enemy>* Enemys;
 
-	destroyObjectsAndBlocks* listDestroy;
+	listDestroyObjectsAndBlocks* listDestroy;
 
 	Field field;
 

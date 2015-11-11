@@ -311,7 +311,7 @@ void startGame()
 				mainPerson.updateView(game->window);
 				window.setView(*mainPerson.view);
 
-				//printf("Angle %f \n", game->mainPerson->rotation);// ÈÑÏÐÀÂÜ
+				printf("Angle %f \n", game->mainPerson.rotation);// ÈÑÏÐÀÂÜ
 			}
 			////////////////////////////////////////////////////////////
 		}

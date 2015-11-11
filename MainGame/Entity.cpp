@@ -345,7 +345,7 @@ float Entity::getYPos()
 
 ////////////////////////////////////////////////////////////////////
 // Взаимодейтсвие с миром
-void Entity::interactionWithMap(Field &field, destroyObjectsAndBlocks& listDestroy, const Time & deltaTime)
+void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const Time & deltaTime)
 {
 
 	float dx(movement.x);
