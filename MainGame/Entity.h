@@ -154,6 +154,18 @@ struct foundObjects
 	void init(Item *item, UnlifeObject *object);
 };
 
+struct currentCollision
+{
+	int x;
+	int y;
+	int level;
+	wchar_t block;
+	int idObject;
+
+	void initPos(int xPos, int yPos, int zPos);
+	void clear();
+};
+
 class Entity
 {
 public:
@@ -180,6 +192,7 @@ public:
 	int idSelectItem;
 
 	bool wasCollision;
+	currentCollision collision;
 
 	bool isEmptySlot();
 	int emptySlot;

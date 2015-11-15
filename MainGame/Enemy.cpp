@@ -19,7 +19,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 1; i <= 20; i++) {
+	for (size_t i = 1; i <= 10; i++) {
 		countEnemy++;
 		if (countEnemy > AMOUNT_ENTITY) {
 			break;
@@ -268,6 +268,8 @@ void Enemy::choiceBlock(Field &field)
 
 
 	wchar_t air = field.charBlocks[idBlocks::air];
+
+	/*
 	switch(directions.directionLook)
 	{
 	case DOWN_LEFT:
@@ -330,6 +332,9 @@ void Enemy::choiceBlock(Field &field)
 	default:
 		break;
 	}
+	//*/
+	
+	field.dataMap[collision.level][collision.y][collision.x] = air;
 	
 }
 

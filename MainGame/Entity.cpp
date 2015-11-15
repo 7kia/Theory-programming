@@ -25,6 +25,20 @@ void foundObjects::init(Item *item, UnlifeObject *object)
 	findObject = emptyObject;
 }
 
+void currentCollision::initPos(int xPos, int yPos, int zPos)
+{
+	x = xPos;
+	y = yPos;
+	level = zPos;
+}
+
+void currentCollision::clear()
+{
+	initPos(0, 0, 0);
+	block = 0;
+	idObject = 0;
+}
+
 void entityMana::update(const sf::Time deltaTime)
 {
 	timeForMana += deltaTime.asSeconds();
@@ -434,6 +448,10 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 					x = getXPos();
 					y = getYPos();
 					wasCollision = true;
+
+					collision.initPos(j, i, currentLevelFloor + 1);
+					collision.block = map[currentLevelFloor + 1][i][j];
+
 					directions.directionWalk = NONE_DIRECTION;
 					break;
 				}
@@ -463,6 +481,10 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 					x = getXPos();
 					y = getYPos();
 					wasCollision = true;
+
+					collision.initPos(j, i, currentLevelFloor);
+					collision.block = map[currentLevelFloor][i][j];
+
 					directions.directionWalk = NONE_DIRECTION;
 					break;
 				}
@@ -476,6 +498,11 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		y = getYPos();
 		wasCollision = true;
 		directions.directionWalk = NONE_DIRECTION;
+	}
+
+	if(wasCollision == false)
+	{
+		collision.clear();
 	}
 
 	spriteEntity->setPosition(x, y);
