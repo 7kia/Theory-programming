@@ -752,159 +752,60 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 }
 ////////////////////////////////////////////////////////////////////////////////////
 // Способы применения предметов
-void Entity::useTool(float &xMouse, float &yMouse, Event &event, Field &field,
-												 String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
-												 Item &currentItem,
-												 TypeItem *typesItems, vector<Item> *items, vector<UnlifeObject> *unlifeObjects) {
-	if (isInUseField(xMouse, yMouse, true)) {
-		if (event.type == Event::MouseButtonPressed) {
-
-			int level;
-			// Удаляем стену
-			if (event.key.code == Mouse::Left) {
-				level = currentLevelFloor + 1;
-			}
-			// Удаляем пол
-			else if (event.key.code == Mouse::Right) {
-				level = currentLevelFloor;
-			}
-			// Иначе ничего
-			else {
-				level = -1;
-			}
-
-			int x = xMouse / SIZE_BLOCK;
-			int y = yMouse / SIZE_BLOCK;
-			///*
-			wchar_t* block = &field.dataMap[level][y][x];
-			// Ставим блок
-			if (founds.findObject != founds.emptyObject) {
-				if (isInListObjects(listObjects, sizeListObjects)) {
-
-					currentItem.currentToughness -= 1;
-
-					//////////////////////////////////////////////////
-					// Выпадение предметов
-					Item* addItem = new Item;
-					int countItem = founds.findObject->typeObject->drop.minCountItems.size();
-
-					vector<int> &minAmount = founds.findObject->typeObject->drop.minCountItems;
-					vector<int> &maxAmount = founds.findObject->typeObject->drop.maxCountItems;
-					vector<int> &idItems = founds.findObject->typeObject->drop.dropItems;
-
-					int currentAmount;
-					for (int i = 0; i < countItem; i++) {
-
-						currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
-						for (int j = 0; j < currentAmount; j++) {
-							addItem->setType(typesItems[idItems[i]]);
-							addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-							items->push_back(*addItem);
-
-						}
-
-					}
-					delete addItem;
-					//////////////////////////////////////////////////
-
-					unlifeObjects->erase(unlifeObjects->begin() + founds.findObjectFromList);
-
-					if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-						currentItem = *founds.emptyItem;
-					}
-
-
-				}
-			}
-			else if (isInListBlocks(*block, listBlocks)) {
-				currentItem.currentToughness -= 1;
-
-				//////////////////////////////
-				// Выпадение предмета
-				Item* addItem = new Item;
-
-				addItem->setType(typesItems[field.findIdBlock(*block)]);
-				addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-				items->push_back(*addItem);
-
-				delete addItem;
-				//////////////////////////////
-
-				*block = field.charBlocks[idBlocks::air];
-
-				if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-					currentItem = *founds.emptyItem;
-				}
-
-			}
-		}
-	}
-
-}
-
 void Entity::useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,
-													Item & currentItem, TypeItem * typesItems, vector<Item>* items,
-													TypeUnlifeObject * typesUnlifeObjects, vector<UnlifeObject>* unlifeObjects)
+											Item & currentItem, TypeItem * typesItems, vector<Item>* items,
+											TypeUnlifeObject * typesUnlifeObjects, vector<UnlifeObject>* unlifeObjects)
 {
 	if (isInUseField(xMouse, yMouse, false)) {
-		if (event.type == Event::MouseButtonPressed) {
 
-			int x = xMouse / SIZE_BLOCK;
-			int y = yMouse / SIZE_BLOCK;
 
-			int level;
-			// Устанавливаем стену
-			if (event.key.code == Mouse::Left) {
-				level = currentLevelFloor + 1;
+		int x = xMouse / SIZE_BLOCK;
+		int y = yMouse / SIZE_BLOCK;
+
+		int level;
+		defineLevel(level, event);
+
+		bool useForAnyLevel = level > -1;
+		if (useForAnyLevel) {
+			bool successfullUse;
+
+			wchar_t *block = &field.dataMap[level][y][x];
+
+			int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+			int idUseObject = currentItem.typeItem->idAdd.idUnlideOnjectForUse;
+			
+			bool isIdBlock = idUseBlock > -1;
+			bool isAir = *block == field.charBlocks[idBlocks::air];
+			if (isIdBlock && isAir) {
+				*block = field.charBlocks[idUseBlock];
+				successfullUse = true;
 			}
-			// Устанавливаем пол
-			else if (event.key.code == Mouse::Right) {
-				level = currentLevelFloor;
+			// Неживой объет
+			else if (idUseObject > -1) {
+				UnlifeObject* addObject = new UnlifeObject;
+
+				addObject->setType(typesUnlifeObjects[idUseObject]);
+				addObject->setPosition(x + 1, y + 1, currentLevelFloor + 1);
+				unlifeObjects->push_back(*addObject);
+
+				delete addObject;
+				successfullUse = true;
+			} else {
+				successfullUse = false;
 			}
-			// Иначе ничего
-			else {
-				level = -1;
-			}
 
-
-			if (level > -1) {
-				bool successfullUse;
-
-				int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
-				int idUseObject = currentItem.typeItem->idAdd.idUnlideOnjectForUse;
-				// Ставим блок
-				if (idUseBlock > -1
-						&& field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
-					field.dataMap[level][y][x] = field.charBlocks[idUseBlock];
-					successfullUse = true;
+			////////////////////////////////
+			// Если успешно применён
+			if (successfullUse) {
+				// В данном случае обазначает количество// ИСПРАВЬ
+				currentItem.currentToughness -= 1;
+				if (currentItem.currentToughness < 1) {
+					currentItem = *founds.emptyItem;
 				}
-				// Неживой объет
-				else if (idUseObject > -1) {
-					UnlifeObject* addObject = new UnlifeObject;
-
-					addObject->setType(typesUnlifeObjects[idUseObject]);
-					addObject->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-					unlifeObjects->push_back(*addObject);
-
-					delete addObject;
-					successfullUse = true;
-				} else {
-					successfullUse = false;
-				}
-
-				////////////////////////////////
-				// Если успешно применён
-				if (successfullUse) {
-					// В данном случае обазначает количество// ИСПРАВЬ
-					currentItem.currentToughness -= 1;
-					if (currentItem.currentToughness < 1) {
-						currentItem = *founds.emptyItem;
-					}
-				}
-				////////////////////////////////
 			}
-
+			////////////////////////////////
 		}
+
 	}
 }
 

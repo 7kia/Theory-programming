@@ -254,13 +254,21 @@ public:
 
 
 	void useTool(float &xMouse, float &yMouse, Event &event, Field &field,
-							 sf::String* listObjects, wchar_t* listBlocks, int &sizeListObjects,
 							 Item &currentItem,
 							 TypeItem *typesItems, std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects);
 	void useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,
 								Item & currentItem, TypeItem * typesItems, std::vector<Item>* items,
 								TypeUnlifeObject * typesUnlifeObjects, std::vector<UnlifeObject>* unlifeObjects);
 	//////////////////////////////////////////////////////////////////////////////////////////
+	// UseItem.cpp
+	void defineLevel(int &number, sf::Event event);
+	void redefineType(Item &currentItem, TypeItem *typesItems, int shift);
+
+	void useAsBottleWithWater(Item &currentItem, TypeItem *typesItems, sf::Event event);
+	void useAsFood(Item &currentItem, sf::Event event);
+	void useAsEmptyBottle(Item &currentItem, TypeItem *typesItems, Field &field, int level);
+	void useAsEmptyBukket(Item &currentItem, TypeItem *typesItems, Field &field, int level);
+	void useAsBukketWithWater(Item &currentItem, TypeItem *typesItems, sf::Event event, Field &field);
 	//private:
 
 };

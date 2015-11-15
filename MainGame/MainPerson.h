@@ -41,9 +41,11 @@ public:
 	float rotation;
 	void computeAngle(sf::RenderWindow &window);
 
+
 	void useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy, const sf::Time &deltaTime,
 							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, std::vector<Enemy> *enemy,
 							 std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
+
 
 	// кнопка "Дествие" и "Другое действие"
 	void actionMain(Field &field, std::vector<UnlifeObject> *unlifeObjects, listDestroyObjectsAndBlocks& listDestroy,

@@ -33,6 +33,8 @@ struct featuresItem
 struct destroyObjectsAndBlocks
 {
 	sf::String *objects;
+	int amountObjects;
+
 	wchar_t *blocks;
 	void init(int countObjects, int countBlock, sf::String *namesObjects, wchar_t *charBlocks);
 };

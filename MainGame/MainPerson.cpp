@@ -1,9 +1,10 @@
 #include "MainPerson.h"
 #include "ItemsVar.h"
 #include "EntityVar.h"
-#include "Map.h"
 #include "Font.h"
 
+
+#include "UseItem.h"
 using namespace sf;
 using namespace std;
 
@@ -235,7 +236,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 
 	float radiuseView = enemy.type->view.radiuseView;
 	bool feelEnemy = enemy.type->view.feelEnemy;
-		if (distanse <= radiuseView && currentLevelFloor == enemy.currentLevelFloor) {
+	if (distanse <= radiuseView && currentLevelFloor == enemy.currentLevelFloor) {
 
 			enemy.currenMode = idEntityMode::fight;
 
@@ -253,7 +254,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 
 				if (enemy.wasCollision) {
 
-					String nameCurrentItem = enemy.itemFromPanelQuickAccess[idSelectItem].typeItem->features.name;
+					String nameCurrentItem = enemy.itemFromPanelQuickAccess[enemy.idSelectItem].typeItem->features.name;
 					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
 					if (nameCurrentItem != nameEmptyItem)
 						enemy.choiceBlock(field);
@@ -298,10 +299,10 @@ void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy,
 	int x = xMouse / SIZE_BLOCK;
 	int y = yMouse / SIZE_BLOCK;
 	founds.currentTarget = { x, y };
-	// Сначала наносим урон
-	if (findEnemy != emptyEnemy //&& event.type == Event::MouseButtonPressed//&& event.type == Event::MouseMoved
 
-			&& event.key.code == Mouse::Left) {
+	bool isEnemy = findEnemy != emptyEnemy;
+	bool isAtack = event.key.code == Mouse::Left;
+	if (isEnemy && isAtack) {
 
 		if (isInUseField(xMouse, yMouse, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
@@ -316,7 +317,6 @@ void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy,
 
 
 	}
-	// Если это не противник
 	else {
 
 		//currenMode = idEntityMode::walk;
@@ -327,48 +327,12 @@ void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy,
 
 		bool findTool = true;
 
-		// useTool(mouse, world, currentItem);
 		int category = currentItem.typeItem->features.category;
 		switch (category) {
-			////////////////////////////////////////////////////////////////////////
-			// Лопата
 		case idCategoryItem::backhoe:
-
-			sizeListObjects = AMOUNT_BACKHOE_BREAKING_OBJECTS;
-			listObjects = listDestroy.backoeBreakingObject;
-
-			listBlocks = listDestroy.backoeBreakingBlock;
-
-			// useBackhoe(mouse, world, currentItem);
-			useTool(xMouse, yMouse, event, field,
-							listObjects, listBlocks, sizeListObjects,
-							currentItem,
-							typesItems, items, unlifeObjects);
-
-			break;
-			////////////////////////////////////////////////////////////////////////
-			// Кирка
 		case idCategoryItem::pickax:
-			sizeListObjects = AMOUNT_PICKAX_BREAKING_OBJECTS;
-			listObjects = listDestroy.pickaxBreakingObject;
-
-			listBlocks = listDestroy.pickaxBreakingBlock;
-
-			useTool(xMouse, yMouse, event, field,
-							listObjects, listBlocks, sizeListObjects,
-							currentItem,
-							typesItems, items, unlifeObjects);
-			break;
-			////////////////////////////////////////////////////////////////////////
-			// Топор
 		case idCategoryItem::axe:
-			sizeListObjects = AMOUNT_AXE_BREAKING_OBJECTS;
-			listObjects = listDestroy.axeBreakingObject;
-
-			listBlocks = listDestroy.axeBreakingBlock;
-
 			useTool(xMouse, yMouse, event, field,
-							listObjects, listBlocks, sizeListObjects,
 							currentItem,
 							typesItems, items, unlifeObjects);
 			break;
@@ -392,155 +356,30 @@ void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy,
 		if (findTool == false)
 		{
 			switch (category) {
-			////////////////////////////////////////////////////////////////////////
-			// Еда
+
 		case idCategoryItem::food:
-			if (event.key.code == Mouse::Right) {
-				// Утоление голода
-				if (hungry.currentHungry < hungry.maxHungry) {
-					hungry.currentHungry += currentItem.currentToughness;
-					currentItem = *founds.emptyItem;
-				}
-			}
+			useAsFood(currentItem, event);
 			break;
-			////////////////////////////////////////////////////////////////////////
-			// Напитки
 		case idCategoryItem::bukketWithWater:
-			if (thirst.currentThirst < thirst.maxThirst) {
-
-				// Если используем ведро с водой
-				if (event.key.code == Mouse::Left) {
-					int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
-					if (idUseBlock) {
-
-						// Пытаемся вылить на землю
-						int level = currentLevelFloor + 1;
-						if (field.dataMap[level][y][x] == field.charBlocks[idBlocks::air]) {
-							// Выливаем в яму если стена не мешает
-							if (field.dataMap[level - 1][y][x] == field.charBlocks[idBlocks::air]) {
-								field.dataMap[level - 1][y][x] = field.charBlocks[idUseBlock];
-							}
-							// 
-							else {
-								field.dataMap[level][y][x] = field.charBlocks[idUseBlock];
-							}
-						}
-
-
-					}
-				}
-
-				// Утоление жажды
-				if (event.key.code == Mouse::Right) {
-					thirst.currentThirst += currentItem.currentToughness;
-				}
-
-				if (event.key.code == Mouse::Left || event.key.code == Mouse::Right) {
-					// Опустошение бутылки
-					int *idItem = &currentItem.typeItem->features.id;
-					int defineType = *idItem - 1;
-
-					*idItem = defineType + 1;
-
-					currentItem.setType(typesItems[defineType]);
-					currentItem.mainSprite->scale(normalSize);
-
-				}
-
-			}
+			useAsBukketWithWater(currentItem, typesItems, event, field);
 			break;
 		case idCategoryItem::bottleWithWater:
-			if (event.key.code == Mouse::Right) {
-				// Утоление жажды
-				if (thirst.currentThirst < thirst.maxThirst) {
-					// Утоление жажды
-					thirst.currentThirst += currentItem.currentToughness;
-
-					// Опустошение бутылки
-					int *idItem = &currentItem.typeItem->features.id;
-					int defineType = *idItem - 1;
-
-					*idItem = defineType + 1;
-					currentItem.setType(typesItems[defineType]);
-					currentItem.mainSprite->scale(normalSize);
-
-				}
-			}
+			useAsBottleWithWater(currentItem, typesItems, event);
 			break;
-			////////////////////////////////////////////////////////////////////////
-			// Бутылки
 		case idCategoryItem::bukketEmpty:// ИСПРАВЬ
 			if (isInUseField(xMouse, yMouse, true)) {
-				// Наполнение бутылки
-
 				int level;
-				// Берём воду
-				if (event.key.code == Mouse::Left) {
-					level = currentLevelFloor + 1;
-				} else if (event.key.code == Mouse::Right) {
-					level = currentLevelFloor;
-				} else {
-					level = -1;
-				}
-
-
-				if (level > -1) {
-					int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
-					if (idUseBlock) {
-						if (field.dataMap[level][y][x] == field.charBlocks[idUseBlock]) {
-
-							field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-							// Опустошение бутылки
-							int *idItem = &currentItem.typeItem->features.id;
-							int defineType = *idItem + 1;
-
-							*idItem = defineType - 1;
-							currentItem.setType(typesItems[defineType]);
-							currentItem.mainSprite->scale(normalSize);
-
-						}
-					}
-				}
-
+				defineLevel(level, event);
+				useAsEmptyBukket(currentItem, typesItems, field, level);
 			}
 			break;
 		case idCategoryItem::bottleEmpty:// ИСПРАВЬ
 			if (isInUseField(xMouse, yMouse, true)) {
-
-				// Наполнение бутылки
-
 				int level;
-				// Берём воду
-				if (event.key.code == Mouse::Left) {
-					level = currentLevelFloor + 1;
-				} else if (event.key.code == Mouse::Right) {
-					level = currentLevelFloor;
-				} else {
-					level = -1;
-				}
-
-
-				if (level > -1) {
-					int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
-					if (idUseBlock) {
-						if (field.dataMap[level][y][x] == field.charBlocks[idUseBlock]) {
-
-							// Опустошение бутылки
-							int *idItem = &currentItem.typeItem->features.id;
-							int defineType = *idItem + 1;
-
-							*idItem = defineType - 1;
-							currentItem.setType(typesItems[defineType]);
-							currentItem.mainSprite->scale(normalSize);
-
-						}
-					}
-				}
-
-
+				defineLevel(level, event);
+				useAsEmptyBottle(currentItem, typesItems, field, level);
 			}
 			break;
-			////////////////////////////////////////////////////////////////////////
 		case idCategoryItem::other:
 			break;
 		default:
@@ -620,6 +459,7 @@ void MainPerson::computeAngle(RenderWindow &window)
 		rotation += 360;
 	}
 }
+
 ////////////////////////////////////////////////////////////////////
 // View
 void MainPerson::getCoordinateForView(float x, float y)//функция для считывания координат игрока
