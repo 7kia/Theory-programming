@@ -13,7 +13,7 @@
 #include "EntityVar.h"
 
 
-const sf::String TITLE_PROGRAM = "MainGame v1.4.9";
+const sf::String TITLE_PROGRAM = "MainGame v1.5.2";
 
 struct Game
 {

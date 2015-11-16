@@ -236,7 +236,9 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 
 	float radiuseView = enemy.type->view.radiuseView;
 	bool feelEnemy = enemy.type->view.feelEnemy;
-	if (distanse <= radiuseView && currentLevelFloor == enemy.currentLevelFloor) {
+
+	bool onLevel = currentLevelFloor == enemy.currentLevelFloor || feelEnemy;
+	if (distanse <= radiuseView && onLevel) {
 
 			enemy.currenMode = idEntityMode::fight;
 
@@ -262,10 +264,11 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 				} 
 				else 
 				{
+					bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
 					if (distanse >= SIZE_BLOCK) {
 						enemy.animation.currentTimeFightAnimation = 0.f;
 					}
-					else {
+					else if(onLevelEnemy){
 						enemy.currenMode = idEntityMode::atack;
 						enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
 						// TODO //enemy->giveDamage//

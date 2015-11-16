@@ -420,11 +420,14 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		y = getYPos() + dy * deltaTime.asSeconds();
 	}
 
+	wchar_t *charBlocks = field.charBlocks;
+		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+
+
 	// Проверка на выход за карту
 	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
 			&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
-		wchar_t *charBlocks = field.charBlocks;
-		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+	
 
 		bool isSlowingBlock = false;
 		/////////////////////////////////////////////
@@ -503,6 +506,13 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	if(wasCollision == false)
 	{
 		collision.clear();
+	}
+
+	if(map[currentLevelFloor][collision.y][collision.x] == field.charBlocks[idBlocks::air])
+	{
+		currentLevelFloor -= 1;
+		x = collision.x * SIZE_BLOCK;
+		y = collision.y * SIZE_BLOCK;
 	}
 
 	spriteEntity->setPosition(x, y);
