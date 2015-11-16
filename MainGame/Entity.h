@@ -209,12 +209,6 @@ public:
 	//////////////////////////////////////////////////
 	// Индикаторы
 
-	// Показатели
-	sf::Sprite* bar;
-	sf::Sprite* levelHealth;// ИСПРАВЬ
-	sf::Sprite* levelStamina;
-	sf::Sprite* levelMana;
-
 	bool isDeath = false;
 	entityHealth health;
 	entityStamina stamina;

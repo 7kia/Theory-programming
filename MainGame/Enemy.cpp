@@ -44,10 +44,12 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 			break;
 		}
 
-		xPos = 9 + rand() % 5;
-		yPos = 9 + rand() % 5;
+
 		levelFloor = 0;
 		for (int i = 0; i < types.size(); i++) {
+
+		xPos = 9 + rand() % 9;
+		yPos = 9 + rand() % 9;
 			addEnemy->EnemyInit(*types[i], emptyItem, emptyObject, xPos, yPos, levelFloor);
 			world.Enemys->push_back(*addEnemy);
 		}
@@ -347,6 +349,7 @@ void Enemy::choiceBlock(Field &field)
 	if (isInListBlocks(*block, listBlocks)) {
 		*block = air;
 	}
+
 	//bool isObject = founds.findObject != founds.emptyObject;
 	//if (isObject) {
 

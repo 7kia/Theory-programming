@@ -18,7 +18,7 @@ void initializeGame(Game & game)
 	initializeTypesItem(game.typesItem, *game.listDestroy, game.databaseSound);
 	initializeItems(*game.world.items, game.typesItem, game.emptyItem);
 
-	initializeTypeUnlifeObjects(*game.typesUnlifeObject, game.databaseSound);
+	initializeTypeUnlifeObjects(game.typesUnlifeObject, game.databaseSound);
 	initializeUnlifeObjects(*game.world.unlifeObjects, game.typesUnlifeObject, game.emptyObject);
 
 	// TODO
@@ -43,7 +43,7 @@ void initializeGame(Game & game)
 void initializeCategorysBreakingObject(Game &game) 
 {
 	listDestroyObjectsAndBlocks &listDestroy = *game.listDestroy;
-	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject->typeUnlifeObject;
+	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject;
 	wchar_t* charBlocks = game.world.field.charBlocks;
 
 	//////////////////////////////////////

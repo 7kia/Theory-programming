@@ -5,28 +5,28 @@
 using namespace sf;
 using namespace std;
 
-void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypesUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
+void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject)
 {
 	UnlifeObject addObject;
 
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakGrow]);
+	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakGrow]);
 	addObject.setPosition(4, 12, 1);
 	unlifeObjects.push_back(addObject);
 
 	///*
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSmall]);
+	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakSmall]);
 	addObject.setPosition(8, 12, 1);
 	unlifeObjects.push_back(addObject);
 
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::oakSeadling]);
+	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakSeadling]);
 	addObject.setPosition(12, 13, 1);
 	unlifeObjects.push_back(addObject);
 
-	addObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::smallStone]);
+	addObject.setType(typesUnlifeObjects[idUnlifeObject::smallStone]);
 	addObject.setPosition(8, 8, 1);
 	unlifeObjects.push_back(addObject);
 
-	emptyObject.setType(typesUnlifeObjects->typeUnlifeObject[idUnlifeObject::empty]);
+	emptyObject.setType(typesUnlifeObjects[idUnlifeObject::empty]);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -99,11 +99,11 @@ void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 	float numberX = xPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 	float numberY = yPos * SIZE_BLOCK - SIZE_BLOCK / 2;
 
-	int width = typeObject->mainSize.size.width;
-	int height = typeObject->mainSize.size.height;
+	int heightMain = typeObject->mainSize.size.height;
+	int height = typeObject->transparentSize.size.height;
 	currentLevel = Level;
 	spriteObject->setPosition(numberX, numberY);
-	transparentSpiteObject->setPosition(numberX, numberY - width / 2 - height / 2);
+	transparentSpiteObject->setPosition(numberX, numberY - (height - heightMain) / 2);
 
 	// TODO
 	directionWalk = NONE_DIRECTION;

@@ -42,9 +42,8 @@ public:
 	void computeAngle(sf::RenderWindow &window);
 
 
-	void useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy, const sf::Time &deltaTime,
-							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, std::vector<Enemy> *enemy,
-							 std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects, sf::Event &event, float xMouse, float yMouse);
+	void useItem(world &world, listDestroyObjectsAndBlocks& listDestroy, const sf::Time &deltaTime,
+							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, sf::Event &event, float xMouse, float yMouse);
 
 
 	// кнопка "Дествие" и "Другое действие"

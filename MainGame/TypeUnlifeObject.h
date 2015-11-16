@@ -23,10 +23,4 @@ public:
 	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness);
 };
 
-struct TypesUnlifeObject {
-	TypeUnlifeObject *typeUnlifeObject;
-	int countTypeObjects = 0;
-	int maxTypeObject = 256;
-};
-
-void initializeTypeUnlifeObjects(TypesUnlifeObject &typesUnlifeObjects, dataSound &databaseSound);
+void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);

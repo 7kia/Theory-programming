@@ -21,7 +21,7 @@ struct Game
 
 	MainPerson mainPerson;
 
-	TypesUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
+	TypeUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
 
 
 	Item emptyItem;

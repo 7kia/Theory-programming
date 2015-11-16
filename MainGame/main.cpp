@@ -126,9 +126,8 @@ void processEvents(Game &game, const Time &deltaTime)
 			// Оюработка щелчка мыши
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
-				mainPerson.useItem(game.world.field, *game.listDestroy, deltaTime,
-													 game.typesItem, game.typesUnlifeObject->typeUnlifeObject, game.world.Enemys,
-													 game.world.items, game.world.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
+				mainPerson.useItem(game.world, *game.listDestroy, deltaTime,
+													 game.typesItem, game.typesUnlifeObject, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 			}
 			//////////////////////////////////////////////////////////////////////////////////

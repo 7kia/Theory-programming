@@ -302,11 +302,15 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 }
 ////////////////////////////////////////////////////////////////////
 
-void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
-												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, vector<Enemy> *enemy,
-												 vector<Item> *items, vector<UnlifeObject> *unlifeObjects, Event &event, float xMouse, float yMouse)
+void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
+												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, Event &event, float xMouse, float yMouse)
 {
+	Field &field = world.field;
+	vector<Item> &items = *world.items;
+	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+
+
 
 	int x = xMouse / SIZE_BLOCK;
 	int y = yMouse / SIZE_BLOCK;
@@ -347,7 +351,7 @@ void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy,
 			if (isInUseField(xMouse, yMouse, true)) {
 				useTool(event, field,
 								currentItem,
-								typesItems, items, unlifeObjects);
+								typesItems, &items, &unlifeObjects);
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
@@ -355,8 +359,8 @@ void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy,
 		case idCategoryItem::block:
 		case idCategoryItem::unlifeObject:
 			useBlock(xMouse, yMouse, event, field,
-							 currentItem, typesItems, items,
-							 typesUnlifeObjects, unlifeObjects);
+							 currentItem, typesItems, &items,
+							 typesUnlifeObjects, &unlifeObjects);
 			findTool = false;
 			break;
 			////////////////////////////////////////////////////////////////////////

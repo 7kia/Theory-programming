@@ -6,11 +6,9 @@
 using namespace sf;
 using namespace std;
 
-void initializeTypeUnlifeObjects(TypesUnlifeObject &typesUnlifeObjects, dataSound &databaseSound) {
-	typesUnlifeObjects.typeUnlifeObject = new TypeUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
-
+void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound) {
 	////////////////////////////////////////////////////////////////////////////////////////
-	TypeUnlifeObject *typesObject = &typesUnlifeObjects.typeUnlifeObject[idUnlifeObject::oakGrow];
+	TypeUnlifeObject *typesObject = &typesUnlifeObjects[idUnlifeObject::oakGrow];
 
 	String texturePath = texturePaths[idTexturePaths::Trees];
 	String name = "Oak";
@@ -28,9 +26,8 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject &typesUnlifeObjects, dataSoun
 
 	typesObject->drop.init(drop);
 	drop.clear();
-	typesUnlifeObjects.countTypeObjects += 1;
 	////////////////////////////////////////////////////////////////////////////////////////
-	typesObject = &typesUnlifeObjects.typeUnlifeObject[idUnlifeObject::oakSmall];
+	typesObject = &typesUnlifeObjects[idUnlifeObject::oakSmall];
 
 	texturePath = texturePaths[idTexturePaths::Trees];
 	name = "Small oak";
@@ -47,11 +44,9 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject &typesUnlifeObjects, dataSoun
 	drop.addItem(1, 2, idItem::seadlingOakItem);
 
 	typesObject->drop.init(drop);
-	//
-	typesUnlifeObjects.countTypeObjects += 1;
 	////////////////////////////////////////////////////////////////////////////////////////
 	// Саженец дуба
-	typesObject = &typesUnlifeObjects.typeUnlifeObject[idUnlifeObject::oakSeadling];
+	typesObject = &typesUnlifeObjects[idUnlifeObject::oakSeadling];
 
 	texturePath = texturePaths[idTexturePaths::Trees];
 	name = "Seadling oak";
@@ -67,10 +62,8 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject &typesUnlifeObjects, dataSoun
 	drop.addItem(1, 1, idItem::seadlingOakItem);
 
 	typesObject->drop.init(drop);
-	//
-	typesUnlifeObjects.countTypeObjects += 1;
 	////////////////////////////////////////////////////////////////////////////////////////
-	typesObject = &typesUnlifeObjects.typeUnlifeObject[idUnlifeObject::smallStone];
+	typesObject = &typesUnlifeObjects[idUnlifeObject::smallStone];
 	texturePath = texturePaths[idTexturePaths::items];
 	name = "Small stone";
 	canDestroy = true;
@@ -85,13 +78,10 @@ void initializeTypeUnlifeObjects(TypesUnlifeObject &typesUnlifeObjects, dataSoun
 	drop.addItem(1, 1, idItem::stoneItem);
 
 	typesObject->drop.init(drop);
-	//
-	typesUnlifeObjects.countTypeObjects += 1;
 	////////////////////////////////////////////////////////////////////////////////////////
 	// Пустой предмет
-	typesObject = &typesUnlifeObjects.typeUnlifeObject[idUnlifeObject::empty];
+	typesObject = &typesUnlifeObjects[idUnlifeObject::empty];
 	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", false, 0);
-	typesUnlifeObjects.countTypeObjects += 1;
 }
 
 ////////////////////////////////////////////////////////////////////
