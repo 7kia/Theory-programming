@@ -703,40 +703,6 @@ bool Entity::isExitFromBorder(int x, int y)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////
-
-void Entity::takeItem(Field &field, vector<Item> &items, float x, float y)
-{
-	if (founds.findItem->typeItem->features.name != founds.emptyItem->typeItem->features.name) {
-		if (isInUseField(x, y, true)) {
-			//////////////////////////////////////////////////////////////////////////////////////////////////////
-			// Если есть место
-			if (isEmptySlot()) {
-
-
-				////////////////////////////////////////////////////////////////////
-				// Если нашли предмет
-				int levelItem = items[founds.findItemFromList].currentLevel;
-
-				Sprite *spriteItem = items[founds.findItemFromList].mainSprite;
-				FloatRect objectItem = spriteItem->getGlobalBounds();
-
-				if (objectItem.contains(x, y) && levelItem == currentLevelFloor + 1) {
-					// Перемещаем в инвентарь
-					//printf("added!1\n");
-					itemFromPanelQuickAccess[emptySlot] = items[founds.findItemFromList];
-					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
-					// Удаляем из мира
-					items.erase(items.begin() + founds.findItemFromList);
-				}
-				////////////////////////////////////////////////////////////////////
-
-
-			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////
-		}
-	}
-}
-
 void Entity::throwItem(Field &field, vector<Item> &items)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
@@ -885,4 +851,3 @@ void Entity::renderCurrentItem(sf::RenderWindow& window)
 		spriteItem.setOrigin(SIZE_ITEM / 2, SIZE_ITEM / 2);
 	}
 }
-

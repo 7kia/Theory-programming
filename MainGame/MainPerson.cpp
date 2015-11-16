@@ -223,7 +223,8 @@ void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &del
 }
 
 
-void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItems, const Time &deltaTime)
+void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItems, TypeUnlifeObject *typesObject, 
+																 const Time &deltaTime)
 {
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
@@ -240,7 +241,8 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 	float radiuseView = enemy.type->view.radiuseView;
 	bool feelEnemy = enemy.type->view.feelEnemy;
 
-	bool onLevel = currentLevelFloor == enemy.currentLevelFloor || feelEnemy;
+	bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
+	bool onLevel = onLevelEnemy || feelEnemy;
 	if (distanse <= radiuseView && onLevel) {
 
 			enemy.currenMode = idEntityMode::fight;
@@ -258,17 +260,25 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 				enemy.choiceDirections(movemoment);
 				step.currentTime = 0;
 				Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
-
+				
 				if (enemy.wasCollision) {
 
 					String nameCurrentItem = itemEnemy.typeItem->features.name;
 					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
-					if (nameCurrentItem != nameEmptyItem)
+
+					bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
+					bool isNotEmpty = nameCurrentItem != nameEmptyItem;
+					if (isNotEmpty && onLevelEnemy)
+					{
 						enemy.choiceBlock(world, typesItems);
+					}
+					else if(isNotEmpty && isLadder)
+					{
+						enemy.buildLadder(world, typesItems, typesObject);
+					}
 
 				} else {
 
-					bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
 					bool noNearFight = distanse >= SIZE_BLOCK;
 					if (noNearFight) {
 						enemy.animation.currentTimeFightAnimation = 0.f;
@@ -363,11 +373,19 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 			// Блок и неживой объект
 		case idCategoryItem::block:
 		case idCategoryItem::unlifeObject:
+			if (isInUseField(xMouse, yMouse, false)) {
 			int level;
 			defineLevel(level, event);
-			useBlock(xMouse, yMouse, level, world,
-							 currentItem, typesItems,
-							 typesUnlifeObjects);
+
+			int x = founds.currentTarget.x;
+			int y = founds.currentTarget.y;
+			Vector3i pos = { x, y, level };
+
+
+				useBlock(pos, world,
+								 currentItem, typesItems,
+								 typesUnlifeObjects);
+			}
 			findTool = false;
 			break;
 			////////////////////////////////////////////////////////////////////////
@@ -416,60 +434,6 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 	}
 
 }
-
-// Взаимодействие с лестницами
-void MainPerson::actionMain(Field &field, vector<UnlifeObject> *unlifeObjects, listDestroyObjectsAndBlocks& listDestroy,
-														vector<Item> *items, float xPos, float yPos)
-{
-	if (isInUseField(xPos, yPos, true)) {
-		/////////////////////////////////////////////////////////////////////////////
-		// Взаимодейстиве с блоками
-		if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
-			// Если блок лестница
-			int x = xPos / SIZE_BLOCK;
-			int y = yPos / SIZE_BLOCK;
-			if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x]) != NULL) {
-				// Чтобы точка отсчёта была у лестницы
-				spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
-				currentLevelFloor += 1;
-
-			}
-
-		}
-		/////////////////////////////////////////////////////////////////////////////
-		// Взаимодейстиве с предметами
-
-		/////////////////////////////////////////////////////////////////////////////
-
-	}
-	
-}
-
-void MainPerson::actionAlternate(Field &field, vector<UnlifeObject> *unlifeObjects, listDestroyObjectsAndBlocks& listDestroy,
-																 vector<Item> *items, float xPos, float yPos)
-{
-	if (isInUseField(xPos, yPos, true)) {
-		/////////////////////////////////////////////////////////////////////////////
-		// Взаимодейстиве с блоками
-		if (currentLevelFloor >= 1) {
-			int x = xPos / SIZE_BLOCK;
-			int y = yPos / SIZE_BLOCK;
-			// Если блок лестница
-			if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x]) != NULL) {
-				// Чтобы точка отсчёта была у лестницы
-				spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
-				currentLevelFloor -= 1;
-
-			}
-
-		}
-		/////////////////////////////////////////////////////////////////////////////
-		// Взаимодейстиве с предметами
-
-		/////////////////////////////////////////////////////////////////////////////
-	}
-}
-
 ////////////////////////////////////////////////////////////////////
 // Использую потом (не ВКЛЮЧЕНА)
 void MainPerson::computeAngle(RenderWindow &window)

@@ -33,10 +33,11 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 	}
 	//////////////////////////////////////////////////////////////
 	// Скелеты
-	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
+	//types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+	//types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
+	//types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
+	//types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
 
 	for (size_t i = 1; i <= 2; i++) {
 		countEnemy++;
@@ -362,6 +363,32 @@ void Enemy::choiceBlock(world &world, TypeItem *typesItem)
 	
 
 	//}
+
+}
+
+void Enemy::buildLadder(world &world, TypeItem *typesItem, TypeUnlifeObject *typesObject)
+{
+	int x = getXPos() / SIZE_BLOCK;
+	int y = getYPos() / SIZE_BLOCK;
+	int level = currentLevelFloor + 1;//currentLevelFloor + 1;
+
+	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
+
+	Field &field = world.field;
+	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+	wchar_t air = field.charBlocks[idBlocks::air];
+	for (int i = -1; i <= 1; i++)
+	{
+		for (int j = -1; j <= 1; j++) {
+			if (map[level][y + j][x + i] == air) {
+				Vector3i pos = { x + i, y + j, level };
+				useBlock(pos, world, currentItem, typesItem, typesObject);
+			}
+		}
+	}
+
+
+
 
 }
 

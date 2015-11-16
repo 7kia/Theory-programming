@@ -70,7 +70,9 @@ void processEvents(Game &game, const Time &deltaTime)
 			if (event.type == Event::KeyPressed) {
 				if (Keyboard::isKeyPressed(Keyboard::C)) 
 				{
-					mainPerson.actionAlternate(game.world.field, game.world.unlifeObjects, *game.listDestroy, game.world.items, pos.x, pos.y);
+					if (mainPerson.isInUseField(pos.x, pos.y, true)) {
+						mainPerson.actionAlternate(game.world, pos, *game.listDestroy);// »—œ–¿¬‹
+					}
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::Q)) 
 				{
@@ -78,11 +80,13 @@ void processEvents(Game &game, const Time &deltaTime)
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::E)) 
 				{
-					mainPerson.actionMain(game.world.field, game.world.unlifeObjects, *game.listDestroy, game.world.items, pos.x, pos.y);// »—œ–¿¬‹
+					if (mainPerson.isInUseField(pos.x, pos.y, true)) {
+						mainPerson.actionMain(game.world, pos, *game.listDestroy);// »—œ–¿¬‹
+					}
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::R)) 
 				{
-					mainPerson.takeItem(game.world.field, *game.world.items, pos.x, pos.y);
+					mainPerson.takeItem(game.world, pos);
 				}
 				/////////////////////////////////////////////////////////////////////////////////////////
 				// ¡Â„

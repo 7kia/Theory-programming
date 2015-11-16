@@ -249,14 +249,20 @@ public:
 	bool isInListObjects(String * listObjects, int sizeString);
 
 
-	void takeItem(Field &field, std::vector<Item> &items, float x, float y);
+	void takeItem(world &world, sf::Vector2f pos);
 	void throwItem(Field &field, std::vector<Item> &items);
 
+	void breakItem(Item &currentItem);
+
+	void dropObject(Vector2i pos, std::vector<Item> &items, TypeItem* typesItems);
 
 	void useTool(sf::Vector3i pos, world &world, Item &currentItem, TypeItem *typesItems);
-	void useBlock(float & xMouse, float & yMouse, int level, world &world,
+	void useBlock(sf::Vector3i pos, world &world,
 								Item & currentItem, TypeItem * typesItems,
 								TypeUnlifeObject * typesUnlifeObjects);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void actionMain(world &world, sf::Vector2f pos, listDestroyObjectsAndBlocks& listDestroy);
+	void actionAlternate(world &world, sf::Vector2f pos, listDestroyObjectsAndBlocks& listDestroy);
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);
