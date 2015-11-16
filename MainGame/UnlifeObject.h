@@ -45,15 +45,4 @@ private:
 
 };
 
-
-/*
-struct UnlifeObjects
-{
-	UnlifeObject *unlifeObject;
-	int maxObject = 256;
-	int countObject = 0;
-};
-*/
-
-
 void initializeUnlifeObjects(std::vector<UnlifeObject> &unlifeObjects, TypeUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject);

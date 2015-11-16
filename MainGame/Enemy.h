@@ -38,7 +38,7 @@ public:
 	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
 	void choiceDirections(Vector2f movemoment);
 	void defineDirectionLook(Vector2f movemoment);
-	void choiceBlock(Field &field);
+	void choiceBlock(world &world, TypeItem *typesItem);
 	void checkBlock(Field &field);
 private:
 

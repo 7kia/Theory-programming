@@ -259,7 +259,7 @@ void Enemy::defineDirectionLook(Vector2f movemoment)
 }
 
 
-void Enemy::choiceBlock(Field &field)
+void Enemy::choiceBlock(world &world, TypeItem *typesItem)
 {
 
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
@@ -339,7 +339,8 @@ void Enemy::choiceBlock(Field &field)
 	}
 	//*/
 	
-	wchar_t air = field.charBlocks[idBlocks::air];
+	/*
+		wchar_t air = field.charBlocks[idBlocks::air];
 	wchar_t *block = &field.dataMap[level][y][x];
 
 	wchar_t *listBlocks = currentItem.typeItem->destroy.blocks;
@@ -349,6 +350,9 @@ void Enemy::choiceBlock(Field &field)
 	if (isInListBlocks(*block, listBlocks)) {
 		*block = air;
 	}
+	*/
+	Vector3i pos = { x, y, level };
+	useTool(pos, world, currentItem, typesItem);
 
 	//bool isObject = founds.findObject != founds.emptyObject;
 	//if (isObject) {

@@ -264,7 +264,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 					String nameCurrentItem = itemEnemy.typeItem->features.name;
 					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
 					if (nameCurrentItem != nameEmptyItem)
-						enemy.choiceBlock(world.field);
+						enemy.choiceBlock(world, typesItems);
 
 				} else {
 
@@ -349,18 +349,25 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 		case idCategoryItem::pickax:
 		case idCategoryItem::axe:
 			if (isInUseField(xMouse, yMouse, true)) {
-				useTool(event, field,
-								currentItem,
-								typesItems, &items, &unlifeObjects);
+				int level;
+				defineLevel(level, event);
+
+				int x = founds.currentTarget.x;
+				int y = founds.currentTarget.y;
+
+				Vector3i pos = { x, y, level };
+				useTool(pos, world, currentItem, typesItems);
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
 			// Блок и неживой объект
 		case idCategoryItem::block:
 		case idCategoryItem::unlifeObject:
-			useBlock(xMouse, yMouse, event, field,
-							 currentItem, typesItems, &items,
-							 typesUnlifeObjects, &unlifeObjects);
+			int level;
+			defineLevel(level, event);
+			useBlock(xMouse, yMouse, level, world,
+							 currentItem, typesItems,
+							 typesUnlifeObjects);
 			findTool = false;
 			break;
 			////////////////////////////////////////////////////////////////////////

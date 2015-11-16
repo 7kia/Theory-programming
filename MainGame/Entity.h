@@ -8,6 +8,7 @@
 
 #include "EntityVar.h"
 
+struct world;
 struct destroyObjectsAndBlocks;
 struct Field;
 const int AMOUNT_ENTITY = 100;
@@ -252,12 +253,10 @@ public:
 	void throwItem(Field &field, std::vector<Item> &items);
 
 
-	void useTool(Event &event, Field &field,
-							 Item &currentItem,
-							 TypeItem *typesItems, std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects);
-	void useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,
-								Item & currentItem, TypeItem * typesItems, std::vector<Item>* items,
-								TypeUnlifeObject * typesUnlifeObjects, std::vector<UnlifeObject>* unlifeObjects);
+	void useTool(sf::Vector3i pos, world &world, Item &currentItem, TypeItem *typesItems);
+	void useBlock(float & xMouse, float & yMouse, int level, world &world,
+								Item & currentItem, TypeItem * typesItems,
+								TypeUnlifeObject * typesUnlifeObjects);
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);

@@ -757,64 +757,6 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
 	}
 }
-////////////////////////////////////////////////////////////////////////////////////
-// Способы применения предметов
-void Entity::useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,
-											Item & currentItem, TypeItem * typesItems, vector<Item>* items,
-											TypeUnlifeObject * typesUnlifeObjects, vector<UnlifeObject>* unlifeObjects)
-{
-	if (isInUseField(xMouse, yMouse, false)) {
-
-
-		int x = xMouse / SIZE_BLOCK;
-		int y = yMouse / SIZE_BLOCK;
-
-		int level;
-		defineLevel(level, event);
-
-		bool useForAnyLevel = level > -1;
-		if (useForAnyLevel) {
-			bool successfullUse;
-
-			wchar_t *block = &field.dataMap[level][y][x];
-
-			int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
-			int idUseObject = currentItem.typeItem->idAdd.idUnlideOnjectForUse;
-			
-			bool isIdBlock = idUseBlock > -1;
-			bool isAir = *block == field.charBlocks[idBlocks::air];
-			if (isIdBlock && isAir) {
-				*block = field.charBlocks[idUseBlock];
-				successfullUse = true;
-			}
-			// Неживой объет
-			else if (idUseObject > -1) {
-				UnlifeObject* addObject = new UnlifeObject;
-
-				addObject->setType(typesUnlifeObjects[idUseObject]);
-				addObject->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-				unlifeObjects->push_back(*addObject);
-
-				delete addObject;
-				successfullUse = true;
-			} else {
-				successfullUse = false;
-			}
-
-			////////////////////////////////
-			// Если успешно применён
-			if (successfullUse) {
-				// В данном случае обазначает количество// ИСПРАВЬ
-				currentItem.currentToughness -= 1;
-				if (currentItem.currentToughness < 1) {
-					currentItem = *founds.emptyItem;
-				}
-			}
-			////////////////////////////////
-		}
-
-	}
-}
 
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
