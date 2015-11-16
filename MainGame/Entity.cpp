@@ -812,21 +812,29 @@ void Entity::useBlock(float & xMouse, float & yMouse, sf::Event & event, Field &
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
 bool Entity::isInListBlocks(wchar_t block, wchar_t *listBlocks) {
-	int i = 0;
-	while (listBlocks[i] != u'\0') {
-		if (listBlocks[i] == block) {
-			return true;
+	if (listBlocks) {
+		int i = 0;
+		while (listBlocks[i] != u'\0') {
+			if (listBlocks[i] == block) {
+				return true;
+			}
+			i++;
 		}
-		i++;
 	}
+	
 	return false;
 }
 bool Entity::isInListObjects(String* listObjects, int sizeString) {
-	for (size_t i = 0; i < sizeString; i++) {
+	if(listObjects)
+	{
+			for (size_t i = 0; i < sizeString; i++) {
 		if (founds.findObject->typeObject->name == listObjects[i]) {
 			return true;
 		}
 	}
+	}
+
+
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////

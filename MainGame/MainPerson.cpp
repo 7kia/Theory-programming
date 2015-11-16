@@ -332,9 +332,11 @@ void MainPerson::useItem(Field &field, listDestroyObjectsAndBlocks& listDestroy,
 		case idCategoryItem::backhoe:
 		case idCategoryItem::pickax:
 		case idCategoryItem::axe:
-			useTool(xMouse, yMouse, event, field,
-							currentItem,
-							typesItems, items, unlifeObjects);
+			if (isInUseField(xMouse, yMouse, true)) {
+				useTool(event, field,
+								currentItem,
+								typesItems, items, unlifeObjects);
+			}
 			break;
 			////////////////////////////////////////////////////////////////////////
 			// Блок и неживой объект

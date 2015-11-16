@@ -253,7 +253,7 @@ public:
 	void throwItem(Field &field, std::vector<Item> &items);
 
 
-	void useTool(float &xMouse, float &yMouse, Event &event, Field &field,
+	void useTool(Event &event, Field &field,
 							 Item &currentItem,
 							 TypeItem *typesItems, std::vector<Item> *items, std::vector<UnlifeObject> *unlifeObjects);
 	void useBlock(float & xMouse, float & yMouse, sf::Event & event, Field & field,

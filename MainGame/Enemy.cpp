@@ -14,7 +14,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	Enemy* addEnemy = new Enemy();
 
 	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::wolfEnemy];
-	
+	std::vector<TypeEnemy*> types;
 	int xPos;
 	int yPos;
 	int levelFloor;
@@ -36,7 +36,10 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 	}
 	//////////////////////////////////////////////////////////////
 	// Скелеты
-	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
+	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
 
 	for (size_t i = 1; i <= 2; i++) {
 		countEnemy++;
@@ -47,10 +50,12 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 		xPos = 9 + rand() % 5;
 		yPos = 9 + rand() % 5;
 		levelFloor = 0;
+		for (int i = 0; i < types.size(); i++) {
+			addEnemy->EnemyInit(*types[i], emptyItem, emptyObject, xPos, yPos, levelFloor);
+			enemy.push_back(*addEnemy);
+		}
 
-		addEnemy->EnemyInit(*typeEnemy, emptyItem, emptyObject, xPos, yPos, levelFloor);
-
-		enemy.push_back(*addEnemy);
+		
 
 	}
 	//////////////////////////////////////////////////////////////
@@ -257,17 +262,18 @@ void Enemy::defineDirectionLook(Vector2f movemoment)
 
 void Enemy::choiceBlock(Field &field)
 {
-	int x;
-	int y;
+
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
-	int level = currentLevelFloor + 1;
+
+	int x = collision.x;
+	int y = collision.y;
+	int level = collision.level;//currentLevelFloor + 1;
 
 	int xShift = 0;
 	int yShift = 0;
 	choiceDirectionLook(xShift, yShift);
 
 
-	wchar_t air = field.charBlocks[idBlocks::air];
 
 	/*
 	switch(directions.directionLook)
@@ -334,8 +340,24 @@ void Enemy::choiceBlock(Field &field)
 	}
 	//*/
 	
-	field.dataMap[collision.level][collision.y][collision.x] = air;
+	wchar_t air = field.charBlocks[idBlocks::air];
+	wchar_t *block = &field.dataMap[level][y][x];
+
+	wchar_t *listBlocks = currentItem.typeItem->destroy.blocks;
+	String *listObjects = currentItem.typeItem->destroy.objects;
+	int countObjects = currentItem.typeItem->destroy.amountObjects;
+
 	
+	if (isInListBlocks(*block, listBlocks)) {
+		*block = air;
+	}
+	//bool isObject = founds.findObject != founds.emptyObject;
+	//if (isObject) {
+
+	
+
+	//}
+
 }
 
 void Enemy::checkBlock(Field& field)

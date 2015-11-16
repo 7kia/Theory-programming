@@ -19,6 +19,10 @@ enum idEnemy
 {
 	wolfEnemy,
 	skeletEnemy,
+	skeletMinerEnemy,
+	skeletLumbermillEnemy,
+	skeletDiggerEnemy,
+	skeletBuilderEnemy,
 	emptyEnemy,
 	amountEnemy
 };
