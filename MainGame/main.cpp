@@ -71,7 +71,7 @@ void processEvents(Game &game, const Time &deltaTime)
 				if (Keyboard::isKeyPressed(Keyboard::C)) 
 				{
 					if (mainPerson.isInUseField(pos.x, pos.y, true)) {
-						mainPerson.actionAlternate(game.world, pos, *game.listDestroy);// ÈÑÏÐÀÂÜ
+						mainPerson.actionAlternate(game.world, pos);// ÈÑÏÐÀÂÜ
 					}
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::Q)) 
@@ -81,7 +81,7 @@ void processEvents(Game &game, const Time &deltaTime)
 				else if (Keyboard::isKeyPressed(Keyboard::E)) 
 				{
 					if (mainPerson.isInUseField(pos.x, pos.y, true)) {
-						mainPerson.actionMain(game.world, pos, *game.listDestroy);// ÈÑÏÐÀÂÜ
+						mainPerson.actionMain(game.world, pos);// ÈÑÏÐÀÂÜ
 					}
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::R)) 
@@ -130,7 +130,7 @@ void processEvents(Game &game, const Time &deltaTime)
 			// Îþðàáîòêà ùåë÷êà ìûøè
 			if (event.type == Event::MouseButtonPressed) {
 				// Èñïîëüçîâàíèå ïðåäìåòà
-				mainPerson.useItem(game.world, *game.listDestroy, deltaTime,
+				mainPerson.useItem(game.world, *game.world.listDestroy, deltaTime,
 													 game.typesItem, game.typesUnlifeObject, event, pos.x, pos.y);// ÈÑÏÐÀÂÜ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ÈÑÏÐÀÂÜ
 			}
@@ -301,7 +301,7 @@ void startGame()
 				//printf("TIMEPERSON %f\n", mainPerson.animation.currentTimeFightAnimation);
 				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
 				mainPerson.updateAtack(game->world, game->typesItem, TIME_PER_FRAME);
-				mainPerson.interactionWithMap(game->world.field, *game->listDestroy, TIME_PER_FRAME);
+				mainPerson.interactionWithMap(game->world.field, *game->world.listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->world.unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 

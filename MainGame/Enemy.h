@@ -40,6 +40,7 @@ public:
 	void defineDirectionLook(Vector2f movemoment);
 	void choiceBlock(world &world, TypeItem *typesItem);
 	void buildLadder(world &world, TypeItem *typesItem, TypeUnlifeObject *typesObject);
+	void findLadder(world &world, TypeItem *typesItem, sf::Vector3i pos);
 	void checkBlock(Field &field);
 private:
 

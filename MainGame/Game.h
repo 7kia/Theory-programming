@@ -38,8 +38,6 @@ struct Game
 	Enemy emptyEnemy;
 	TypeEnemy typesEnemy[amountEnemy];
 
-	listDestroyObjectsAndBlocks* listDestroy;
-
 	sf::Clock clock;
 
 	dataSound databaseSound;

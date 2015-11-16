@@ -33,10 +33,10 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 	}
 	//////////////////////////////////////////////////////////////
 	// Скелеты
-	//types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	//types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	//types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	//types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
 
 	for (size_t i = 1; i <= 2; i++) {
@@ -390,6 +390,25 @@ void Enemy::buildLadder(world &world, TypeItem *typesItem, TypeUnlifeObject *typ
 
 
 
+}
+
+void Enemy::findLadder(world &world, TypeItem *typesItem, Vector3i pos)
+{
+	int x = getXPos() / SIZE_BLOCK;
+	int y = getYPos() / SIZE_BLOCK;
+	int level = pos.z;//currentLevelFloor + 1;
+
+	Field &field = world.field;
+	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+	wchar_t ladder = field.charBlocks[idBlocks::woodLadder];
+	for (int i = -1; i <= 1; i++) {
+		for (int j = -1; j <= 1; j++) {
+			if (map[level][y + j][x + i] == ladder) {
+				Vector2f posLadder = { getXPos() + i * SIZE_BLOCK / 2,  getYPos() + j * SIZE_BLOCK / 2 };
+				actionMain(world, posLadder);
+			}
+		}
+	}
 }
 
 void Enemy::checkBlock(Field& field)

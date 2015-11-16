@@ -261,8 +261,8 @@ public:
 								Item & currentItem, TypeItem * typesItems,
 								TypeUnlifeObject * typesUnlifeObjects);
 	//////////////////////////////////////////////////////////////////////////////////////////
-	void actionMain(world &world, sf::Vector2f pos, listDestroyObjectsAndBlocks& listDestroy);
-	void actionAlternate(world &world, sf::Vector2f pos, listDestroyObjectsAndBlocks& listDestroy);
+	void actionMain(world &world, sf::Vector2f pos);
+	void actionAlternate(world &world, sf::Vector2f pos);
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);

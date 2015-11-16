@@ -263,6 +263,14 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 				
 				if (enemy.wasCollision) {
 
+					if (!onLevelEnemy && feelEnemy) {
+						Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK),
+						int(enemy.getXPos() / SIZE_BLOCK),
+						enemy.collision.level };
+						enemy.findLadder(world, typesItems, posEnemy);
+					}
+
+
 					String nameCurrentItem = itemEnemy.typeItem->features.name;
 					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
 

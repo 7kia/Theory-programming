@@ -8,14 +8,14 @@ void initializeGame(Game & game)
 	
 	game.world.unlifeObjects = new vector<UnlifeObject>;
 	game.world.items = new vector<Item>;
-	game.listDestroy = new listDestroyObjectsAndBlocks;
+	game.world.listDestroy = new listDestroyObjectsAndBlocks;
 
 	game.window.create(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
 	initializeSound(game.databaseSound);
 	initializeField(game.world.field);
 
-	initializeTypesItem(game.typesItem, *game.listDestroy, game.databaseSound);
+	initializeTypesItem(game.typesItem, *game.world.listDestroy, game.databaseSound);
 	initializeItems(*game.world.items, game.typesItem, game.emptyItem);
 
 	initializeTypeUnlifeObjects(game.typesUnlifeObject, game.databaseSound);
@@ -42,7 +42,7 @@ void initializeGame(Game & game)
 ///*
 void initializeCategorysBreakingObject(Game &game) 
 {
-	listDestroyObjectsAndBlocks &listDestroy = *game.listDestroy;
+	listDestroyObjectsAndBlocks &listDestroy = *game.world.listDestroy;
 	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject;
 	wchar_t* charBlocks = game.world.field.charBlocks;
 
@@ -107,7 +107,7 @@ void updateEntity(Game& game, const Time deltaTime)
 	Field &field = game.world.field;
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime, game.databaseSound);
-		Enemys[i].interactionWithMap(field, *game.listDestroy, deltaTime);
+		Enemys[i].interactionWithMap(field, *game.world.listDestroy, deltaTime);
 		game.mainPerson.attractionEnemy(Enemys[i], game.world, game.typesItem, game.typesUnlifeObject, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
