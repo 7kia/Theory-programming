@@ -1,10 +1,7 @@
-#include "Enemy.h"
-#include "Items.h"
-#include "UnlifeObject.h"
+#include "World.h"
 #include "EntityVar.h"
-#include "Map.h"
 
-void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
+void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 											 Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy)// днаюбкемхе ясымнярх 
 {
 
@@ -31,7 +28,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 
 		addEnemy->EnemyInit(*typeEnemy, emptyItem, emptyObject, xPos, yPos, levelFloor);
 
-		enemy.push_back(*addEnemy);
+		world.Enemys->push_back(*addEnemy);
 
 	}
 	//////////////////////////////////////////////////////////////
@@ -52,7 +49,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int cou
 		levelFloor = 0;
 		for (int i = 0; i < types.size(); i++) {
 			addEnemy->EnemyInit(*types[i], emptyItem, emptyObject, xPos, yPos, levelFloor);
-			enemy.push_back(*addEnemy);
+			world.Enemys->push_back(*addEnemy);
 		}
 
 		
@@ -347,13 +344,14 @@ void Enemy::choiceBlock(Field &field)
 	String *listObjects = currentItem.typeItem->destroy.objects;
 	int countObjects = currentItem.typeItem->destroy.amountObjects;
 
-	
 	if (isInListBlocks(*block, listBlocks)) {
 		*block = air;
 	}
 	//bool isObject = founds.findObject != founds.emptyObject;
 	//if (isObject) {
 
+	// Building
+	//field.dataMap[currentLevelFloor][y][x] = currentItem.typeItem->idAdd.idBlockForUse;
 	
 
 	//}

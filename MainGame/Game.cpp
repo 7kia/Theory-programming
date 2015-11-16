@@ -6,28 +6,28 @@ using namespace std;
 void initializeGame(Game & game)
 {
 	
-	game.unlifeObjects = new vector<UnlifeObject>;
-	game.items = new vector<Item>;
+	game.world.unlifeObjects = new vector<UnlifeObject>;
+	game.world.items = new vector<Item>;
 	game.listDestroy = new listDestroyObjectsAndBlocks;
 
 	game.window.create(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
 	initializeSound(game.databaseSound);
-	initializeField(game.field);
+	initializeField(game.world.field);
 
 	initializeTypesItem(game.typesItem, *game.listDestroy, game.databaseSound);
-	initializeItems(*game.items, game.typesItem, game.emptyItem);
+	initializeItems(*game.world.items, game.typesItem, game.emptyItem);
 
 	initializeTypeUnlifeObjects(*game.typesUnlifeObject, game.databaseSound);
-	initializeUnlifeObjects(*game.unlifeObjects, game.typesUnlifeObject, game.emptyObject);
+	initializeUnlifeObjects(*game.world.unlifeObjects, game.typesUnlifeObject, game.emptyObject);
 
 	// TODO
 	initializeCategorysBreakingObject(game);
 
-	game.Enemys = new vector<Enemy>;
+	game.world.Enemys = new vector<Enemy>;
 
 	initializeTypeEnemy(game.typesEnemy, game.typesItem, game.databaseSound);
-	initializeEntitys(game.typesEnemy, *game.Enemys, game.countEntity, game.emptyItem, game.emptyObject, game.emptyEnemy);
+	initializeEntitys(game.typesEnemy, game.world, game.countEntity, game.emptyItem, game.emptyObject, game.emptyEnemy);
 
 	initializeMainPerson(game.mainPerson, game.databaseSound, game.emptyItem, game.emptyObject, game.emptyEnemy);
 
@@ -44,7 +44,7 @@ void initializeCategorysBreakingObject(Game &game)
 {
 	listDestroyObjectsAndBlocks &listDestroy = *game.listDestroy;
 	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject->typeUnlifeObject;
-	wchar_t* charBlocks = game.field.charBlocks;
+	wchar_t* charBlocks = game.world.field.charBlocks;
 
 	//////////////////////////////////////
 	// Блоки уничтожаемые лопатой
@@ -103,11 +103,12 @@ void initializeCategorysBreakingObject(Game &game)
 
 void updateEntity(Game& game, const Time deltaTime)
 {
-	vector<Enemy>& Enemys = *game.Enemys;
+	vector<Enemy>& Enemys = *game.world.Enemys;
+	Field &field = game.world.field;
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime, game.databaseSound);
-		Enemys[i].interactionWithMap(game.field, *game.listDestroy, deltaTime);
-		game.mainPerson.attractionEnemy(Enemys[i], game.field, deltaTime);
+		Enemys[i].interactionWithMap(field, *game.listDestroy, deltaTime);
+		game.mainPerson.attractionEnemy(Enemys[i], game.world, game.typesItem, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
 }
@@ -119,7 +120,7 @@ void renderEntitys(Game &game)
 {
 	RenderWindow& window = game.window;
 
-	vector<Enemy>& Enemys = *game.Enemys;
+	vector<Enemy>& Enemys = *game.world.Enemys;
 
 	int enemyLevel;
 	const int personLevel = game.mainPerson.currentLevelFloor;
@@ -150,7 +151,7 @@ void destroyGame(Game & game)
 void informationAboutSelect(Game &game, float x, float y)
 {
 
-	Field &field = game.field;
+	Field &field = game.world.field;
 	TextGame &textGame = game.textGame;
 	MainPerson &mainPerson = game.mainPerson;
 
@@ -186,7 +187,7 @@ void informationAboutSelect(Game &game, float x, float y)
 		}
 	}
 
-	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
+	vector<UnlifeObject> &unlifeObjects = *game.world.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
 
@@ -218,7 +219,7 @@ void informationAboutSelect(Game &game, float x, float y)
 
 	}
 
-	vector<Item> &items = *game.items;
+	vector<Item> &items = *game.world.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
 	mainPerson.founds.findItemFromList = -1;
@@ -248,7 +249,7 @@ void informationAboutSelect(Game &game, float x, float y)
 
 	}
 
-	vector<Enemy>& Enemys = *game.Enemys;
+	vector<Enemy>& Enemys = *game.world.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
 	mainPerson.findEnemy = &game.emptyEnemy;

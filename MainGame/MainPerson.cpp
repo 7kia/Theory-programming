@@ -1,4 +1,4 @@
-#include "MainPerson.h"
+
 #include "ItemsVar.h"
 #include "EntityVar.h"
 #include "Font.h"
@@ -132,7 +132,6 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	float crashDamage;
 	float multiplirer = enemyDamege.damageMultiplirer;
 
-
 	damage.inputCutDamage = multiplirer * (enemyDamege.cuttingDamage + damageEnemyItem.cuttingDamage);
 	damage.inputCrashDamage = multiplirer * (enemyDamege.crushingDamage + damageEnemyItem.crushingDamage);
 	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
@@ -148,10 +147,12 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 }
 
 
-void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem *typesItems, const Time &deltaTime)
+void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
-
+	Field &field = world.field;
+	vector<Enemy> &enemy = *world.Enemys;
+	vector<Item> &items = *world.items;
 
 	if (currenMode == idEntityMode::atack
 			&& findEnemy->type->name != emptyEnemy->type->name) {
@@ -165,6 +166,8 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 			vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
 			vector<int> &idItems = typeEnemy.drop.dropItems;
 
+			findEnemy->throwItem(field, items);
+
 			int currentAmount;
 			for (int i = 0; i < countItem; i++) {
 
@@ -172,18 +175,18 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 				for (int j = 0; j < currentAmount; j++) {
 					addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
 					addItem->setPosition(founds.currentTarget.x + 1, founds.currentTarget.y + 1, currentLevelFloor + 1);
-					items->push_back(*addItem);
+					world.items->push_back(*addItem);
 
 				}
 
 			}
 			delete addItem;
 			if (findEnemyFromList) {
-				enemy->erase(enemy->begin() + findEnemyFromList);
+				enemy.erase(enemy.begin() + findEnemyFromList);
 			}
 			else
 			{
-				enemy->clear();//TODO
+				enemy.clear();//TODO
 			}
 
 			//if (giveDamage) {
@@ -220,7 +223,7 @@ void MainPerson::updateAtack(vector<Enemy> *enemy, vector<Item> *items, TypeItem
 }
 
 
-void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTime)
+void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItems, const Time &deltaTime)
 {
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
@@ -247,37 +250,43 @@ void MainPerson::attractionEnemy(Enemy &enemy, Field &field, const Time &deltaTi
 			enemy.defineDirectionLook(movemoment);
 
 			if(feelEnemy != true)
-				enemy.checkBlock(field);
+				enemy.checkBlock(world.field);
 
 
 			if (enemy.currenMode == idEntityMode::fight) {
-			enemy.choiceDirections(movemoment);
+
+				enemy.choiceDirections(movemoment);
 				step.currentTime = 0;
+				Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
 
 				if (enemy.wasCollision) {
 
-					String nameCurrentItem = enemy.itemFromPanelQuickAccess[enemy.idSelectItem].typeItem->features.name;
+					String nameCurrentItem = itemEnemy.typeItem->features.name;
 					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
 					if (nameCurrentItem != nameEmptyItem)
-						enemy.choiceBlock(field);
+						enemy.choiceBlock(world.field);
 
-				} 
-				else 
-				{
+				} else {
+
 					bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
-					if (distanse >= SIZE_BLOCK) {
+					bool noNearFight = distanse >= SIZE_BLOCK;
+					if (noNearFight) {
 						enemy.animation.currentTimeFightAnimation = 0.f;
-					}
-					else if(onLevelEnemy){
+					} else if (onLevelEnemy) {
 						enemy.currenMode = idEntityMode::atack;
+
 						enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
-						// TODO //enemy->giveDamage//
 						if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
 							enemy.animation.currentTimeFightAnimation = 0.f;
 
 							enemy.currenMode = idEntityMode::fight;
 							enemy.giveDamage = false;
 							givenForPersonDamage(enemy);
+
+							itemEnemy.currentToughness -= 1;
+							if (itemEnemy.currentToughness < 1) {
+								redefineType(itemEnemy, typesItems, -itemEnemy.typeItem->features.id);
+							}
 						}
 
 						directions.directionWalk = NONE_DIRECTION;

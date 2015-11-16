@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include "TypeEnemy.h"
-
 struct TypeEnemy;
 class UnlifeObject;
 
@@ -53,6 +52,3 @@ struct foundsByEnemy
 	int findEnemyFromList;
 	void init(Item &item, UnlifeObject &object, Enemy &enemy);
 };
-
-void initializeEntitys(TypeEnemy *typesEnemy, std::vector<Enemy> &enemy, int countEnemy,
-											 Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy);

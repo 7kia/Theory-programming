@@ -5,15 +5,12 @@
 
 #include "Font.h"
 #include "GUI.h"
-#include "UnlifeObject.h"
-#include "TypeItems.h"
-#include "Items.h"
-#include "ListObjectsAndBlocks.h"
-#include "Map.h"
+
 #include "EntityVar.h"
 
 
 const sf::String TITLE_PROGRAM = "MainGame v1.5.2";
+
 
 struct Game
 {
@@ -25,14 +22,14 @@ struct Game
 	MainPerson mainPerson;
 
 	TypesUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
-	std::vector<UnlifeObject>* unlifeObjects;
+
 
 	Item emptyItem;
 	UnlifeObject emptyObject;
 
 	TypeItem typesItem[AMOUNT_TYPES_ITEM];
-	std::vector<Item>* items;
-
+	
+	world world;
 	////////////////////////////////////
 	// Ходьба по карте(для противников
 	float minTimeWalk = 4.f;
@@ -40,11 +37,8 @@ struct Game
 
 	Enemy emptyEnemy;
 	TypeEnemy typesEnemy[amountEnemy];
-	std::vector<Enemy>* Enemys;
 
 	listDestroyObjectsAndBlocks* listDestroy;
-
-	Field field;
 
 	sf::Clock clock;
 

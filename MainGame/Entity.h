@@ -4,6 +4,9 @@
 #include "ListObjectsAndBlocks.h"
 #include "Items.h"
 #include "UnlifeObject.h"
+#include "Map.h"
+
+#include "EntityVar.h"
 
 struct destroyObjectsAndBlocks;
 struct Field;
@@ -192,6 +195,8 @@ public:
 	int idSelectItem;
 
 	bool wasCollision;
+	bool enemyUp;
+	bool enemyDown;
 	currentCollision collision;
 
 	bool isEmptySlot();

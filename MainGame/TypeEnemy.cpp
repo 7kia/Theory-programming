@@ -102,6 +102,24 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
+	typeEnemy = &typesEnemy[idEnemy::skeletBuilderEnemy];
+
+	name = "Skelet builder";
+
+	drop.addItem(1, 2, idItem::dirtItem);
+
+	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
+	typeEnemy->protection.init(0.f, 1.f);
+	typeEnemy->step.init(SPEED_ENTITY);
+	typeEnemy->features.init(75, 0, 0, 20, 20);
+	typeEnemy->damage.init(0, 5, 1.f, 1.f);
+	typeEnemy->drop.init(drop);
+	typeEnemy->view.init(RADIUSE_VIEW, true);
+	typeEnemy->initCurrentItem(typesItem, idItem::woodLadderItem);
+	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
+
+	drop.clear();
+	////////////////////////////////////////////////////////////////
 	typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
 
 	name = "Empty";

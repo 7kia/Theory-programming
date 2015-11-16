@@ -328,7 +328,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	numberItem = idItem::stoneKnifeItem;
 
 	featuresAddItem.init("Stone knife", numberItem, idCategoryItem::weapon);
-	featuresAddItem.defineToughness(true, 128);
+	featuresAddItem.defineToughness(true, 2);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_KNIFE, PIXEL_Y_STONE_KNIFE);
 

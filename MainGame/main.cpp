@@ -70,19 +70,19 @@ void processEvents(Game &game, const Time &deltaTime)
 			if (event.type == Event::KeyPressed) {
 				if (Keyboard::isKeyPressed(Keyboard::C)) 
 				{
-					mainPerson.actionAlternate(game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);
+					mainPerson.actionAlternate(game.world.field, game.world.unlifeObjects, *game.listDestroy, game.world.items, pos.x, pos.y);
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::Q)) 
 				{
-					mainPerson.throwItem(game.field, *game.items);
+					mainPerson.throwItem(game.world.field, *game.world.items);
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::E)) 
 				{
-					mainPerson.actionMain(game.field, game.unlifeObjects, *game.listDestroy, game.items, pos.x, pos.y);// ИСПРАВЬ
+					mainPerson.actionMain(game.world.field, game.world.unlifeObjects, *game.listDestroy, game.world.items, pos.x, pos.y);// ИСПРАВЬ
 				} 
 				else if (Keyboard::isKeyPressed(Keyboard::R)) 
 				{
-					mainPerson.takeItem(game.field, *game.items, pos.x, pos.y);
+					mainPerson.takeItem(game.world.field, *game.world.items, pos.x, pos.y);
 				}
 				/////////////////////////////////////////////////////////////////////////////////////////
 				// Бег
@@ -126,9 +126,9 @@ void processEvents(Game &game, const Time &deltaTime)
 			// Оюработка щелчка мыши
 			if (event.type == Event::MouseButtonPressed) {
 				// Использование предмета
-				mainPerson.useItem(game.field, *game.listDestroy, deltaTime,
-													 game.typesItem, game.typesUnlifeObject->typeUnlifeObject, game.Enemys,
-													 game.items, game.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
+				mainPerson.useItem(game.world.field, *game.listDestroy, deltaTime,
+													 game.typesItem, game.typesUnlifeObject->typeUnlifeObject, game.world.Enemys,
+													 game.world.items, game.world.unlifeObjects, event, pos.x, pos.y);// ИСПРАВЬ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ИСПРАВЬ
 			}
 			//////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ void render(Game & game)
 	//////////////////////////////////////////////
 	// Отрисовка карты
 	MainPerson &mainPerson = game.mainPerson;
-	Field &field = game.field;
+	Field &field = game.world.field;
 	bool isEmpty(false);
 	
 	int l = 0;
@@ -201,7 +201,7 @@ void render(Game & game)
 
 	//////////////////////////////////////////////
 	// Отрисовка предметов
-	vector<Item> &items = *game.items;
+	vector<Item> &items = *game.world.items;
 	for (int i = 0; i != items.size(); ++i) {
 		if (items[i].currentLevel >= game.mainPerson.currentLevelFloor
 				&& items[i].currentLevel <= game.mainPerson.currentLevelFloor + 2) {
@@ -238,7 +238,7 @@ void render(Game & game)
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
 	int currentLevel = game.mainPerson.currentLevelFloor;
-	vector<UnlifeObject> &unlifeObjects = *game.unlifeObjects;
+	vector<UnlifeObject> &unlifeObjects = *game.world.unlifeObjects;
 	for (int i = 0; i != unlifeObjects.size(); ++i)
 	{
 		if (unlifeObjects[i].currentLevel >= currentLevel
@@ -269,7 +269,7 @@ void render(Game & game)
 
 	//////////////////////////////////////////////
 	// GUI
-	game.gui.setPositionGui(window, game.mainPerson, *game.Enemys, game.textGame);
+	game.gui.setPositionGui(window, game.mainPerson, *game.world.Enemys, game.textGame);
 	//////////////////////////////////////////////
 	window.display();
 }
@@ -297,9 +297,9 @@ void startGame()
 			if (mainPerson.isDeath == false) {
 				//printf("TIMEPERSON %f\n", mainPerson.animation.currentTimeFightAnimation);
 				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
-				mainPerson.updateAtack(game->Enemys, game->items, game->typesItem, TIME_PER_FRAME);
-				mainPerson.interactionWithMap(game->field, *game->listDestroy, TIME_PER_FRAME);
-				mainPerson.interactionWitnUnlifeObject(game->unlifeObjects, TIME_PER_FRAME);
+				mainPerson.updateAtack(game->world, game->typesItem, TIME_PER_FRAME);
+				mainPerson.interactionWithMap(game->world.field, *game->listDestroy, TIME_PER_FRAME);
+				mainPerson.interactionWitnUnlifeObject(game->world.unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
 				/////////////////////////////////////

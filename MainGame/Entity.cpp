@@ -1,9 +1,6 @@
 
 #include <list>
-#include "Items.h"
-#include "Map.h"
-#include "ListObjectsAndBlocks.h"
-#include "EntityVar.h"
+
 #include "Entity.h"
 #include "Font.h"
 
