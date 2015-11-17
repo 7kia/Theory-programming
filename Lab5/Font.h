@@ -10,10 +10,10 @@ typedef enum {
 	arrowGui,
 	plusGui,
 	minusGui,
-	amountPath
-} idPath;
+	amountPathGui
+} idPathGui;
 
-const sf::String path[idPath::amountPath] =
+const sf::String path[idPathGui::amountPathGui] =
 {
 	"recourses\\Arrow.png",
 	"recourses\\Plus.png",

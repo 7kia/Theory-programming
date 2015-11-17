@@ -36,46 +36,14 @@ void processEvents(Program &program, const Time & deltaTime)
 				}
 			}
 
-			if (event.type == Event::MouseMoved && program.isShift && program.isZoom) {// 
-				//if (pressKey == Keyboard::Left) {
-				View& view = program.view;
-				///////////////////////////////////////////////
+			if (event.type == Event::MouseMoved && program.isShift && program.isZoom) { 
 				Vector2f movemoment = { 0.f, 0.f };
-
-				/*
-				
-				view.move(program.shiftMouse.x, program.shiftMouse.y);
-				window.setView(view);
-				program.xMouse = pos.x;
-				program.yMouse = pos.y;
-
-if (mousePos.x < 20) {
-					printf("mousePos.x < 20");
-					movemoment = { -SHIFT_VIEW * deltaTime.asSeconds(), 0.f };
-					view.move(movemoment);//если пришли курсором в левый край экрана,то двигаем камеру влево
-					window.setView(view);
-				} else if (mousePos.x > window.getSize().x - 20) {
-					movemoment = { SHIFT_VIEW * deltaTime.asSeconds(), 0.f };
-					view.move(movemoment);//правый край-вправо
-					window.setView(view);
-				}
-				if (mousePos.y > window.getSize().y - 20) {
-					movemoment = { 0.f, SHIFT_VIEW * deltaTime.asSeconds() };
-					view.move(movemoment);//нижний край - вниз
-					window.setView(view);
-				} else if (mousePos.y < 20) {
-					movemoment = { 0.f, -SHIFT_VIEW * deltaTime.asSeconds() };
-					view.move(movemoment);//верхний край - вверх
-					window.setView(view);
-				}
-				//*/
 				
 				program.newPositionMouse = pos;
 
 				if (program.oldPositionMouse.x > program.newPositionMouse.x) {
 					movemoment.x = -SPEED_SHIFT;
 				}
-					
 				if (program.oldPositionMouse.x < program.newPositionMouse.x) {
 					movemoment.x = +SPEED_SHIFT;
 				}
@@ -89,7 +57,6 @@ if (mousePos.x < 20) {
 				program.oldPositionMouse = pos;
 
 				program.currentImage->move(movemoment);
-				///////////////////////////////////////////////
 				updateView(program, deltaTime);
 			}
 			
@@ -108,9 +75,11 @@ if (mousePos.x < 20) {
 					Sprite &plus = *program.gui->plus;
 					Sprite &minus = *program.gui->minus;
 					if (arrowLeft.getGlobalBounds().contains(pos)) {
-						actionLeft(program);
+						if (program.isZoom == false)
+							actionLeft(program);
 					} else if (arrowRight.getGlobalBounds().contains(pos)) {
-						actionRight(program);
+						if(program.isZoom == false)
+							actionRight(program);
 					} else if (plus.getGlobalBounds().contains(pos)) {
 						actionZoomPlus(program, pos);
 					} else if (minus.getGlobalBounds().contains(pos)) {
@@ -145,6 +114,8 @@ if (mousePos.x < 20) {
 void render(Program & program)
 {
 	RenderWindow &window = *program.window;
+	Vector2u sizeWindow = window.getSize();
+	Vector2f centerWindow = { (float)sizeWindow.x / 2, (float)sizeWindow.y / 2 };
 	window.clear(COLOR_GREY);
 
 	//////////////////////////////////////////////
@@ -160,6 +131,30 @@ void render(Program & program)
 	}
 	
 	if (program.currentTitle != TITLE_PROGRAM) {
+		if (program.isZoom == false) {
+			Vector2u sizeImage = program.textureCurrentImage->getSize();
+			Vector2f &scaleImage = *program.scaleImage;
+			Vector2f &sourseScale = *program.sourseScale;
+
+			int shiftBorder = 200;
+			if (sizeImage.x + WIDTH_GUI_ELEMENT + shiftBorder > sizeWindow.x) {
+				scaleImage = { float(sizeWindow.x) / (sizeImage.x + WIDTH_GUI_ELEMENT + shiftBorder),
+					float(sizeWindow.x) / (sizeImage.x + WIDTH_GUI_ELEMENT + shiftBorder) };
+				sourseScale = { 1 / scaleImage.x ,  1 / scaleImage.x };
+				program.currentImage->setScale(scaleImage);
+			} else if (sizeImage.y + HEIGHT_GUI_ELEMENT + shiftBorder > sizeWindow.y) {
+				scaleImage = { float(sizeWindow.y) / (sizeImage.y + HEIGHT_GUI_ELEMENT + shiftBorder),
+					float(sizeWindow.y) / (sizeImage.y + HEIGHT_GUI_ELEMENT + shiftBorder) };
+				sourseScale = { 1 / scaleImage.y ,  1 / scaleImage.y };
+				program.currentImage->setScale(scaleImage);
+			} else {
+				program.currentImage->setScale(sourseScale);
+				sourseScale = { 1.f, 1.f };
+				scaleImage = { 1.f, 1.f };
+			}
+			program.currentImage->setPosition(centerWindow);
+		}
+
 		window.draw(*program.currentImage);
 	}
 
@@ -183,7 +178,7 @@ void startProgram()
 	Text* textError = &mainProgram->textProgram->texts[idText::errorText];
 	if (textError->getString() != INVALID_PATH) {
 		if (mainProgram->pathsImages->end() == mainProgram->pathsImages->begin()) {
-			textError->setString(DIRECTORY_EMPTY);// »—ѕ–а¬№
+			textError->setString(DIRECTORY_EMPTY);
 		} else {
 			textError->setString("");
 			initializeImage(*mainProgram);

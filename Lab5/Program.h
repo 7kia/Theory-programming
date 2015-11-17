@@ -14,15 +14,19 @@
 #include "Font.h"
 #include "GUI.h"
 
+const int K_BITE = 1024;
+const int MEGA_BITE = 1024 * K_BITE;
+const int MAX_SIZE = 4 * MEGA_BITE;
+
 const int DEFAULT_WIDTH_WINDOW = 800;
 const int DEFAULT_HEIGHT_WINDOW = 600;
 
-const float SHIFT_VIEW = 200.f;
+const float SHIFT_VIEW = 400.f;
 
-const sf::Vector2f NORMAL_SCALE = { 1.f, 1.f };
-const sf::Vector2f MAX_SCALE = { 3.f, 3.f };
+const float NORMAL_SCALE = 1.f;
+const float MAX_SCALE = 3.f;
 
-const float SPEED_SHIFT = 2.f;
+const float SPEED_SHIFT = 5.f;
 
 const float SCALE_IMAGE = 0.25f;
 const float SOURCE_SIZE = 1.f;
@@ -37,12 +41,12 @@ const char formats[AMOUNT_FORMATS][SIZE_STRING] = {
 	"jpg",
 	"bmp"
 };
-//const char* formats[AMOUNT_FORMATS] = { "png", "jpeg", "bmp" };
+
 typedef enum {
 	currentImage,
 	folder,
 	amountPaths
-} idPathUpdate;
+} idPath;
 
 struct Program
 {
@@ -51,15 +55,13 @@ struct Program
 	bool isZoom;
 	TextProgram *textProgram;
 
-	sf::View view;
-	sf::Vector2f viewPos;
 	sf::Vector2f oldPositionMouse, newPositionMouse;
 	float scale = 1.f;
 
 	GUI* gui;
 	std::list<std::string>* pathsImages;
 	char* mask;
-	char* formats[AMOUNT_FORMATS];
+	void searchImages();
 	void searchImage(const char *path);
 
 	std::list<std::string>::iterator currentPath;
@@ -78,6 +80,11 @@ struct Program
 
 	unsigned int widthMainWindow = DEFAULT_WIDTH_WINDOW;
 	unsigned int heightMainWindow = DEFAULT_HEIGHT_WINDOW;
+
+
+	void setPositionsArrows(sf::Vector2i centerWindow, sf::Vector2u sizeWindow);
+	void setPositionsZoomButtons(sf::Vector2u centerWindow);
+	void setPositionErrorText(sf::Vector2i centerWindow);
 };
 void initializeImage(Program & program);
 void setPositionGui(Program & program);
