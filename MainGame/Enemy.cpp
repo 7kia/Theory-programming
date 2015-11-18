@@ -34,14 +34,14 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 	//////////////////////////////////////////////////////////////
 	// Скелеты
 
-	/*
+	///*
 		types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
 
-	*/
+	//*/
 
 	for (size_t i = 1; i <= 2; i++) {
 		countEnemy++;

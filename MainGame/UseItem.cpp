@@ -328,7 +328,9 @@ void Entity::actionMain(world &world, Vector2f pos)
 		int y = pos.y / SIZE_BLOCK;
 		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x]) != NULL) {
 
-			spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
+			Vector2f posOrigin = spriteEntity->getOrigin();
+
+			spriteEntity->setPosition(x * SIZE_BLOCK + posOrigin.x, y * SIZE_BLOCK + posOrigin.y);
 			currentLevelFloor += 1;
 
 		}
@@ -351,7 +353,9 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 		// Если блок лестница
 		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x]) != NULL) {
 
-			spriteEntity->setPosition(x * SIZE_BLOCK, y * SIZE_BLOCK);
+			Vector2f posOrigin = spriteEntity->getOrigin();
+
+			spriteEntity->setPosition(x * SIZE_BLOCK + posOrigin.x, y * SIZE_BLOCK + posOrigin.y);
 			currentLevelFloor -= 1;
 
 		}

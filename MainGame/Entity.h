@@ -83,7 +83,7 @@ struct entityHealth
 
 	int currentHealth = 100;
 	int maxHealth = 100;
-	void update(const sf::Time deltaTime, bool& isDeath, idEntityMode &mode);
+	void update(const sf::Time deltaTime, bool& isDeath);
 };
 
 struct entityStamina

@@ -176,7 +176,7 @@ void informationAboutSelect(Game &game, float x, float y)
 					if (l == mainPerson.currentLevelFloor) {
 						infoFloor.setString("Floor : " + field.findCharBlocks(field.dataMap[l][i][j]));
 					}
-					else {
+					else if(l == mainPerson.currentLevelFloor + 1){
 						infoBlock.setString("Block : " + field.findCharBlocks(field.dataMap[l][i][j]));
 					}
 				}

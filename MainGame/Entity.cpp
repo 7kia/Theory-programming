@@ -132,7 +132,7 @@ void entityStamina::update(const sf::Time deltaTime, Direction directionWalk, St
 
 };
 
-void entityHealth::update(const sf::Time deltaTime, bool &isDeath, idEntityMode &mode)
+void entityHealth::update(const sf::Time deltaTime, bool &isDeath)
 {
 	timeForHealth += deltaTime.asSeconds();
 
@@ -149,19 +149,7 @@ void entityHealth::update(const sf::Time deltaTime, bool &isDeath, idEntityMode 
 	if (currentHealth < 1) {
 		isDeath = true;
 	} 
-	else if(currentHealth < (maxHealth / 4))
-	{
-		if (mode == idEntityMode::fight || mode == idEntityMode::atack)
-		{
-			mode = idEntityMode::panic;
-		}
-	}
-	else if (currentHealth < maxHealth) {
-		if (mode == idEntityMode::panic) {
-			mode = idEntityMode::fight;
-		}
-	}
-	else {
+	else if (currentHealth > maxHealth) {
 		currentHealth = maxHealth;
 	}
 
@@ -230,7 +218,7 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	damage.updateInputDamage(deltaTime);
 	mana.update(deltaTime);
 	stamina.update(deltaTime, directions.directionWalk, step);
-	health.update(deltaTime, isDeath, currenMode);
+	health.update(deltaTime, isDeath);
 	hungry.update(deltaTime, health.needMinusHealth);
 	thirst.update(deltaTime, health.needMinusHealth);
 

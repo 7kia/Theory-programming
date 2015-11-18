@@ -198,9 +198,7 @@ void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &del
 			//}
 			
 
-			if (itemFromPanelQuickAccess[idSelectItem].currentToughness < 1) {
-				itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
-			}
+				breakItem(currentItem);
 		} 
 		else {
 			currenMode = idEntityMode::atack;
@@ -216,6 +214,9 @@ void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &del
 				currenMode = idEntityMode::walk;
 				giveDamage = false;
 				findEnemy->takeDamage(damage, currentItem);
+
+				currentItem.currentToughness -= 1;
+				breakItem(currentItem);
 			}
 
 		}
@@ -249,14 +250,21 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 
 		bool canPanic = enemy.type->converse.canPanic;
 
-		if (enemy.currenMode != idEntityMode::panic)
-			enemy.currenMode = idEntityMode::fight;
-		else if (canPanic)
-		{
-			movemoment = { -movemoment.x, -movemoment.y };
-			enemy.choiceDirections(movemoment);
+		if (enemy.health.currentHealth < (enemy.health.maxHealth / 4)) {
+			enemy.currenMode = idEntityMode::panic;
+			if (canPanic) {
+				movemoment = { -movemoment.x, -movemoment.y };
+				enemy.choiceDirections(movemoment);
 
+				enemy.animation.currentTimeFightAnimation = 0.f;
+				step.currentTime = 0;
+			}
 		}
+		else
+		{
+			enemy.currenMode = idEntityMode::fight;
+		}
+		
 
 
 		enemy.defineDirectionLook(movemoment);
@@ -392,32 +400,20 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 		case idCategoryItem::block:
 		case idCategoryItem::unlifeObject:
 			if (isInUseField(xMouse, yMouse, false)) {
-			int level;
-			defineLevel(level, event);
+				int level;
+				defineLevel(level, event);
 
-			int x = founds.currentTarget.x;
-			int y = founds.currentTarget.y;
-			Vector3i pos = { x, y, level };
+				int x = founds.currentTarget.x;
+				int y = founds.currentTarget.y;
+				Vector3i pos = { x, y, level };
 
 
 				useBlock(pos, world,
 								 currentItem, typesItems,
 								 typesUnlifeObjects);
 			}
-			findTool = false;
 			break;
 			////////////////////////////////////////////////////////////////////////
-		default:
-			findTool = false;
-			break;
-		}
-
-
-
-		if (findTool == false)
-		{
-			switch (category) {
-
 		case idCategoryItem::food:
 			useAsFood(currentItem, event);
 			break;
@@ -446,9 +442,6 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 		default:
 			break;
 		}
-		}
-		
-
 	}
 
 }
