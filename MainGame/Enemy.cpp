@@ -33,11 +33,15 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 	}
 	//////////////////////////////////////////////////////////////
 	// Скелеты
-	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+
+	/*
+		types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+
+	*/
 
 	for (size_t i = 1; i <= 2; i++) {
 		countEnemy++;
@@ -402,9 +406,9 @@ void Enemy::findLadder(world &world, TypeItem *typesItem, Vector3i pos)
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 	wchar_t ladder = field.charBlocks[idBlocks::woodLadder];
 	for (int i = -1; i <= 1; i++) {
-		for (int j = -1; j <= 1; j++) {
-			if (map[level][y + j][x + i] == ladder) {
-				Vector2f posLadder = { getXPos() + i * SIZE_BLOCK / 2,  getYPos() + j * SIZE_BLOCK / 2 };
+		for (int j = -1; j <= 1; j++) {// TODO
+			if (map[level][y + j][x + i] == ladder) {//(x + float(i) / 2) * SIZE_BLOCK,   (y + float(j) / 2) * SIZE_BLOCK
+				Vector2f posLadder = { float(x + i) * SIZE_BLOCK, float(y + j) * SIZE_BLOCK };
 				actionMain(world, posLadder);
 			}
 		}
@@ -498,7 +502,8 @@ void Enemy::checkBlock(Field& field)
 			}
 
 			if (summaryCondition) {
-				currenMode = idEntityMode::walk;
+				if(currenMode != idEntityMode::panic)
+					currenMode = idEntityMode::walk;
 
 				if(wasCollision)
 				{

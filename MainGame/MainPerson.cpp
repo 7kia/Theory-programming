@@ -223,7 +223,7 @@ void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &del
 }
 
 
-void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItems, TypeUnlifeObject *typesObject, 
+void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItems, TypeUnlifeObject *typesObject,
 																 const Time &deltaTime)
 {
 	Vector2f personPoint = { getXPos(), getYPos() };
@@ -245,79 +245,89 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 	bool onLevel = onLevelEnemy || feelEnemy;
 	if (distanse <= radiuseView && onLevel) {
 
+		movemoment = vectorDirection(enemyPoint, personPoint);
+
+		bool canPanic = enemy.type->converse.canPanic;
+
+		if (enemy.currenMode != idEntityMode::panic)
 			enemy.currenMode = idEntityMode::fight;
+		else if (canPanic)
+		{
+			movemoment = { -movemoment.x, -movemoment.y };
+			enemy.choiceDirections(movemoment);
 
-			movemoment = vectorDirection(enemyPoint, personPoint);
-
-			enemy.defineDirectionLook(movemoment);
-
-			if(feelEnemy != true)
-				enemy.checkBlock(world.field);
-
-
-			if (enemy.currenMode == idEntityMode::fight) {
-
-				enemy.choiceDirections(movemoment);
-				step.currentTime = 0;
-				Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
-				
-				if (enemy.wasCollision) {
-
-					if (!onLevelEnemy && feelEnemy) {
-						Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK),
-						int(enemy.getXPos() / SIZE_BLOCK),
-						enemy.collision.level };
-						enemy.findLadder(world, typesItems, posEnemy);
-					}
+		}
 
 
-					String nameCurrentItem = itemEnemy.typeItem->features.name;
-					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+		enemy.defineDirectionLook(movemoment);
 
-					bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
-					bool isNotEmpty = nameCurrentItem != nameEmptyItem;
-					if (isNotEmpty && onLevelEnemy)
-					{
-						enemy.choiceBlock(world, typesItems);
-					}
-					else if(isNotEmpty && isLadder)
-					{
-						enemy.buildLadder(world, typesItems, typesObject);
-					}
 
-				} else {
+		if (feelEnemy != true)
+			enemy.checkBlock(world.field);
 
-					bool noNearFight = distanse >= SIZE_BLOCK;
-					if (noNearFight) {
-						enemy.animation.currentTimeFightAnimation = 0.f;
-					} else if (onLevelEnemy) {
-						enemy.currenMode = idEntityMode::atack;
 
-						enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
-						if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
-							enemy.animation.currentTimeFightAnimation = 0.f;
+		if (enemy.currenMode == idEntityMode::fight) {
 
-							enemy.currenMode = idEntityMode::fight;
-							enemy.giveDamage = false;
-							givenForPersonDamage(enemy);
+			enemy.choiceDirections(movemoment);
+			step.currentTime = 0;
+			Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
 
-							itemEnemy.currentToughness -= 1;
-							if (itemEnemy.currentToughness < 1) {
-								redefineType(itemEnemy, typesItems, -itemEnemy.typeItem->features.id);
-							}
-						}
+			if (enemy.wasCollision) {
 
-						directions.directionWalk = NONE_DIRECTION;
-					}
-
+				if (!onLevelEnemy && feelEnemy) {
+					Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK),
+					int(enemy.getXPos() / SIZE_BLOCK),
+					enemy.collision.level };
+					enemy.findLadder(world, typesItems, posEnemy);
 				}
 
 
+				String nameCurrentItem = itemEnemy.typeItem->features.name;
+				String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+
+				bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
+				bool isNotEmpty = nameCurrentItem != nameEmptyItem;
+				if (isNotEmpty && onLevelEnemy) {
+					enemy.choiceBlock(world, typesItems);
+				} else if (isNotEmpty && isLadder) {
+					enemy.buildLadder(world, typesItems, typesObject);
+				}
+
+			} else {
+
+				bool noNearFight = distanse >= SIZE_BLOCK;
+				if (noNearFight) {
+					enemy.animation.currentTimeFightAnimation = 0.f;
+				} else if (onLevelEnemy) {
+					enemy.currenMode = idEntityMode::atack;
+
+					enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
+					if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+						enemy.animation.currentTimeFightAnimation = 0.f;
+
+						enemy.currenMode = idEntityMode::fight;
+						enemy.giveDamage = false;
+						givenForPersonDamage(enemy);
+
+						itemEnemy.currentToughness -= 1;
+						if (itemEnemy.currentToughness < 1) {
+							redefineType(itemEnemy, typesItems, -itemEnemy.typeItem->features.id);
+						}
+					}
+
+					directions.directionWalk = NONE_DIRECTION;
+				}
+
 			}
 
+
+		}
+
 	}
-	
+
 }
+	
+
 ////////////////////////////////////////////////////////////////////
 
 void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy, const Time &deltaTime,

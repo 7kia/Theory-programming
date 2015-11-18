@@ -23,6 +23,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->damage.init(5, 0, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * 2, false);
+	typeEnemy->converse.init(true, true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS);
 
@@ -43,6 +44,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true);
+	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
 
@@ -61,6 +63,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true);
+	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::ironBackHoerIte);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
 
@@ -79,6 +82,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true);
+	typeEnemy->converse.init(true, true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stonePickaxItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
 
@@ -97,6 +101,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true);
+	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneAxeItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
 
@@ -115,6 +120,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true);
+	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::woodLadderItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
 
@@ -145,6 +151,13 @@ void enemyFeatures::init(int health, int stamina, int mana, int thirst, int hung
 	maxStamina = stamina;
 	maxThirst = thirst;
 	maxHungry = hungry;
+}
+
+void converseEnemy::init(bool enemy, bool panic, bool avoid)
+{
+	isEnemy = enemy;
+	canPanic = panic;
+	avoidEnemy = avoid;
 }
 
 void TypeEnemy::initCurrentItem(TypeItem *typesItem, int id)

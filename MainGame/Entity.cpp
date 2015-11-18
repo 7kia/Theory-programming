@@ -132,7 +132,7 @@ void entityStamina::update(const sf::Time deltaTime, Direction directionWalk, St
 
 };
 
-void entityHealth::update(const sf::Time deltaTime, bool &isDeath)
+void entityHealth::update(const sf::Time deltaTime, bool &isDeath, idEntityMode &mode)
 {
 	timeForHealth += deltaTime.asSeconds();
 
@@ -148,7 +148,20 @@ void entityHealth::update(const sf::Time deltaTime, bool &isDeath)
 
 	if (currentHealth < 1) {
 		isDeath = true;
-	} else if (currentHealth > maxHealth) {
+	} 
+	else if(currentHealth < (maxHealth / 4))
+	{
+		if (mode == idEntityMode::fight || mode == idEntityMode::atack)
+		{
+			mode = idEntityMode::panic;
+		}
+	}
+	else if (currentHealth < maxHealth) {
+		if (mode == idEntityMode::panic) {
+			mode = idEntityMode::fight;
+		}
+	}
+	else {
 		currentHealth = maxHealth;
 	}
 
@@ -217,12 +230,13 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	damage.updateInputDamage(deltaTime);
 	mana.update(deltaTime);
 	stamina.update(deltaTime, directions.directionWalk, step);
-	health.update(deltaTime, isDeath);
+	health.update(deltaTime, isDeath, currenMode);
 	hungry.update(deltaTime, health.needMinusHealth);
 	thirst.update(deltaTime, health.needMinusHealth);
 
 	///////////////////////////////////////
-	if (currenMode == idEntityMode::walk) {
+	if (currenMode == idEntityMode::walk
+			|| currenMode == idEntityMode::panic) {
 		switch (directions.directionWalk) {
 		case UP_LEFT:
 			directions.directionLook = UP_LEFT;

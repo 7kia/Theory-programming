@@ -83,7 +83,7 @@ struct entityHealth
 
 	int currentHealth = 100;
 	int maxHealth = 100;
-	void update(const sf::Time deltaTime, bool& isDeath);
+	void update(const sf::Time deltaTime, bool& isDeath, idEntityMode &mode);
 };
 
 struct entityStamina
@@ -183,6 +183,7 @@ public:
 	std::vector<sf::Sound*> soundsEntity;
 
 	DamageInputAndOutput damage;
+	bool isAtack;
 	bool giveDamage;
 
 	int radiusUse;
@@ -191,7 +192,7 @@ public:
 	foundObjects founds;
 	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
-	int currenMode;
+	idEntityMode currenMode;
 	Item *itemFromPanelQuickAccess;
 	int idSelectItem;
 
