@@ -73,13 +73,17 @@ void panelQuickAccess::renderItems(MainPerson& mainPerson, featuresWindow featur
 			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 				centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ÈÑÏÐÀÂÜ
 			currentItem.mainSprite->setPosition(pos);
-			window.draw(*currentItem.mainSprite);
-
+			
 
 			if (mainPerson.idSelectItem == i) {
 				itemFeatures.renderFeatures(mainPerson, features, textGame, bars);
+				currentItem.mainSprite->setScale(normalSize);
 			}
-
+			else
+			{
+				currentItem.mainSprite->setScale(scaleOutItems);
+			}
+			window.draw(*currentItem.mainSprite);
 		}
 
 	}

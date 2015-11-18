@@ -102,11 +102,13 @@ void MainPerson::updateView(RenderWindow & window)
 	int rightBorder = SIZE_BLOCK * (WIDTH_MAP - BORDER1) - sizeWindow.x / 2;
 	int topBorder = sizeWindow.y / 2;
 	int lowBorder = SIZE_BLOCK * LONG_MAP - sizeWindow.y / 2;
-
+	/*
 	if (x < leftBorder) tempX = leftBorder;//убираем из вида левую сторону
 	else if (x > rightBorder) tempX = rightBorder;//убираем из вида левую сторону
 	if (y < topBorder) tempY = topBorder;//верхнюю сторону
 	else if (y > lowBorder) tempY = lowBorder;//нижнюю сторону	
+	//*/
+	
 
 	view->setCenter(tempX, tempY);
 }
@@ -154,8 +156,10 @@ void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &del
 	vector<Enemy> &enemy = *world.Enemys;
 	vector<Item> &items = *world.items;
 
-	if (currenMode == idEntityMode::atack
-			&& findEnemy->type->name != emptyEnemy->type->name) {
+	bool isAtack = currenMode == idEntityMode::atack;
+	bool isEnemy = findEnemy->type->name != emptyEnemy->type->name;
+	if (isAtack && isEnemy) {
+
 		if (findEnemy->isDeath) {
 
 			Item* addItem = new Item;
@@ -257,6 +261,9 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 				enemy.choiceDirections(movemoment);
 
 				enemy.animation.currentTimeFightAnimation = 0.f;
+
+				enemy.step.stepCurrent = enemy.step.stepFirst * 2;
+				enemy.stamina.needMinusStamina = true;
 				step.currentTime = 0;
 			}
 		}

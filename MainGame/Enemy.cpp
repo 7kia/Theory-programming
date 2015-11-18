@@ -34,7 +34,7 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 	//////////////////////////////////////////////////////////////
 	// Скелеты
 
-	///*
+	/*
 		types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);

@@ -82,7 +82,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true);
-	typeEnemy->converse.init(true, true, false);
+	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stonePickaxItem);
 	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
 

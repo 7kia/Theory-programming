@@ -148,6 +148,7 @@ void entityHealth::update(const sf::Time deltaTime, bool &isDeath)
 
 	if (currentHealth < 1) {
 		isDeath = true;
+		currentHealth = 0;
 	} 
 	else if (currentHealth > maxHealth) {
 		currentHealth = maxHealth;
@@ -788,28 +789,28 @@ void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
 		shiftX = 0;
 		shiftY -= size.width / 4;
 
-		shiftX -= size.width / 4 * percentTime;
-		shiftY += size.width / 4 * percentTime;
+		shiftX += size.width / 4 * percentTime;
+		shiftY -= size.width / 4 * percentTime;
 		break;
 	case UP_LEFT:
 		shiftX -= size.width / 4;
 		shiftY = 0;
 
-		shiftX += size.width / 4 * percentTime;
+		shiftX -= size.width / 4 * percentTime;
 		shiftY -= size.width / 4 * percentTime;
 		break;
 	case DOWN_RIGHT:
 		shiftX += size.width / 4;
 		shiftY = 0;
 
-		shiftX -= size.width / 4 * percentTime;
+		shiftX += size.width / 4 * percentTime;
 		shiftY += size.width / 4 * percentTime;
 		break;
 	case DOWN_LEFT:
 		shiftX = 0;
 		shiftY += size.width / 3;
 
-		shiftX += size.width / 4 * percentTime;
+		shiftX -= size.width / 4 * percentTime;
 		shiftY += size.width / 4 * percentTime;
 		break;
 	default:

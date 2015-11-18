@@ -8,7 +8,7 @@ const int MAX_ITEMS = 256;
 const int shiftAngleUseItem = 2;
 const sf::Vector2f scaleOutItems = { 0.75f, 0.75f };
 const sf::Vector2f scaleUseItems = { 0.5f, 0.5f };
-const sf::Vector2f normalSize = { 1.34f, 1.34f };
+const sf::Vector2f normalSize = { 1.f, 1.f };
 
 const int SIZE_ITEM = SIZE_BLOCK;
 
