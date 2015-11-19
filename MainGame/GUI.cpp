@@ -31,9 +31,9 @@ void barHungry::renderBar(int& current, int& max, Vector2f centerWindow, Vector2
 	pos = centerWindow;
 	
 	// TODO
-	highHungry->setScale(scaleGuiForMainPerson);
-	lowHungry->setScale(scaleGuiForMainPerson);
-	levelHungry->setScale(scaleGuiForMainPerson);
+	highHungry.setScale(scaleGuiForMainPerson);
+	lowHungry.setScale(scaleGuiForMainPerson);
+	levelHungry.setScale(scaleGuiForMainPerson);
 
 	renderHigh(pos, sizeWindow, window);
 	renderLevel(current, max, pos, window);
@@ -45,8 +45,8 @@ void barHungry::renderHigh(Vector2f& pos, Vector2u sizeWindow, RenderWindow& win
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) * scaleGuiForMainPerson.x;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) * scaleGuiForMainPerson.y;
 
-	highHungry->setPosition(pos);
-	window.draw(*highHungry);
+	highHungry.setPosition(pos);
+	window.draw(highHungry);
 }
 
 void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow& window)
@@ -55,9 +55,9 @@ void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow&
 
 	pos.y += (LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level)) * scaleGuiForMainPerson.y;
 	int currentLevel = LEVEL_HUNGY_GUI * level;
-	levelHungry->setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
-	levelHungry->setPosition(pos);
-	window.draw(*levelHungry);
+	levelHungry.setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
+	levelHungry.setPosition(pos);
+	window.draw(levelHungry);
 }
 
 void barHungry::renderLow(Vector2f& pos, Vector2f centerWindow, Vector2u sizeWindow, RenderWindow& window)
@@ -65,8 +65,8 @@ void barHungry::renderLow(Vector2f& pos, Vector2f centerWindow, Vector2u sizeWin
 	pos = centerWindow;
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) * scaleGuiForMainPerson.x;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) * scaleGuiForMainPerson.y;
-	lowHungry->setPosition(pos);
-	window.draw(*lowHungry);
+	lowHungry.setPosition(pos);
+	window.draw(lowHungry);
 
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,9 +78,9 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 
 
 	//TODO
-	bottle->setScale(scaleGuiForMainPerson);
-	bottle->setPosition(pos);
-	window.draw(*bottle);
+	bottle.setScale(scaleGuiForMainPerson);
+	bottle.setPosition(pos);
+	window.draw(bottle);
 
 	float level = float(current) / max;
 
@@ -88,10 +88,10 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 	int currentLevel = LEVEL_THIRST * level;
 	int currentShift = LEVEL_THIRST * (1 - level);
 	// TODO
-	levelThirst->setScale(scaleGuiForMainPerson);
-	levelThirst->setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
-	levelThirst->setPosition(pos);
-	window.draw(*levelThirst);
+	levelThirst.setScale(scaleGuiForMainPerson);
+	levelThirst.setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
+	levelThirst.setPosition(pos);
+	window.draw(levelThirst);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int health = mainPerson.health.currentHealth;
 	int healthMax = mainPerson.health.maxHealth;
 	int shiftHealth = 3;
-	mainFeatures.renderBarMainPerson(mainPerson, health, healthMax, shiftHealth, *mainFeatures.levelHealth,
+	mainFeatures.renderBarMainPerson(mainPerson, health, healthMax, shiftHealth, mainFeatures.levelHealth,
 																	 sizes, featuresWindow, textGame);
 
 	////////////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			healthEnemy = enemy[i].health.currentHealth;
 			healthMaxEnemy = enemy[i].health.maxHealth;
 
-			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, *mainFeatures.levelHealth,
+			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, mainFeatures.levelHealth,
 																	sizes, textGame, window);
 		}	
 
@@ -176,7 +176,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int stamina = mainPerson.stamina.currentStamina;
 	int staminaMax = mainPerson.stamina.maxStamina;
 	int shiftStamina = 2;
-	mainFeatures.renderBarMainPerson(mainPerson, stamina, staminaMax, shiftStamina, *mainFeatures.levelStamina,
+	mainFeatures.renderBarMainPerson(mainPerson, stamina, staminaMax, shiftStamina, mainFeatures.levelStamina,
 																	 sizes, featuresWindow, textGame);
 
 
@@ -199,7 +199,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			staminaMaxEnemy = enemy[i].stamina.maxStamina;
 
 			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, *mainFeatures.levelStamina,
+				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, mainFeatures.levelStamina,
 																		sizes, textGame, window);
 			}
 			
@@ -214,7 +214,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	int mana = mainPerson.mana.currentMana;
 	int manaMax = mainPerson.mana.maxMana;
 	int shiftMana = 1;
-	mainFeatures.renderBarMainPerson(mainPerson, mana, manaMax, shiftMana, *mainFeatures.levelMana,
+	mainFeatures.renderBarMainPerson(mainPerson, mana, manaMax, shiftMana, mainFeatures.levelMana,
 																	 sizes, featuresWindow, textGame);
 
 
@@ -234,7 +234,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 			manaMaxEnemy = enemy[i].mana.maxMana;
 
 			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, *mainFeatures.levelMana,
+				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, mainFeatures.levelMana,
 																		sizes, textGame, window);
 			}
 
@@ -247,4 +247,9 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	thirst.renderBar(mainPerson.thirst.currentThirst, mainPerson.thirst.maxThirst, centerWindow, sizeWindow, window);
 	////////////////////////////////////////////////////////////////////////
 
+}
+
+GUI::~GUI()
+{
+	delete *textGui;// TODO
 }

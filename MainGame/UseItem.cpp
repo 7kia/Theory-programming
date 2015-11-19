@@ -58,8 +58,6 @@ void Entity::takeItem(world &world, Vector2f pos)
 	}
 }
 
-
-
 void Entity::useAsBottleWithWater(Item &currentItem, TypeItem *typesItems, Event event)
 {
 	bool drinking = event.key.code == Mouse::Right;
@@ -176,6 +174,7 @@ void Entity::useAsBukketWithWater(Item &currentItem, TypeItem *typesItems, Event
 
 void Entity::breakItem(Item &currentItem)
 {
+	currentItem.currentToughness -= 1;
 	if (currentItem.currentToughness < 1) {
 		currentItem = *founds.emptyItem;
 	}
@@ -230,7 +229,7 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 
 		if (isInListObjects(listObjects, countObjects)) {
 
-			currentItem.currentToughness -= 1;
+
 
 			Vector2i posDrop = { x, y };
 			dropObject(posDrop, items, typesItems);
@@ -242,7 +241,7 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 
 		}
 	} else if (isInListBlocks(*block, listBlocks)) {
-		currentItem.currentToughness -= 1;
+
 
 		//////////////////////////////
 		// Выпадение предмета
@@ -304,7 +303,6 @@ void Entity::useBlock(Vector3i pos, world &world,
 		////////////////////////////////
 		// Если успешно применён
 		if (successfullUse) {
-			currentItem.currentToughness -= 1;
 			breakItem(currentItem);
 		}
 		////////////////////////////////

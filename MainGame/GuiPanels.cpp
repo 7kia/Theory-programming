@@ -3,8 +3,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void infoAboutSelect::render(Vector2f position, RenderWindow &window, TextGame &textGame)
 {
-	sprite->setPosition(position);
-	window.draw(*sprite);
+	sprite.setPosition(position);
+	window.draw(sprite);
 
 	Text* currentText = &textGame.texts[idText::infoWindowBlock];
 	position = { position.x + shiftXInfoText , position.y + shiftYInfoText };
@@ -22,8 +22,8 @@ void infoAboutSelect::render(Vector2f position, RenderWindow &window, TextGame &
 
 void panelQuickAccess::renderPanel(Vector2f position, RenderWindow& window)
 {
-	spritePanel->setPosition(position);
-	window.draw(*spritePanel);
+	spritePanel.setPosition(position);
+	window.draw(spritePanel);
 }
 
 void panelQuickAccess::renderSelect(MainPerson& mainPerson, featuresWindow features)
@@ -39,8 +39,8 @@ void panelQuickAccess::renderSelect(MainPerson& mainPerson, featuresWindow featu
 	Vector2f position;
 	position = { centerWindow.x - startPosition + shift, centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ÈÑÏÐÀÂÜ
 
-	spriteSelect->setPosition(position);
-	window.draw(*spriteSelect);
+	spriteSelect.setPosition(position);
+	window.draw(spriteSelect);
 }
 
 void panels::renderItemPanel(sf::Vector2f position, RenderWindow& window)

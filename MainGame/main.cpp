@@ -178,23 +178,25 @@ void render(Game & game)
 	Field &field = game.world.field;
 	bool isEmpty(false);
 	
-	int l = 0;
-	while (l < HEIGHT_MAP)
+	int l = mainPerson.currentLevelFloor;
+	int lowBorder = l - 1;
+	if (lowBorder < 0)
+		lowBorder = 0;
+	int topBorder = l + 2;
+	if (topBorder > HEIGHT_MAP - 1)
+		topBorder = HEIGHT_MAP - 1;
+
+	l = lowBorder;
+	while (l <= topBorder)
 	{
-		// Рисуем только текущий уровень
-		if (l >= mainPerson.currentLevelFloor - 1
-			&& l <= mainPerson.currentLevelFloor + 2)
-		{
-			for (int i = 0; i < LONG_MAP; i++)
-			{
-				for (int j = 0; j < WIDTH_MAP - BORDER1; j++)
-				{
-					field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
-					window.draw(*field.wallSprite);
-					window.draw(*field.floorSprite);
+		for (int i = 0; i < LONG_MAP; i++) {
+			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
+				field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
-				}
+				window.draw(*field.wallSprite);
+				window.draw(*field.floorSprite);
+
 			}
 		}
 		
@@ -239,41 +241,24 @@ void render(Game & game)
 
 	////////////////////////////////////////////////////////
 	// Рисуем неживые объекты
-	int currentLevel = game.mainPerson.currentLevelFloor;
-	vector<UnlifeObject> &unlifeObjects = *game.world.unlifeObjects;
-	for (int i = 0; i != unlifeObjects.size(); ++i)
-	{
-		if (unlifeObjects[i].currentLevel >= currentLevel
-				&& unlifeObjects[i].currentLevel <= currentLevel + 2)
-		{
-			if (unlifeObjects[i].currentLevel == currentLevel)
-			{
-				unlifeObjects[i].spriteObject->setColor(DOWN_VIEW);
-				unlifeObjects[i].transparentSpiteObject->setColor(DOWN_VIEW);
-			}
-			/*
-			else if (unlifeObjects[i].currentLevel == currentLevel + 1)
-			{
-				unlifeObjects[i].spriteObject->setColor(NORMAL_VIEW);
-				unlifeObjects[i].transparentSpiteObject->setColor(NORMAL_VIEW);
-			}
-			*/
-			else if (unlifeObjects[i].currentLevel == currentLevel + 2) {
-				unlifeObjects[i].spriteObject->setColor(UP_VIEW);
-				unlifeObjects[i].transparentSpiteObject->setColor(UP_VIEW);
-			}
+	renderUnlifeObjects(game);
 
-			window.draw(*unlifeObjects[i].spriteObject);
-			window.draw(*unlifeObjects[i].transparentSpiteObject);
-		}
-		
-	}
-
-	//////////////////////////////////////////////
-	// GUI
 	game.gui.setPositionGui(window, game.mainPerson, *game.world.Enemys, game.textGame);
-	//////////////////////////////////////////////
 	window.display();
+}
+
+void updatePlayer(Game &game, MainPerson& mainPerson)
+{
+	mainPerson.update(TIME_PER_FRAME, game.databaseSound);
+	mainPerson.updateAtack(game.world, TIME_PER_FRAME);
+	mainPerson.interactionWithMap(game.world.field, *game.world.listDestroy, TIME_PER_FRAME);
+	mainPerson.interactionWitnUnlifeObject(game.world.unlifeObjects, TIME_PER_FRAME);
+	mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
+
+	mainPerson.updateView(game.window);
+	game.window.setView(*mainPerson.view);
+
+	printf("Angle %f \n", mainPerson.rotation);// ИСПРАВЬ
 }
 
 void startGame()
@@ -290,30 +275,13 @@ void startGame()
 	while (window.isOpen())
 	{
 		timeSinceLastUpdate += game->clock.restart();
-		//printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());// ИСПРАВЬ
 		while (timeSinceLastUpdate > TIME_PER_FRAME) {
 			timeSinceLastUpdate -= TIME_PER_FRAME;
 			processEvents(*game, TIME_PER_FRAME);
-			////////////////////////////////////////////////////////////
-			// Если персонаж жив
+
 			if (mainPerson.isDeath == false) {
-				//printf("TIMEPERSON %f\n", mainPerson.animation.currentTimeFightAnimation);
-				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
-				mainPerson.updateAtack(game->world, TIME_PER_FRAME);
-				mainPerson.interactionWithMap(game->world.field, *game->world.listDestroy, TIME_PER_FRAME);
-				mainPerson.interactionWitnUnlifeObject(game->world.unlifeObjects, TIME_PER_FRAME);
-				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
-
-				/////////////////////////////////////
-				// Взаимодействие существ с миром
+				updatePlayer(*game, mainPerson);
 				updateEntity(*game, TIME_PER_FRAME);
-				
-				/////////////////////////////////////
-
-				mainPerson.updateView(game->window);
-				window.setView(*mainPerson.view);
-
-				printf("Angle %f \n", game->mainPerson.rotation);// ИСПРАВЬ
 			}
 			////////////////////////////////////////////////////////////
 		}
