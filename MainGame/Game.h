@@ -21,10 +21,6 @@ struct Game
 
 	MainPerson mainPerson;
 
-	Item emptyItem;
-	UnlifeObject emptyObject;
-	Enemy emptyEnemy;
-
 	world world;
 	////////////////////////////////////
 	// Ходьба по карте(для противников
@@ -34,10 +30,6 @@ struct Game
 	sf::Clock clock;
 
 	dataSound databaseSound;
-
-	//TODO
-	int countUnlifeObject = 0;
-	int countEntity = 0;
 
 	unsigned int widthMainWindow = DEFAULT_WIDTH_WINDOW;
 	unsigned int heightMainWindow = DEFAULT_HEIGHT_WINDOW;
@@ -49,6 +41,8 @@ void initializeCategorysBreakingObject(Game &game);
 
 void updateEntity(Game &game, const sf::Time deltaTime);
 void renderEntitys(Game &game);
+
+void renderUnlifeObjects(Game &game);
 
 void destroyGame(Game & game);
 void initializeClock(Clock &clock);

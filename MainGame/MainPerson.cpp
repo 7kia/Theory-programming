@@ -10,7 +10,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy)
+void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emptyObjects &emptyObjects)
 {
 	mainPerson.spriteEntity = new Sprite;
 	mainPerson.textureEntity = new Texture;
@@ -42,14 +42,14 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, Ite
 
 	mainPerson.initStepSounds(databaseSound);
 
-	mainPerson.initFounds(emptyItem, emptyObject, emptyEnemy);
+	mainPerson.initFounds(emptyObjects.emptyItem, emptyObjects.emptyObject, emptyObjects.emptyEnemy);
 
 	// Создайм и заполняем панель
 	mainPerson.idSelectItem = 0;
 	mainPerson.amountSlots = AMOUNT_ACTIVE_SLOTS;
 	mainPerson.itemFromPanelQuickAccess = new Item[AMOUNT_ACTIVE_SLOTS];
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		mainPerson.itemFromPanelQuickAccess[i].typeItem = emptyItem.typeItem;
+		mainPerson.itemFromPanelQuickAccess[i].typeItem = emptyObjects.emptyItem.typeItem;
 	}
 
 	// Позиция и направление
@@ -193,7 +193,7 @@ void MainPerson::updateAtack(world &world, const Time &deltaTime)
 
 				currenMode = idEntityMode::walk;
 				giveDamage = false;
-				currentItem.currentToughness -= 1;
+				
 			//}
 			
 
@@ -214,7 +214,7 @@ void MainPerson::updateAtack(world &world, const Time &deltaTime)
 				giveDamage = false;
 				findEnemy->takeDamage(damage, currentItem);
 
-				currentItem.currentToughness -= 1;
+
 				breakItem(currentItem);
 			}
 
@@ -254,7 +254,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const Time &deltaTi
 		enemy.defineDirectionLook(movemoment);
 
 		// TODO
-		bool isFight = currenMode == idEntityMode::fight;
+		bool isFight = enemy.currenMode == idEntityMode::fight;
 		if (feelEnemy != true && isFight)
 			enemy.checkBlock(world.field);
 

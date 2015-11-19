@@ -12,25 +12,27 @@ void initializeGame(Game & game)
 
 	game.window.create(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
 
+	world &world = game.world;
+
 	initializeSound(game.databaseSound);
 	initializeField(game.world.field);
 
 	typesObjectsInWorld &types = game.world.typesObjects;
 	initializeTypesItem(types.typesItem, *game.world.listDestroy, game.databaseSound);
-	initializeItems(*game.world.items, types.typesItem, game.emptyItem);
+	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
 
 	initializeTypeUnlifeObjects(types.typesUnlifeObject, game.databaseSound);
-	initializeUnlifeObjects(*game.world.unlifeObjects, types.typesUnlifeObject, game.emptyObject);
+	initializeUnlifeObjects(*game.world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
 
 	// TODO
 	initializeCategorysBreakingObject(game);
 
-	game.world.Enemys = new vector<Enemy>;
+	world.Enemys = new vector<Enemy>;
 
 	initializeTypeEnemy(types, game.databaseSound);
-	initializeEntitys(types.typesEnemy, game.world, game.countEntity, game.emptyItem, game.emptyObject, game.emptyEnemy);
+	initializeEntitys(game.world);
 
-	initializeMainPerson(game.mainPerson, game.databaseSound, game.emptyItem, game.emptyObject, game.emptyEnemy);
+	initializeMainPerson(game.mainPerson, game.databaseSound, world.emptyObjects);
 
 	createTextsAndFonts(game.textGame);
 	initializeTexts(game.textGame);
@@ -145,8 +147,36 @@ void renderEntitys(Game &game)
 
 }
 
+void renderUnlifeObjects(Game &game)
+{
+	RenderWindow &window = game.window;
+
+	int currentLevel = game.mainPerson.currentLevelFloor;
+	vector<UnlifeObject> &unlifeObjects = *game.world.unlifeObjects;
+	bool inView;
+	for (int i = 0; i != unlifeObjects.size(); ++i) {
+		inView = unlifeObjects[i].currentLevel >= currentLevel
+			&& unlifeObjects[i].currentLevel <= currentLevel + 2;
+
+		if (inView) {
+			if (unlifeObjects[i].currentLevel == currentLevel) {
+				unlifeObjects[i].spriteObject->setColor(DOWN_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(DOWN_VIEW);
+			} else if (unlifeObjects[i].currentLevel == currentLevel + 2) {
+				unlifeObjects[i].spriteObject->setColor(UP_VIEW);
+				unlifeObjects[i].transparentSpiteObject->setColor(UP_VIEW);
+			}
+
+			window.draw(*unlifeObjects[i].spriteObject);
+			window.draw(*unlifeObjects[i].transparentSpiteObject);
+		}
+
+	}
+}
+
 void destroyGame(Game & game)
 {
+	
 	delete &game;
 }
 
@@ -192,8 +222,8 @@ void informationAboutSelect(Game &game, float x, float y)
 	vector<UnlifeObject> &unlifeObjects = *game.world.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
-
-	mainPerson.founds.init(&game.emptyItem,  &game.emptyObject);
+	emptyObjects &emptyObjects = game.world.emptyObjects;
+	mainPerson.founds.init(&emptyObjects.emptyItem,  &emptyObjects.emptyObject);
 	mainPerson.founds.findObjectFromList = -1;
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
@@ -254,7 +284,7 @@ void informationAboutSelect(Game &game, float x, float y)
 	vector<Enemy>& Enemys = *game.world.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
-	mainPerson.findEnemy = &game.emptyEnemy;
+	mainPerson.findEnemy = &emptyObjects.emptyEnemy;
 	mainPerson.findEnemyFromList = -1;
 	infoEnemys.setString("Entity : not select");
 	for (int i = 0; i != Enemys.size(); ++i) {

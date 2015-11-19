@@ -3,9 +3,9 @@
 
 struct barHungry
 {
-	sf::Sprite* lowHungry;
-	sf::Sprite* highHungry;
-	sf::Sprite* levelHungry;
+	sf::Sprite lowHungry;
+	sf::Sprite highHungry;
+	sf::Sprite levelHungry;
 	void renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
 								 sf::RenderWindow& window);
 	void renderHigh(sf::Vector2f &pos, sf::Vector2u sizeWindow, sf::RenderWindow &window);
@@ -16,8 +16,8 @@ struct barHungry
 
 struct barThirst
 {
-	sf::Sprite* bottle;
-	sf::Sprite* levelThirst;
+	sf::Sprite bottle;
+	sf::Sprite levelThirst;
 	void renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow,
 								 sf::RenderWindow& window);
 };

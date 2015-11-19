@@ -5,15 +5,15 @@
 
 struct infoAboutSelect
 {
-	sf::Texture* Texture;
-	sf::Sprite* sprite;
+	sf::Texture Texture;
+	sf::Sprite sprite;
 	void render(sf::Vector2f position, sf::RenderWindow &window, TextGame &textGame);
 };
 
 struct panelQuickAccess
 {
-	sf::Sprite* spritePanel;
-	sf::Sprite* spriteSelect;
+	sf::Sprite spritePanel;
+	sf::Sprite spriteSelect;
 	void renderPanel(Vector2f position, RenderWindow& window);
 	void renderSelect(::MainPerson& mainPerson, featuresWindow features);
 	void renderItems(::MainPerson& mainPerson, featuresWindow features,

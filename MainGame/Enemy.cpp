@@ -1,8 +1,45 @@
 #include "World.h"
 #include "EntityVar.h"
 
-void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
-											 Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy)// ДОБАВЛЕНИЕ СУЩНОСТИ 
+void createGroup(world &world, std::vector<TypeEnemy*> &types, sf::Vector3i pos)
+{
+	Enemy* addEnemy = new Enemy();
+
+	emptyObjects &emptyObjects = world.emptyObjects;
+
+	Item &emptyItem = emptyObjects.emptyItem;
+	UnlifeObject &emptyObject = emptyObjects.emptyObject;
+	Enemy &emptyEnemy = emptyObjects.emptyEnemy;
+
+	int xPos;
+	int yPos;
+	int levelFloor;
+
+	int &countEnemy = world.countEntity;
+	for (size_t i = 1; i <= 2; i++) {
+		countEnemy++;
+		if (countEnemy > AMOUNT_ENTITY) {
+			break;
+		}
+
+
+		levelFloor = 1;
+		for (int i = 0; i < types.size(); i++) {
+
+			xPos = 9 + rand() % 9;
+			yPos = 9 + rand() % 9;
+			addEnemy->EnemyInit(*types[i], emptyItem, emptyObject, xPos, yPos, levelFloor);
+			world.Enemys->push_back(*addEnemy);
+		}
+
+
+
+	}
+
+	delete addEnemy;
+}
+
+void initializeEntitys(world &world)// ДОБАВЛЕНИЕ СУЩНОСТИ 
 {
 
 	srand(time(0)); // автоматическая случайность
@@ -10,38 +47,23 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 									// Волки
 	Enemy* addEnemy = new Enemy();
 
+	emptyObjects &emptyObjects = world.emptyObjects;
+
+	Item &emptyItem = emptyObjects.emptyItem;
+	UnlifeObject &emptyObject = emptyObjects.emptyObject; 
+	Enemy &emptyEnemy = emptyObjects.emptyEnemy;
+
+	int &countEnemy = world.countEntity;
+
+
+	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::wolfEnemy];
 	std::vector<TypeEnemy*> types;
 	int xPos;
 	int yPos;
 	int levelFloor;
 
-	for (size_t i = 1; i <= 2; i++) {
-		countEnemy++;
-		if (countEnemy > AMOUNT_ENTITY) {
-			break;
-		}
-
-		xPos = 9 + rand() % 5;
-		yPos = 9 + rand() % 5;
-		levelFloor = 0;
-
-		addEnemy->EnemyInit(*typeEnemy, emptyItem, emptyObject, xPos, yPos, levelFloor);
-
-		world.Enemys->push_back(*addEnemy);
-
-	}
-	//////////////////////////////////////////////////////////////
-	// Скелеты
-
-	/*
-		types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
-
-	//*/
+	types.push_back(&typesEnemy[idEnemy::wolfEnemy]);
 
 	for (size_t i = 1; i <= 2; i++) {
 		countEnemy++;
@@ -53,15 +75,25 @@ void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
 		levelFloor = 0;
 		for (int i = 0; i < types.size(); i++) {
 
-		xPos = 9 + rand() % 9;
-		yPos = 9 + rand() % 9;
+			xPos = 9 + rand() % 9;
+			yPos = 9 + rand() % 9;
 			addEnemy->EnemyInit(*types[i], emptyItem, emptyObject, xPos, yPos, levelFloor);
 			world.Enemys->push_back(*addEnemy);
 		}
 
-		
-
 	}
+	//////////////////////////////////////////////////////////////
+	// Скелеты
+	types.clear();
+
+	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
+	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+
+	Vector3i pos = { 12, 12, 0 };
+	createGroup(world, types, pos);
 	//////////////////////////////////////////////////////////////
 	typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
 	emptyEnemy.EnemyInit(*typeEnemy, emptyItem, emptyObject, -1, -1, -1);//TODO
@@ -376,6 +408,9 @@ void Enemy::checkLevelHealth(Vector2f &movemoment)
 	bool isLowHealth = healthEnemy.currentHealth < (healthEnemy.maxHealth / 4);
 	if (isLowHealth) {
 		entityStandPanic(movemoment);
+	}
+	else {
+		currenMode = idEntityMode::fight;
 	}
 }
 

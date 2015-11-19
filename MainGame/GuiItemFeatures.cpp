@@ -30,19 +30,19 @@ void itemFeatures::renderValueMiddle(string string, Text* text, sf::Vector2f &po
 	window.draw(*text);
 }
 
-void itemFeatures::renderIconWithScale(Sprite* sprite, sf::Vector2f position, sf::RenderWindow& window)
+void itemFeatures::renderIconWithScale(Sprite &sprite, sf::Vector2f position, sf::RenderWindow& window)
 {
-	sprite->setPosition(position);
-	sprite->setScale(SCALE_FEATURES);
-	window.draw(*sprite);
+	sprite.setPosition(position);
+	sprite.setScale(SCALE_FEATURES);
+	window.draw(sprite);
 }
 
-void itemFeatures::renderBar(Sprite *sprite, sf::Vector2f position, sf::RenderWindow& window)
+void itemFeatures::renderBar(Sprite &sprite, sf::Vector2f position, sf::RenderWindow& window)
 {
-	sprite->setPosition(position);
-	sprite->setScale(scaleGuiForEnemy);
-	window.draw(*sprite);
-	sprite->setScale(normalSizeGuiForEnemy);
+	sprite.setPosition(position);
+	sprite.setScale(scaleGuiForEnemy);
+	window.draw(sprite);
+	sprite.setScale(normalSizeGuiForEnemy);
 }
 
 void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow features,
@@ -91,7 +91,7 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 		pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 		pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
 		int currentToughness = WIDTH_LEVEL_BAR_GUI * levelToughness;
-		bars.levelStamina->setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
+		bars.levelStamina.setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
 
 		renderBar(bars.levelStamina, pos, window);
 	}
@@ -131,17 +131,17 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 	////////////////
 	// Голод
 	if (categoryItem == idCategoryItem::food) {
-		hungrySprite->setPosition(pos);
-		hungrySprite->setScale(SCALE_FEATURES);
-		window.draw(*hungrySprite);
+		hungrySprite.setPosition(pos);
+		hungrySprite.setScale(SCALE_FEATURES);
+		window.draw(hungrySprite);
 	}
 	////////////////
 	// Жажда
 	else if (categoryItem == idCategoryItem::bottleWithWater
 					 || categoryItem == idCategoryItem::bukketWithWater) {
-		thirstSprite->setPosition(pos);
-		thirstSprite->setScale(SCALE_FEATURES);
-		window.draw(*thirstSprite);
+		thirstSprite.setPosition(pos);
+		thirstSprite.setScale(SCALE_FEATURES);
+		window.draw(thirstSprite);
 	}
 	////////////////
 	// Другое не показываем

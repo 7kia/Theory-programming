@@ -10,6 +10,13 @@ struct typesObjectsInWorld
 
 };
 
+struct emptyObjects
+{
+		Item emptyItem;
+	UnlifeObject emptyObject;
+	Enemy emptyEnemy;
+};
+
 struct world
 {
 	std::vector<Item>* items;
@@ -18,9 +25,13 @@ struct world
 	typesObjectsInWorld typesObjects;
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
+
+	int countUnlifeObject = 0;
+	int countEntity = 0;
+
+	emptyObjects emptyObjects;
 };
 
+void createGroup(TypeEnemy *typesEnemy, sf::Vector3i pos);
 
-
-void initializeEntitys(TypeEnemy *typesEnemy, world &world, int countEnemy,
-											 Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy);
+void initializeEntitys(world &world);

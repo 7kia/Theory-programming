@@ -257,8 +257,6 @@ public:
 
 	void dropObject(Vector2i pos, std::vector<Item> &items, TypeItem* typesItems);
 
-	void useTool(sf::Vector3i pos, world &world, Item &currentItem);
-	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);
 	void actionAlternate(world &world, sf::Vector2f pos);
@@ -272,6 +270,9 @@ public:
 	void useAsEmptyBottle(Item &currentItem, TypeItem *typesItems, Field &field, int level);
 	void useAsEmptyBukket(Item &currentItem, TypeItem *typesItems, Field &field, int level);
 	void useAsBukketWithWater(Item &currentItem, TypeItem *typesItems, sf::Event event, Field &field);
+
+	void useTool(sf::Vector3i pos, world &world, Item &currentItem);
+	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	//private:
 
 };

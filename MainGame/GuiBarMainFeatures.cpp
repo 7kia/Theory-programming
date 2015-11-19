@@ -13,11 +13,11 @@ void barMainFeatures::renderBar(int& current, int& max, sf::Sprite& sprite, Vect
 void barMainFeatures::render(int &current, int& max, Sprite &sprite, Vector2f scale,
 														 featuresSprite &featuresSprite, Vector2f &position, RenderWindow &window)
 {
-
-	bar->setPosition(position);
-	bar->setScale(scale);
-	window.draw(*bar);
-	bar->setScale(normalSize);
+	
+	bar.setPosition(position);
+	bar.setScale(scale);
+	window.draw(bar);
+	bar.setScale(normalSize);
 
 	float level = float(current) / max;
 

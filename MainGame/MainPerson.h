@@ -49,4 +49,5 @@ private:
 };
 
 void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound,
-													Item &emptyItem, UnlifeObject &emptyObject, Enemy &emptyEnemy);
+													emptyObjects &emptyObjects);
+
