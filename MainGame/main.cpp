@@ -130,8 +130,7 @@ void processEvents(Game &game, const Time &deltaTime)
 			// Îþðàáîòêà ùåë÷êà ìûøè
 			if (event.type == Event::MouseButtonPressed) {
 				// Èñïîëüçîâàíèå ïðåäìåòà
-				mainPerson.useItem(game.world, *game.world.listDestroy, deltaTime,
-													 game.typesItem, game.typesUnlifeObject, event, pos.x, pos.y);// ÈÑÏÐÀÂÜ
+				mainPerson.useItem(game.world, deltaTime, event, pos);// ÈÑÏÐÀÂÜ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ÈÑÏÐÀÂÜ
 			}
 			//////////////////////////////////////////////////////////////////////////////////
@@ -300,7 +299,7 @@ void startGame()
 			if (mainPerson.isDeath == false) {
 				//printf("TIMEPERSON %f\n", mainPerson.animation.currentTimeFightAnimation);
 				mainPerson.update(TIME_PER_FRAME, game->databaseSound);
-				mainPerson.updateAtack(game->world, game->typesItem, TIME_PER_FRAME);
+				mainPerson.updateAtack(game->world, TIME_PER_FRAME);
 				mainPerson.interactionWithMap(game->world.field, *game->world.listDestroy, TIME_PER_FRAME);
 				mainPerson.interactionWitnUnlifeObject(game->world.unlifeObjects, TIME_PER_FRAME);
 				mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());

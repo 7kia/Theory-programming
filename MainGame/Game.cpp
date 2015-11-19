@@ -15,19 +15,20 @@ void initializeGame(Game & game)
 	initializeSound(game.databaseSound);
 	initializeField(game.world.field);
 
-	initializeTypesItem(game.typesItem, *game.world.listDestroy, game.databaseSound);
-	initializeItems(*game.world.items, game.typesItem, game.emptyItem);
+	typesObjectsInWorld &types = game.world.typesObjects;
+	initializeTypesItem(types.typesItem, *game.world.listDestroy, game.databaseSound);
+	initializeItems(*game.world.items, types.typesItem, game.emptyItem);
 
-	initializeTypeUnlifeObjects(game.typesUnlifeObject, game.databaseSound);
-	initializeUnlifeObjects(*game.world.unlifeObjects, game.typesUnlifeObject, game.emptyObject);
+	initializeTypeUnlifeObjects(types.typesUnlifeObject, game.databaseSound);
+	initializeUnlifeObjects(*game.world.unlifeObjects, types.typesUnlifeObject, game.emptyObject);
 
 	// TODO
 	initializeCategorysBreakingObject(game);
 
 	game.world.Enemys = new vector<Enemy>;
 
-	initializeTypeEnemy(game.typesEnemy, game.typesItem, game.databaseSound);
-	initializeEntitys(game.typesEnemy, game.world, game.countEntity, game.emptyItem, game.emptyObject, game.emptyEnemy);
+	initializeTypeEnemy(types, game.databaseSound);
+	initializeEntitys(types.typesEnemy, game.world, game.countEntity, game.emptyItem, game.emptyObject, game.emptyEnemy);
 
 	initializeMainPerson(game.mainPerson, game.databaseSound, game.emptyItem, game.emptyObject, game.emptyEnemy);
 
@@ -43,7 +44,8 @@ void initializeGame(Game & game)
 void initializeCategorysBreakingObject(Game &game) 
 {
 	listDestroyObjectsAndBlocks &listDestroy = *game.world.listDestroy;
-	TypeUnlifeObject* typesUnlifeObject = game.typesUnlifeObject;
+	typesObjectsInWorld &types = game.world.typesObjects;
+	TypeUnlifeObject* typesUnlifeObject = types.typesUnlifeObject;
 	wchar_t* charBlocks = game.world.field.charBlocks;
 
 	//////////////////////////////////////
@@ -108,7 +110,7 @@ void updateEntity(Game& game, const Time deltaTime)
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime, game.databaseSound);
 		Enemys[i].interactionWithMap(field, *game.world.listDestroy, deltaTime);
-		game.mainPerson.attractionEnemy(Enemys[i], game.world, game.typesItem, game.typesUnlifeObject, deltaTime);
+		game.mainPerson.attractionEnemy(Enemys[i], game.world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
 }

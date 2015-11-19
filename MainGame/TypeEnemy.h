@@ -3,6 +3,8 @@
 
 #include "Entity.h"
 
+
+struct typesObjectsInWorld;
 struct enemyFeatures
 {
 	int maxHealth;
@@ -56,4 +58,4 @@ struct TypeEnemy
 												 int amountEnemySlots);
 };
 
-void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &databaseSound);
+void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound);

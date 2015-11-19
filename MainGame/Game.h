@@ -21,22 +21,15 @@ struct Game
 
 	MainPerson mainPerson;
 
-	TypeUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
-
-
 	Item emptyItem;
 	UnlifeObject emptyObject;
+	Enemy emptyEnemy;
 
-	TypeItem typesItem[AMOUNT_TYPES_ITEM];
-	
 	world world;
 	////////////////////////////////////
 	// Ходьба по карте(для противников
 	float minTimeWalk = 4.f;
 	float maxTimeWalk = 12.f;// TODO
-
-	Enemy emptyEnemy;
-	TypeEnemy typesEnemy[amountEnemy];
 
 	sf::Clock clock;
 

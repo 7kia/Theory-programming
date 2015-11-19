@@ -119,12 +119,6 @@ void MainPerson::initFounds(::Item &item, UnlifeObject& object, ::Enemy& enemy)
 	emptyEnemy = &enemy;
 }
 
-void MainPerson::initStepSounds(dataSound& databaseSound)
-{
-	soundsEntity.push_back(&databaseSound.sounds[idSoundEntity::stepGrass]);
-	soundsEntity.push_back(&databaseSound.sounds[idSoundEntity::stepStone]);
-}
-
 void MainPerson::givenForPersonDamage(Enemy &enemy)
 {
 	Item& itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
@@ -149,8 +143,9 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 }
 
 
-void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &deltaTime)
+void MainPerson::updateAtack(world &world, const Time &deltaTime)
 {
+	TypeItem *typesItems = world.typesObjects.typesItem;
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 	Field &field = world.field;
 	vector<Enemy> &enemy = *world.Enemys;
@@ -228,9 +223,12 @@ void MainPerson::updateAtack(world &world, TypeItem *typesItems, const Time &del
 }
 
 
-void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItems, TypeUnlifeObject *typesObject,
-																 const Time &deltaTime)
+void MainPerson::attractionEnemy(Enemy &enemy, world &world, const Time &deltaTime)
 {
+	typesObjectsInWorld &types = world.typesObjects;
+	TypeEnemy *typesEnemy = types.typesEnemy;
+	TypeItem *typesItem = types.typesItem;
+
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
 	Vector2f movemoment;
@@ -249,39 +247,19 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 	bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
 	bool onLevel = onLevelEnemy || feelEnemy;
 	if (distanse <= radiuseView && onLevel) {
+		enemy.currenMode = idEntityMode::fight;
 
 		movemoment = vectorDirection(enemyPoint, personPoint);
-
-		bool canPanic = enemy.type->converse.canPanic;
-
-		if (enemy.health.currentHealth < (enemy.health.maxHealth / 4)) {
-			enemy.currenMode = idEntityMode::panic;
-			if (canPanic) {
-				movemoment = { -movemoment.x, -movemoment.y };
-				enemy.choiceDirections(movemoment);
-
-				enemy.animation.currentTimeFightAnimation = 0.f;
-
-				enemy.step.stepCurrent = enemy.step.stepFirst * 2;
-				enemy.stamina.needMinusStamina = true;
-				step.currentTime = 0;
-			}
-		}
-		else
-		{
-			enemy.currenMode = idEntityMode::fight;
-		}
-		
-
-
+		enemy.checkLevelHealth(movemoment);
 		enemy.defineDirectionLook(movemoment);
 
-
-		if (feelEnemy != true)
+		// TODO
+		bool isFight = currenMode == idEntityMode::fight;
+		if (feelEnemy != true && isFight)
 			enemy.checkBlock(world.field);
 
 
-		if (enemy.currenMode == idEntityMode::fight) {
+		if (isFight) {
 
 			enemy.choiceDirections(movemoment);
 			step.currentTime = 0;
@@ -290,10 +268,10 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 			if (enemy.wasCollision) {
 
 				if (!onLevelEnemy && feelEnemy) {
-					Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK),
-					int(enemy.getXPos() / SIZE_BLOCK),
-					enemy.collision.level };
-					enemy.findLadder(world, typesItems, posEnemy);
+					Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK), 
+						int(enemy.getXPos() / SIZE_BLOCK),
+						enemy.collision.level };
+					enemy.findLadder(world, posEnemy);
 				}
 
 
@@ -303,12 +281,13 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 				bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
 				bool isNotEmpty = nameCurrentItem != nameEmptyItem;
 				if (isNotEmpty && onLevelEnemy) {
-					enemy.choiceBlock(world, typesItems);
+					enemy.choiceBlock(world);
 				} else if (isNotEmpty && isLadder) {
-					enemy.buildLadder(world, typesItems, typesObject);
+					enemy.buildLadder(world);
 				}
 
-			} else {
+			} 
+			else {
 
 				bool noNearFight = distanse >= SIZE_BLOCK;
 				if (noNearFight) {
@@ -326,7 +305,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 
 						itemEnemy.currentToughness -= 1;
 						if (itemEnemy.currentToughness < 1) {
-							redefineType(itemEnemy, typesItems, -itemEnemy.typeItem->features.id);
+							redefineType(itemEnemy, types.typesItem, -itemEnemy.typeItem->features.id);
 						}
 					}
 
@@ -345,9 +324,12 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItem
 
 ////////////////////////////////////////////////////////////////////
 
-void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy, const Time &deltaTime,
-												 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, Event &event, float xMouse, float yMouse)
+void MainPerson::useItem(world &world, const Time &deltaTime,
+												Event &event, Vector2f pos)
 {
+
+	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
+	TypeItem *typesItem = world.typesObjects.typesItem;
 	Field &field = world.field;
 	vector<Item> &items = *world.items;
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
@@ -355,15 +337,15 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 
 
 
-	int x = xMouse / SIZE_BLOCK;
-	int y = yMouse / SIZE_BLOCK;
+	int x = pos.x / SIZE_BLOCK;
+	int y = pos.y / SIZE_BLOCK;
 	founds.currentTarget = { x, y };
 
 	bool isEnemy = findEnemy != emptyEnemy;
 	bool isAtack = event.key.code == Mouse::Left;
 	if (isEnemy && isAtack) {
 
-		if (isInUseField(xMouse, yMouse, true)) {
+		if (isInUseField(pos.x, pos.y, true)) {
 			if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
 				if (animation.currentTimeFightAnimation == 0.f) {
@@ -391,7 +373,7 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 		case idCategoryItem::backhoe:
 		case idCategoryItem::pickax:
 		case idCategoryItem::axe:
-			if (isInUseField(xMouse, yMouse, true)) {
+			if (isInUseField(pos.x, pos.y, true)) {
 				int level;
 				defineLevel(level, event);
 
@@ -399,14 +381,14 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 				int y = founds.currentTarget.y;
 
 				Vector3i pos = { x, y, level };
-				useTool(pos, world, currentItem, typesItems);
+				useTool(pos, world, currentItem);
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
 			// ¡ÎÓÍ Ë ÌÂÊË‚ÓÈ Ó·˙ÂÍÚ
 		case idCategoryItem::block:
 		case idCategoryItem::unlifeObject:
-			if (isInUseField(xMouse, yMouse, false)) {
+			if (isInUseField(pos.x, pos.y, false)) {
 				int level;
 				defineLevel(level, event);
 
@@ -416,8 +398,7 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 
 
 				useBlock(pos, world,
-								 currentItem, typesItems,
-								 typesUnlifeObjects);
+								 currentItem);
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
@@ -425,23 +406,23 @@ void MainPerson::useItem(world &world, listDestroyObjectsAndBlocks& listDestroy,
 			useAsFood(currentItem, event);
 			break;
 		case idCategoryItem::bukketWithWater:
-			useAsBukketWithWater(currentItem, typesItems, event, field);
+			useAsBukketWithWater(currentItem, typesItem, event, field);
 			break;
 		case idCategoryItem::bottleWithWater:
-			useAsBottleWithWater(currentItem, typesItems, event);
+			useAsBottleWithWater(currentItem, typesItem, event);
 			break;
 		case idCategoryItem::bukketEmpty:// »—œ–¿¬‹
-			if (isInUseField(xMouse, yMouse, true)) {
+			if (isInUseField(pos.x, pos.y, true)) {
 				int level;
 				defineLevel(level, event);
-				useAsEmptyBukket(currentItem, typesItems, field, level);
+				useAsEmptyBukket(currentItem, typesItem, field, level);
 			}
 			break;
 		case idCategoryItem::bottleEmpty:// »—œ–¿¬‹
-			if (isInUseField(xMouse, yMouse, true)) {
+			if (isInUseField(pos.x, pos.y, true)) {
 				int level;
 				defineLevel(level, event);
-				useAsEmptyBottle(currentItem, typesItems, field, level);
+				useAsEmptyBottle(currentItem, typesItem, field, level);
 			}
 			break;
 		case idCategoryItem::other:

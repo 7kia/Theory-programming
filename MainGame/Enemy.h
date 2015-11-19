@@ -23,6 +23,8 @@ public:
 	int idSelectItem;
 
 	TypeEnemy *type;
+
+
 	///////////////////////////////////////////////////////
 	// Для уничтожения врагов
 	Enemy *findEnemy;
@@ -32,16 +34,25 @@ public:
 	void EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level);
 	~Enemy();
 
+	void checkLevelHealth(Vector2f& movemoment);
+	void entityStandPanic(sf::Vector2f &movemoment);
 
 	void randomWalk(const sf::Time &deltaTime);
 
 	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
+
 	void choiceDirections(Vector2f movemoment);
 	void defineDirectionLook(Vector2f movemoment);
-	void choiceBlock(world &world, TypeItem *typesItem);
-	void buildLadder(world &world, TypeItem *typesItem, TypeUnlifeObject *typesObject);
-	void findLadder(world &world, TypeItem *typesItem, sf::Vector3i pos);
+	void choiceBlock(world &world);
+
+	void findLadder(world &world, sf::Vector3i pos);
+	void buildLadder(world &world);
+
+	void checkInDirectionWalk(Field &field, sf::Vector2i posStart, sf::Vector2i shifts);
+	void redefineDirectionWalk();
 	void checkBlock(Field &field);
+
+
 private:
 
 };

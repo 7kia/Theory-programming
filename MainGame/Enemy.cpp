@@ -264,9 +264,9 @@ void Enemy::defineDirectionLook(Vector2f movemoment)
 }
 
 
-void Enemy::choiceBlock(world &world, TypeItem *typesItem)
+void Enemy::choiceBlock(world &world)
 {
-
+	TypeItem *typesItem = world.typesObjects.typesItem;
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 
 	int x = collision.x;
@@ -357,7 +357,7 @@ void Enemy::choiceBlock(world &world, TypeItem *typesItem)
 	}
 	*/
 	Vector3i pos = { x, y, level };
-	useTool(pos, world, currentItem, typesItem);
+	useTool(pos, world, currentItem);
 
 	//bool isObject = founds.findObject != founds.emptyObject;
 	//if (isObject) {
@@ -370,8 +370,35 @@ void Enemy::choiceBlock(world &world, TypeItem *typesItem)
 
 }
 
-void Enemy::buildLadder(world &world, TypeItem *typesItem, TypeUnlifeObject *typesObject)
+void Enemy::checkLevelHealth(Vector2f &movemoment)
 {
+	entityHealth &healthEnemy = health;
+	bool isLowHealth = healthEnemy.currentHealth < (healthEnemy.maxHealth / 4);
+	if (isLowHealth) {
+		entityStandPanic(movemoment);
+	}
+}
+
+void Enemy::entityStandPanic(Vector2f &movemoment)
+{
+	bool canPanic = type->converse.canPanic;
+	currenMode = idEntityMode::panic;
+	if (canPanic) {
+		movemoment = { -movemoment.x, -movemoment.y };
+		choiceDirections(movemoment);
+
+		animation.currentTimeFightAnimation = 0.f;
+
+		step.stepCurrent = step.stepFirst * 2;
+		stamina.needMinusStamina = true;
+	}
+}
+
+void Enemy::buildLadder(world &world)
+{
+	TypeItem *typesItem = world.typesObjects.typesItem;
+	TypeUnlifeObject *typesObject = world.typesObjects.typesUnlifeObject;
+
 	int x = getXPos() / SIZE_BLOCK;
 	int y = getYPos() / SIZE_BLOCK;
 	int level = currentLevelFloor + 1;//currentLevelFloor + 1;
@@ -386,7 +413,7 @@ void Enemy::buildLadder(world &world, TypeItem *typesItem, TypeUnlifeObject *typ
 		for (int j = -1; j <= 1; j++) {
 			if (map[level][y + j][x + i] == air) {
 				Vector3i pos = { x + i, y + j, level };
-				useBlock(pos, world, currentItem, typesItem, typesObject);
+				useBlock(pos, world, currentItem);
 			}
 		}
 	}
@@ -396,8 +423,9 @@ void Enemy::buildLadder(world &world, TypeItem *typesItem, TypeUnlifeObject *typ
 
 }
 
-void Enemy::findLadder(world &world, TypeItem *typesItem, Vector3i pos)
+void Enemy::findLadder(world &world, Vector3i pos)
 {
+	TypeItem *typesItem = world.typesObjects.typesItem;
 	int x = getXPos() / SIZE_BLOCK;
 	int y = getYPos() / SIZE_BLOCK;
 	int level = pos.z;//currentLevelFloor + 1;
@@ -415,111 +443,121 @@ void Enemy::findLadder(world &world, TypeItem *typesItem, Vector3i pos)
 	}
 }
 
+void Enemy::checkInDirectionWalk(Field &field, sf::Vector2i posStart, sf::Vector2i shifts)
+{
+	int level = currentLevelFloor + 1;
+	int x = posStart.x;
+	int y = posStart.y;
+	int xShift = shifts.x;
+	int yShift = shifts.y;
+
+
+	int countCheckingBlocks = RADIUSE_VIEW / SIZE_BLOCK;
+	int count = 1;
+	while (!isExitFromBorder(x, y) && count < countCheckingBlocks) {
+
+		bool checkX = field.dataMap[level][y][x + xShift] != field.charBlocks[idBlocks::air];
+		bool checkY = field.dataMap[level][y + yShift][x] != field.charBlocks[idBlocks::air];
+		bool checkXAndY = field.dataMap[level][y + yShift][x + xShift] != field.charBlocks[idBlocks::air];
+		bool summaryCondition = false;
+		if (xShift != 0 && yShift != 0) {
+			summaryCondition = checkXAndY;
+		}
+		if (xShift != 0) {
+			summaryCondition = checkX;
+		} else if (yShift != 0) {
+			summaryCondition = checkY;
+		}
+
+		if (summaryCondition) {
+
+
+			if (wasCollision) {
+			
+				currenMode = idEntityMode::walk;
+
+				redefineDirectionWalk();
+			}
+
+			break;
+		}
+		x += xShift;
+		y += yShift;
+
+		count++;
+	}
+}
+
+void Enemy::redefineDirectionWalk()
+{
+	step.currentTime = 0;
+	step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
+
+	int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
+	directions.directionWalk = Direction(randomDirection);
+}
+
 void Enemy::checkBlock(Field& field)
 {
-	if(currenMode == idEntityMode::fight)
-	{
-		int x = 0;
-		int y = 0;
-		int level = currentLevelFloor + 1;
+	int x = 0;
+	int y = 0;
 
-		int countCheckingBlocks = RADIUSE_VIEW / SIZE_BLOCK;
-		int count = 1;
-
-		int xShift = 0;
-		int yShift = 0;
-		switch (directions.directionLook) {
-		case DOWN_LEFT:
-			x = getXPos() / SIZE_BLOCK - 1;
-			y = getYPos() / SIZE_BLOCK + 1;
-			xShift = -1;
-			yShift = 1;
-			break;
-		case DOWN_RIGHT:
-			x = getXPos() / SIZE_BLOCK + 1;
-			y = getYPos() / SIZE_BLOCK + 1;
-			xShift = 1;
-			yShift = 1;
-			break;
-		case UP_LEFT:
-			x = getXPos() / SIZE_BLOCK - 1;
-			y = getYPos() / SIZE_BLOCK - 1;
-			xShift = -1;
-			yShift = -1;
-			break;
-		case UP_RIGHT:
-			x = getXPos() / SIZE_BLOCK + 1;
-			y = getYPos() / SIZE_BLOCK - 1;
-			xShift = 1;
-			yShift = -1;
-			break;
-		case LEFT:
-			x = getXPos() / SIZE_BLOCK - 1;
-			y = getYPos() / SIZE_BLOCK;
-			xShift = -1;
-			yShift = 0;
-			break;
-		case RIGHT:
-			x = getXPos() / SIZE_BLOCK + 1;
-			y = getYPos() / SIZE_BLOCK;
-			xShift = 1;
-			yShift = 0;
-			break;
-		case UP:
-			x = getXPos() / SIZE_BLOCK;
-			y = getYPos() / SIZE_BLOCK - 1;
-			xShift = 0;
-			yShift = -1;
-			break;
-		case DOWN:
-			x = getXPos() / SIZE_BLOCK;
-			y = getYPos() / SIZE_BLOCK + 1;
-			xShift = 0;
-			yShift = 1;
-			break;
-		default:
-			break;
-		}
-
-		while (!isExitFromBorder(x, y) && count < countCheckingBlocks) {
-			bool checkX = field.dataMap[level][y][x + xShift] != field.charBlocks[idBlocks::air];
-
-			bool checkY = field.dataMap[level][y + yShift][x] != field.charBlocks[idBlocks::air];
-
-			bool checkXY = field.dataMap[level][y + yShift][x + xShift] != field.charBlocks[idBlocks::air];
-
-			bool summaryCondition = true;
-			if(xShift != 0 && yShift != 0)
-			{
-				summaryCondition = checkXY;
-			}
-			if(xShift != 0)
-			{
-				summaryCondition = checkX;
-			}
-			else if (yShift != 0) {
-				summaryCondition = checkY;
-			}
-
-			if (summaryCondition) {
-				if(currenMode != idEntityMode::panic)
-					currenMode = idEntityMode::walk;
-
-				if(wasCollision)
-				{
-					step.currentTime = 0;
-					step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
-
-					int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
-					directions.directionWalk = Direction(randomDirection);
-				}
-			
-				break;
-			}
-			x += xShift;
-			y += yShift;
-			count++;
-		}
+	int xShift = 0;
+	int yShift = 0;
+	switch (directions.directionLook) {
+	case DOWN_LEFT:
+		x = getXPos() / SIZE_BLOCK - 1;
+		y = getYPos() / SIZE_BLOCK + 1;
+		xShift = -1;
+		yShift = 1;
+		break;
+	case DOWN_RIGHT:
+		x = getXPos() / SIZE_BLOCK + 1;
+		y = getYPos() / SIZE_BLOCK + 1;
+		xShift = 1;
+		yShift = 1;
+		break;
+	case UP_LEFT:
+		x = getXPos() / SIZE_BLOCK - 1;
+		y = getYPos() / SIZE_BLOCK - 1;
+		xShift = -1;
+		yShift = -1;
+		break;
+	case UP_RIGHT:
+		x = getXPos() / SIZE_BLOCK + 1;
+		y = getYPos() / SIZE_BLOCK - 1;
+		xShift = 1;
+		yShift = -1;
+		break;
+	case LEFT:
+		x = getXPos() / SIZE_BLOCK - 1;
+		y = getYPos() / SIZE_BLOCK;
+		xShift = -1;
+		yShift = 0;
+		break;
+	case RIGHT:
+		x = getXPos() / SIZE_BLOCK + 1;
+		y = getYPos() / SIZE_BLOCK;
+		xShift = 1;
+		yShift = 0;
+		break;
+	case UP:
+		x = getXPos() / SIZE_BLOCK;
+		y = getYPos() / SIZE_BLOCK - 1;
+		xShift = 0;
+		yShift = -1;
+		break;
+	case DOWN:
+		x = getXPos() / SIZE_BLOCK;
+		y = getYPos() / SIZE_BLOCK + 1;
+		xShift = 0;
+		yShift = 1;
+		break;
+	default:
+		break;
 	}
 
+	Vector2i startPosition = { x, y };
+	Vector2i shifts = { xShift, yShift };
+	checkInDirectionWalk(field, startPosition, shifts);
 }

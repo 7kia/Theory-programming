@@ -208,9 +208,10 @@ void Entity::dropObject(Vector2i pos, vector<Item> &items, TypeItem* typesItems)
 	//////////////////////////////////////////////////
 }
 
-void Entity::useTool(Vector3i pos, world &world, Item &currentItem, TypeItem *typesItems) {
+void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 
 	///*
+	TypeItem *typesItems = world.typesObjects.typesItem;
 	Field &field = world.field;
 	vector<Item> &items = *world.items;
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
@@ -263,11 +264,10 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem, TypeItem *ty
 }
 
 void Entity::useBlock(Vector3i pos, world &world,
-											Item & currentItem, TypeItem * typesItems,
-											TypeUnlifeObject * typesUnlifeObjects)
+											Item & currentItem)
 {
 
-
+	TypeUnlifeObject *typesUnlifeObjects = world.typesObjects.typesUnlifeObject;
 
 	Field &field = world.field;
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;

@@ -36,6 +36,7 @@ void currentCollision::clear()
 	idObject = 0;
 }
 
+
 void entityMana::update(const sf::Time deltaTime)
 {
 	timeForMana += deltaTime.asSeconds();
@@ -756,6 +757,12 @@ bool Entity::isInListObjects(String* listObjects, int sizeString) {
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////
+
+void Entity::initStepSounds(dataSound & databaseSound)
+{
+	soundsEntity.push_back(&databaseSound.sounds[idSoundEntity::stepGrass]);
+	soundsEntity.push_back(&databaseSound.sounds[idSoundEntity::stepStone]);
+}
 
 void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
 {

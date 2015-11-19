@@ -1,11 +1,15 @@
 #include "TypeEnemy.h"
 #include "EntityVar.h"
 #include "Recourses.h"
+#include "World.h"
 using namespace sf;
 using namespace std;
 
-void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem, dataSound &databaseSound)
+void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 {
+
+	TypeEnemy *typesEnemy = types.typesEnemy;
+	TypeItem *typesItem = types.typesItem;
 	////////////////////////////////////////////////////////////////
 	// Волк
 	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::wolfEnemy];

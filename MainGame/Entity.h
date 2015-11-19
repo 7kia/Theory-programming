@@ -257,10 +257,8 @@ public:
 
 	void dropObject(Vector2i pos, std::vector<Item> &items, TypeItem* typesItems);
 
-	void useTool(sf::Vector3i pos, world &world, Item &currentItem, TypeItem *typesItems);
-	void useBlock(sf::Vector3i pos, world &world,
-								Item & currentItem, TypeItem * typesItems,
-								TypeUnlifeObject * typesUnlifeObjects);
+	void useTool(sf::Vector3i pos, world &world, Item &currentItem);
+	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);
 	void actionAlternate(world &world, sf::Vector2f pos);

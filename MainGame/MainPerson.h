@@ -6,8 +6,6 @@ class MainPerson : public Entity
 public:
 	sf::Texture *textureEntity;
 
-	void initStepSounds(dataSound& databaseSound);
-
 	sf::View *view;
 	void updateView(sf::RenderWindow & window);
 
@@ -19,9 +17,8 @@ public:
 	void initFounds(Item& item, UnlifeObject& object, Enemy& enemy);
 
 	void givenForPersonDamage(Enemy & enemy);
-	void updateAtack(world &world, TypeItem* typesItems, const sf::Time &deltaTime);
-	void attractionEnemy(Enemy &enemy, world &world, TypeItem *typesItems, TypeUnlifeObject *typesObject,
-											 const Time &deltaTime);
+	void updateAtack(world &world, const sf::Time &deltaTime);
+	void attractionEnemy(Enemy &enemy, world &world, const Time &deltaTime);
 	/*
 		///////////////////////////////////////////////////////
 	// Основные характерисктики
@@ -43,8 +40,8 @@ public:
 	void computeAngle(sf::RenderWindow &window);
 
 
-	void useItem(world &world, listDestroyObjectsAndBlocks& listDestroy, const sf::Time &deltaTime,
-							 TypeItem *typesItems, TypeUnlifeObject *typesUnlifeObjects, sf::Event &event, float xMouse, float yMouse);
+	void useItem(world &world, const Time &deltaTime,
+							 Event &event, Vector2f pos);
 
 
 private:
