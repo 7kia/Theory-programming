@@ -3,6 +3,9 @@
 
 #include "TypeItems.h"
 
+
+struct world;
+
 struct Item 
 {
 	sf::Sprite *mainSprite;
@@ -34,3 +37,5 @@ private:
 };
 
 void initializeItems(std::vector<Item> &items, TypeItem *typesItem, Item &emptyItem);
+
+void dropBlock(world &world, sf::Vector3i pos, int level);

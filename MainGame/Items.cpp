@@ -1,8 +1,25 @@
-#include "Items.h"
-#include "ItemsVar.h"
+#include "World.h"
+
 
 using namespace sf;
 using namespace std;
+
+void dropBlock(world &world, Vector3i pos, int level)
+{
+	vector<Item> &items = *world.items;
+	TypeItem *typesItems = world.typesObjects.typesItem;
+	Field &field = world.field;
+
+	Item* addItem = new Item;
+
+	wchar_t &block = field.dataMap[pos.z][pos.y][pos.z];
+
+	addItem->setType(typesItems[field.findIdBlock(block)]);
+	addItem->setPosition(pos.x + 1, pos.y + 1, pos.z + 1);
+	items.push_back(*addItem);
+
+	delete addItem;
+}
 
 void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 {

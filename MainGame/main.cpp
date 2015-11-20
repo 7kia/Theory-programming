@@ -271,7 +271,7 @@ void generateGroups(Game &game)
 	bool condition = int(currentWorldTime) % TIME_GENERATE_WAVE_ENEMYS == 0;
 	if(condition && needGenerateWave == false)
 	{
-		Vector3i pos = { 10, 10, 1 };
+		Vector3i pos = { 3, 10, 1 };
 		createSmallGroupSkelets(game.world, pos);
 	}
 

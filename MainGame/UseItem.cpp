@@ -241,17 +241,7 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 		}
 	} else if (isInListBlocks(*block, listBlocks)) {
 
-
-		//////////////////////////////
-		// Выпадение предмета
-		Item* addItem = new Item;
-
-		addItem->setType(typesItems[field.findIdBlock(*block)]);
-		addItem->setPosition(x + 1, y + 1, currentLevelFloor + 1);
-		items.push_back(*addItem);
-
-		delete addItem;
-		//////////////////////////////
+		dropBlock(world, pos, level);
 
 		*block = field.charBlocks[idBlocks::air];
 

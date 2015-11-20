@@ -11,7 +11,7 @@
 
 const sf::String TITLE_PROGRAM = "MainGame v1.6.0";
 
-const int TIME_GENERATE_WAVE_ENEMYS = 60;
+const int TIME_GENERATE_WAVE_ENEMYS = 50;
 
 struct Game
 {

@@ -23,7 +23,7 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 	unlifeObjects.push_back(addObject);
 
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::smallStone]);
-	addObject.setPosition(8, 8, 1);
+	addObject.setPosition(5, 11, 1);
 	unlifeObjects.push_back(addObject);
 
 	emptyObject.setType(typesUnlifeObjects[idUnlifeObject::empty]);
