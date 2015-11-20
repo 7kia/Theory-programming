@@ -143,7 +143,7 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 }
 
 
-void MainPerson::updateAtack(world &world, const Time &deltaTime)
+void MainPerson::updateAtack(world &world, const float deltaTime)
 {
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
@@ -201,7 +201,7 @@ void MainPerson::updateAtack(world &world, const Time &deltaTime)
 		} 
 		else {
 			currenMode = idEntityMode::atack;
-			//animation.currentTimeFightAnimation += deltaTime.asSeconds();
+			//animation.currentTimeFightAnimation += deltaTime;
 			// TODO //enemy->giveDamage//
 			Vector2f posPerson = { getXPos(), getYPos() };
 			Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
@@ -223,7 +223,7 @@ void MainPerson::updateAtack(world &world, const Time &deltaTime)
 }
 
 
-void MainPerson::attractionEnemy(Enemy &enemy, world &world, const Time &deltaTime)
+void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTime)
 {
 	typesObjectsInWorld &types = world.typesObjects;
 	TypeEnemy *typesEnemy = types.typesEnemy;
@@ -295,7 +295,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const Time &deltaTi
 				} else if (onLevelEnemy) {
 					enemy.currenMode = idEntityMode::atack;
 
-					enemy.animation.currentTimeFightAnimation += deltaTime.asSeconds();
+					enemy.animation.currentTimeFightAnimation += deltaTime;
 					if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
 						enemy.animation.currentTimeFightAnimation = 0.f;
 
@@ -324,7 +324,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const Time &deltaTi
 
 ////////////////////////////////////////////////////////////////////
 
-void MainPerson::useItem(world &world, const Time &deltaTime,
+void MainPerson::useItem(world &world,
 												Event &event, Vector2f pos)
 {
 

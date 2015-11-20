@@ -31,7 +31,7 @@ public:
 	float timeAnimation;
 
 	// Передвижение. Его анимация и озвучка
-	void update(const Time & deltaTime, dataSound &databaseSound);
+	void update(const float deltaTime, dataSound &databaseSound);
 	void playSound(float time, float start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 

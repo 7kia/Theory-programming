@@ -17,8 +17,8 @@ public:
 	void initFounds(Item& item, UnlifeObject& object, Enemy& enemy);
 
 	void givenForPersonDamage(Enemy & enemy);
-	void updateAtack(world &world, const sf::Time &deltaTime);
-	void attractionEnemy(Enemy &enemy, world &world, const Time &deltaTime);
+	void updateAtack(world &world, const float deltaTime);
+	void attractionEnemy(Enemy &enemy, world &world, const float deltaTime);
 	/*
 		///////////////////////////////////////////////////////
 	// Основные характерисктики
@@ -40,8 +40,7 @@ public:
 	void computeAngle(sf::RenderWindow &window);
 
 
-	void useItem(world &world, const Time &deltaTime,
-							 Event &event, Vector2f pos);
+	void useItem(world &world, Event &event, Vector2f pos);
 
 
 private:

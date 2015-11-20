@@ -31,7 +31,7 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 
 ////////////////////////////////////////////////////////////////////
 // Анимация и озвучка объектов НЕРАБОТАЕТ пока
-void UnlifeObject::update(const Time & deltaTime, dataSound &databaseSound)
+void UnlifeObject::update(const float deltaTime, dataSound &databaseSound)
 {
 	float pauseStep = 5, resetAnimation = 2;
 }

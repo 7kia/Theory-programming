@@ -37,9 +37,9 @@ void currentCollision::clear()
 }
 
 
-void entityMana::update(const sf::Time deltaTime)
+void entityMana::update(const float deltaTime)
 {
-	timeForMana += deltaTime.asSeconds();
+	timeForMana += deltaTime;
 
 	if (timeForMana > timeUpdateMana) {
 		timeForMana = 0;
@@ -83,10 +83,10 @@ void entityAnimation::init(float input, float output)
 	currentTimeFightAnimation = 0.f;
 }
 
-void entityAnimation::updateFight(const sf::Time deltaTime, bool &giveDamage)
+void entityAnimation::updateFight(const float deltaTime, bool &giveDamage)
 {
 
-		currentTimeFightAnimation += deltaTime.asSeconds();
+		currentTimeFightAnimation += deltaTime;
 
 		if (currentTimeFightAnimation > timeFightAnimation) {
 			giveDamage = true;
@@ -95,10 +95,10 @@ void entityAnimation::updateFight(const sf::Time deltaTime, bool &giveDamage)
 
 };
 
-void DamageInputAndOutput::updateInputDamage(const sf::Time deltaTime)
+void DamageInputAndOutput::updateInputDamage(const float deltaTime)
 {
 	if (inputDamage) {
-		timeInputDamage += deltaTime.asSeconds();
+		timeInputDamage += deltaTime;
 
 		if (timeInputDamage > TIME_ATTENTION_SHOW_DAMAGE) {
 			timeInputDamage = 0;
@@ -108,9 +108,9 @@ void DamageInputAndOutput::updateInputDamage(const sf::Time deltaTime)
 	}
 };
 
-void entityStamina::update(const sf::Time deltaTime, Direction directionWalk, Step &step)
+void entityStamina::update(const float deltaTime, Direction directionWalk, Step &step)
 {
-	timeForStamina += deltaTime.asSeconds();
+	timeForStamina += deltaTime;
 
 	if (timeForStamina > timeUpdateStamina) {
 		timeForStamina = 0;
@@ -132,9 +132,9 @@ void entityStamina::update(const sf::Time deltaTime, Direction directionWalk, St
 
 };
 
-void entityHealth::update(const sf::Time deltaTime, bool &isDeath)
+void entityHealth::update(const float deltaTime, bool &isDeath)
 {
-	timeForHealth += deltaTime.asSeconds();
+	timeForHealth += deltaTime;
 
 	if (timeForHealth > timeUpdateHealth) {
 		timeForHealth = 0;
@@ -156,9 +156,9 @@ void entityHealth::update(const sf::Time deltaTime, bool &isDeath)
 
 };
 
-void entityHungry::update(const sf::Time deltaTime, bool &needMinusHealth)
+void entityHungry::update(const float deltaTime, bool &needMinusHealth)
 {
-	timeForHungry += deltaTime.asSeconds();
+	timeForHungry += deltaTime;
 
 	if (timeForHungry > timeUpdateHungry) {
 		timeForHungry = 0;
@@ -176,9 +176,9 @@ void entityHungry::update(const sf::Time deltaTime, bool &needMinusHealth)
 	}
 };
 
-void entityThirst::update(const sf::Time deltaTime, bool &needMinusHealth)
+void entityThirst::update(const float deltaTime, bool &needMinusHealth)
 {
-	timeForThirst += deltaTime.asSeconds();
+	timeForThirst += deltaTime;
 
 	if (timeForThirst > timeUpdateThirst) {
 		timeForThirst = 0;
@@ -198,12 +198,12 @@ void entityThirst::update(const sf::Time deltaTime, bool &needMinusHealth)
 
 ////////////////////////////////////////////////////////////////////
 // Передвижение. Его анимация и озвучка
-void Entity::update(const Time & deltaTime, dataSound &databaseSound)
+void Entity::update(const float deltaTime, dataSound &databaseSound)
 {
 
 	/*
 	if (outputDamage) {
-	currentTimeFightAnimation += deltaTime.asSeconds();
+	currentTimeFightAnimation += deltaTime;
 	if (currentTimeFightAnimation > timeOutputDamage) {
 	currentTimeFightAnimation = 0;
 
@@ -282,13 +282,13 @@ void Entity::update(const Time & deltaTime, dataSound &databaseSound)
 	}
 }
 
-void Entity::playAnimationWalk(const Time& deltaTime, dataSound& databaseSound)
+void Entity::playAnimationWalk(const float deltaTime, dataSound& databaseSound)
 {
 	float pauseStep = 5, resetAnimation = 4;
 
 	//playSound(animation.timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
-	animation.timeAnimation += deltaTime.asSeconds() * pauseStep;
+	animation.timeAnimation += deltaTime * pauseStep;
 	resetTimeAnimation(animation.timeAnimation, resetAnimation);
 	playSound(animation.timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
 
@@ -304,13 +304,13 @@ void Entity::playAnimationWalk(const Time& deltaTime, dataSound& databaseSound)
 	spriteEntity->setTextureRect(IntRect(xPos, size.height * int(animation.timeAnimation), currentWidth, size.height));
 }
 
-void Entity::playAnimationAtack(const Time& deltaTime, dataSound& databaseSound)
+void Entity::playAnimationAtack(const float deltaTime, dataSound& databaseSound)
 {
 	float pauseStep = 5, resetAnimation = 3;
 	int shiftAnimation = 4;
 
 
-	animation.timeAnimation += deltaTime.asSeconds() * pauseStep;
+	animation.timeAnimation += deltaTime * pauseStep;
 	resetTimeAnimation(animation.timeAnimation, resetAnimation);
 
 	int shiftWidth = directions.directionLook / 6;// TODO
@@ -398,7 +398,7 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 
 ////////////////////////////////////////////////////////////////////
 // Взаимодейтсвие с миром
-void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const Time & deltaTime)
+void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime)
 {
 
 	float dx(movement.x);
@@ -411,11 +411,11 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 	if (directions.directionWalk >= Direction::UP_LEFT) {
 		// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-		x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
-		y = getYPos() + DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
+		x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime;
+		y = getYPos() + DIAGONAL_SCALE_SPEED * dy * deltaTime;
 	} else {
-		x = getXPos() + dx * deltaTime.asSeconds();
-		y = getYPos() + dy * deltaTime.asSeconds();
+		x = getXPos() + dx * deltaTime;
+		y = getYPos() + dy * deltaTime;
 	}
 
 	wchar_t *charBlocks = field.charBlocks;
@@ -517,7 +517,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 }
 
 
-void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const Time & deltaTime)// ИСПРАВЬ for enity and mainPerson
+void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
 	float dx(movement.x);
 	float dy(movement.y);
@@ -554,11 +554,11 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
 				if (directions.directionWalk >= Direction::UP_LEFT) {
 					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-					x -= DIAGONAL_SCALE_SPEED * dx * deltaTime.asSeconds();
-					y -= DIAGONAL_SCALE_SPEED * dy * deltaTime.asSeconds();
+					x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
+					y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
 				} else {
-					x -= dx * deltaTime.asSeconds();
-					y -= dy * deltaTime.asSeconds();
+					x -= dx * deltaTime;
+					y -= dy * deltaTime;
 				}
 				wasCollision = true;
 				directions.directionWalk = NONE_DIRECTION;

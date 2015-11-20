@@ -47,7 +47,7 @@ struct entityAnimation
 	float currentTimeFightAnimation;
 
 	void init(float input, float output);
-	void updateFight(const sf::Time deltaTime, bool &giveDamage);
+	void updateFight(const float deltaTime, bool &giveDamage);
 
 };
 
@@ -67,7 +67,7 @@ struct DamageInputAndOutput
 	float timeInputDamage;// Показывает урон в течении ... секунд
 
 	void init(int cut, int crush, float time, float mult);
-	void updateInputDamage(const sf::Time deltaTime);
+	void updateInputDamage(const float deltaTime);
 };
 
 struct entityHealth
@@ -83,7 +83,7 @@ struct entityHealth
 
 	int currentHealth = 100;
 	int maxHealth = 100;
-	void update(const sf::Time deltaTime, bool& isDeath);
+	void update(const float deltaTime, bool& isDeath);
 };
 
 struct entityStamina
@@ -99,7 +99,7 @@ struct entityStamina
 
 	int currentStamina = 100;
 	int maxStamina = 100;
-	void update(const sf::Time deltaTime, Direction directionWalk, Step& step);
+	void update(const float deltaTime, Direction directionWalk, Step& step);
 };
 
 struct entityMana
@@ -116,7 +116,7 @@ struct entityMana
 	int currentMana = 100;
 	int maxMana = 100;
 
-	void update(const sf::Time deltaTime);
+	void update(const float deltaTime);
 };
 
 struct entityHungry
@@ -125,7 +125,7 @@ struct entityHungry
 	float timeUpdateHungry = 100;
 	int currentHungry = 20;
 	int maxHungry = 20;
-	void update(const sf::Time deltaTime, bool& needMinusHealth);
+	void update(const float deltaTime, bool& needMinusHealth);
 };
 
 struct entityThirst
@@ -134,7 +134,7 @@ struct entityThirst
 	float timeUpdateThirst = 60;
 	int currentThirst = 20;
 	int maxThirst = 20;
-	void update(const sf::Time deltaTime, bool& needMinusHealth);
+	void update(const float deltaTime, bool& needMinusHealth);
 };
 
 struct entityProtection
@@ -225,15 +225,15 @@ public:
 	void renderCurrentItem(sf::RenderWindow &window);
 
 	// Передвижение. Его анимация и озвучка
-	void update(const Time & deltaTime, dataSound &databaseSound);
-	void playAnimationWalk(const Time & deltaTime, dataSound & databaseSound);
-	void playAnimationAtack(const Time & deltaTime, dataSound & databaseSound);
+	void update(const float deltaTime, dataSound &databaseSound);
+	void playAnimationWalk(const float deltaTime, dataSound & databaseSound);
+	void playAnimationAtack(const float deltaTime, dataSound & databaseSound);
 	void playSound(float time, float &start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 
 	// Взаимодейтсвие с миром
-	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const Time & deltaTime);
-	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const Time & deltaTime);
+	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
+	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const float deltaTime);
 	bool isInUseField(float x, float y, bool under);
 
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки

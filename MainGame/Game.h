@@ -40,7 +40,7 @@ void initializeGame(Game & game);
 
 void initializeCategorysBreakingObject(Game &game);
 
-void updateEntity(Game &game, const sf::Time deltaTime);
+void updateEntity(Game &game, const float deltaTime);
 void renderEntitys(Game &game);
 
 void renderUnlifeObjects(Game &game);

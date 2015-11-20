@@ -2,13 +2,13 @@
 
 #include "Game.h"
 
-const Time TIME_PER_FRAME = seconds(1.f / 60.f);
+const float TIME_PER_FRAME = 1.f / 60.f;
 const float faultWorldTime = 0.03f;
 
 using namespace sf;
 using namespace std;
 
-void processEvents(Game &game, const Time &deltaTime)
+void processEvents(Game &game, const float deltaTime)
 {
 	Event event;
 	RenderWindow &window = game.window;
@@ -131,7 +131,7 @@ void processEvents(Game &game, const Time &deltaTime)
 			// Îþðàáîòêà ùåë÷êà ìûøè
 			if (event.type == Event::MouseButtonPressed) {
 				// Èñïîëüçîâàíèå ïðåäìåòà
-				mainPerson.useItem(game.world, deltaTime, event, pos);// ÈÑÏÐÀÂÜ
+				mainPerson.useItem(game.world, event, pos);// ÈÑÏÐÀÂÜ
 				//mainPerson.modeProcess(*game.field, game.unlifeObjects , game.items, event, pos.x, pos.y);// ÈÑÏÐÀÂÜ
 			}
 			//////////////////////////////////////////////////////////////////////////////////
@@ -314,8 +314,8 @@ void startGame()
 	while (window.isOpen())
 	{
 		timeSinceLastUpdate += game->clock.restart();
-		while (timeSinceLastUpdate > TIME_PER_FRAME) {
-			timeSinceLastUpdate -= TIME_PER_FRAME;
+		while (timeSinceLastUpdate.asSeconds() > TIME_PER_FRAME) {
+			timeSinceLastUpdate -= seconds(TIME_PER_FRAME);
 			processEvents(*game, TIME_PER_FRAME);
 
 			if (mainPerson.isDeath == false) {

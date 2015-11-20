@@ -37,7 +37,7 @@ public:
 	void checkLevelHealth(Vector2f& movemoment);
 	void entityStandPanic(sf::Vector2f &movemoment);
 
-	void randomWalk(const sf::Time &deltaTime);
+	void randomWalk(const float deltaTime);
 
 	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
 

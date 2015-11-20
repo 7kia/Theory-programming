@@ -105,7 +105,7 @@ void initializeCategorysBreakingObject(Game &game)
 	/////////////////////////////////////////////////////////////////////////
 }
 
-void updateEntity(Game& game, const Time deltaTime)
+void updateEntity(Game& game, const float deltaTime)
 {
 	vector<Enemy>& Enemys = *game.world.Enemys;
 	Field &field = game.world.field;

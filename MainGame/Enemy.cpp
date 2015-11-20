@@ -78,7 +78,14 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 				break;
 			}
 
+
+
 			addEnemy->EnemyInit(*types[countTypes], emptyItem, emptyObject, xPos, yPos, levelFloor);
+			addEnemy->interactionWithMap(world.field, *world.listDestroy, 1.f);
+			if(true)
+			{
+				
+			}
 			world.Enemys->push_back(*addEnemy);
 
 			xPos++;
@@ -137,10 +144,6 @@ void initializeEntitys(world &world)// днаюбкемхе ясымнярх
 	amount.push_back(4);
 
 	createOnlyEnemy(world, types, amount);
-	//////////////////////////////////////////////////////////////
-
-	Vector3i pos = { 10, 10, 1 };
-	createSmallGroupSkelets(world, pos);
 	//////////////////////////////////////////////////////////////
 	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
 
@@ -240,12 +243,12 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::randomWalk(const Time &deltaTime) {
+void Enemy::randomWalk(const float deltaTime) {
 
 	if (currenMode == idEntityMode::walk) {
 		if (step.currentTime < step.timeWalk && directions.directionWalk != Direction::NONE_DIRECTION) {
 
-			step.currentTime += deltaTime.asSeconds();
+			step.currentTime += deltaTime;
 
 		} else {
 
