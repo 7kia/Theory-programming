@@ -3,6 +3,7 @@
 #include "Game.h"
 
 const Time TIME_PER_FRAME = seconds(1.f / 60.f);
+const float faultWorldTime = 0.03f;
 
 using namespace sf;
 using namespace std;
@@ -56,10 +57,10 @@ void processEvents(Game &game, const Time &deltaTime)
 			if (event.type == Event::KeyPressed) {
 				if (Keyboard::isKeyPressed(Keyboard::G)) {
 					//mainPerson.currenMode = idEntityMode::build;// ÈÑÏÐÀÂÜ
-					printf("build mode\n");
+
 				} else if (Keyboard::isKeyPressed(Keyboard::F)) {
 					//mainPerson.currenMode = idModeEntity::fight;// ÈÑÏÐÀÂÜ
-					printf("fight mode\n");
+
 				}
 			}
 			/////////////////////////////////////////////////////////////////////////////////////////
@@ -258,7 +259,45 @@ void updatePlayer(Game &game, MainPerson& mainPerson)
 	mainPerson.updateView(game.window);
 	game.window.setView(*mainPerson.view);
 
-	printf("Angle %f \n", mainPerson.rotation);// ÈÑÏÐÀÂÜ
+	//printf("Angle %f \n", mainPerson.rotation);// ÈÑÏÐÀÂÜ
+}
+
+void generateGroups(Game &game)
+{
+	world &world = game.world;
+	bool &needGenerateWave = world.waveEnemysCreated;
+	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+
+	bool condition = int(currentWorldTime) % TIME_GENERATE_WAVE_ENEMYS == 0;
+	if(condition && needGenerateWave == false)
+	{
+		Vector3i pos = { 10, 10, 1 };
+		createSmallGroupSkelets(game.world, pos);
+	}
+
+}
+
+void updateWorldTimeCircles(Game &game)
+{
+	world &world = game.world;
+	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+
+	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
+		generateGroups(game);
+
+		printf("World time: %f\n", currentWorldTime);
+	}
+}
+
+void showFPS(Game &game, const Time timeSinceLastUpdate)
+{
+	world &world = game.world;
+	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+
+	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
+		world.lastSecond += 1.f;
+		printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());
+	}
 }
 
 void startGame()
@@ -282,10 +321,13 @@ void startGame()
 			if (mainPerson.isDeath == false) {
 				updatePlayer(*game, mainPerson);
 				updateEntity(*game, TIME_PER_FRAME);
+				updateWorldTimeCircles(*game);
 			}
 			////////////////////////////////////////////////////////////
 		}
 		render(*game);
+		
+		showFPS(*game, timeSinceLastUpdate);
 		//writeMap(game->field->dataMap);
 	}
 	destroyGame(*game);

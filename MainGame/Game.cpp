@@ -131,7 +131,6 @@ void renderEntitys(Game &game)
 	for (int i = 0; i < Enemys.size(); ++i) {
 		enemyLevel = Enemys[i].currentLevelFloor;
 		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
-			printf("ID  %d\n", Enemys[i].idSelectItem);
 			Enemys[i].renderCurrentItem(window);
 
 			Color currentColor;

@@ -99,7 +99,6 @@ void DamageInputAndOutput::updateInputDamage(const sf::Time deltaTime)
 {
 	if (inputDamage) {
 		timeInputDamage += deltaTime.asSeconds();
-		printf("damage %d time %f\n", inputDamage, timeInputDamage);
 
 		if (timeInputDamage > TIME_ATTENTION_SHOW_DAMAGE) {
 			timeInputDamage = 0;
@@ -164,7 +163,6 @@ void entityHungry::update(const sf::Time deltaTime, bool &needMinusHealth)
 	if (timeForHungry > timeUpdateHungry) {
 		timeForHungry = 0;
 		currentHungry--;
-		//printf("%d\n", currentThirst);// ÈÑÏÐÀÂÜ
 	}
 
 	if (currentHungry > maxHungry) {
@@ -185,7 +183,6 @@ void entityThirst::update(const sf::Time deltaTime, bool &needMinusHealth)
 	if (timeForThirst > timeUpdateThirst) {
 		timeForThirst = 0;
 		currentThirst--;
-		//printf("%d\n", currentThirst);// ÈÑÏÐÀÂÜ
 	}
 
 	if (currentThirst > maxThirst) {

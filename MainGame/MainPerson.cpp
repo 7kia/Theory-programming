@@ -43,7 +43,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	mainPerson.initStepSounds(databaseSound);
 
 	mainPerson.initFounds(emptyObjects.emptyItem, emptyObjects.emptyObject, emptyObjects.emptyEnemy);
-
+	emptyObjects.emptyEnemy.type->name;
 	// Создайм и заполняем панель
 	mainPerson.idSelectItem = 0;
 	mainPerson.amountSlots = AMOUNT_ACTIVE_SLOTS;

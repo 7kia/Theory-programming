@@ -73,6 +73,8 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 		for (int amountAdd = 0; amountAdd < amount[countTypes]; amountAdd++) {
 			countEnemy++;
 			if (countEnemy > AMOUNT_ENTITY) {
+				// ÷òîáû âûéòè èç öèêëîâ
+				countTypes = types.size();
 				break;
 			}
 
@@ -100,6 +102,26 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 	delete addEnemy;
 }
 
+void createSmallGroupSkelets(world &world, Vector3i pos)
+{
+	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
+
+	std::vector<TypeEnemy*> types;
+	std::vector<int> amount;
+
+	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+	amount.push_back(3);
+	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
+	amount.push_back(3);
+	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
+	amount.push_back(3);
+	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
+	amount.push_back(3);
+	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+	amount.push_back(3);
+
+	createGroup(world, types, amount, 5, pos);
+}
 void initializeEntitys(world &world)// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ 
 {
 
@@ -116,19 +138,9 @@ void initializeEntitys(world &world)// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ
 
 	createOnlyEnemy(world, types, amount);
 	//////////////////////////////////////////////////////////////
-	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	amount.push_back(3);
-	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	amount.push_back(3);
-	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	amount.push_back(3);
-	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
-	amount.push_back(3);
-	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
-	amount.push_back(3);
 
 	Vector3i pos = { 10, 10, 1 };
-	createGroup(world, types, amount, 5, pos);
+	createSmallGroupSkelets(world, pos);
 	//////////////////////////////////////////////////////////////
 	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
 

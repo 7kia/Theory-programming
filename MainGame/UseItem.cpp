@@ -43,7 +43,6 @@ void Entity::takeItem(world &world, Vector2f pos)
 
 				if (objectItem.contains(pos.x, pos.y) && levelItem == currentLevelFloor + 1) {
 					// Перемещаем в инвентарь
-					//printf("added!1\n");
 					itemFromPanelQuickAccess[emptySlot] = items[founds.findItemFromList];
 					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
 					// Удаляем из мира

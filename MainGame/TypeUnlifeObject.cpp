@@ -44,6 +44,7 @@ void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound
 	drop.addItem(1, 2, idItem::seadlingOakItem);
 
 	typesObject->drop.init(drop);
+	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
 	// Саженец дуба
 	typesObject = &typesUnlifeObjects[idUnlifeObject::oakSeadling];
@@ -62,6 +63,7 @@ void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound
 	drop.addItem(1, 1, idItem::seadlingOakItem);
 
 	typesObject->drop.init(drop);
+	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
 	typesObject = &typesUnlifeObjects[idUnlifeObject::smallStone];
 	texturePath = texturePaths[idTexturePaths::items];
@@ -78,6 +80,7 @@ void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound
 	drop.addItem(1, 1, idItem::stoneItem);
 
 	typesObject->drop.init(drop);
+	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
 	// Пустой предмет
 	typesObject = &typesUnlifeObjects[idUnlifeObject::empty];

@@ -26,6 +26,10 @@ struct world
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
 
+	sf::Clock worldTime;
+	bool waveEnemysCreated = false;
+	float lastSecond = 0;
+
 	int countUnlifeObject = 0;
 	int countEntity = 0;
 
@@ -33,6 +37,8 @@ struct world
 };
 
 void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount);
+
 void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos);
+void createSmallGroupSkelets(world &world, Vector3i pos);
 
 void initializeEntitys(world &world);

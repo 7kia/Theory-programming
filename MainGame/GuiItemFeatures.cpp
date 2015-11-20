@@ -16,7 +16,6 @@ void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, fe
 	position = { centerWindow.x - WIDTH_ITEM_OVER_PANEL_INFO / 2 + SHIFT_FEATURES_PANEL,
 		centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - HEIGHT_ITEM_OVER_PANEL_INFO / 2 };
 	currentText->setPosition(position);
-	//std::cout << string(currentText->getString()) << std::endl;
 	window.draw(*currentText);
 }
 
