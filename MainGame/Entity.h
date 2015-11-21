@@ -264,12 +264,12 @@ public:
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);
-	void redefineType(Item &currentItem, TypeItem *typesItems, int shift);
-	void useAsBottleWithWater(Item &currentItem, TypeItem *typesItems, sf::Event event);
+	void redefineType(Item &currentItem, world &world, int shift);
+	void useAsBottleWithWater(Item &currentItem, world &world, sf::Event event);
 	void useAsFood(Item &currentItem, sf::Event event);
-	void useAsEmptyBottle(Item &currentItem, TypeItem *typesItems, Field &field, int level);
-	void useAsEmptyBukket(Item &currentItem, TypeItem *typesItems, Field &field, int level);
-	void useAsBukketWithWater(Item &currentItem, TypeItem *typesItems, sf::Event event, Field &field);
+	void useAsEmptyBottle(Item &currentItem, world &world, int level);
+	void useAsEmptyBukket(Item &currentItem, world &world, int level);
+	void useAsBukketWithWater(Item &currentItem, world &world, sf::Event event);
 
 	void useTool(sf::Vector3i pos, world &world, Item &currentItem);
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);

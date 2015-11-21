@@ -305,7 +305,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 						itemEnemy.currentToughness -= 1;
 						if (itemEnemy.currentToughness < 1) {
-							redefineType(itemEnemy, types.typesItem, -itemEnemy.typeItem->features.id);
+							redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
 						}
 					}
 
@@ -406,23 +406,23 @@ void MainPerson::useItem(world &world,
 			useAsFood(currentItem, event);
 			break;
 		case idCategoryItem::bukketWithWater:
-			useAsBukketWithWater(currentItem, typesItem, event, field);
+			useAsBukketWithWater(currentItem, world, event);
 			break;
 		case idCategoryItem::bottleWithWater:
-			useAsBottleWithWater(currentItem, typesItem, event);
+			useAsBottleWithWater(currentItem, world, event);
 			break;
 		case idCategoryItem::bukketEmpty:// ÈÑÏÐÀÂÜ
 			if (isInUseField(pos.x, pos.y, true)) {
 				int level;
 				defineLevel(level, event);
-				useAsEmptyBukket(currentItem, typesItem, field, level);
+				useAsEmptyBukket(currentItem, world, level);
 			}
 			break;
 		case idCategoryItem::bottleEmpty:// ÈÑÏÐÀÂÜ
 			if (isInUseField(pos.x, pos.y, true)) {
 				int level;
 				defineLevel(level, event);
-				useAsEmptyBottle(currentItem, typesItem, field, level);
+				useAsEmptyBottle(currentItem, world, level);
 			}
 			break;
 		case idCategoryItem::other:

@@ -14,14 +14,36 @@ void Entity::defineLevel(int &number, Event event)
 	}
 }
 
-void Entity::redefineType(Item &currentItem, TypeItem *typesItems, int shift)
+void Entity::redefineType(Item &currentItem, world &world, int shift)
 {
+	TypeItem *typesItems = world.typesObjects.typesItem;
 	int *idItem = &currentItem.typeItem->features.id;
 	int defineType = *idItem + shift;
 
 	*idItem = defineType - shift;
-	currentItem.setType(typesItems[defineType]);
-	currentItem.mainSprite->scale(normalSize);
+
+	vector<Item> &items = *world.items;
+	Item *addItem = new Item;
+	addItem->setType(typesItems[defineType]);
+
+	Vector2f posItem = { getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK};
+
+	addItem->setPosition(posItem.x + 1,
+											 posItem.y + 1,
+											 currentLevelFloor + 1);
+	items.push_back(*addItem);
+	delete addItem;
+
+	Vector2f posPerson = { getXPos() , getYPos() };
+
+	founds.findItemFromList = world.items->size() - 1;
+	founds.findItem = &items[founds.findItemFromList];
+
+	takeItem(world, posPerson);
+
+	currentItem.amount--;
+	if (currentItem.amount < 1)
+		currentItem = *founds.emptyItem;
 }
 
 void Entity::transferInInventory(vector<Item> &items)
@@ -33,7 +55,7 @@ void Entity::transferInInventory(vector<Item> &items)
 		int idItem = item.typeItem->features.id;
 		bool isTypesEqual = idItem == idFindItem;
 
-		if (isTypesEqual && (item.amount + 1 < item.typeItem->maxAmount)) {
+		if (isTypesEqual && (item.amount + 1 <= item.typeItem->maxAmount)) {
 			item.amount++;
 			isFindItem = true;
 			break;
@@ -84,21 +106,22 @@ void Entity::takeItem(world &world, Vector2f pos)
 	}
 }
 
-void Entity::useAsBottleWithWater(Item &currentItem, TypeItem *typesItems, Event event)
+void Entity::useAsBottleWithWater(Item &currentItem, world &world, Event event)
 {
 	bool drinking = event.key.code == Mouse::Right;
 	bool isThirts = thirst.currentThirst < thirst.maxThirst;
 	if (drinking && isThirts)
 	{
 		thirst.currentThirst += currentItem.currentToughness;
-		redefineType(currentItem, typesItems, -1);
+		redefineType(currentItem, world, -1);
 	}
 
 
 }
 
-void Entity::useAsEmptyBottle(Item &currentItem, TypeItem *typesItems, Field &field, int level)
+void Entity::useAsEmptyBottle(Item &currentItem, world &world, int level)
 {
+	Field &field = world.field;
 	bool useToAnyLevel = level > -1;
 	if (useToAnyLevel) {
 
@@ -110,16 +133,16 @@ void Entity::useAsEmptyBottle(Item &currentItem, TypeItem *typesItems, Field &fi
 			wchar_t block = field.dataMap[level][y][x];
 			bool isWater = block == field.charBlocks[idUseBlock];
 			if (isWater) {
-				redefineType(currentItem, typesItems, 1);
+				redefineType(currentItem, world, 1);
 			}
 		}
 	}
 
 }
 
-void Entity::useAsEmptyBukket(Item &currentItem, TypeItem *typesItems, Field &field, int level)
+void Entity::useAsEmptyBukket(Item &currentItem, world &world, int level)
 {
-
+	Field &field = world.field;
 	bool useToAnyLevel = level > -1;
 	if (useToAnyLevel) {
 		int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
@@ -132,7 +155,7 @@ void Entity::useAsEmptyBukket(Item &currentItem, TypeItem *typesItems, Field &fi
 			bool isWater = *block == field.charBlocks[idUseBlock];
 			if (isWater) {
 				*block = field.charBlocks[idBlocks::air];
-				redefineType(currentItem, typesItems, 1);
+				redefineType(currentItem, world, 1);
 			}
 
 		}
@@ -150,8 +173,10 @@ void Entity::useAsFood(Item &currentItem, Event event)
 	}
 }
 
-void Entity::useAsBukketWithWater(Item &currentItem, TypeItem *typesItems, Event event, Field& field)
+void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 {
+	TypeItem *typesItems = world.typesObjects.typesItem;
+	Field& field = world.field;
 	bool drinking = event.key.code == Mouse::Right;
 	bool isThirts = thirst.currentThirst < thirst.maxThirst;
 	if (isThirts && drinking) {
