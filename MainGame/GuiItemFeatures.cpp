@@ -19,7 +19,6 @@ void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, fe
 	window.draw(*currentText);
 }
 
-
 void itemFeatures::renderValueMiddle(string string, Text* text, sf::Vector2f &position, RenderWindow &window)
 {
 	position.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;

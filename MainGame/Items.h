@@ -13,6 +13,8 @@ struct Item
 
 	TypeItem *typeItem;
 
+	int amount;
+
 	int currentToughness;
 	int maxToughness;
 

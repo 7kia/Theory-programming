@@ -35,6 +35,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::stone, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -52,6 +53,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::planksBlock, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -67,6 +69,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	damage.init(0, 1);
 
+	addType.maxAmount = 4;
 	idCreated.init(idBlocks::dirt, idUnlifeObject::NONE_OBJECT);
 
 	addType.Init(*pathTexture, featuresAddItem,
@@ -86,6 +89,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::grass, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -103,6 +107,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::sand, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -120,6 +125,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -137,6 +143,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::stoneBrick, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -154,6 +161,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::logOak, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -174,6 +182,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::oakSeadling);
 
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -194,6 +203,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -211,6 +221,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -228,6 +239,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -245,6 +257,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -265,6 +278,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -282,6 +296,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -299,6 +314,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -316,6 +332,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -336,6 +353,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -356,6 +374,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -379,6 +398,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -402,6 +422,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -425,6 +446,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
@@ -444,6 +466,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
+	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 

@@ -24,10 +24,37 @@ void Entity::redefineType(Item &currentItem, TypeItem *typesItems, int shift)
 	currentItem.mainSprite->scale(normalSize);
 }
 
+void Entity::transferInInventory(vector<Item> &items)
+{
+	bool isFindItem = false;
+	int idFindItem = items[founds.findItemFromList].typeItem->features.id;
+	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
+		Item &item = itemFromPanelQuickAccess[i];
+		int idItem = item.typeItem->features.id;
+		bool isTypesEqual = idItem == idFindItem;
+
+		if (isTypesEqual && (item.amount + 1 < item.typeItem->maxAmount)) {
+			item.amount++;
+			isFindItem = true;
+			break;
+		}
+
+	}
+
+	if (isFindItem == false) {
+		itemFromPanelQuickAccess[emptySlot] = items[founds.findItemFromList];
+		itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
+	}
+}
+
 void Entity::takeItem(world &world, Vector2f pos)
 {
 	vector<Item> &items = *world.items;
-	if (founds.findItem->typeItem->features.name != founds.emptyItem->typeItem->features.name) {
+	String nameFindItem = founds.findItem->typeItem->features.name;
+	String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+
+
+	if (nameFindItem != nameEmptyItem) {
 		if (isInUseField(pos.x, pos.y, true)) {
 			//////////////////////////////////////////////////////////////////////////////////////////////////////
 			// Если есть место
@@ -41,11 +68,11 @@ void Entity::takeItem(world &world, Vector2f pos)
 				Sprite *spriteItem = items[founds.findItemFromList].mainSprite;
 				FloatRect objectItem = spriteItem->getGlobalBounds();
 
-				if (objectItem.contains(pos.x, pos.y) && levelItem == currentLevelFloor + 1) {
-					// Перемещаем в инвентарь
-					itemFromPanelQuickAccess[emptySlot] = items[founds.findItemFromList];
-					itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
-					// Удаляем из мира
+				bool onOneLevel = levelItem == currentLevelFloor + 1;
+				if (objectItem.contains(pos.x, pos.y) && onOneLevel) {
+
+					transferInInventory(items);
+
 					items.erase(items.begin() + founds.findItemFromList);
 				}
 				////////////////////////////////////////////////////////////////////
@@ -173,9 +200,11 @@ void Entity::useAsBukketWithWater(Item &currentItem, TypeItem *typesItems, Event
 
 void Entity::breakItem(Item &currentItem)
 {
-	currentItem.currentToughness -= 1;
+	currentItem.currentToughness -= 1;//&& currentItem.amount < 1
 	if (currentItem.currentToughness < 1) {
-		currentItem = *founds.emptyItem;
+		currentItem.amount--;
+		if(currentItem.amount < 1)
+			currentItem = *founds.emptyItem;
 	}
 }
 

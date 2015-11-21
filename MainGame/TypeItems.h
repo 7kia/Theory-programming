@@ -47,6 +47,7 @@ public:
 
 	// —сылки на звуки
 	//Sound *soundsEntity[sizeBuffer];// »—ѕ–ј¬№
+	int maxAmount;
 	featuresItem features;
 
 	destroyObjectsAndBlocks destroy;

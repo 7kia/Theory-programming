@@ -250,6 +250,7 @@ public:
 	bool isInListObjects(String * listObjects, int sizeString);
 
 
+	void transferInInventory(std::vector<Item> &items);
 	void takeItem(world &world, sf::Vector2f pos);
 	void throwItem(Field &field, std::vector<Item> &items);
 
@@ -264,7 +265,6 @@ public:
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);
 	void redefineType(Item &currentItem, TypeItem *typesItems, int shift);
-
 	void useAsBottleWithWater(Item &currentItem, TypeItem *typesItems, sf::Event event);
 	void useAsFood(Item &currentItem, sf::Event event);
 	void useAsEmptyBottle(Item &currentItem, TypeItem *typesItems, Field &field, int level);

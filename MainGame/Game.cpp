@@ -175,7 +175,12 @@ void renderUnlifeObjects(Game &game)
 
 void destroyGame(Game & game)
 {
-	
+	// TODO
+	delete game.world.items;
+	delete game.world.unlifeObjects;
+	delete game.world.Enemys;
+	delete game.world.listDestroy;
+
 	delete &game;
 }
 

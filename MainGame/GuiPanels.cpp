@@ -1,5 +1,6 @@
 #include "GuiPanels.h"
 
+using namespace std;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void infoAboutSelect::render(Vector2f position, RenderWindow &window, TextGame &textGame)
 {
@@ -43,6 +44,23 @@ void panelQuickAccess::renderSelect(MainPerson& mainPerson, featuresWindow featu
 	window.draw(spriteSelect);
 }
 
+void panelQuickAccess::renderAmountItem(int amount, Vector2f pos, TextGame &textGame, featuresWindow features)
+{
+	RenderWindow &window = *features.window;
+	Text *currentText = &textGame.texts[idText::itemGui];
+
+	if (amount > 1) {
+		string str;
+		intToString(amount, str);
+
+		currentText->setString(str);
+
+		currentText->setPosition(pos);
+		window.draw(*currentText);
+	}
+
+}
+
 void panels::renderItemPanel(sf::Vector2f position, RenderWindow& window)
 {
 	itemInfoOverPanel.setPosition(position);
@@ -72,8 +90,9 @@ void panelQuickAccess::renderItems(MainPerson& mainPerson, featuresWindow featur
 			Vector2f pos;
 			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 				centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ÈÑÏÐÀÂÜ
+		
 			currentItem.mainSprite->setPosition(pos);
-			
+
 
 			if (mainPerson.idSelectItem == i) {
 				itemFeatures.renderFeatures(mainPerson, features, textGame, bars);
@@ -84,6 +103,7 @@ void panelQuickAccess::renderItems(MainPerson& mainPerson, featuresWindow featur
 				currentItem.mainSprite->setScale(scaleOutItems);
 			}
 			window.draw(*currentItem.mainSprite);
+			renderAmountItem(currentItem.amount, pos, textGame, features);
 		}
 
 	}
