@@ -740,13 +740,12 @@ bool Entity::isInListBlocks(wchar_t block, wchar_t *listBlocks) {
 	return false;
 }
 bool Entity::isInListObjects(String* listObjects, int sizeString) {
-	if(listObjects)
-	{
-			for (size_t i = 0; i < sizeString; i++) {
-		if (founds.findObject->typeObject->name == listObjects[i]) {
-			return true;
+	if (listObjects) {
+		for (size_t i = 0; i < sizeString; i++) {
+			if (founds.findObject->typeObject->name == listObjects[i]) {
+				return true;
+			}
 		}
-	}
 	}
 
 

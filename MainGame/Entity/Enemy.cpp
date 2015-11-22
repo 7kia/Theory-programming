@@ -162,15 +162,51 @@ void createSmallGroupSkelets(world &world, Vector3i pos)
 	std::vector<int> amount;
 
 	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	amount.push_back(3);
+	amount.push_back(2);
+	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+	amount.push_back(1);
+
+	createGroup(world, types, amount, 2, pos);
+}
+
+void createMiddleGroupSkelets(world &world, Vector3i pos)
+{
+	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
+
+	std::vector<TypeEnemy*> types;
+	std::vector<int> amount;
+
+	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	amount.push_back(3);
+	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	amount.push_back(3);
+	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
-	amount.push_back(3);
+	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
 	amount.push_back(3);
+
+	createGroup(world, types, amount, 4, pos);
+}
+
+void createBigGroupSkelets(world &world, Vector3i pos)
+{
+	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
+
+	std::vector<TypeEnemy*> types;
+	std::vector<int> amount;
+
+	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
+	amount.push_back(5);
+	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
+	amount.push_back(2);
+	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
+	amount.push_back(2);
+	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
+	amount.push_back(2);
+	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+	amount.push_back(4);
 
 	createGroup(world, types, amount, 5, pos);
 }
@@ -223,6 +259,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	itemFromPanelQuickAccess = new Item;
 	itemFromPanelQuickAccess->setType(type->typeItem);
 	idSelectItem = 0;
+	itemFromPanelQuickAccess[idSelectItem].amount = type->typeItem.maxAmount;
 
 	size.width = type->featuresSprite.size.width;
 	size.height = type->featuresSprite.size.height;
@@ -411,85 +448,6 @@ void Enemy::choiceBlock(world &world)
 	int yShift = 0;
 	choiceDirectionLook(xShift, yShift);
 
-
-
-	/*
-	switch(directions.directionLook)
-	{
-	case DOWN_LEFT:
-		x = getXPos() / SIZE_BLOCK - 1;
-		y = getYPos() / SIZE_BLOCK + 1;
-		if (!isExitFromBorder(x, y))
-		{
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	case DOWN_RIGHT:
-		x = getXPos() / SIZE_BLOCK + 1;
-		y = getYPos() / SIZE_BLOCK + 1;
-		if (!isExitFromBorder(x, y)) {
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	case UP_LEFT:
-		x = getXPos() / SIZE_BLOCK - 1;
-		y = getYPos() / SIZE_BLOCK - 1;
-		if (isExitFromBorder(x, y)) {
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	case UP_RIGHT:
-		x = getXPos() / SIZE_BLOCK + 1;
-		y = getYPos() / SIZE_BLOCK - 1;
-		if (!isExitFromBorder(x, y)) {
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	case LEFT:
-		x = getXPos() / SIZE_BLOCK - 1;
-		y = getYPos() / SIZE_BLOCK;
-		if (!isExitFromBorder(x, y)) {
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	case RIGHT:
-		x = getXPos() / SIZE_BLOCK + 1;
-		y = getYPos() / SIZE_BLOCK;
-		if (!isExitFromBorder(x, y)) {
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	case UP:
-		x = getXPos() / SIZE_BLOCK;
-		y = getYPos() / SIZE_BLOCK - 1;
-		if (!isExitFromBorder(x, y)) {
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	case DOWN:
-		x = getXPos() / SIZE_BLOCK;
-		y = getYPos() / SIZE_BLOCK + 1;
-		if (!isExitFromBorder(x, y)) {
-			field.dataMap[level][y][x] = field.charBlocks[idBlocks::air];
-		}
-		break;
-	default:
-		break;
-	}
-	//*/
-	
-	/*
-		wchar_t air = field.charBlocks[idBlocks::air];
-	wchar_t *block = &field.dataMap[level][y][x];
-
-	wchar_t *listBlocks = currentItem.typeItem->destroy.blocks;
-	String *listObjects = currentItem.typeItem->destroy.objects;
-	int countObjects = currentItem.typeItem->destroy.amountObjects;
-
-	if (isInListBlocks(*block, listBlocks)) {
-		*block = air;
-	}
-	*/
 	Vector3i pos = { x, y, level };
 	useTool(pos, world, currentItem);
 
@@ -580,7 +538,7 @@ void Enemy::findLadder(world &world, Vector3i pos)
 	}
 }
 
-void Enemy::checkInDirectionWalk(Field &field, sf::Vector2i posStart, sf::Vector2i shifts)
+void Enemy::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts)
 {
 	int level = currentLevelFloor + 1;
 	int x = posStart.x;
@@ -589,7 +547,7 @@ void Enemy::checkInDirectionWalk(Field &field, sf::Vector2i posStart, sf::Vector
 	int yShift = shifts.y;
 
 
-	int countCheckingBlocks = RADIUSE_VIEW / SIZE_BLOCK;
+	int countCheckingBlocks = distanse / SIZE_BLOCK;
 	int count = 1;
 	while (!isExitFromBorder(x, y) && count < countCheckingBlocks) {
 
@@ -607,21 +565,14 @@ void Enemy::checkInDirectionWalk(Field &field, sf::Vector2i posStart, sf::Vector
 		}
 
 		if (summaryCondition) {
-
-
-currenMode = idEntityMode::walk;
+			currenMode = idEntityMode::walk;
 			if (wasCollision) {
-			
-				
-
 				redefineDirectionWalk();
 			}
-
 			break;
 		}
 		x += xShift;
 		y += yShift;
-
 		count++;
 	}
 }
@@ -635,7 +586,7 @@ void Enemy::redefineDirectionWalk()
 	directions.directionWalk = Direction(randomDirection);
 }
 
-void Enemy::checkBlock(Field& field)
+void Enemy::checkBlock(Field& field, float distanse)
 {
 	int x = 0;
 	int y = 0;
@@ -697,5 +648,5 @@ void Enemy::checkBlock(Field& field)
 
 	Vector2i startPosition = { x, y };
 	Vector2i shifts = { xShift, yShift };
-	checkInDirectionWalk(field, startPosition, shifts);
+	checkInDirectionWalk(field, distanse, startPosition, shifts);
 }

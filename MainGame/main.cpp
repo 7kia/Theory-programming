@@ -262,6 +262,28 @@ void updatePlayer(Game &game, MainPerson& mainPerson)
 	//printf("Angle %f \n", mainPerson.rotation);// ÈÑÏÐÀÂÜ
 }
 
+void createGroups(float time, world &world)
+{
+	Vector3i pos = { 3, 10, 0 };
+		createSmallGroupSkelets(world, pos);
+
+		pos = { 10, 3, 2 };
+		createSmallGroupSkelets(world, pos);
+
+		bool updateDifficult = int(time) % TIME_UPDATE_DIFFICULT == 0;
+		if(updateDifficult)
+			world.difficult++;
+
+		if (world.difficult > 0) {
+			pos = { 10, 10, 1 };
+			createMiddleGroupSkelets(world, pos);
+		}
+		if (world.difficult > 1) {
+			pos = { 20, 20, 1 };
+			createBigGroupSkelets(world, pos);
+		}
+}
+
 void generateGroups(Game &game)
 {
 	world &world = game.world;
@@ -271,12 +293,23 @@ void generateGroups(Game &game)
 	bool condition = int(currentWorldTime) % TIME_GENERATE_WAVE_ENEMYS == 0;
 	if(condition && needGenerateWave == false)
 	{
-		Vector3i pos = { 3, 10, 0 };
-		createSmallGroupSkelets(game.world, pos);
-
-		pos = { 10, 3, 2 };
-		createSmallGroupSkelets(game.world, pos);
+		createGroups(currentWorldTime, world);
 	}
+}
+
+void upgradeObject(UnlifeObject &object, world &world)
+{
+	redefineObject &redefine = object.typeObject->redefine;
+	Sprite &spriteObject = *object.spriteObject;
+	Vector2f currentPos = spriteObject.getPosition();
+	Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
+		int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
+
+	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
+
+
+	object.setType(nextType);
+	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
 }
 
 void updateUnlifeObjects(world &world, float deltaTime)
@@ -289,15 +322,7 @@ void updateUnlifeObjects(world &world, float deltaTime)
 			float timeUpdate = redefine.timeUpdate;
 			if (timeUpdate) {
 				if (objects[i].timeLife > timeUpdate) {
-					Sprite &spriteObject = *objects[i].spriteObject;
-					Vector2f currentPos = spriteObject.getPosition();
-					Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
-						int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
-
-					TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
-
-					objects[i].setType(nextType);
-					objects[i].setPosition(posOnMap.x, posOnMap.y, objects[i].currentLevel);
+					upgradeObject(objects[i], world);
 				}
 			}
 

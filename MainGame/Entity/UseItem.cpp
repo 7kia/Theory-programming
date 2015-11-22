@@ -14,6 +14,13 @@ void Entity::defineLevel(int &number, Event event)
 	}
 }
 
+void Entity::minusAmount(Item &currentItem)
+{
+	currentItem.amount--;
+	if (currentItem.amount < 1)
+		currentItem = *founds.emptyItem;
+}
+
 void Entity::redefineType(Item &currentItem, world &world, int shift)
 {
 	TypeItem *typesItems = world.typesObjects.typesItem;
@@ -40,10 +47,7 @@ void Entity::redefineType(Item &currentItem, world &world, int shift)
 	founds.findItem = &items[founds.findItemFromList];
 
 	takeItem(world, posPerson);
-
-	currentItem.amount--;
-	if (currentItem.amount < 1)
-		currentItem = *founds.emptyItem;
+	minusAmount(currentItem);
 }
 
 void Entity::transferInInventory(vector<Item> &items)
@@ -169,7 +173,8 @@ void Entity::useAsFood(Item &currentItem, Event event)
 	bool isHungry = hungry.currentHungry < hungry.maxHungry;
 	if (eating && isHungry) {
 		hungry.currentHungry += currentItem.currentToughness;
-		currentItem = *founds.emptyItem;
+
+		minusAmount(currentItem);
 	}
 }
 
@@ -233,19 +238,28 @@ void Entity::breakItem(Item &currentItem)
 	}
 }
 
-void Entity::dropObject(Vector2i pos, vector<Item> &items, TypeItem* typesItems)
+void Entity::dropObject(Vector2i pos, vector<Item> &items, TypeItem* typesItems, bool harvest)
 {
 	//////////////////////////////////////////////////
 	// Выпадение предметов
 	Item* addItem = new Item;
+
 	int countItem = founds.findObject->typeObject->drop.minCountItems.size();
 
 	vector<int> &minAmount = founds.findObject->typeObject->drop.minCountItems;
 	vector<int> &maxAmount = founds.findObject->typeObject->drop.maxCountItems;
 	vector<int> &idItems = founds.findObject->typeObject->drop.dropItems;
 
+	int start = 0;
+	int finish = countItem;
+
+	if(harvest)
+	{
+		start = 1;
+	}
+
 	int currentAmount;
-	for (int i = 0; i < countItem; i++) {
+	for (int i = start; i < countItem; i++) {
 
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
 		for (int j = 0; j < currentAmount; j++) {
@@ -290,7 +304,7 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 
 			if (toughnessObject < 1) {
 				Vector2i posDrop = { x, y };
-				dropObject(posDrop, items, typesItems);
+				dropObject(posDrop, items, typesItems, false);
 
 				unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
@@ -359,7 +373,26 @@ void Entity::useBlock(Vector3i pos, world &world,
 	}
 
 }
+void Entity::upgradeObject(UnlifeObject &object, world &world)
+{
+	redefineObject &redefine = object.typeObject->redefine;
+	Sprite &spriteObject = *object.spriteObject;
+	Vector2f currentPos = spriteObject.getPosition();
+	Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
+		int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
 
+	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
+
+	Vector2i currentTarget = founds.currentTarget;
+	vector<Item> *items = world.items;
+	TypeItem *typesItems = world.typesObjects.typesItem;
+
+	Vector2i posItems = { posOnMap.x - 1, posOnMap.y - 1 };
+	dropObject(posItems, *items, typesItems, true);
+
+	object.setType(nextType);
+	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
+}
 
 // TODO
 void Entity::actionMain(world &world, Vector2f pos)
@@ -381,6 +414,9 @@ void Entity::actionMain(world &world, Vector2f pos)
 			spriteEntity->setPosition(x * SIZE_BLOCK + posOrigin.x, y * SIZE_BLOCK + posOrigin.y);
 			currentLevelFloor += 1;
 
+		} else if (isInListObjects(listDestroy.harvestObjects, AMOUNT_HARVEST_OBJECTS))
+		{
+			upgradeObject(*founds.findObject, world);
 		}
 
 	}

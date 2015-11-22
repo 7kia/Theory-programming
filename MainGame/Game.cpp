@@ -104,6 +104,8 @@ void initializeCategorysBreakingObject(Game &game)
 
 	listDestroy.ladder[0] = charBlocks[idBlocks::woodLadder];
 	/////////////////////////////////////////////////////////////////////////
+	listDestroy.harvestObjects[0] = typesUnlifeObject[idUnlifeObject::appleGrowTree].name;
+
 }
 
 void updateEntity(Game& game, const float deltaTime)

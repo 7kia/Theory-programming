@@ -72,7 +72,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	mainPerson.hungry.currentHungry = 5;
 
 	entityProtection &protection = mainPerson.protection;
-	protection.protectionCut = 1.5f;
+	protection.protectionCut = 0.15f;
 	protection.protectionCrash = 1.f;
 
 	mainPerson.damage.damageMultiplirer = 1;
@@ -254,8 +254,8 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 		// TODO
 		bool isFight = enemy.currenMode == idEntityMode::fight;
-		if (feelEnemy != true)
-			enemy.checkBlock(world.field);
+		if (feelEnemy == false)
+			enemy.checkBlock(world.field, distanse);
 
 		isFight = enemy.currenMode == idEntityMode::fight;
 		if (isFight) {
@@ -267,23 +267,28 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 			if (enemy.wasCollision) {
 
 				if (!onLevelEnemy && feelEnemy) {
-					Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK), 
+					Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK),
 						int(enemy.getXPos() / SIZE_BLOCK),
 						enemy.collision.level };
 					enemy.findLadder(world, posEnemy);
+
+
+					String nameCurrentItem = itemEnemy.typeItem->features.name;
+					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+
+					bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
+					bool isNotEmpty = nameCurrentItem != nameEmptyItem;
+
+					if (isNotEmpty && isLadder) {
+						enemy.buildLadder(world);
+					}
 				}
-
-
-				String nameCurrentItem = itemEnemy.typeItem->features.name;
-				String nameEmptyItem = founds.emptyItem->typeItem->features.name;
-
-				bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
-				bool isNotEmpty = nameCurrentItem != nameEmptyItem;
-				if (isNotEmpty && onLevelEnemy) {
+				else if (feelEnemy) {
 					enemy.choiceBlock(world);
-				} else if (isNotEmpty && isLadder) {
-					enemy.buildLadder(world);
 				}
+
+
+
 
 			} 
 			else {

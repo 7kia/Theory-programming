@@ -254,9 +254,10 @@ public:
 	void takeItem(world &world, sf::Vector2f pos);
 	void throwItem(Field &field, std::vector<Item> &items);
 
+	void minusAmount(Item& currentItem);
 	void breakItem(Item &currentItem);
 
-	void dropObject(Vector2i pos, std::vector<Item> &items, TypeItem* typesItems);
+	void dropObject(Vector2i pos, std::vector<Item> &items, TypeItem* typesItems, bool harvest);
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);
@@ -273,6 +274,7 @@ public:
 
 	void useTool(sf::Vector3i pos, world &world, Item &currentItem);
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
+	void upgradeObject(UnlifeObject& object, world& world);
 	//private:
 
 };

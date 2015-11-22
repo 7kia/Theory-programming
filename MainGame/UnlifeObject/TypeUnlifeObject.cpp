@@ -63,7 +63,7 @@ void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound
 	drop.addItem(1, 2, idItem::logOakItem);
 	drop.addItem(3, 6, idItem::appleItem);
 
-	typesObject->redefine.init(idUnlifeObject::appleGrowTree, 0);
+	typesObject->redefine.init(idUnlifeObject::appleTree, 0);
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////

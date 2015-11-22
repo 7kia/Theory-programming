@@ -4,9 +4,11 @@
 #include "GUI and Fonts/Font.h"
 #include "GUI and Fonts/GUI.h"
 
-const sf::String TITLE_PROGRAM = "MainGame v1.6.5";
+const sf::String TITLE_PROGRAM = "MainGame v1.6.6";
 
-const int TIME_GENERATE_WAVE_ENEMYS = 50;
+const int TIME_GENERATE_WAVE_ENEMYS = 10;
+const int TIME_UPDATE_DIFFICULT = TIME_GENERATE_WAVE_ENEMYS * 2;
+
 
 struct Game
 {
