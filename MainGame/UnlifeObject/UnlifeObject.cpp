@@ -20,6 +20,10 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 	addObject.setPosition(12, 13, 1);
 	unlifeObjects.push_back(addObject);
 
+	addObject.setType(typesUnlifeObjects[idUnlifeObject::appleSeadling]);
+	addObject.setPosition(12, 8, 1);
+	unlifeObjects.push_back(addObject);
+
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::smallStone]);
 	addObject.setPosition(5, 11, 1);
 	unlifeObjects.push_back(addObject);
@@ -72,6 +76,7 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 	typeObject = &type;
 	isDestroy = type.isDestroy;
 
+
 	int width = type.mainSize.size.width;
 	int height = type.mainSize.size.height;
 	int pixelXPos = type.mainSize.pixPos.x;
@@ -90,6 +95,8 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 
 	// Прочность 
 	currentToughness = type.toughnessObject;
+
+	timeLife = 0.f;
 }
 
 void UnlifeObject::setPosition(int xPos, int yPos, int Level)
@@ -102,7 +109,4 @@ void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 	currentLevel = Level;
 	spriteObject->setPosition(numberX, numberY);
 	transparentSpiteObject->setPosition(numberX, numberY - (height - heightMain) / 2);
-
-	// TODO
-	directionWalk = NONE_DIRECTION;
 }

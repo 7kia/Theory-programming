@@ -99,6 +99,10 @@ const int PIXEL_Y_APPLE = 0;
 // seedling oak - саженец дуба
 const int PIXEL_X_SEADLING_OAK_ITEM = SIZE_ITEM * 5;
 const int PIXEL_Y_SEADLING_OAK_ITEM = SIZE_ITEM;
+
+// seedling apple - саженец яблони
+const int PIXEL_X_SEADLING_APPLE_ITEM = SIZE_ITEM * 5;
+const int PIXEL_Y_SEADLING_APPLE_ITEM = SIZE_ITEM * 2;
 // ДОБАВЛЕНИЕ ПРЕДМЕТА
 
 namespace idItem {
@@ -118,6 +122,7 @@ namespace idItem {
 		woodLadderItem,
 		// Саженцы
 		seadlingOakItem,
+		seadlingApple,
 		// Еда
 		mushroomItem,
 		rawMeatWolfItem,

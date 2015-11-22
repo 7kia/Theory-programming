@@ -7,6 +7,7 @@
 
 #include "TypeUnlifeObject.h"
 
+struct world;
 using namespace sf;
 
 class UnlifeObject
@@ -20,17 +21,12 @@ public:
 
 	TypeUnlifeObject *typeObject;// Пренадлежность типу
 
-	// Прочность
 	int currentToughness;
-	// Разрушаемый или перетаскиваемый
 	bool isDestroy;
 
 	// Текущий уровень размещения
 	int currentLevel;
-
-	// Для анимации
-	Direction directionWalk;
-	float timeAnimation;
+	float timeLife;
 
 	// Передвижение. Его анимация и озвучка
 	void update(const float deltaTime, dataSound &databaseSound);
@@ -48,3 +44,4 @@ private:
 };
 
 void initializeUnlifeObjects(std::vector<UnlifeObject> &unlifeObjects, TypeUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject);
+void updateUnlifeObjects(world &world, float deltaTime);

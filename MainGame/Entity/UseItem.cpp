@@ -282,14 +282,21 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 
 		if (isInListObjects(listObjects, countObjects)) {
 
+			int &toughnessObject = founds.findObject->currentToughness;
+			typeDamageItem &damageItem = currentItem.typeItem->damageItem;
+			
+			toughnessObject -= damageItem.cuttingDamage;
+			toughnessObject -= damageItem.crushingDamage;
 
+			if (toughnessObject < 1) {
+				Vector2i posDrop = { x, y };
+				dropObject(posDrop, items, typesItems);
 
-			Vector2i posDrop = { x, y };
-			dropObject(posDrop, items, typesItems);
+				unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
-			unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
-
-			breakItem(currentItem);
+				breakItem(currentItem);
+			}
+			
 
 
 		}

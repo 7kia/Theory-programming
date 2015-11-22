@@ -271,10 +271,37 @@ void generateGroups(Game &game)
 	bool condition = int(currentWorldTime) % TIME_GENERATE_WAVE_ENEMYS == 0;
 	if(condition && needGenerateWave == false)
 	{
-		Vector3i pos = { 3, 10, 1 };
+		Vector3i pos = { 3, 10, 0 };
+		createSmallGroupSkelets(game.world, pos);
+
+		pos = { 10, 3, 2 };
 		createSmallGroupSkelets(game.world, pos);
 	}
+}
 
+void updateUnlifeObjects(world &world, float deltaTime)
+{
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+		for (int i = 0; i < objects.size(); ++i) {
+			objects[i].timeLife += deltaTime;
+
+			redefineObject &redefine = objects[i].typeObject->redefine;
+			float timeUpdate = redefine.timeUpdate;
+			if (timeUpdate) {
+				if (objects[i].timeLife > timeUpdate) {
+					Sprite &spriteObject = *objects[i].spriteObject;
+					Vector2f currentPos = spriteObject.getPosition();
+					Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
+						int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
+
+					TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
+
+					objects[i].setType(nextType);
+					objects[i].setPosition(posOnMap.x, posOnMap.y, objects[i].currentLevel);
+				}
+			}
+
+		}
 }
 
 void updateWorldTimeCircles(Game &game)
@@ -284,6 +311,7 @@ void updateWorldTimeCircles(Game &game)
 
 	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
 		generateGroups(game);
+
 
 		printf("World time: %f\n", currentWorldTime);
 	}
@@ -321,6 +349,7 @@ void startGame()
 			if (mainPerson.isDeath == false) {
 				updatePlayer(*game, mainPerson);
 				updateEntity(*game, TIME_PER_FRAME);
+				updateUnlifeObjects(game->world, TIME_PER_FRAME);
 				updateWorldTimeCircles(*game);
 			}
 			////////////////////////////////////////////////////////////

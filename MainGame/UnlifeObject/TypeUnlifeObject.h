@@ -7,6 +7,14 @@
 #include "../CommonStructs.h"
 #include "UnlifeObjectVar.h"
 
+struct TypeUnlifeObject;
+
+struct redefineObject
+{
+	int id;
+	float timeUpdate;
+	void init(int idType, float time);
+};
 
 struct TypeUnlifeObject {
 public:
@@ -19,6 +27,9 @@ public:
 
 	bool isDestroy;
 	int toughnessObject;
+
+	redefineObject redefine;
+
 
 	featuresSprite mainSize;
 	featuresSprite transparentSize;

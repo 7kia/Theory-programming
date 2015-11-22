@@ -187,6 +187,24 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Саженец дуба
+	numberItem = idItem::seadlingApple;
+
+	featuresAddItem.init("Seadling apple", numberItem, idCategoryItem::unlifeObject);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_APPLE_ITEM, PIXEL_Y_SEADLING_APPLE_ITEM);
+
+	damage.init(1, 1);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::appleSeadling);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
 	// Напитки и сосуды
 

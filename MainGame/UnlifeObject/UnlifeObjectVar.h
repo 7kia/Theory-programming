@@ -29,6 +29,22 @@ const int HEIGHT_SEADLING_OAK = 101;
 const int PIXEL_X_SEADLING_OAK = WIDTH_SMALL_OAK + WIDTH_OAK;
 const int PIXEL_Y_SEADLING_OAK = 0;
 
+// Яблоня
+const int WIDTH_APPLE_TREE = 79;
+const int HEIGHT_APPLE_TREE = 107;
+
+const int PIXEL_X_APPLE_TREE = PIXEL_X_SEADLING_OAK + WIDTH_SEADLING_OAK;
+const int PIXEL_Y_APPLE_TREE = 0;
+
+const int PIXEL_X_GROW_APPLE_TREE = PIXEL_X_APPLE_TREE + WIDTH_APPLE_TREE;
+const int PIXEL_Y_GROW_APPLE_TREE = 0;
+
+// Саженец яблони
+const int WIDTH_SEADLING_APPLE = 28;
+const int HEIGHT_SEADLING_APPLE = 45;
+
+const int PIXEL_X_SEADLING_APPLE = WIDTH_OAK_STUMP;
+const int PIXEL_Y_SEADLING_APPLE = PIXEL_Y_OAK_STUMP;
 
 typedef enum
 {
@@ -36,6 +52,9 @@ typedef enum
 	oakSeadling,
 	oakSmall,
 	oakGrow,
+	appleSeadling,
+	appleTree,
+	appleGrowTree,
 	smallStone,
 	empty
 } idUnlifeObject;

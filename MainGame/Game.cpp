@@ -70,6 +70,8 @@ void initializeCategorysBreakingObject(Game &game)
 	// Объекты уничтожаемые топором
 	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oakGrow].name;
 	listDestroy.axeBreakingObject[1] = typesUnlifeObject[idUnlifeObject::oakSmall].name;
+	listDestroy.axeBreakingObject[2] = typesUnlifeObject[idUnlifeObject::appleTree].name;
+	listDestroy.axeBreakingObject[3] = typesUnlifeObject[idUnlifeObject::appleGrowTree].name;
 	/////////////////////////////////////////////////////////////////////////
 	// Блоки уничтожаемые киркой
 	listDestroy.pickaxBreakingBlock[SIZE_STRING - 1] = u'\0';
