@@ -9,9 +9,9 @@
 #include <sstream>// Для перевода числа в строку
 
 #include "Recourses.h"
-#include "ItemsVar.h"
-#include "BlocksVar.h"
-#include "UnlifeObjectVar.h"
+#include "Items/ItemsVar.h"
+#include "Map/BlocksVar.h"
+#include "UnlifeObject/UnlifeObjectVar.h"
 
 #include "MyFunctions.h"
 

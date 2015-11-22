@@ -1,6 +1,5 @@
 #pragma once
-#include "World.h"
-#include "Enemy.h"
+#include "../Entity/Enemy.h"
 
 struct typesObjectsInWorld
 {

@@ -1,13 +1,8 @@
 #pragma once
-#include "Sound.h"
+#include "Entity/MainPerson.h"
 
-#include "MainPerson.h"
-
-#include "Font.h"
-#include "GUI.h"
-
-#include "EntityVar.h"
-
+#include "GUI and Fonts/Font.h"
+#include "GUI and Fonts/GUI.h"
 
 const sf::String TITLE_PROGRAM = "MainGame v1.6.5";
 

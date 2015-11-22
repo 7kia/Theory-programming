@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "EntityVar.h"
 
 using namespace std;
 
