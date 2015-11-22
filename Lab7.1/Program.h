@@ -9,11 +9,6 @@
 
 #include "Font.h"
 #include "programClock.h"
-
-const unsigned int DEFAULT_WIDTH_WINDOW = 500;
-const unsigned int DEFAULT_HEIGHT_WINDOW = 500;
-const sf::Vector2u SIZE_WINDOW = { DEFAULT_WIDTH_WINDOW , DEFAULT_HEIGHT_WINDOW };
-
 const float SPEED_SHIFT = 5.f;
 
 const float SCALE_IMAGE = 0.25f;
@@ -26,6 +21,7 @@ struct Program
 	sf::RenderWindow window;
 	
 	TextProgram textProgram;
+
 
 	programClock Clock;
 };

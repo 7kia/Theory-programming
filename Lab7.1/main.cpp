@@ -46,6 +46,8 @@ void render(Program & program)
 
 	//////////////////////////////////////////////
 	// Текст Clock
+	program.Clock.render(window);
+
 
 	window.display();
 }
