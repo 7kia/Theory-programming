@@ -6,10 +6,6 @@
 
 const sf::String TITLE_PROGRAM = "MainGame v1.6.6";
 
-const int TIME_GENERATE_WAVE_ENEMYS = 10;
-const int TIME_UPDATE_DIFFICULT = TIME_GENERATE_WAVE_ENEMYS * 2;
-
-
 struct Game
 {
 	sf::RenderWindow window;

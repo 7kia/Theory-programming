@@ -162,9 +162,12 @@ void createSmallGroupSkelets(world &world, Vector3i pos)
 	std::vector<int> amount;
 
 	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	amount.push_back(2);
+	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
-	amount.push_back(1);
+
+	amount.push_back(AMOUNT_SIMPLE_SKELET_IN_SMALL_GROUP);
+	amount.push_back(AMOUNT_SKELET_DIGGER_IN_SMALL_GROUP);
+	amount.push_back(AMOUNT_SKELET_BUILDER_IN_SMALL_GROUP);
 
 	createGroup(world, types, amount, 2, pos);
 }
@@ -177,15 +180,16 @@ void createMiddleGroupSkelets(world &world, Vector3i pos)
 	std::vector<int> amount;
 
 	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
-	amount.push_back(1);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
-	amount.push_back(3);
+
+	amount.push_back(AMOUNT_SIMPLE_SKELET_IN_MIDDLE_GROUP);
+	amount.push_back(AMOUNT_SKELET_DIGGER_IN_MIDDLE_GROUP);
+	amount.push_back(AMOUNT_SKELET_LUMBER_IN_MIDDLE_GROUP);
+	amount.push_back(AMOUNT_SKELET_MINER_IN_MIDDLE_GROUP);
+	amount.push_back(AMOUNT_SKELET_BUILDER_IN_MIDDLE_GROUP);
 
 	createGroup(world, types, amount, 4, pos);
 }
@@ -198,15 +202,16 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 	std::vector<int> amount;
 
 	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	amount.push_back(5);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	amount.push_back(2);
 	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	amount.push_back(2);
 	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
-	amount.push_back(2);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
-	amount.push_back(4);
+	
+	amount.push_back(AMOUNT_SIMPLE_SKELET_IN_BIG_GROUP);
+	amount.push_back(AMOUNT_SKELET_DIGGER_IN_BIG_GROUP);
+	amount.push_back(AMOUNT_SKELET_LUMBER_IN_BIG_GROUP);
+	amount.push_back(AMOUNT_SKELET_MINER_IN_BIG_GROUP);
+	amount.push_back(AMOUNT_SKELET_BUILDER_IN_BIG_GROUP);
 
 	createGroup(world, types, amount, 5, pos);
 }

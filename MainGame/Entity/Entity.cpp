@@ -560,6 +560,9 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 					y -= dy * deltaTime;
 				}
 				wasCollision = true;
+
+				founds.findObject = &objects[i];
+				founds.findObjectFromList = i;
 				directions.directionWalk = NONE_DIRECTION;
 				break;
 			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {

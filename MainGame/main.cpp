@@ -337,7 +337,6 @@ void updateWorldTimeCircles(Game &game)
 	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
 		generateGroups(game);
 
-
 		printf("World time: %f\n", currentWorldTime);
 	}
 }
