@@ -24,8 +24,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	mainPerson.step.init(SPEED_ENTITY);
 	mainPerson.animation.timeAnimation = 0.f;
 
-	// Камера
-	int posX(64), posY(64);
+	// TODO
+	int posX(CENTER_WORLD.x * SIZE_BLOCK), posY(CENTER_WORLD.y * SIZE_BLOCK);
 	mainPerson.view = new View;
 	mainPerson.view->setSize(640, 480);
 	mainPerson.view->setCenter(posX, posY);
@@ -52,7 +52,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	}
 
 	// Позиция и направление
-	mainPerson.currentLevelFloor = 0;
+	mainPerson.currentLevelFloor = 1;
 	mainPerson.currenMode = idEntityMode::walk;
 	mainPerson.spriteEntity->setPosition(posX, posY);
 
@@ -151,7 +151,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	vector<Item> &items = *world.items;
 
 	bool isAtack = currenMode == idEntityMode::atack;
-	bool isEnemy = findEnemy->type->name != emptyEnemy->type->name;
+	bool isEnemy = findEnemyFromList > -1;
 	if (isAtack && isEnemy) {
 
 		if (findEnemy->isDeath) {
@@ -179,13 +179,10 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 
 			}
 			delete addItem;
-			if (findEnemyFromList) {
+			if (findEnemyFromList > -1) {
 				enemy.erase(enemy.begin() + findEnemyFromList);
 			}
-			else
-			{
-				enemy.clear();//TODO
-			}
+
 
 			//if (giveDamage) {
 				animation.currentTimeFightAnimation = 0.f;

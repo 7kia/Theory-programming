@@ -33,7 +33,7 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 		for (size_t countItem = 1; countItem <= 4; countItem++)
 		{
 				addItem->setType(typesItem[i]);
-		addItem->setPosition(i / 2 + 2, i % 3 + 2, 1);
+		addItem->setPosition(CENTER_WORLD.x + i / 2 + 2, CENTER_WORLD.y + i % 3 + 2, 2);
 		items.push_back(*addItem);
 		// днаюбкемхе опедлерю	
 		}

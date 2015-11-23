@@ -19,5 +19,6 @@ typedef enum
 	planksBlock,
 	woodLadder,
 	water,
+	borderBlock,
 	amountKnowBlocks
 } idBlocks;

@@ -26,6 +26,8 @@ const int LONG_MAP = 25;
 const int WIDTH_MAP = 40 + BORDER1;
 const int HEIGHT_MAP = 4;
 
+const sf::Vector2i CENTER_WORLD = { WIDTH_MAP / 2, LONG_MAP / 2 };
+
 const int NUMBER_COORDINATES = 2;
 
 const int NUMBER_TEXT_STRING = 15;

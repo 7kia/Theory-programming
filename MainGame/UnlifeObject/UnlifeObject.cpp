@@ -7,25 +7,27 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 {
 	UnlifeObject addObject;
 
+	int topLevel = 2;
+
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakGrow]);
-	addObject.setPosition(4, 12, 1);
+	addObject.setPosition(4, 12, topLevel);
 	unlifeObjects.push_back(addObject);
 
 	///*
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakSmall]);
-	addObject.setPosition(8, 12, 1);
+	addObject.setPosition(8, 12, topLevel);
 	unlifeObjects.push_back(addObject);
 
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakSeadling]);
-	addObject.setPosition(12, 13, 1);
+	addObject.setPosition(12, 13, topLevel);
 	unlifeObjects.push_back(addObject);
 
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::appleSeadling]);
-	addObject.setPosition(12, 8, 1);
+	addObject.setPosition(12, 8, topLevel);
 	unlifeObjects.push_back(addObject);
 
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::smallStone]);
-	addObject.setPosition(5, 11, 1);
+	addObject.setPosition(5, 11, topLevel);
 	unlifeObjects.push_back(addObject);
 
 	emptyObject.setType(typesUnlifeObjects[idUnlifeObject::empty]);

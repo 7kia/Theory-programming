@@ -83,9 +83,13 @@ void Field::initializeDataBlocks()
 	coordinateBloks[idBlocks::stoneBrick][1] = BLOCK_SIZE * 2;
 
 
-	charBlocks[idBlocks::woodLadder] = u'\x021';
+	charBlocks[idBlocks::woodLadder] = u'\x018';
 	coordinateBloks[idBlocks::woodLadder][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::woodLadder][1] = BLOCK_SIZE;
+
+	charBlocks[idBlocks::borderBlock] = u'\x019';
+	coordinateBloks[idBlocks::borderBlock][0] = BLOCK_SIZE * 6;
+	coordinateBloks[idBlocks::borderBlock][1] = BLOCK_SIZE * 7;
 
 	coordinateBloks[idBlocks::unknow][0] = BLOCK_SIZE * 7;
 	coordinateBloks[idBlocks::unknow][1] = BLOCK_SIZE * 7;
