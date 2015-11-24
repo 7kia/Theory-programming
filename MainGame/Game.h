@@ -6,6 +6,8 @@
 
 const sf::String TITLE_PROGRAM = "MainGame v1.6.6";
 
+const float faultWorldTime = 0.03f;
+
 struct Game
 {
 	sf::RenderWindow window;
@@ -27,6 +29,28 @@ struct Game
 
 	unsigned int widthMainWindow = DEFAULT_WIDTH_WINDOW;
 	unsigned int heightMainWindow = DEFAULT_HEIGHT_WINDOW;
+
+	void informationAboutSelect(float x, float y);
+
+	void processEvents(const float deltaTime);
+
+	void updatePlayer(const float& deltaTime);
+	void updateEntity(const float deltaTime);
+
+	void updateUnlifeObjects(const float& deltaTime);
+	void upgradeObject(UnlifeObject& object);
+
+	void createGroups(float time);
+	void generateGroups();
+	void updateWorldTimeCircles();
+
+	void update(const float& deltaTime);
+
+	void renderEntitys();
+	void renderUnlifeObjects();
+	void render();
+
+	void showFPS(const Time timeSinceLastUpdate);
 };
 
 void initializeGame(Game & game);
