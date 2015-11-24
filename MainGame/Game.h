@@ -4,7 +4,7 @@
 #include "GUI and Fonts/Font.h"
 #include "GUI and Fonts/GUI.h"
 
-const sf::String TITLE_PROGRAM = "MainGame v1.6.6";
+const sf::String TITLE_PROGRAM = "MainGame v1.7.1";
 
 const float faultWorldTime = 0.03f;
 
