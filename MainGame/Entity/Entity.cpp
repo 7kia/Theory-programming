@@ -403,19 +403,10 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	float dx(movement.x);
 	float dy(movement.y);
 
-	float x;
-	float y;
+	float x = getXPos();
+	float y = getYPos();
 
 	wasCollision = false;
-
-	if (directions.directionWalk >= Direction::UP_LEFT) {
-		// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-		x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime;
-		y = getYPos() + DIAGONAL_SCALE_SPEED * dy * deltaTime;
-	} else {
-		x = getXPos() + dx * deltaTime;
-		y = getYPos() + dy * deltaTime;
-	}
 
 	wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
@@ -494,14 +485,28 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 		/////////////////////////////////////////////
 	} else {
-		x = getXPos();
-		y = getYPos();
+		if (directions.directionWalk >= Direction::UP_LEFT) {
+			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
+			x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
+			y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
+		} else {
+			x -= dx * deltaTime;
+			y -= dy * deltaTime;
+		}
 		wasCollision = true;
 		directions.directionWalk = NONE_DIRECTION;
 	}
 
 	if(wasCollision == false)
 	{
+		if (directions.directionWalk >= Direction::UP_LEFT) {
+			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
+			x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime;
+			y = getYPos() + DIAGONAL_SCALE_SPEED * dy * deltaTime;
+		} else {
+			x = getXPos() + dx * deltaTime;
+			y = getYPos() + dy * deltaTime;
+		}
 		collision.clear();
 	}
 
@@ -518,19 +523,16 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
-	float dx(movement.x);
-	float dy(movement.y);
+	if (wasCollision == false) {
+		float dx(movement.x);
+		float dy(movement.y);
 
-	float x;
-	float y;
-	x = getXPos();
-	y = getYPos();
+		float x;
+		float y;
+		x = getXPos();
+		y = getYPos();
 
-	wasCollision = false;
 
-	// Проверка на выход за карту
-	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x >  0))
-			&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y >  0))) {
 		Sprite *spriteObject;
 		FloatRect objectBound;
 
@@ -572,14 +574,12 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 			}
 
 		}
-	} else {
-		wasCollision = true;
-		x = int(getXPos());
-		y = int(getYPos());
-	}
 
-	spriteEntity->setPosition(x, y);
-	movement = { 0.f, 0.f };
+
+
+		spriteEntity->setPosition(x, y);
+		movement = { 0.f, 0.f };
+	}
 }
 
 

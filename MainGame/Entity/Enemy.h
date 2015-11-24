@@ -51,7 +51,7 @@ public:
 	void checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts);
 	void redefineDirectionWalk();
 	void checkBlock(Field &field, float distanse);
-
+	void interactionWithEntity(std::vector<Enemy>* enemys, int id, const float deltaTime);
 
 private:
 

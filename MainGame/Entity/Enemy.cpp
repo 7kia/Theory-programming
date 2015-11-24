@@ -1,6 +1,7 @@
 #include "../World.h"
 #include "EntityVar.h"
 
+using namespace std;
 
 void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount)
 {
@@ -654,4 +655,63 @@ void Enemy::checkBlock(Field& field, float distanse)
 	Vector2i startPosition = { x, y };
 	Vector2i shifts = { xShift, yShift };
 	checkInDirectionWalk(field, distanse, startPosition, shifts);
+}
+
+void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
+{
+	if (wasCollision == false) {
+		float dx(movement.x);
+		float dy(movement.y);
+
+		float x;
+		float y;
+		x = getXPos();
+		y = getYPos();
+
+		
+			Sprite *spriteObject;
+			FloatRect objectBound;
+
+			int levelUnlifeObject;
+			Sprite *transparentSpiteObject;
+			FloatRect entityBound;
+			entityBound = spriteEntity->getGlobalBounds();
+
+
+			vector<Enemy> &objects = *enemys;
+			for (int i = 0; i != objects.size(); ++i) {
+
+				if (id != i && findEnemyFromList != -1) {
+					levelUnlifeObject = objects[i].currentLevelFloor;
+
+					spriteObject = objects[i].spriteEntity;
+					objectBound = spriteObject->getGlobalBounds();
+
+
+					if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor)) {
+						if (directions.directionWalk >= Direction::UP_LEFT) {
+							// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
+							x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
+							y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
+						} else {
+							x -= dx * deltaTime;
+							y -= dy * deltaTime;
+						}
+						wasCollision = true;
+
+						findEnemy = &objects[i];
+						findEnemyFromList = i;
+						directions.directionWalk = NONE_DIRECTION;
+						break;
+					}
+
+				}
+
+			}
+		
+
+		spriteEntity->setPosition(x, y);
+		movement = { 0.f, 0.f };
+
+	}
 }

@@ -11,7 +11,7 @@
 struct world;
 struct destroyObjectsAndBlocks;
 struct Field;
-const int AMOUNT_ENTITY = 100;
+const int AMOUNT_ENTITY = 30;
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
 const float TIME_ATTENTION_SHOW_DAMAGE = 1.5f;

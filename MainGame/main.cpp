@@ -265,9 +265,9 @@ void updatePlayer(Game &game, MainPerson& mainPerson)
 void createGroups(float time, world &world)
 {
 	Vector3i pos = { 3, 10, 0 };
-		createSmallGroupSkelets(world, pos);
+		//createSmallGroupSkelets(world, pos);
 
-		pos = { 10, 3, 2 };
+		pos = { 5, 5, 2 };
 		createSmallGroupSkelets(world, pos);
 
 		bool updateDifficult = int(time) % TIME_UPDATE_DIFFICULT == 0;

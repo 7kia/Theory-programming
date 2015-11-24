@@ -115,7 +115,9 @@ void updateEntity(Game& game, const float deltaTime)
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime, game.databaseSound);
 		Enemys[i].interactionWithMap(field, *game.world.listDestroy, deltaTime);
+		Enemys[i].interactionWithEntity(game.world.Enemys, i, deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(game.world.unlifeObjects, deltaTime);
+
 		game.mainPerson.attractionEnemy(Enemys[i], game.world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
