@@ -8,6 +8,20 @@ const sf::String TITLE_PROGRAM = "MainGame v1.6.6";
 
 const float faultWorldTime = 0.03f;
 
+struct hotKeys
+{
+	Keyboard::Key Up = Keyboard::W;
+	Keyboard::Key UpAlternate = Keyboard::Up;
+	Keyboard::Key Left = Keyboard::A;
+	Keyboard::Key LeftAlternate = Keyboard::Left;
+	Keyboard::Key Down = Keyboard::S;
+	Keyboard::Key DownAlternate = Keyboard::Down;
+	Keyboard::Key Right = Keyboard::D;
+	Keyboard::Key RightAlternate = Keyboard::Right;
+
+	Keyboard::Key run = Keyboard::LShift;
+};
+
 struct Game
 {
 	sf::RenderWindow window;
@@ -15,6 +29,7 @@ struct Game
 	GUI gui;
 	TextGame textGame;
 
+	hotKeys keys;
 	MainPerson mainPerson;
 
 	world world;
@@ -32,24 +47,29 @@ struct Game
 
 	void informationAboutSelect(float x, float y);
 
+	// processEvents.cpp
 	void processEvents(const float deltaTime);
+	void processArrows();
+	void resizeWindow();
 
+	// updateGame.cpp
+	void update(const float& deltaTime);
 	void updatePlayer(const float& deltaTime);
 	void updateEntity(const float deltaTime);
-
 	void updateUnlifeObjects(const float& deltaTime);
 	void upgradeObject(UnlifeObject& object);
 
+	// worldCircle.cpp
 	void createGroups(float time);
 	void generateGroups();
 	void updateWorldTimeCircles();
 
-	void update(const float& deltaTime);
-
+	// renderGame.cpp
+	void render();
 	void renderEntitys();
 	void renderUnlifeObjects();
-	void render();
-
+	void renderItems();
+	void renderMap();
 	void showFPS(const Time timeSinceLastUpdate);
 };
 
