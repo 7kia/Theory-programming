@@ -251,5 +251,5 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 GUI::~GUI()
 {
-	delete *textGui;// TODO
+	//delete *textGui;// TODO
 }

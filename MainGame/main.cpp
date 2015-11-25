@@ -9,9 +9,7 @@ using namespace std;
 
 void startGame()
 {
-	// Îáúÿâëåíèå èãğû
 	Game *game = new Game();
-	initializeGame(*game);
 
 	RenderWindow &window = game->window;
 	MainPerson &mainPerson = game->mainPerson;
@@ -24,8 +22,8 @@ void startGame()
 		while (timeSinceLastUpdate.asSeconds() > TIME_PER_FRAME) {
 			timeSinceLastUpdate -= seconds(TIME_PER_FRAME);
 			game->update(TIME_PER_FRAME);
-
 		}
+
 		game->render();	
 		game->showFPS(timeSinceLastUpdate);
 		//writeMap(game->field->dataMap);

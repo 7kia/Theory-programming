@@ -133,52 +133,51 @@ void Game::informationAboutSelect(float x, float y)
 
 }
 
-void initializeGame(Game & game)
+Game::Game()
 {
 	
-	game.world.unlifeObjects = new vector<UnlifeObject>;
-	game.world.items = new vector<Item>;
-	game.world.listDestroy = new listDestroyObjectsAndBlocks;
+	world.unlifeObjects = new vector<UnlifeObject>;
+	world.items = new vector<Item>;
+	world.listDestroy = new listDestroyObjectsAndBlocks;
 
-	game.window.create(VideoMode(game.widthMainWindow, game.heightMainWindow), TITLE_PROGRAM);
+	window.create(VideoMode(widthMainWindow, heightMainWindow), TITLE_PROGRAM);
 
-	world &world = game.world;
+	initializeSound(databaseSound);
+	initializeField(world.field);
 
-	initializeSound(game.databaseSound);
-	initializeField(game.world.field);
-
-	typesObjectsInWorld &types = game.world.typesObjects;
-	initializeTypesItem(types.typesItem, *game.world.listDestroy, game.databaseSound);
+	typesObjectsInWorld &types = world.typesObjects;
+	initializeTypesItem(types.typesItem, *world.listDestroy, databaseSound);
 	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
 
-	initializeTypeUnlifeObjects(types.typesUnlifeObject, game.databaseSound);
-	initializeUnlifeObjects(*game.world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
+	initializeTypeUnlifeObjects(types.typesUnlifeObject, databaseSound);
+	initializeUnlifeObjects(*world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
 
 	// TODO
-	initializeCategorysBreakingObject(game);
+	initializeCategorysBreakingObject();
 
 	world.Enemys = new vector<Enemy>;
 
-	initializeTypeEnemy(types, game.databaseSound);
-	initializeEntitys(game.world);
+	initializeTypeEnemy(types, databaseSound);
+	initializeEntitys(world);
 
-	initializeMainPerson(game.mainPerson, game.databaseSound, world.emptyObjects);
+	initializeMainPerson(mainPerson, databaseSound, world.emptyObjects);
+	initializeHotKeys();
 
-	createTextsAndFonts(game.textGame);
-	initializeTexts(game.textGame);
+	createTextsAndFonts(textGame);
+	initializeTexts(textGame);
 
-	initializeGUI(game.gui, game.textGame);
+	initializeGUI(gui, textGame);
 
-	initializeClock(game.clock);
+	initializeClock(clock);
 }
 
 ///*
-void initializeCategorysBreakingObject(Game &game) 
+void Game::initializeCategorysBreakingObject() 
 {
-	listDestroyObjectsAndBlocks &listDestroy = *game.world.listDestroy;
-	typesObjectsInWorld &types = game.world.typesObjects;
+	listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
+	typesObjectsInWorld &types = world.typesObjects;
 	TypeUnlifeObject* typesUnlifeObject = types.typesUnlifeObject;
-	wchar_t* charBlocks = game.world.field.charBlocks;
+	wchar_t* charBlocks = world.field.charBlocks;
 
 	//////////////////////////////////////
 	// Блоки уничтожаемые лопатой
@@ -237,6 +236,14 @@ void initializeCategorysBreakingObject(Game &game)
 	/////////////////////////////////////////////////////////////////////////
 	listDestroy.harvestObjects[0] = typesUnlifeObject[idUnlifeObject::appleGrowTree].name;
 
+}
+
+void Game::initializeHotKeys()
+{
+	for (int i = 0; i < hotKeys::amountKeys; i++)
+	{
+		keys[i] = hotKeys::defaultValue[i];
+	}
 }
 
 //*/

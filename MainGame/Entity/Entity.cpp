@@ -727,6 +727,18 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 	}
 }
 
+void Entity::run()
+{
+	if (step.stepCurrent > step.stepFirst) {
+		step.stepCurrent = step.stepFirst;
+		stamina.needMinusStamina = false;
+	}
+	else {
+		step.stepCurrent = step.stepFirst * 3;
+		stamina.needMinusStamina = true;
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
 bool Entity::isInListBlocks(wchar_t block, wchar_t *listBlocks) {

@@ -8,19 +8,48 @@ const sf::String TITLE_PROGRAM = "MainGame v1.7.1";
 
 const float faultWorldTime = 0.03f;
 
-struct hotKeys
+namespace hotKeys
 {
-	Keyboard::Key Up = Keyboard::W;
-	Keyboard::Key UpAlternate = Keyboard::Up;
-	Keyboard::Key Left = Keyboard::A;
-	Keyboard::Key LeftAlternate = Keyboard::Left;
-	Keyboard::Key Down = Keyboard::S;
-	Keyboard::Key DownAlternate = Keyboard::Down;
-	Keyboard::Key Right = Keyboard::D;
-	Keyboard::Key RightAlternate = Keyboard::Right;
+	enum id {
+		Up,
+		UpAlternate,
+		Left,
+		LeftAlternate,
+		Down,
+		DownAlternate,
+		Right,
+		RightAlternate,
 
-	Keyboard::Key run = Keyboard::LShift;
-};
+		run,
+		takeItem,
+		throwItem,
+
+		actionMain,
+		actionAlternate,
+
+		amountKeys
+	};
+
+	const Keyboard::Key defaultValue[amountKeys]
+	{
+		Keyboard::W,
+		Keyboard::Up,
+		Keyboard::A,
+		Keyboard::Left,
+		Keyboard::S,
+		Keyboard::Down,
+		Keyboard::D,
+		Keyboard::Right,
+
+		Keyboard::LShift,
+		Keyboard::R,
+		Keyboard::Q,
+
+		Keyboard::E,
+		Keyboard::C
+	};
+}
+
 
 struct Game
 {
@@ -29,7 +58,7 @@ struct Game
 	GUI gui;
 	TextGame textGame;
 
-	hotKeys keys;
+	Keyboard::Key keys[hotKeys::amountKeys];
 	MainPerson mainPerson;
 
 	world world;
@@ -45,11 +74,19 @@ struct Game
 	unsigned int widthMainWindow = DEFAULT_WIDTH_WINDOW;
 	unsigned int heightMainWindow = DEFAULT_HEIGHT_WINDOW;
 
+
+	Game();
+	void initializeCategorysBreakingObject();
+	void initializeHotKeys();
+
 	void informationAboutSelect(float x, float y);
 
 	// processEvents.cpp
 	void processEvents(const float deltaTime);
 	void processArrows();
+	void processPersonAction(Vector2f pos);
+	void processOtherAction(Event& event, Vector2f pos);
+	void processPanelQuickAccess();
 	void resizeWindow();
 
 	// updateGame.cpp
@@ -72,9 +109,6 @@ struct Game
 	void renderMap();
 	void showFPS(const Time timeSinceLastUpdate);
 };
-
-void initializeGame(Game & game);
-
 void initializeCategorysBreakingObject(Game &game);
 
 void updateEntity(Game &game, const float deltaTime);

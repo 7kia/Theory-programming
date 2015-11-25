@@ -77,6 +77,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 
 	mainPerson.damage.damageMultiplirer = 1;
 
+
 }
 
 ////////////////////////////////////////////////////////////////////

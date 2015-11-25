@@ -259,6 +259,7 @@ public:
 
 	void dropObject(Vector2i pos, std::vector<Item> &items, TypeItem* typesItems, bool harvest);
 
+	void run();
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);
 	void actionAlternate(world &world, sf::Vector2f pos);
