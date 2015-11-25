@@ -5,23 +5,39 @@ const char currentFolder[] = "c:\\Study\\»Ëœ\\Programs\\Lab5\\";
 using namespace sf;
 using namespace std;
 
-void initializeProgram(Program & program)
+Program::Program()
 {
-	program.window.create(VideoMode(DEFAULT_WIDTH_WINDOW, DEFAULT_HEIGHT_WINDOW), TITLE_PROGRAM);
-
-	initializeClock(program.Clock);
-	initializeTexts(program.textProgram);
-	
+	settings.antialiasingLevel = 8;
+	window.create(VideoMode(DEFAULT_WIDTH_WINDOW, DEFAULT_HEIGHT_WINDOW), TITLE_PROGRAM, Style::Default, settings);
+	initializeClock(Clock);
 }
 
-
-void setPositionGui(Program & program)
+void Program::processEvents()
 {
+	Event event;
+	while (window.pollEvent(event)) {
 
-	Vector2u sizeWindow = program.window.getSize();
-	Vector2i centerWindow = { int(sizeWindow.x / 2), int(sizeWindow.y / 2) };//{ sizeWindow.x / 2, sizeWindow.y / 2 };
+		if (event.type == sf::Event::Resized) {
+			window.setSize(SIZE_WINDOW);
+		}
 
+		if (event.type == Event::Closed) {
+			window.close();
+		}
 
+	}
+}
+
+void Program::update()
+{
+	Clock.update();
+}
+
+void Program::render()
+{
+	window.clear(COLOR_GREY);
+	Clock.draw(window);
+	window.display();
 }
 
 void destroyProgram(Program & program)
