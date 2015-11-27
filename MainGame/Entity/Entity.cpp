@@ -408,7 +408,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 	wasCollision = false;
 
-	wchar_t *charBlocks = field.charBlocks;
+	//wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
 

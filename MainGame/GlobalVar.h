@@ -13,7 +13,7 @@
 #include "Map/BlocksVar.h"
 #include "UnlifeObject/UnlifeObjectVar.h"
 
-#include "MyFunctions.h"
+#include "../structGame/MyFunctions.h"
 
 const sf::String stringDeathPerson = "DEATH";
 
@@ -32,8 +32,8 @@ const int NUMBER_COORDINATES = 2;
 
 const int NUMBER_TEXT_STRING = 15;
 
-const float DIAGONAL_SCALE_SPEED = 0.7;
-const float PI = 3.14159265;// ÈÑÏÐÀÂÜ
+const float DIAGONAL_SCALE_SPEED = 0.7f;
+const float PI = 3.14159265f;// ÈÑÏÐÀÂÜ
 
 const int SIZE_STRING = 256;
 

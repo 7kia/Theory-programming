@@ -3,7 +3,7 @@
 
 #include "../ListObjectsAndBlocks.h"
 #include "../Sounds/Sound.h"
-#include "../CommonStructs.h"
+#include "../structGame/CommonStructs.h"
 
 struct typeDamageItem
 {

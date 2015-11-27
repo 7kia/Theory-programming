@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
-#include "Game.h"
+
+#include "structGame/Game.h"
 
 const float TIME_PER_FRAME = 1.f / 60.f;
 

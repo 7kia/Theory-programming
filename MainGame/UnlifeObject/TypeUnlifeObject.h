@@ -4,7 +4,7 @@
 #include "../Recourses.h"
 #include "../Items/ItemsVar.h"
 #include "../Sounds/Sound.h"
-#include "../CommonStructs.h"
+#include "../structGame/CommonStructs.h"
 #include "UnlifeObjectVar.h"
 
 struct TypeUnlifeObject;

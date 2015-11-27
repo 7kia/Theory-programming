@@ -1,5 +1,5 @@
 #pragma once
-#include "../CommonStructs.h"
+#include "../structGame/CommonStructs.h"
 #include "GuiVar.h"
 
 struct barMainFeatures

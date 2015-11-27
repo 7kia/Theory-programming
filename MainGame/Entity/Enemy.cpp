@@ -11,7 +11,6 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 
 	Item &emptyItem = emptyObjects.emptyItem;
 	UnlifeObject &emptyObject = emptyObjects.emptyObject;
-	Enemy &emptyEnemy = emptyObjects.emptyEnemy;
 
 	int xPos;
 	int yPos;
@@ -19,7 +18,6 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 
 	int &countEnemy = world.countEntity;
 
-	int countTypes = 0;
 	for (int countTypes = 0; countTypes < types.size(); countTypes++) {
 		for (int amountAdd = 0; amountAdd < amount[countTypes]; amountAdd++) {
 			countEnemy++;
@@ -45,7 +43,6 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 bool isPlaceForCreate(world world, Enemy* enemy, Vector3i &pos)
 {
 	// TODO
-	Vector3i startPos = pos;
 	enemy->interactionWithMap(world.field, *world.listDestroy, 0);
 	enemy->interactionWitnUnlifeObject(world.unlifeObjects, 0);
 
@@ -58,7 +55,7 @@ bool isPlaceForCreate(world world, Enemy* enemy, Vector3i &pos)
 			if (enemy->isExitFromBorder(pos.x, pos.y)) {
 
 				pos.x = 0;
-				enemy->spriteEntity->move(-(pos.x + 1) * SIZE_BLOCK, 0);
+				enemy->spriteEntity->move(float(-(pos.x + 1) * SIZE_BLOCK), 0.f);
 
 				pos.y++;
 				if (enemy->isExitFromBorder(pos.x, pos.y)) {
@@ -67,12 +64,12 @@ bool isPlaceForCreate(world world, Enemy* enemy, Vector3i &pos)
 					enemy->wasCollision = false;
 					break;
 				} else {
-					enemy->spriteEntity->move(0, SIZE_BLOCK);
+					enemy->spriteEntity->move(0.f, float(SIZE_BLOCK));
 				}
 
 
 			} else {
-				enemy->spriteEntity->move(SIZE_BLOCK, 0);
+				enemy->spriteEntity->move(float(SIZE_BLOCK), 0.f);
 			}
 
 			enemy->interactionWithMap(world.field, *world.listDestroy, 0);
@@ -93,18 +90,16 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 
 	Item &emptyItem = emptyObjects.emptyItem;
 	UnlifeObject &emptyObject = emptyObjects.emptyObject;
-	Enemy &emptyEnemy = emptyObjects.emptyEnemy;
 
 	int xPos, xTemp;
 	int yPos, yTemp;
 	int levelFloor = pos.z;
 
 	int &countEnemy = world.countEntity;
-	bool oddSquare = square % 2;
 
 	int start = -square / 2;
 	int finish = square / 2;
-	if(!oddSquare)
+	if(square % 2 == 1)
 	{
 		start += 1;
 	}
@@ -112,9 +107,8 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 	xPos = pos.x + start;
 	yPos = pos.y + start;
 
-	int countTypes = 0;
-	for (int countTypes = 0; countTypes < types.size(); countTypes++) {
-		for (int amountAdd = 0; amountAdd < amount[countTypes]; amountAdd++) {
+	for (size_t countTypes = 0; countTypes < types.size(); countTypes++) {
+		for (size_t amountAdd = 0; amountAdd < amount[countTypes]; amountAdd++) {
 			countEnemy++;
 			if (countEnemy > AMOUNT_ENTITY) {
 				// чтобы выйти из циклов
@@ -291,8 +285,9 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	currentLevelFloor = level;
 	currenMode = idEntityMode::walk;
 
-	spriteEntity->setOrigin(size.width / 2, size.height / 2);
-	spriteEntity->setPosition(xPos * SIZE_BLOCK - SIZE_BLOCK / 2, yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
+	spriteEntity->setOrigin(float(size.width / 2), float(size.height / 2));
+	spriteEntity->setPosition(float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2),
+														float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2));
 
 	directions.directionWalk = NONE_DIRECTION;
 	directions.directionLook = DOWN;
@@ -367,18 +362,18 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 	float multiplirer = damage.damageMultiplirer;
 
 
-	damage.inputCutDamage = multiplirer * (damage.cuttingDamage + damagePersonItem.cuttingDamage);
-	damage.inputCrashDamage = multiplirer * (damage.crushingDamage + damagePersonItem.crushingDamage);
+	damage.inputCutDamage = int(multiplirer * (damage.cuttingDamage + damagePersonItem.cuttingDamage));
+	damage.inputCrashDamage = int(multiplirer * (damage.crushingDamage + damagePersonItem.crushingDamage));
 	int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
 	int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
 
-	float cutDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.cuttingDamage;
-	float crashDamage = damage.damageMultiplirer * currentItem.typeItem->damageItem.crushingDamage;
+	float cutDamage = damage.damageMultiplirer * cuttingDamage;
+	float crashDamage = damage.damageMultiplirer * crushingDamage;
 
 	cutDamage *= protection.protectionCut;
 	crashDamage *= protection.protectionCrash;
 
-	damage.inputDamage = cutDamage + crashDamage;
+	damage.inputDamage = int(cutDamage + crashDamage);
 	health.currentHealth -= damage.inputDamage;
 }
 
@@ -443,7 +438,7 @@ void Enemy::defineDirectionLook(Vector2f movemoment)
 
 void Enemy::choiceBlock(world &world)
 {
-	TypeItem *typesItem = world.typesObjects.typesItem;
+	//TypeItem *typesItem = world.typesObjects.typesItem;
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 
 	int x = collision.x;
@@ -497,11 +492,11 @@ void Enemy::entityStandPanic(Vector2f &movemoment)
 
 void Enemy::buildLadder(world &world)
 {
-	TypeItem *typesItem = world.typesObjects.typesItem;
+	
 	TypeUnlifeObject *typesObject = world.typesObjects.typesUnlifeObject;
 
-	int x = getXPos() / SIZE_BLOCK;
-	int y = getYPos() / SIZE_BLOCK;
+	int x = int(getXPos() / SIZE_BLOCK);
+	int y = int(getYPos() / SIZE_BLOCK);
 	int level = currentLevelFloor + 1;//currentLevelFloor + 1;
 
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
@@ -526,9 +521,9 @@ void Enemy::buildLadder(world &world)
 
 void Enemy::findLadder(world &world, Vector3i pos)
 {
-	TypeItem *typesItem = world.typesObjects.typesItem;
-	int x = getXPos() / SIZE_BLOCK;
-	int y = getYPos() / SIZE_BLOCK;
+
+	int x = int(getXPos() / SIZE_BLOCK);
+	int y = int(getYPos() / SIZE_BLOCK);
 	int level = pos.z;//currentLevelFloor + 1;
 
 	Field &field = world.field;
@@ -553,7 +548,7 @@ void Enemy::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posS
 	int yShift = shifts.y;
 
 
-	int countCheckingBlocks = distanse / SIZE_BLOCK;
+	int countCheckingBlocks = int(distanse / SIZE_BLOCK);
 	int count = 1;
 	while (!isExitFromBorder(x, y) && count < countCheckingBlocks) {
 
@@ -601,50 +596,50 @@ void Enemy::checkBlock(Field& field, float distanse)
 	int yShift = 0;
 	switch (directions.directionLook) {
 	case DOWN_LEFT:
-		x = getXPos() / SIZE_BLOCK - 1;
-		y = getYPos() / SIZE_BLOCK + 1;
+		x = int(getXPos() / SIZE_BLOCK - 1);
+		y = int(getYPos() / SIZE_BLOCK + 1);
 		xShift = -1;
 		yShift = 1;
 		break;
 	case DOWN_RIGHT:
-		x = getXPos() / SIZE_BLOCK + 1;
-		y = getYPos() / SIZE_BLOCK + 1;
+		x = int(getXPos() / SIZE_BLOCK + 1);
+		y = int(getYPos() / SIZE_BLOCK + 1);
 		xShift = 1;
 		yShift = 1;
 		break;
 	case UP_LEFT:
-		x = getXPos() / SIZE_BLOCK - 1;
-		y = getYPos() / SIZE_BLOCK - 1;
+		x = int(getXPos() / SIZE_BLOCK - 1);
+		y = int(getYPos() / SIZE_BLOCK - 1);
 		xShift = -1;
 		yShift = -1;
 		break;
 	case UP_RIGHT:
-		x = getXPos() / SIZE_BLOCK + 1;
-		y = getYPos() / SIZE_BLOCK - 1;
+		x = int(getXPos() / SIZE_BLOCK + 1);
+		y = int(getYPos() / SIZE_BLOCK - 1);
 		xShift = 1;
 		yShift = -1;
 		break;
 	case LEFT:
-		x = getXPos() / SIZE_BLOCK - 1;
-		y = getYPos() / SIZE_BLOCK;
+		x = int(getXPos() / SIZE_BLOCK - 1);
+		y = int(getYPos() / SIZE_BLOCK);
 		xShift = -1;
 		yShift = 0;
 		break;
 	case RIGHT:
-		x = getXPos() / SIZE_BLOCK + 1;
-		y = getYPos() / SIZE_BLOCK;
+		x = int(getXPos() / SIZE_BLOCK + 1);
+		y = int(getYPos() / SIZE_BLOCK);
 		xShift = 1;
 		yShift = 0;
 		break;
 	case UP:
-		x = getXPos() / SIZE_BLOCK;
-		y = getYPos() / SIZE_BLOCK - 1;
+		x = int(getXPos() / SIZE_BLOCK);
+		y = int(getYPos() / SIZE_BLOCK - 1);
 		xShift = 0;
 		yShift = -1;
 		break;
 	case DOWN:
-		x = getXPos() / SIZE_BLOCK;
-		y = getYPos() / SIZE_BLOCK + 1;
+		x = int(getXPos() / SIZE_BLOCK);
+		y = int(getYPos() / SIZE_BLOCK + 1);
 		xShift = 0;
 		yShift = 1;
 		break;
@@ -673,7 +668,6 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 			FloatRect objectBound;
 
 			int levelUnlifeObject;
-			Sprite *transparentSpiteObject;
 			FloatRect entityBound;
 			entityBound = spriteEntity->getGlobalBounds();
 
