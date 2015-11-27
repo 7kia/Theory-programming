@@ -41,8 +41,6 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 
 	currentText->setString(toStringCharacter(current, max));
 
-	int middleString = computeMiddleString(*currentText);
-
 	// TODO
 	//position.x += middleString * scale.x;
 	position.y -= (HEIGHT_BARS_GUI / 2) * scale.y;

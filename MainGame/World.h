@@ -1,7 +1,7 @@
 #pragma once
 #include "../Entity/Enemy.h"
 
-
+/*
 const int TIME_GENERATE_WAVE_ENEMYS = 2;
 const int	AMOUNT_WAVE_FOR_UPDATE_DIFFICULT = 2;
 const int TIME_UPDATE_DIFFICULT = TIME_GENERATE_WAVE_ENEMYS * AMOUNT_WAVE_FOR_UPDATE_DIFFICULT;
@@ -21,6 +21,34 @@ const int AMOUNT_SKELET_DIGGER_IN_BIG_GROUP = 2;
 const int AMOUNT_SKELET_LUMBER_IN_BIG_GROUP = 0;
 const int AMOUNT_SKELET_MINER_IN_BIG_GROUP = 2;
 const int AMOUNT_SKELET_BUILDER_IN_BIG_GROUP = 4;
+*/
+
+
+enum idConfigVariable
+{
+	TIME_GENERATE_WAVE_ENEMYS,
+	AMOUNT_WAVE_FOR_UPDATE_DIFFICULT,
+	TIME_UPDATE_DIFFICULT,
+
+	AMOUNT_SIMPLE_SKELET_IN_SMALL_GROUP,
+	AMOUNT_SKELET_DIGGER_IN_SMALL_GROUP,
+	AMOUNT_SKELET_BUILDER_IN_SMALL_GROUP,
+
+	AMOUNT_SIMPLE_SKELET_IN_MIDDLE_GROUP,
+	AMOUNT_SKELET_DIGGER_IN_MIDDLE_GROUP,
+	AMOUNT_SKELET_LUMBER_IN_MIDDLE_GROUP,
+	AMOUNT_SKELET_MINER_IN_MIDDLE_GROUP,
+	AMOUNT_SKELET_BUILDER_IN_MIDDLE_GROUP,
+
+	AMOUNT_SIMPLE_SKELET_IN_BIG_GROUP,
+	AMOUNT_SKELET_DIGGER_IN_BIG_GROUP,
+	AMOUNT_SKELET_LUMBER_IN_BIG_GROUP,
+	AMOUNT_SKELET_MINER_IN_BIG_GROUP,
+	AMOUNT_SKELET_BUILDER_IN_BIG_GROUP,
+
+	amountId
+};
+
 struct typesObjectsInWorld
 {
 	TypeItem typesItem[AMOUNT_TYPES_ITEM];
@@ -31,7 +59,7 @@ struct typesObjectsInWorld
 
 struct emptyObjects
 {
-		Item emptyItem;
+	Item emptyItem;
 	UnlifeObject emptyObject;
 	Enemy emptyEnemy;
 };
@@ -44,6 +72,8 @@ struct world
 	typesObjectsInWorld typesObjects;
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
+
+	int configVariable[idConfigVariable::amountId];
 
 	sf::Clock worldTime;
 	int difficult = 0;

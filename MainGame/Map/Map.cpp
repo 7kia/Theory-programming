@@ -176,7 +176,7 @@ void Field::setSprite(Sprite *sprite, int l, int i, int j)
 		sprite->setTextureRect(IntRect(unknowXPos, unknowYpos, BLOCK_SIZE, BLOCK_SIZE));
 	}
 
-	sprite->setPosition(j * BLOCK_SIZE, i * BLOCK_SIZE);
+	sprite->setPosition(float(j * BLOCK_SIZE), float(i * BLOCK_SIZE));
 }
 //////////////////////////////////////////////////////
 

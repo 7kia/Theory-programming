@@ -851,7 +851,7 @@ void Entity::renderCurrentItem(sf::RenderWindow& window)
 		int shiftX;
 		int shiftY;
 
-		bool prickBlow = bool(rand() % 2);
+		bool prickBlow = rand() % 2 == 1;
 		choceShiftUseItem(shiftX, shiftY, prickBlow);
 
 

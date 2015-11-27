@@ -156,13 +156,15 @@ void createSmallGroupSkelets(world &world, Vector3i pos)
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
 
+	int *config = world.configVariable;
+
 	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
 
-	amount.push_back(AMOUNT_SIMPLE_SKELET_IN_SMALL_GROUP);
-	amount.push_back(AMOUNT_SKELET_DIGGER_IN_SMALL_GROUP);
-	amount.push_back(AMOUNT_SKELET_BUILDER_IN_SMALL_GROUP);
+	amount.push_back(config[AMOUNT_SIMPLE_SKELET_IN_SMALL_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_DIGGER_IN_SMALL_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_BUILDER_IN_SMALL_GROUP]);
 
 	createGroup(world, types, amount, 2, pos);
 }
@@ -173,6 +175,7 @@ void createMiddleGroupSkelets(world &world, Vector3i pos)
 
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
+	int *config = world.configVariable;
 
 	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
@@ -180,11 +183,11 @@ void createMiddleGroupSkelets(world &world, Vector3i pos)
 	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
 
-	amount.push_back(AMOUNT_SIMPLE_SKELET_IN_MIDDLE_GROUP);
-	amount.push_back(AMOUNT_SKELET_DIGGER_IN_MIDDLE_GROUP);
-	amount.push_back(AMOUNT_SKELET_LUMBER_IN_MIDDLE_GROUP);
-	amount.push_back(AMOUNT_SKELET_MINER_IN_MIDDLE_GROUP);
-	amount.push_back(AMOUNT_SKELET_BUILDER_IN_MIDDLE_GROUP);
+	amount.push_back(config[AMOUNT_SIMPLE_SKELET_IN_MIDDLE_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_DIGGER_IN_MIDDLE_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_LUMBER_IN_MIDDLE_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_MINER_IN_MIDDLE_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_BUILDER_IN_MIDDLE_GROUP]);
 
 	createGroup(world, types, amount, 4, pos);
 }
@@ -195,6 +198,7 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
+	int *config = world.configVariable;
 
 	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
@@ -202,19 +206,22 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
 	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
 	
-	amount.push_back(AMOUNT_SIMPLE_SKELET_IN_BIG_GROUP);
-	amount.push_back(AMOUNT_SKELET_DIGGER_IN_BIG_GROUP);
-	amount.push_back(AMOUNT_SKELET_LUMBER_IN_BIG_GROUP);
-	amount.push_back(AMOUNT_SKELET_MINER_IN_BIG_GROUP);
-	amount.push_back(AMOUNT_SKELET_BUILDER_IN_BIG_GROUP);
+	amount.push_back(config[AMOUNT_SIMPLE_SKELET_IN_BIG_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_DIGGER_IN_BIG_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_LUMBER_IN_BIG_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_MINER_IN_BIG_GROUP]);
+	amount.push_back(config[AMOUNT_SKELET_BUILDER_IN_BIG_GROUP]);
 
 	createGroup(world, types, amount, 5, pos);
 }
 
 void initializeEntitys(world &world)// ДОБАВЛЕНИЕ СУЩНОСТИ 
 {
+	srand(time(nullptr)); // автоматическая случайность
 
-	srand(time(0)); // автоматическая случайность
+	int *config = world.configVariable;
+	config[TIME_UPDATE_DIFFICULT] = config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]
+																	* config[TIME_GENERATE_WAVE_ENEMYS];
 	//////////////////////////////////////////////////////////////
 	Enemy* addEnemy = new Enemy();
 
