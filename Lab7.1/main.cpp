@@ -9,7 +9,7 @@ void startProgram()
 {
 	Program *mainProgram = new Program();
 
-	RenderWindow &window = mainProgram->window;
+	RenderWindow &window = *mainProgram->window;
 
 	while (window.isOpen())
 	{

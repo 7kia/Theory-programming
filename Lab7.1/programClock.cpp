@@ -2,7 +2,6 @@
 
 using namespace sf;
 
-
 void programClock::initializeArrows()
 {
 	minuteArrow.setSize(SIZE_MINUTE_ARROW);
@@ -50,7 +49,7 @@ void programClock::initializeIndicators()
 
 
 
-void programClock::initialize()
+programClock::programClock()
 {
 	initializeArrows();
 	initializeCircles();
@@ -96,10 +95,5 @@ void programClock::drawIndicators(sf::RenderWindow& window)
 		indicatorShape.setRotation(i * (FULL_CIRCLE_DEGREES / NUMBER_HOUR));
 		window.draw(indicatorShape);
 	}
-}
-
-void initializeClock(programClock &clock)
-{
-	clock.initialize();
 }
 

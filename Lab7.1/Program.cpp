@@ -1,28 +1,32 @@
 #include "Program.h"
 
-const char currentFolder[] = "c:\\Study\\ÈèÏ\\Programs\\Lab5\\";
-
 using namespace sf;
 using namespace std;
 
 Program::Program()
 {
+	ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	window.create(VideoMode(DEFAULT_WIDTH_WINDOW, DEFAULT_HEIGHT_WINDOW), TITLE_PROGRAM, Style::Default, settings);
-	initializeClock(Clock);
+	window = new RenderWindow(VideoMode(unsigned int(SIZE_WINDOW.x), unsigned int(SIZE_WINDOW.y)),
+														TITLE_PROGRAM, Style::Default, settings);
+}
+
+Program::~Program()
+{
+	delete window;
 }
 
 void Program::processEvents()
 {
 	Event event;
-	while (window.pollEvent(event)) {
+	while (window->pollEvent(event)) {
 
 		if (event.type == sf::Event::Resized) {
-			window.setSize(SIZE_WINDOW);
+			window->setSize(Vector2u(SIZE_WINDOW));
 		}
 
 		if (event.type == Event::Closed) {
-			window.close();
+			window->close();
 		}
 
 	}
@@ -35,12 +39,7 @@ void Program::update()
 
 void Program::render()
 {
-	window.clear(COLOR_GREY);
-	Clock.draw(window);
-	window.display();
-}
-
-void destroyProgram(Program & program)
-{
-	delete &program;
+	window->clear(COLOR_GREY);
+	Clock.draw(*window);
+	window->display();
 }

@@ -9,8 +9,8 @@ const sf::Vector2f SIZE_HOUR_ARROW = { 80, 5 };
 const float RADIUSE_CLOCK = 200.f;
 const float RADIUSE_MIDDLE = 15.f;
 
-const int ARROW_OUTLINE_THIKNESS = 2;
-const int BORDER_THIKNESS = 5;
+const float ARROW_OUTLINE_THIKNESS = 2;
+const float BORDER_THIKNESS = 5;
 
 const int NUMBER_SECOND = 60;
 const float NUMBER_HOUR = 12;
@@ -18,9 +18,9 @@ const float NUMBER_HOUR = 12;
 const int FULL_CIRCLE_DEGREES = 360;
 const float CIRCLE_QUARTER = FULL_CIRCLE_DEGREES / 4;
 
-const unsigned int DEFAULT_WIDTH_WINDOW = (RADIUSE_CLOCK + BORDER_THIKNESS) * 2;
-const unsigned int DEFAULT_HEIGHT_WINDOW = DEFAULT_WIDTH_WINDOW;
-const sf::Vector2u SIZE_WINDOW = { DEFAULT_WIDTH_WINDOW , DEFAULT_HEIGHT_WINDOW };
+const float DEFAULT_WIDTH_WINDOW = (RADIUSE_CLOCK + BORDER_THIKNESS) * 2;
+const float DEFAULT_HEIGHT_WINDOW = DEFAULT_WIDTH_WINDOW;
+const sf::Vector2f SIZE_WINDOW = { DEFAULT_WIDTH_WINDOW , DEFAULT_HEIGHT_WINDOW };
 const sf::Vector2f CENTER_WINDOW = { float(SIZE_WINDOW.x / 2) , float(SIZE_WINDOW.y / 2) };
 
 struct programClock
@@ -44,7 +44,7 @@ struct programClock
 	void initializeCircles();
 	void initializeIndicators();
 
-	void initialize();
+	programClock();
 
 	void update();
 
