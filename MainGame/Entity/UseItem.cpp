@@ -35,15 +35,15 @@ void Entity::redefineType(Item &currentItem, world &world, int shift)
 
 	Vector2f posItem = { getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK};
 
-	addItem->setPosition(posItem.x + 1,
-											 posItem.y + 1,
+	addItem->setPosition(int(posItem.x + 1),
+											 int(posItem.y + 1),
 											 currentLevelFloor + 1);
 	items.push_back(*addItem);
 	delete addItem;
 
 	Vector2f posPerson = { getXPos() , getYPos() };
 
-	founds.findItemFromList = world.items->size() - 1;
+	founds.findItemFromList = int(world.items->size() - 1);
 	founds.findItem = &items[founds.findItemFromList];
 
 	takeItem(world, posPerson);
@@ -244,14 +244,14 @@ void Entity::dropObject(Vector2i pos, vector<Item> &items, TypeItem* typesItems,
 	// Выпадение предметов
 	Item* addItem = new Item;
 
-	int countItem = founds.findObject->typeObject->drop.minCountItems.size();
+	size_t countItem = founds.findObject->typeObject->drop.minCountItems.size();
 
 	vector<int> &minAmount = founds.findObject->typeObject->drop.minCountItems;
 	vector<int> &maxAmount = founds.findObject->typeObject->drop.maxCountItems;
 	vector<int> &idItems = founds.findObject->typeObject->drop.dropItems;
 
-	int start = 0;
-	int finish = countItem;
+	size_t start = 0;
+	size_t finish = countItem;
 
 	if(harvest)
 	{
@@ -259,7 +259,7 @@ void Entity::dropObject(Vector2i pos, vector<Item> &items, TypeItem* typesItems,
 	}
 
 	int currentAmount;
-	for (int i = start; i < countItem; i++) {
+	for (size_t i = start; i < finish; i++) {
 
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
 		for (int j = 0; j < currentAmount; j++) {
@@ -383,7 +383,6 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 
 	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
 
-	Vector2i currentTarget = founds.currentTarget;
 	vector<Item> *items = world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
@@ -399,14 +398,12 @@ void Entity::actionMain(world &world, Vector2f pos)
 {
 
 	Field &field = world.field;
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
-	vector<Item> &items = *world.items;
 	listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
 
 	if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
 		// Если блок лестница
-		int x = pos.x / SIZE_BLOCK;
-		int y = pos.y / SIZE_BLOCK;
+		int x = int(pos.x / SIZE_BLOCK);
+		int y = int(pos.y / SIZE_BLOCK);
 		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x]) != NULL) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
@@ -427,13 +424,11 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 {
 
 	Field &field = world.field;
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
-	vector<Item> &items = *world.items;
 	listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
 
 	if (currentLevelFloor >= 1) {
-		int x = pos.x / SIZE_BLOCK;
-		int y = pos.y / SIZE_BLOCK;
+		int x = int(pos.x / SIZE_BLOCK);
+		int y = int(pos.y / SIZE_BLOCK);
 		// Если блок лестница
 		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x]) != NULL) {
 

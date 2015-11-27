@@ -54,7 +54,7 @@ void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow&
 	float level = float(current) / max;
 
 	pos.y += (LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level)) * scaleGuiForMainPerson.y;
-	int currentLevel = LEVEL_HUNGY_GUI * level;
+	int currentLevel = int(LEVEL_HUNGY_GUI * level);
 	levelHungry.setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
 	levelHungry.setPosition(pos);
 	window.draw(levelHungry);
@@ -85,8 +85,8 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 	float level = float(current) / max;
 
 	pos.y += LEVEL_SHIFT_THIRST + LEVEL_THIRST * (1 - level);
-	int currentLevel = LEVEL_THIRST * level;
-	int currentShift = LEVEL_THIRST * (1 - level);
+	int currentLevel = int(LEVEL_THIRST * level);
+	int currentShift = int(LEVEL_THIRST * (1 - level));
 	// TODO
 	levelThirst.setScale(scaleGuiForMainPerson);
 	levelThirst.setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
@@ -146,7 +146,6 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	////////////////////////////////////////////////////////////////
 	// для противников
-	int shiftBar;
 	int shiftHelathEnemy = 2;
 	int healthEnemy;
 	int healthMaxEnemy;

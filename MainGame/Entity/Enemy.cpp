@@ -323,6 +323,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, timeAtack, 1.f);
 }
 
+
 Enemy::~Enemy()
 {
 }
@@ -492,8 +493,6 @@ void Enemy::entityStandPanic(Vector2f &movemoment)
 
 void Enemy::buildLadder(world &world)
 {
-	
-	TypeUnlifeObject *typesObject = world.typesObjects.typesUnlifeObject;
 
 	int x = int(getXPos() / SIZE_BLOCK);
 	int y = int(getYPos() / SIZE_BLOCK);

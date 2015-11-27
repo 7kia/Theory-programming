@@ -74,7 +74,6 @@ void panelQuickAccess::renderItems(MainPerson& mainPerson, featuresWindow featur
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	Text *currentText;
 	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
 	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
 

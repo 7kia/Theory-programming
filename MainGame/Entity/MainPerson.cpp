@@ -25,7 +25,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	mainPerson.animation.timeAnimation = 0.f;
 
 	// TODO
-	int posX(CENTER_WORLD.x * SIZE_BLOCK), posY(CENTER_WORLD.y * SIZE_BLOCK);
+	float posX = float(CENTER_WORLD.x * SIZE_BLOCK);
+	float posY = float(CENTER_WORLD.y * SIZE_BLOCK);
 	mainPerson.view = new View;
 	mainPerson.view->setSize(640, 480);
 	mainPerson.view->setCenter(posX, posY);
@@ -136,20 +137,54 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	cutDamage *= protection.protectionCut;
 	crashDamage *= protection.protectionCrash;
 
-	damage.inputDamage = cutDamage + crashDamage;
+	damage.inputDamage = int(cutDamage + crashDamage);
 	health.currentHealth -= damage.inputDamage;
 
 	damage.inputDamage = 0;// TODO
 }
 
+void Enemy::EnemyDestroy(world& world)
+{
+	Field &field = world.field;
+	vector<Item> &items = *world.items;
+	TypeItem *typesItems = world.typesObjects.typesItem;
+
+	Item* addItem = new Item;
+	TypeEnemy& typeEnemy = *findEnemy->type;
+	size_t countItem = typeEnemy.drop.minCountItems.size();
+
+	vector<int> &minAmount = typeEnemy.drop.minCountItems;
+	vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
+	vector<int> &idItems = typeEnemy.drop.dropItems;
+
+	throwItem(field, items);
+
+	int currentAmount;
+	for (int i = 0; i < countItem; i++) {
+
+		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
+		for (int j = 0; j < currentAmount; j++) {
+			addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
+			addItem->setPosition(founds.currentTarget.x + 1, founds.currentTarget.y + 1, currentLevelFloor + 1);
+			world.items->push_back(*addItem);
+
+		}
+
+	}
+	delete addItem;
+
+	vector<Enemy> &enemys = *world.Enemys;
+
+	bool isLastObject = findEnemyFromList > -1;
+	if (isLastObject) {
+		enemys.erase(enemys.begin() + findEnemyFromList);
+	}
+}
 
 void MainPerson::updateAtack(world &world, const float deltaTime)
 {
-	TypeItem *typesItems = world.typesObjects.typesItem;
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
-	Field &field = world.field;
-	vector<Enemy> &enemy = *world.Enemys;
-	vector<Item> &items = *world.items;
+
 
 	bool isAtack = currenMode == idEntityMode::atack;
 	bool isEnemy = findEnemyFromList > -1;
@@ -157,49 +192,17 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 
 		if (findEnemy->isDeath) {
 
-			Item* addItem = new Item;
-			TypeEnemy& typeEnemy = *findEnemy->type;
-			int countItem = typeEnemy.drop.minCountItems.size();
+			findEnemy->EnemyDestroy(world);
 
-			vector<int> &minAmount = typeEnemy.drop.minCountItems;
-			vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
-			vector<int> &idItems = typeEnemy.drop.dropItems;
+			animation.currentTimeFightAnimation = 0.f;
 
-			findEnemy->throwItem(field, items);
+			currenMode = idEntityMode::walk;
+			giveDamage = false;
 
-			int currentAmount;
-			for (int i = 0; i < countItem; i++) {
-
-				currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
-				for (int j = 0; j < currentAmount; j++) {
-					addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
-					addItem->setPosition(founds.currentTarget.x + 1, founds.currentTarget.y + 1, currentLevelFloor + 1);
-					world.items->push_back(*addItem);
-
-				}
-
-			}
-			delete addItem;
-			if (findEnemyFromList > -1) {
-				enemy.erase(enemy.begin() + findEnemyFromList);
-			}
-
-
-			//if (giveDamage) {
-				animation.currentTimeFightAnimation = 0.f;
-
-				currenMode = idEntityMode::walk;
-				giveDamage = false;
-				
-			//}
-			
-
-				breakItem(currentItem);
 		} 
 		else {
 			currenMode = idEntityMode::atack;
-			//animation.currentTimeFightAnimation += deltaTime;
-			// TODO //enemy->giveDamage//
+
 			Vector2f posPerson = { getXPos(), getYPos() };
 			Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
 			float distanse = distansePoints(posPerson, posEnemy);
@@ -210,12 +213,16 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 				currenMode = idEntityMode::walk;
 				giveDamage = false;
 				findEnemy->takeDamage(damage, currentItem);
-
-
-				breakItem(currentItem);
 			}
 
 		}
+
+		int categoryItem = currentItem.typeItem->features.category;
+		if (categoryItem == idCategoryItem::weapon)
+		{
+				breakItem(currentItem);
+		}
+
 	}
 }
 
@@ -223,8 +230,6 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTime)
 {
 	typesObjectsInWorld &types = world.typesObjects;
-	TypeEnemy *typesEnemy = types.typesEnemy;
-	TypeItem *typesItem = types.typesItem;
 
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
@@ -331,17 +336,12 @@ void MainPerson::useItem(world &world,
 												Event &event, Vector2f pos)
 {
 
-	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
-	TypeItem *typesItem = world.typesObjects.typesItem;
-	Field &field = world.field;
-	vector<Item> &items = *world.items;
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
 
 
-	int x = pos.x / SIZE_BLOCK;
-	int y = pos.y / SIZE_BLOCK;
+	int x = int(pos.x / SIZE_BLOCK);
+	int y = int(pos.y / SIZE_BLOCK);
 	founds.currentTarget = { x, y };
 
 	bool isEnemy = findEnemy != emptyEnemy;
@@ -362,15 +362,8 @@ void MainPerson::useItem(world &world,
 
 	}
 	else {
-
-		//currenMode = idEntityMode::walk;
-
-		String* listObjects;
-		wchar_t* listBlocks;
-		int sizeListObjects;
-
-		bool findTool = true;
-
+		
+		Vector3i posUse;
 		int category = currentItem.typeItem->features.category;
 		switch (category) {
 		case idCategoryItem::backhoe:
@@ -380,11 +373,10 @@ void MainPerson::useItem(world &world,
 				int level;
 				defineLevel(level, event);
 
-				int x = founds.currentTarget.x;
-				int y = founds.currentTarget.y;
-
-				Vector3i pos = { x, y, level };
-				useTool(pos, world, currentItem);
+				x = founds.currentTarget.x;
+				y = founds.currentTarget.y;
+				posUse = { x, y, level };
+				useTool(posUse, world, currentItem);
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
@@ -395,12 +387,11 @@ void MainPerson::useItem(world &world,
 				int level;
 				defineLevel(level, event);
 
-				int x = founds.currentTarget.x;
-				int y = founds.currentTarget.y;
-				Vector3i pos = { x, y, level };
+				x = founds.currentTarget.x;
+				y = founds.currentTarget.y;
+				posUse = { x, y, level };
 
-
-				useBlock(pos, world,
+				useBlock(posUse, world,
 								 currentItem);
 			}
 			break;
@@ -458,7 +449,7 @@ void MainPerson::getCoordinateForView(float x, float y)//функция для считывания 
 	view->setCenter(x, y);//следим за игроком, передавая его координаты. 
 }
 
-// Возможно пригодится (не ВКЛЮЧЕНА)
+/*
 void MainPerson::viewmap(float time)
 {
 	if (Keyboard::isKeyPressed(Keyboard::Right)) {
@@ -477,6 +468,9 @@ void MainPerson::viewmap(float time)
 	}
 
 }
+
+*/
+// Возможно пригодится (не ВКЛЮЧЕНА)
 // Возможно пригодится (не ВКЛЮЧЕНА)
 void MainPerson::changeview()
 {

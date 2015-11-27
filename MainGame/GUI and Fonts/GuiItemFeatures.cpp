@@ -23,7 +23,7 @@ void itemFeatures::renderValueMiddle(string string, Text* text, sf::Vector2f &po
 {
 	position.x += WIDTH_DAMAGE_GUI * SCALE_FEATURES.x;
 	text->setString(string);
-	text->setOrigin(string.size() / 2, text->getCharacterSize() / 2);
+	text->setOrigin(float(string.size() / 2), float(text->getCharacterSize() / 2));
 	text->setPosition(position);
 	window.draw(*text);
 }
@@ -60,7 +60,7 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 	int i = mainPerson.idSelectItem;
 	int paritySize = currentText->getString().getSize() % 2;
 	int shiftName = currentText->getCharacterSize();// TODO
-	int halfSizeString = shiftName * (2 - paritySize) + computeSizeString(*currentText) / 2;
+	int halfSizeString = shiftName * (2 - paritySize) + int(computeSizeString(*currentText) / 2);
 	//////////////////////////////////////////////
 
 
@@ -80,7 +80,7 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 			centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };
 		// то отображаем прочность
 		pos.x -= SIZE_ITEM / 2;
-		pos.y += SIZE_ITEM / 2 - HEIGHT_BARS_GUI * 0.5 * scaleOutItems.y;
+		pos.y += SIZE_ITEM / 2 - HEIGHT_BARS_GUI * 0.5f * scaleOutItems.y;
 
 		renderBar(bars.bar, pos, window);
 
@@ -88,7 +88,7 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 
 		pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
 		pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
-		int currentToughness = WIDTH_LEVEL_BAR_GUI * levelToughness;
+		int currentToughness = int(WIDTH_LEVEL_BAR_GUI * levelToughness);
 		bars.levelStamina.setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
 
 		renderBar(bars.levelStamina, pos, window);

@@ -29,8 +29,8 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 	// Пустой предмет
 	emptyItem.setType(typesItem[idItem::emptyItem]);// ИСПРАВЬ
 
-	for (size_t i = idItem::airItem + 1; i < AMOUNT_TYPES_ITEM; i++) {
-		for (size_t countItem = 1; countItem <= 4; countItem++)
+	for (int i = idItem::airItem + 1; i < AMOUNT_TYPES_ITEM; i++) {
+		for (int countItem = 1; countItem <= 4; countItem++)
 		{
 				addItem->setType(typesItem[i]);
 		addItem->setPosition(CENTER_WORLD.x + i / 2 + 2, CENTER_WORLD.y + i % 3 + 2, 2);
@@ -94,7 +94,7 @@ void Item::setType(TypeItem &type)
 	int height = type.sizeMain.size.height;
 	mainSprite->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
 	mainSprite->scale(scaleOutItems);// Вне инвентаря предмет будет меньше
-	mainSprite->setOrigin(width / 2, height / 2);
+	mainSprite->setOrigin(float(width / 2), float(height / 2));
 
 	///*
 	spriteForUse = new Sprite;
@@ -105,7 +105,7 @@ void Item::setType(TypeItem &type)
 	height = type.sizeAlternative.size.width;
 	spriteForUse->setTexture(*type.textureItem);
 	spriteForUse->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
-	spriteForUse->setOrigin(width / 2, height / 2);
+	spriteForUse->setOrigin(float(width / 2), float(height / 2));
 	//*/
 	
 
@@ -115,8 +115,8 @@ void Item::setType(TypeItem &type)
 
 void Item::setPosition(int xPos, int yPos, int Level)
 {
-	float numberX = xPos * SIZE_BLOCK - SIZE_BLOCK / 2;
-	float numberY = yPos * SIZE_BLOCK - SIZE_BLOCK / 2;
+	float numberX = float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2);
+	float numberY = float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
 
 	currentLevel = Level;
 	mainSprite->setPosition(numberX, numberY);

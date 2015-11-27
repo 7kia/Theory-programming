@@ -53,17 +53,7 @@ void initDeathText(TextGame& textGame)
 	textGame.InitText(idText::mainPersonIsDeath, Color::White, Text::Regular | Text::Underlined, SIZE_BIG_TEXT);
 
 	Text *currentText = &textGame.texts[idText::mainPersonIsDeath];
-	int sizeString = stringDeathPerson.getSize();
-
-	/*
-	for (int i = 0; i < SIZE_STRING; i++) {
-	if (stringDeathPerson[i] != '\0') {
-	sizeString += 1;
-	} else {
-	break;
-	}
-	}
-	*/
+	size_t sizeString = stringDeathPerson.getSize();
 
 	defineOriginInMiddleString(*currentText);
 

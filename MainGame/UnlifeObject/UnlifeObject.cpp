@@ -85,7 +85,7 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 	int pixelYPos = type.mainSize.pixPos.y;
 	spriteObject->setTexture(*type.textureObject);
 	spriteObject->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
-	spriteObject->setOrigin(width / 2, height / 2);
+	spriteObject->setOrigin(float(width / 2), float(height / 2));
 
 	width = type.transparentSize.size.width;
 	height = type.transparentSize.size.height;
@@ -93,7 +93,7 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 	pixelYPos = type.transparentSize.pixPos.y;
 	transparentSpiteObject->setTexture(*type.textureObject);
 	transparentSpiteObject->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
-	transparentSpiteObject->setOrigin(width / 2, height / 2);
+	transparentSpiteObject->setOrigin(float(width / 2), float(height / 2));
 
 	// Прочность 
 	currentToughness = type.toughnessObject;
@@ -103,8 +103,8 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 
 void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 {
-	float numberX = xPos * SIZE_BLOCK - SIZE_BLOCK / 2;
-	float numberY = yPos * SIZE_BLOCK - SIZE_BLOCK / 2;
+	float numberX = float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2);
+	float numberY = float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
 
 	int heightMain = typeObject->mainSize.size.height;
 	int height = typeObject->transparentSize.size.height;

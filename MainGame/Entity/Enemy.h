@@ -32,6 +32,7 @@ public:
 	int findEnemyFromList;
 	///////////////////////////////////////////////////////
 	void EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level);
+	void EnemyDestroy(world &world);
 	~Enemy();
 
 	void checkLevelHealth(Vector2f& movemoment);

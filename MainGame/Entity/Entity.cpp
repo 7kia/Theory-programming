@@ -420,8 +420,8 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		bool isSlowingBlock = false;
 		/////////////////////////////////////////////
 		// Проверяем окружающие объекты
-		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
+		for (int i = int(y) / SIZE_BLOCK; i < int(y + size.height) / SIZE_BLOCK; i++) {
+			for (int j = int(x) / SIZE_BLOCK; j < int(x + size.width) / SIZE_BLOCK; j++) {
 				// Замедляющие блоки
 				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
@@ -452,8 +452,8 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		/////////////////////////////////////////////
 		// Проверяем пол
 
-		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
+		for (int i = int(y) / SIZE_BLOCK; i < int(y + size.height) / SIZE_BLOCK; i++) {
+			for (int j = int(x) / SIZE_BLOCK; j < int(x + size.width) / SIZE_BLOCK; j++) {
 
 
 				// Замедляющие блоки
@@ -510,8 +510,8 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	if(map[currentLevelFloor][collision.y][collision.x] == field.charBlocks[idBlocks::air])
 	{
 		currentLevelFloor -= 1;
-		x = collision.x * SIZE_BLOCK;
-		y = collision.y * SIZE_BLOCK;
+		x = float(collision.x * SIZE_BLOCK);
+		y = float(collision.y * SIZE_BLOCK);
 	}
 
 	spriteEntity->setPosition(x, y);
@@ -628,8 +628,8 @@ bool isItem(float x, float y, vector<Item> &items, Item &findItem, int &findItem
 
 bool Entity::isInUseField(float x, float y, bool under)
 {
-	int xPosBlock = x / SIZE_BLOCK;
-	int yPosBlock = y / SIZE_BLOCK;
+	int xPosBlock = int(x / SIZE_BLOCK);
+	int yPosBlock = int(y / SIZE_BLOCK);
 
 	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + radiusUse > xPosBlock)
 		&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= xPosBlock);
@@ -652,8 +652,8 @@ bool Entity::isInUseField(float x, float y, bool under)
 
 Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 {
-	int x = getXPos() / SIZE_BLOCK;
-	int y = getYPos() / SIZE_BLOCK;
+	int x = int(getXPos() / SIZE_BLOCK);
+	int y = int(getYPos() / SIZE_BLOCK);
 
 	wchar_t *charBlocks = field.charBlocks;
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
@@ -713,7 +713,9 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		Item* addItem = new Item;
 		*addItem = itemFromPanelQuickAccess[idSelectItem];
 		// Задаём уровень расположения
-		addItem->setPosition(getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK, currentLevelFloor + 1);
+		addItem->setPosition(int(getXPos() / SIZE_BLOCK),
+												 int(getYPos() / SIZE_BLOCK),
+												 currentLevelFloor + 1);
 		Vector2f posHero = { getXPos() + size.width / 2, getYPos() + size.height / 2 };// Начало отсчёта не в центре спрайта
 		addItem->mainSprite->setPosition(posHero);
 		addItem->mainSprite->scale(scaleOutItems);
@@ -774,58 +776,58 @@ void Entity::initStepSounds(dataSound & databaseSound)
 void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
 {
 	float percentTime = 1.f - 2.f * animation.currentTimeFightAnimation / animation.timeFightAnimation;
-	shiftX = -spriteEntity->getOrigin().x;
-	shiftY = -spriteEntity->getOrigin().y;
+	shiftX = int(-spriteEntity->getOrigin().x);
+	shiftY = int(-spriteEntity->getOrigin().y);
 
 
 	switch (directions.directionLook) {
 	case UP:
 		shiftX -= size.width / 4;
 		shiftY -= size.width / 3;
-		shiftY -= size.width / 4 * percentTime;
+		shiftY -= int(size.width / 4 * percentTime);
 		break;
 	case DOWN:
 		shiftX += size.width / 4;
 		shiftY += size.width / 3;
-		shiftY += size.width / 4 * percentTime;
+		shiftY += int(size.width / 4 * percentTime);
 		break;
 	case RIGHT:
 		shiftX += size.width / 3;
 		shiftY -= size.width / 4;
-		shiftX -= size.width / 4 * percentTime;
+		shiftX -= int(size.width / 4 * percentTime);
 		break;
 	case LEFT:
 		shiftX -= size.width / 3;
 		shiftY += size.width / 4;
-		shiftX += size.width / 4 * percentTime;
+		shiftX += int(size.width / 4 * percentTime);
 		break;
 	case UP_RIGHT:
 		shiftX = 0;
 		shiftY -= size.width / 4;
 
-		shiftX += size.width / 4 * percentTime;
-		shiftY -= size.width / 4 * percentTime;
+		shiftX += int(size.width / 4 * percentTime);
+		shiftY -= int(size.width / 4 * percentTime);
 		break;
 	case UP_LEFT:
 		shiftX -= size.width / 4;
 		shiftY = 0;
 
-		shiftX -= size.width / 4 * percentTime;
-		shiftY -= size.width / 4 * percentTime;
+		shiftX -= int(size.width / 4 * percentTime);
+		shiftY -= int(size.width / 4 * percentTime);
 		break;
 	case DOWN_RIGHT:
 		shiftX += size.width / 4;
 		shiftY = 0;
 
-		shiftX += size.width / 4 * percentTime;
-		shiftY += size.width / 4 * percentTime;
+		shiftX += int(size.width / 4 * percentTime);
+		shiftY += int(size.width / 4 * percentTime);
 		break;
 	case DOWN_LEFT:
 		shiftX = 0;
 		shiftY += size.width / 3;
 
-		shiftX -= size.width / 4 * percentTime;
-		shiftY += size.width / 4 * percentTime;
+		shiftX -= int(size.width / 4 * percentTime);
+		shiftY += int(size.width / 4 * percentTime);
 		break;
 	default:
 		break;
@@ -849,7 +851,7 @@ void Entity::renderCurrentItem(sf::RenderWindow& window)
 		int shiftX;
 		int shiftY;
 
-		bool prickBlow = rand() % 2;
+		bool prickBlow = bool(rand() % 2);
 		choceShiftUseItem(shiftX, shiftY, prickBlow);
 
 
