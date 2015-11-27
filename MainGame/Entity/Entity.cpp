@@ -436,8 +436,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 				// Проверяем по списку проходимых блоков
 				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == 0) {
-					x = getXPos();
-					y = getYPos();
 					wasCollision = true;
 
 					collision.initPos(j, i, currentLevelFloor + 1);
@@ -469,8 +467,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 				// Является непроходимым
 				if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
-					x = getXPos();
-					y = getYPos();
+
 					wasCollision = true;
 
 					collision.initPos(j, i, currentLevelFloor);
@@ -523,7 +520,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
-	if (wasCollision == false) {
+	//if (wasCollision == false) {
 		float dx(movement.x);
 		float dy(movement.y);
 
@@ -579,7 +576,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 
 		spriteEntity->setPosition(x, y);
 		movement = { 0.f, 0.f };
-	}
+	//}
 }
 
 

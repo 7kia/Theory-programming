@@ -128,15 +128,15 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	float crashDamage;
 	float multiplirer = enemyDamege.damageMultiplirer;
 
-	damage.inputCutDamage = multiplirer * (enemyDamege.cuttingDamage + damageEnemyItem.cuttingDamage);
-	damage.inputCrashDamage = multiplirer * (enemyDamege.crushingDamage + damageEnemyItem.crushingDamage);
+	cutDamage = multiplirer * (enemyDamege.cuttingDamage + damageEnemyItem.cuttingDamage);
+	crashDamage = multiplirer * (enemyDamege.crushingDamage + damageEnemyItem.crushingDamage);
 	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
 	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
-	damage.inputCutDamage *= protection.protectionCut;
-	damage.inputCrashDamage *= protection.protectionCrash;
+	cutDamage *= protection.protectionCut;
+	crashDamage *= protection.protectionCrash;
 
-	damage.inputDamage = damage.inputCutDamage + damage.inputCrashDamage;
+	damage.inputDamage = cutDamage + crashDamage;
 	health.currentHealth -= damage.inputDamage;
 
 	damage.inputDamage = 0;// TODO
@@ -264,6 +264,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 			if (enemy.wasCollision) {
 
+				enemy.directions.directionWalk = NONE_DIRECTION;
 				if (!onLevelEnemy && feelEnemy) {
 					Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK),
 						int(enemy.getXPos() / SIZE_BLOCK),

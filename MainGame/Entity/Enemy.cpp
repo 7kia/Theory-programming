@@ -225,7 +225,7 @@ void initializeEntitys(world &world)// днаюбкемхе ясымнярх
 	types.push_back(&typesEnemy[idEnemy::wolfEnemy]);
 	amount.push_back(4);
 
-	createOnlyEnemy(world, types, amount);
+	//createOnlyEnemy(world, types, amount);
 	//////////////////////////////////////////////////////////////
 	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
 
