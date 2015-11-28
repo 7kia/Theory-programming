@@ -141,6 +141,18 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	health.currentHealth -= damage.inputDamage;
 
 	damage.inputDamage = 0;// TODO
+
+
+	int idSound;
+	if (itemEnemy.typeItem->features.isCutting) {
+		idSound = idSoundEntity::metalPunchBody1Id;
+		enemy.playSound(0.f, 0.f, idSound);
+	}
+	else {
+		idSound = idSoundEntity::punchBody1Id;
+		enemy.playSound(0.f, 0.f, idSound);
+
+	}
 }
 
 void Enemy::EnemyDestroy(world& world)
@@ -199,7 +211,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 			currenMode = idEntityMode::walk;
 			giveDamage = false;
 
-		} 
+		}
 		else {
 			currenMode = idEntityMode::atack;
 
@@ -213,15 +225,12 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 				currenMode = idEntityMode::walk;
 				giveDamage = false;
 				findEnemy->takeDamage(damage, currentItem);
+
+				
 			}
 
 		}
 
-		int categoryItem = currentItem.typeItem->features.category;
-		if (categoryItem == idCategoryItem::weapon)
-		{
-				breakItem(currentItem);
-		}
 
 	}
 }

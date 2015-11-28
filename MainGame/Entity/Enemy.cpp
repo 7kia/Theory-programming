@@ -232,7 +232,7 @@ void initializeEntitys(world &world)// днаюбкемхе ясымнярх
 	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
 	amount.push_back(4);
 
-	//createOnlyEnemy(world, types, amount);
+	createOnlyEnemy(world, types, amount);
 	//////////////////////////////////////////////////////////////
 	TypeEnemy* typeEnemy = &typesEnemy[idEntity::emptyEnemy];
 
@@ -250,8 +250,9 @@ void initializeEntitys(world &world)// днаюбкемхе ясымнярх
 
 void Enemy::initStepSounds()
 {
-	soundsEntity.push_back(type->soundsEntity[idSoundEntity::stepGrass]);
-	soundsEntity.push_back(type->soundsEntity[idSoundEntity::stepStone]);
+	for (int i = 0; i < sizeBuffer; i++) {
+		soundsEntity.push_back(type->soundsEntity[i]);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,6 +384,11 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 
 	damage.inputDamage = int(cutDamage + crashDamage);
 	health.currentHealth -= damage.inputDamage;
+
+	int categoryItem = currentItem.typeItem->features.category;
+	if (categoryItem == idCategoryItem::weapon) {
+		breakItem(currentItem);
+	}
 }
 
 void Enemy::choiceDirections(Vector2f movemoment)

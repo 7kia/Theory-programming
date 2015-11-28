@@ -20,6 +20,9 @@ typedef enum {
 typedef enum {
 	stepGrass1,
 	stepStone1,
+	drop1,
+	punchBody1,
+	metalPunchBody1,
 	amountSoundPaths
 } idSoundPaths;
 
@@ -41,5 +44,11 @@ const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 const sf::String soundPaths[idSoundPaths::amountSoundPaths] =
 {
 	"recourses\\sounds\\step\\grass1.ogg",
-	"recourses\\sounds\\step\\stone1.ogg"
+	"recourses\\sounds\\step\\stone1.ogg",
+	"recourses\\sounds\\drop_1.ogg",
+	"recourses\\sounds\\punch_body1.ogg",
+	"recourses\\sounds\\metal_punch_body1.ogg"
+
+
+	
 };

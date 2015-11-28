@@ -142,7 +142,6 @@ Game::Game()
 
 	window.create(VideoMode(widthMainWindow, heightMainWindow), TITLE_PROGRAM);
 
-	initializeSound(databaseSound);
 	initializeField(world.field);
 
 	typesObjectsInWorld &types = world.typesObjects;

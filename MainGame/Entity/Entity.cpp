@@ -289,7 +289,9 @@ void Entity::playAnimationWalk(const float deltaTime, dataSound& databaseSound)
 
 	animation.timeAnimation += deltaTime * pauseStep;
 	resetTimeAnimation(animation.timeAnimation, resetAnimation);
-	playSound(animation.timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
+
+	int id = idSoundEntity::stepGrass;
+	playSound(animation.timeAnimation, databaseSound.startSounds[id], id);
 
 	int shiftWidth = directions.directionLook / 6;// TODO
 
@@ -312,6 +314,20 @@ void Entity::playAnimationAtack(const float deltaTime, dataSound& databaseSound)
 	animation.timeAnimation += deltaTime * pauseStep;
 	resetTimeAnimation(animation.timeAnimation, resetAnimation);
 
+	if (animation.timeAnimation == 0.f) {
+		Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
+		int idSound;
+		if (currentItem.typeItem->features.isCutting) {
+			idSound = idSoundEntity::metalPunchBody1Id;
+			playSound(0.f, 0.f, idSound);
+		}
+		else {
+			idSound = idSoundEntity::punchBody1Id;
+			playSound(0.f, 0.f, idSound);
+		}
+	}
+
+
 	int shiftWidth = directions.directionLook / 6;// TODO
 
 	int currentWidth = size.width;
@@ -325,7 +341,7 @@ void Entity::playAnimationAtack(const float deltaTime, dataSound& databaseSound)
 															 currentWidth, size.height));
 }
 
-void Entity::playSound(float time, float &start, const int idSound)
+void Entity::playSound(float time, float start, const int idSound)
 {
 	if (time == start) {
 		soundEntity.setBuffer(*soundsEntity[idSound]);
@@ -727,6 +743,9 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		items.push_back(*addItem);
 		delete addItem;
 
+		int idSound = idSoundEntity::dropSound;
+		playSound(0.f, 0.f, idSound);
+
 		itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
 	}
 }
@@ -774,8 +793,10 @@ bool Entity::isInListObjects(String* listObjects, int sizeString) {
 
 void Entity::initStepSounds(dataSound & databaseSound)
 {
-	soundsEntity.push_back(&databaseSound.soundBuffer[idSoundEntity::stepGrass]);
-	soundsEntity.push_back(&databaseSound.soundBuffer[idSoundEntity::stepStone]);
+	for (int i = 0; i < sizeBuffer; i++)
+	{
+		soundsEntity.push_back(&databaseSound.soundBuffer[i]);
+	}
 }
 
 void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)

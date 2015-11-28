@@ -26,7 +26,8 @@ struct featuresItem
 	int id;
 	bool isDestroy;
 	int toughness;// прочность
-	void init(sf::String nameItem, int idItem, int idCategory);
+	bool isCutting;
+	void init(sf::String nameItem, int idItem, int idCategory, bool cutting);
 	void defineToughness(bool destroy, int toughnessItem);
 };
 

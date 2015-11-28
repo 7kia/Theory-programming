@@ -83,6 +83,8 @@ void Item::setType(TypeItem &type)
 {
 	typeItem = &type;
 
+	
+
 	amount = 1;
 
 	mainSprite = new Sprite;

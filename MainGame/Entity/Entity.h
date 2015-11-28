@@ -73,7 +73,7 @@ public:
 	void update(const float deltaTime, dataSound &databaseSound);
 	void playAnimationWalk(const float deltaTime, dataSound & databaseSound);
 	void playAnimationAtack(const float deltaTime, dataSound & databaseSound);
-	void playSound(float time, float &start, const int idSound);
+	void playSound(float time, float start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 
 	// Взаимодейтсвие с миром

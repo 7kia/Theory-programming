@@ -2,12 +2,19 @@
 
 using namespace sf;
 
-void initializeSound(dataSound &soundBuffer)
+
+void dataSound::initSound(int id, sf::String path, float start)
 {
-	soundBuffer.soundBuffer[idSoundEntity::stepGrass].loadFromFile(soundPaths[idSoundPaths::stepGrass1]);
-	soundBuffer.startSounds[idSoundEntity::stepGrass] = 0;
-
-	soundBuffer.soundBuffer[idSoundEntity::stepStone].loadFromFile(soundPaths[idSoundPaths::stepStone1]);
-	soundBuffer.startSounds[idSoundEntity::stepStone] = 0;
-
+	soundBuffer[id].loadFromFile(path);
+	startSounds[id] = start;
 }
+
+dataSound::dataSound()
+{
+	initSound(idSoundEntity::stepGrass, soundPaths[idSoundPaths::stepGrass1], 0.f);
+	initSound(idSoundEntity::stepStone, soundPaths[idSoundPaths::stepStone1], 0.f);
+	initSound(idSoundEntity::dropSound, soundPaths[idSoundPaths::drop1], 0.f);
+	initSound(idSoundEntity::punchBody1Id, soundPaths[idSoundPaths::punchBody1], 0.f);
+	initSound(idSoundEntity::metalPunchBody1Id, soundPaths[idSoundPaths::metalPunchBody1], 0.f);
+}
+

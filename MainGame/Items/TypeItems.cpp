@@ -26,7 +26,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	String* pathTexture = new String;
 	*pathTexture = texturePaths[idTexturePaths::items];
 
-	featuresAddItem.init("Stone block", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Stone block", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
@@ -44,7 +44,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Доски
 	numberItem = idItem::planksBlockItem;
 
-	featuresAddItem.init("Planks", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Planks", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_PLANKS, PIXEL_Y_PLANKS);
@@ -62,7 +62,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Земля
 	numberItem = idItem::dirtItem;
 
-	featuresAddItem.init("Dirt block", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Dirt block", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_DIRT, PIXEL_Y_DIRT);
@@ -80,7 +80,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Земля с травой
 	numberItem = idItem::grassItem;
 
-	featuresAddItem.init("Grass", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Grass", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GRASS_BRICK, PIXEL_Y_GRASS_BRICK);
@@ -98,7 +98,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Песок
 	numberItem = idItem::sandItem;
 
-	featuresAddItem.init("Sand block", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Sand block", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SAND, PIXEL_Y_SAND);
@@ -116,7 +116,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Деревянная лестница
 	numberItem = idItem::woodLadderItem;
 
-	featuresAddItem.init("Wood ladder", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Wood ladder", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_LADDER, PIXEL_Y_WOOD_LADDER);
@@ -134,7 +134,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Каменные кирпичи
 	numberItem = idItem::stoneBrickItem;
 
-	featuresAddItem.init("Stone brick", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Stone brick", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_BRICK, PIXEL_Y_STONE_BRICK);
@@ -152,7 +152,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Дубовое бревно
 	numberItem = idItem::logOakItem;
 
-	featuresAddItem.init("Log oak", numberItem, idCategoryItem::block);
+	featuresAddItem.init("Log oak", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_LOG_OAK, PIXEL_Y_LOG_OAK);
@@ -173,7 +173,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Саженец дуба
 	numberItem = idItem::seadlingOakItem;
 
-	featuresAddItem.init("Seadling oak", numberItem, idCategoryItem::unlifeObject);
+	featuresAddItem.init("Seadling oak", numberItem, idCategoryItem::unlifeObject, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_OAK_ITEM, PIXEL_Y_SEADLING_OAK_ITEM);
@@ -191,7 +191,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Саженец дуба
 	numberItem = idItem::seadlingApple;
 
-	featuresAddItem.init("Seadling apple", numberItem, idCategoryItem::unlifeObject);
+	featuresAddItem.init("Seadling apple", numberItem, idCategoryItem::unlifeObject, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_APPLE_ITEM, PIXEL_Y_SEADLING_APPLE_ITEM);
@@ -212,7 +212,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Деревянное ведро
 	numberItem = idItem::woodBukketItem;
 
-	featuresAddItem.init("Wood bukket", numberItem, idCategoryItem::bukketEmpty);
+	featuresAddItem.init("Wood bukket", numberItem, idCategoryItem::bukketEmpty, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET, PIXEL_Y_WOOD_BUKKET);
@@ -230,7 +230,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Деревянное ведро с водой
 	numberItem = idItem::woodBukketWithWaterItem;
 
-	featuresAddItem.init("Wood bukket with water", numberItem, idCategoryItem::bukketWithWater);
+	featuresAddItem.init("Wood bukket with water", numberItem, idCategoryItem::bukketWithWater, false);
 	featuresAddItem.defineToughness(false, 20);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET_WITH_WATER, PIXEL_Y_WOOD_BUKKET_WITH_WATER);
@@ -248,7 +248,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Стеклянная бытылка
 	numberItem = idItem::glassBottleItem;
 
-	featuresAddItem.init("Glass bottle", numberItem, idCategoryItem::bottleEmpty);
+	featuresAddItem.init("Glass bottle", numberItem, idCategoryItem::bottleEmpty, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE, PIXEL_Y_GLASS_BOTTLE);
@@ -266,7 +266,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Стеклянная бытылка с водой
 	numberItem = idItem::glassbukketWithWater;
 
-	featuresAddItem.init("Glass bottle with water", numberItem, idCategoryItem::bottleWithWater);
+	featuresAddItem.init("Glass bottle with water", numberItem, idCategoryItem::bottleWithWater, false);
 	featuresAddItem.defineToughness(false, 5);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE_WITH_WATER, PIXEL_Y_GLASS_BOTTLE_WITH_WATER);
@@ -287,7 +287,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Гриб
 	numberItem = idItem::mushroomItem;
 
-	featuresAddItem.init("Mushroom", numberItem, idCategoryItem::food);
+	featuresAddItem.init("Mushroom", numberItem, idCategoryItem::food, false);
 	featuresAddItem.defineToughness(false, 4);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_MUSHROOM, PIXEL_Y_MUSHROOM);
@@ -305,7 +305,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Мясо волка
 	numberItem = idItem::rawMeatWolfItem;
 
-	featuresAddItem.init("Raw meat wolf", numberItem, idCategoryItem::other);
+	featuresAddItem.init("Raw meat wolf", numberItem, idCategoryItem::other, false);
 	featuresAddItem.defineToughness(false, 4);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_RAW_MEAT_WOLF, PIXEL_Y_RAW_MEAT_WOLF);
@@ -323,7 +323,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Жаренное мясо волка
 	numberItem = idItem::roastMeatWolfItem;
 
-	featuresAddItem.init("Roast meat wolf", numberItem, idCategoryItem::food);
+	featuresAddItem.init("Roast meat wolf", numberItem, idCategoryItem::food, false);
 	featuresAddItem.defineToughness(false, 10);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_ROAST_MEAT_WOLF, PIXEL_Y_ROAST_MEAT_WOLF);
@@ -341,7 +341,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Яблоко
 	numberItem = idItem::appleItem;
 
-	featuresAddItem.init("Apple", numberItem, idCategoryItem::food);
+	featuresAddItem.init("Apple", numberItem, idCategoryItem::food, false);
 	featuresAddItem.defineToughness(false, 4);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_APPLE, PIXEL_Y_APPLE);
@@ -362,7 +362,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Каменный нож
 	numberItem = idItem::stoneKnifeItem;
 
-	featuresAddItem.init("Stone knife", numberItem, idCategoryItem::weapon);
+	featuresAddItem.init("Stone knife", numberItem, idCategoryItem::weapon, true);
 	featuresAddItem.defineToughness(true, 128);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_KNIFE, PIXEL_Y_STONE_KNIFE);
@@ -383,7 +383,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Деревянная дубина
 	numberItem = idItem::woodClubItem;
 
-	featuresAddItem.init("Wood club", numberItem, idCategoryItem::weapon);
+	featuresAddItem.init("Wood club", numberItem, idCategoryItem::weapon, false);
 	featuresAddItem.defineToughness(true, 128);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_CLUB, PIXEL_Y_WOOD_CLUB);
@@ -404,7 +404,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Железная лопата
 	numberItem = idItem::ironBackHoerIte;
 
-	featuresAddItem.init("Iron backhoe", numberItem, idCategoryItem::backhoe);
+	featuresAddItem.init("Iron backhoe", numberItem, idCategoryItem::backhoe, false);
 	featuresAddItem.defineToughness(true, 512);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_BACKHOE, PIXEL_Y_IRON_BACKHOE);
@@ -428,7 +428,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Каменная кирка
 	numberItem = idItem::stonePickaxItem;
 
-	featuresAddItem.init("Stone pickax", numberItem, idCategoryItem::pickax);
+	featuresAddItem.init("Stone pickax", numberItem, idCategoryItem::pickax, false);
 	featuresAddItem.defineToughness(true, 128);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_PICKAX, PIXEL_Y_STONE_PICKAX);
@@ -452,7 +452,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Каменный топор
 	numberItem = idItem::stoneAxeItem;
 
-	featuresAddItem.init("Stone axe", numberItem, idCategoryItem::axe);
+	featuresAddItem.init("Stone axe", numberItem, idCategoryItem::axe, false);
 	featuresAddItem.defineToughness(true, 128);
 
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_AXE, PIXEL_Y_STONE_AXE);
@@ -475,7 +475,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 	// Пустой предмет( нужен для работы с инвентарём
 	numberItem = idItem::emptyItem;
 
-	featuresAddItem.init("Empty", numberItem, idCategoryItem::other);
+	featuresAddItem.init("Empty", numberItem, idCategoryItem::other, false);
 	featuresAddItem.defineToughness(false, 1);
 
 	sizeMain.init(0, 0, 0, 0);
@@ -505,12 +505,12 @@ void idCreateObjects::init(int idBlock, int idObject)
 	idUnlideOnjectForUse = idObject;
 }
 
-void featuresItem::init(String nameItem, int idItem, int idCategory)
+void featuresItem::init(String nameItem, int idItem, int idCategory, bool cutting)
 {
 	name = nameItem;
 	id = idItem;
 	category = idCategory;
-
+	isCutting = cutting;
 }
 
 void featuresItem::defineToughness(bool destroy, int toughnessItem)
@@ -549,6 +549,7 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 	features.toughness = featuresAddItem.toughness;
 	features.name = featuresAddItem.name;
 	features.id = featuresAddItem.id;
+	features.isCutting = featuresAddItem.isCutting;
 
 	damageItem.cuttingDamage = damage.cuttingDamage;// Режущий
 	damageItem.crushingDamage = damage.crushingDamage;// Дробящий
@@ -569,9 +570,6 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 		break;
 	}
 
-	// Звуки 
-	//mainPerson.soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];// ИСПРАВЬ
-	//mainPerson.soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
 };
 
 void TypeItem::InitForUse(String filenameTextureForUse, featuresSprite features)
