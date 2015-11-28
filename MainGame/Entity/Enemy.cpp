@@ -158,9 +158,9 @@ void createSmallGroupSkelets(world &world, Vector3i pos)
 
 	int *config = world.configVariable;
 
-	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletDiggerEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletBuilderEnemy]);
 
 	amount.push_back(config[AMOUNT_SIMPLE_SKELET_IN_SMALL_GROUP]);
 	amount.push_back(config[AMOUNT_SKELET_DIGGER_IN_SMALL_GROUP]);
@@ -177,11 +177,11 @@ void createMiddleGroupSkelets(world &world, Vector3i pos)
 	std::vector<int> amount;
 	int *config = world.configVariable;
 
-	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletDiggerEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletLumbermillEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletMinerEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletBuilderEnemy]);
 
 	amount.push_back(config[AMOUNT_SIMPLE_SKELET_IN_MIDDLE_GROUP]);
 	amount.push_back(config[AMOUNT_SKELET_DIGGER_IN_MIDDLE_GROUP]);
@@ -200,11 +200,11 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 	std::vector<int> amount;
 	int *config = world.configVariable;
 
-	types.push_back(&typesEnemy[idEnemy::skeletEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletDiggerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletLumbermillEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletMinerEnemy]);
-	types.push_back(&typesEnemy[idEnemy::skeletBuilderEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletDiggerEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletLumbermillEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletMinerEnemy]);
+	types.push_back(&typesEnemy[idEntity::skeletBuilderEnemy]);
 	
 	amount.push_back(config[AMOUNT_SIMPLE_SKELET_IN_BIG_GROUP]);
 	amount.push_back(config[AMOUNT_SKELET_DIGGER_IN_BIG_GROUP]);
@@ -229,12 +229,12 @@ void initializeEntitys(world &world)// днаюбкемхе ясымнярх
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
 
-	types.push_back(&typesEnemy[idEnemy::wolfEnemy]);
+	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
 	amount.push_back(4);
 
 	//createOnlyEnemy(world, types, amount);
 	//////////////////////////////////////////////////////////////
-	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
+	TypeEnemy* typeEnemy = &typesEnemy[idEntity::emptyEnemy];
 
 	emptyObjects &emptyObjects = world.emptyObjects;
 	Item &emptyItem = emptyObjects.emptyItem;

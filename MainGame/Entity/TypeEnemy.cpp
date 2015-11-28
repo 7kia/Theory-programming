@@ -11,7 +11,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	TypeItem *typesItem = types.typesItem;
 	////////////////////////////////////////////////////////////////
 	// Волк
-	TypeEnemy* typeEnemy = &typesEnemy[idEnemy::wolfEnemy];
+	TypeEnemy* typeEnemy = &typesEnemy[idEntity::wolfEnemy];
 
 	String texturePath = texturePaths[idTexturePaths::wolf];
 	String name = "Wolf";
@@ -33,7 +33,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	drop.clear();
 	////////////////////////////////////////////////////////////////
 	// Волк
-	typeEnemy = &typesEnemy[idEnemy::skeletEnemy];
+	typeEnemy = &typesEnemy[idEntity::skeletEnemy];
 
 	texturePath = texturePaths[idTexturePaths::skelet];
 	name = "Skelet";
@@ -53,7 +53,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEnemy::skeletDiggerEnemy];
+	typeEnemy = &typesEnemy[idEntity::skeletDiggerEnemy];
 
 	name = "Skelet digger";
 
@@ -72,7 +72,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEnemy::skeletMinerEnemy];
+	typeEnemy = &typesEnemy[idEntity::skeletMinerEnemy];
 
 	name = "Skelet miner";
 
@@ -91,7 +91,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEnemy::skeletLumbermillEnemy];
+	typeEnemy = &typesEnemy[idEntity::skeletLumbermillEnemy];
 
 	name = "Skelet lumbermill";
 
@@ -110,7 +110,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEnemy::skeletBuilderEnemy];
+	typeEnemy = &typesEnemy[idEntity::skeletBuilderEnemy];
 
 	name = "Skelet builder";
 
@@ -129,7 +129,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEnemy::emptyEnemy];
+	typeEnemy = &typesEnemy[idEntity::emptyEnemy];
 
 	name = "Empty";
 
@@ -179,7 +179,7 @@ void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, 
 	name = nameEnemy;
 
 	// TODO
-	soundsEntity[idSoundEntity::stepGrass] = &databaseSound.sounds[idSoundEntity::stepGrass];
-	soundsEntity[idSoundEntity::stepStone] = &databaseSound.sounds[idSoundEntity::stepStone];
+	soundsEntity[idSoundEntity::stepGrass] = &databaseSound.soundBuffer[idSoundEntity::stepGrass];
+	soundsEntity[idSoundEntity::stepStone] = &databaseSound.soundBuffer[idSoundEntity::stepStone];
 
 }

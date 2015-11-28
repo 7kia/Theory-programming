@@ -27,7 +27,6 @@ void startGame()
 
 		game->render();	
 		game->showFPS(timeSinceLastUpdate);
-		//writeMap(game->field->dataMap);
 	}
 	destroyGame(*game);
 }

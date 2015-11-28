@@ -38,7 +38,7 @@ struct TypeEnemy
 	sf::Texture *textureEntity;
 	sf::String name;
 
-	sf::Sound *soundsEntity[sizeBuffer];
+	sf::SoundBuffer *soundsEntity[sizeBuffer];
 
 	viewEnemy view;
 	converseEnemy converse;

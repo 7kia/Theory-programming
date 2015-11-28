@@ -2,6 +2,8 @@
 #include <SFML/Audio.hpp>
 #include "../Recourses.h"
 
+const float minDistanse = 300.f;
+
 typedef enum
 {
 	stepGrass,
