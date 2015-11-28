@@ -40,7 +40,7 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
 	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.size.width, mainPerson.size.height));
 
-	mainPerson.initStepSounds(databaseSound);
+	mainPerson.soundBase = &databaseSound;
 
 	mainPerson.initFounds(emptyObjects.emptyItem, emptyObjects.emptyObject, emptyObjects.emptyEnemy);
 	emptyObjects.emptyEnemy.type->name;
@@ -143,31 +143,21 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	damage.inputDamage = 0;// TODO
 
 
-	int idSound;
-	if (itemEnemy.typeItem->features.isCutting) {
-		idSound = idSoundEntity::metalPunchBody1Id;
-		enemy.playSound(0.f, 0.f, idSound);
-	}
-	else {
-		idSound = idSoundEntity::punchBody1Id;
-		enemy.playSound(0.f, 0.f, idSound);
 
-	}
 }
 
-void Enemy::EnemyDestroy(world& world)
+void Enemy::EnemyDrop(world& world)
 {
 	Field &field = world.field;
 	vector<Item> &items = *world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
 	Item* addItem = new Item;
-	TypeEnemy& typeEnemy = *findEnemy->type;
+	TypeEnemy& typeEnemy = *type;
 	size_t countItem = typeEnemy.drop.minCountItems.size();
 
 	vector<int> &minAmount = typeEnemy.drop.minCountItems;
 	vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
-	vector<int> &idItems = typeEnemy.drop.dropItems;
 
 	throwItem(field, items);
 
@@ -177,7 +167,9 @@ void Enemy::EnemyDestroy(world& world)
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
 		for (int j = 0; j < currentAmount; j++) {
 			addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
-			addItem->setPosition(founds.currentTarget.x + 1, founds.currentTarget.y + 1, currentLevelFloor + 1);
+			addItem->setPosition(founds.currentTarget.x + 1,
+													 founds.currentTarget.y + 1,
+													 currentLevelFloor + 1);
 			world.items->push_back(*addItem);
 
 		}
@@ -185,12 +177,6 @@ void Enemy::EnemyDestroy(world& world)
 	}
 	delete addItem;
 
-	vector<Enemy> &enemys = *world.Enemys;
-
-	bool isLastObject = findEnemyFromList > -1;
-	if (isLastObject) {
-		enemys.erase(enemys.begin() + findEnemyFromList);
-	}
 }
 
 void MainPerson::updateAtack(world &world, const float deltaTime)
@@ -204,7 +190,8 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 
 		if (findEnemy->isDeath) {
 
-			findEnemy->EnemyDestroy(world);
+			findEnemy->EnemyDrop(world);
+			world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
 
 			animation.currentTimeFightAnimation = 0.f;
 

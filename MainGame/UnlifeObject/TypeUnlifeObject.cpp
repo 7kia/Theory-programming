@@ -6,6 +6,14 @@ using namespace sf;
 using namespace std;
 
 void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound) {
+	
+	initTree(typesUnlifeObjects, databaseSound);
+	initStones(typesUnlifeObjects, databaseSound);
+	initEmpty(typesUnlifeObjects);
+}
+
+void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
+{
 	////////////////////////////////////////////////////////////////////////////////////////
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[idUnlifeObject::oakGrow];
 
@@ -125,27 +133,32 @@ void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound
 	typesObject->redefine.init(idUnlifeObject::appleTree, 3);
 	typesObject->drop.init(drop);
 	drop.clear();
-	////////////////////////////////////////////////////////////////////////////////////////
-	typesObject = &typesUnlifeObjects[idUnlifeObject::smallStone];
-	texturePath = texturePaths[idTexturePaths::items];
-	name = "Small stone";
-	canDestroy = true;
-	toughness = 2;
+}
+
+void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
+{
+	TypeUnlifeObject *typesObject = &typesUnlifeObjects[idUnlifeObject::smallStone];
+	String texturePath = texturePaths[idTexturePaths::items];
+	String name = "Small stone";
+	bool canDestroy = true;
+	int toughness = 2;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
 	typesObject->Init(texturePath, name, canDestroy, toughness);
 
 	typesObject->transparentSize.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
 
-	// Предметы
+	objectDropItems drop;
 	drop.addItem(1, 1, idItem::stoneItem);
 
 	typesObject->redefine.init(idUnlifeObject::smallStone, 0);
 	typesObject->drop.init(drop);
 	drop.clear();
-	////////////////////////////////////////////////////////////////////////////////////////
-	// Пустой предмет
-	typesObject = &typesUnlifeObjects[idUnlifeObject::empty];
+}
+
+void initEmpty(TypeUnlifeObject *typesUnlifeObjects)
+{
+	TypeUnlifeObject *typesObject = &typesUnlifeObjects[idUnlifeObject::empty];
 	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", false, 0);
 }
 

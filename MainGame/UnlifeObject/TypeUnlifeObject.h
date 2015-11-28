@@ -38,4 +38,8 @@ public:
 	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness);
 };
 
+void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);
+void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);
+void initEmpty(TypeUnlifeObject *typesUnlifeObjects);
+
 void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);

@@ -103,6 +103,10 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 			for (int i = 0; i < mainPerson.amountSlots - 1; i++) {
 				if (Keyboard::isKeyPressed(Keyboard::Key(Keyboard::Num1 + i))) {
 					mainPerson.idSelectItem = i;
+
+					Vector2f posPerson = { mainPerson.getXPos(), mainPerson.getYPos() };
+					int id = idSoundEntity::itemChoiseSound;
+					playSound(id, *mainPerson.soundBase, posPerson);
 				}
 			}
 

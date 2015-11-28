@@ -178,7 +178,5 @@ void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, 
 
 	name = nameEnemy;
 
-	for (int i = 0; i < sizeBuffer; i++) {
-		soundsEntity[i] = &databaseSound.soundBuffer[i];
-	}
+	soundBase = &databaseSound;
 }

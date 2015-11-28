@@ -43,6 +43,7 @@ struct TypeEnemy
 	viewEnemy view;
 	converseEnemy converse;
 
+	dataSound *soundBase;
 	TypeItem typeItem;
 	int amountSlots;//TODO
 

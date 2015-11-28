@@ -344,7 +344,7 @@ void Entity::playAnimationAtack(const float deltaTime, dataSound& databaseSound)
 void Entity::playSound(float time, float start, const int idSound)
 {
 	if (time == start) {
-		soundEntity.setBuffer(*soundsEntity[idSound]);
+		soundEntity.setBuffer(soundBase->soundBuffer[idSound]);
 
 		soundEntity.setMinDistance(minDistanse / 2);
 		soundEntity.setAttenuation(minDistanse + 1.f);
@@ -790,14 +790,6 @@ bool Entity::isInListObjects(String* listObjects, int sizeString) {
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////
-
-void Entity::initStepSounds(dataSound & databaseSound)
-{
-	for (int i = 0; i < sizeBuffer; i++)
-	{
-		soundsEntity.push_back(&databaseSound.soundBuffer[i]);
-	}
-}
 
 void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
 {

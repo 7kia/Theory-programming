@@ -24,7 +24,7 @@ public:
 	Step step;
 	sf::Vector2f movement;
 
-	std::vector<sf::SoundBuffer*> soundsEntity;
+	dataSound *soundBase;
 	Sound soundEntity;
 
 	DamageInputAndOutput damage;

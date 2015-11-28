@@ -248,13 +248,6 @@ void initializeEntitys(world &world)// днаюбкемхе ясымнярх
 }
 
 
-void Enemy::initStepSounds()
-{
-	for (int i = 0; i < sizeBuffer; i++) {
-		soundsEntity.push_back(type->soundsEntity[i]);
-	}
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // яСЫМНЯРХ
 void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject,
@@ -285,7 +278,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	spriteEntity->setTextureRect(IntRect(0, 0, size.width, size.height));
 
 
-	initStepSounds();
+	soundBase = type->soundBase;
 
 	founds.init(&emptyItem, &emptyObject);
 
