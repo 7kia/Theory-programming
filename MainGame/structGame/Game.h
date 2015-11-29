@@ -119,4 +119,3 @@ void renderUnlifeObjects(Game &game);
 
 void destroyGame(Game & game);
 void initializeClock(Clock &clock);
-void informationAboutSelect(Game &game, float x, float y);

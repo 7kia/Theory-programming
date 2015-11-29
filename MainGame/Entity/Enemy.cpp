@@ -382,6 +382,17 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 	if (categoryItem == idCategoryItem::weapon) {
 		breakItem(currentItem);
 	}
+
+	int idSound;
+	if (currentItem.typeItem->features.isCutting) {
+		idSound = idSoundEntity::metalPunchBody1Id;
+		playSound(0.f, 0.f, idSound);
+	}
+	else {
+		idSound = idSoundEntity::punchBody1Id;
+		playSound(0.f, 0.f, idSound);
+	}
+
 }
 
 void Enemy::choiceDirections(Vector2f movemoment)
@@ -470,6 +481,34 @@ void Enemy::choiceBlock(world &world)
 
 }
 
+void Enemy::resetFightAnimation()
+{
+	animation.currentTimeFightAnimation = 0.f;
+}
+
+void Enemy::searchWay(world &world)
+{
+	Item &itemEnemy = itemFromPanelQuickAccess[idSelectItem];
+
+	Vector3i posEnemy = { int(getXPos() / SIZE_BLOCK),
+		int(getXPos() / SIZE_BLOCK),
+		collision.level };
+
+	if (findLadder(world, posEnemy)) {
+
+		String nameCurrentItem = itemEnemy.typeItem->features.name;
+		String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+
+		bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
+		bool isNotEmpty = nameCurrentItem != nameEmptyItem;
+
+		if (isNotEmpty && isLadder) {
+			buildLadder(world);
+		}
+
+	}
+}
+
 void Enemy::checkLevelHealth(Vector2f &movemoment)
 {
 	entityHealth &healthEnemy = health;
@@ -524,7 +563,7 @@ void Enemy::buildLadder(world &world)
 
 }
 
-void Enemy::findLadder(world &world, Vector3i pos)
+bool Enemy::findLadder(world &world, Vector3i pos)
 {
 
 	int x = int(getXPos() / SIZE_BLOCK);
@@ -539,9 +578,11 @@ void Enemy::findLadder(world &world, Vector3i pos)
 			if (map[level][y + j][x + i] == ladder) {//(x + float(i) / 2) * SIZE_BLOCK,   (y + float(j) / 2) * SIZE_BLOCK
 				Vector2f posLadder = { float(x + i) * SIZE_BLOCK, float(y + j) * SIZE_BLOCK };
 				actionMain(world, posLadder);
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 void Enemy::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts)

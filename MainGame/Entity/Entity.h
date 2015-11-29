@@ -91,8 +91,9 @@ public:
 	//////////////////////////////////////////////////////////////////////////////////////////vv
 	// ITEMS
 	// Использование предметов
-	bool isInListBlocks(wchar_t block, wchar_t * listBlocks);
-	bool isInListObjects(String * listObjects, int sizeString);
+	bool isInListBlocks(wchar_t block, std::vector<wchar_t> &listObjects);
+	bool isInListIds(int id, std::vector<wchar_t>& listIds);
+	bool isInListObjects(std::vector<sf::String> &listObjects);
 
 
 	void transferInInventory(std::vector<Item> &items);
@@ -102,7 +103,7 @@ public:
 	void minusAmount(Item& currentItem);
 	void breakItem(Item &currentItem);
 
-	void dropObject(Vector2i pos, std::vector<Item> &items, TypeItem* typesItems, bool harvest);
+	void dropObject(Vector2i pos, world &world, bool harvest);
 
 	void run();
 	//////////////////////////////////////////////////////////////////////////////////////////

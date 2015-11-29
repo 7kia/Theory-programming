@@ -252,60 +252,84 @@ void Game::initializeCategorysBreakingObject()
 
 	//////////////////////////////////////
 	// Блоки уничтожаемые лопатой
-	listDestroy.backoeBreakingBlock[SIZE_STRING - 1] = u'\0';
+	vector<String> *listObjects = &listDestroy.backoeBreakingObject;
+	vector<wchar_t> *listBlocks = &listDestroy.backoeBreakingBlock;
 
-	listDestroy.backoeBreakingBlock[0] = charBlocks[idBlocks::grass];
-	listDestroy.backoeBreakingBlock[1] = charBlocks[idBlocks::dirt];
-	listDestroy.backoeBreakingBlock[2] = charBlocks[idBlocks::sand];
-	//////////////////////////////////////
-	// Объекты уничтожаемые лопатой TODO
-	listDestroy.backoeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oakSeadling].name;
+	listBlocks->push_back(charBlocks[idBlocks::grass]);
+	listBlocks->push_back(charBlocks[idBlocks::dirt]);
+	listBlocks->push_back(charBlocks[idBlocks::sand]);
+
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::oakSeadling].name);
 	//////////////////////////////////////
 	// Блоки уничтожаемые топором
-	listDestroy.axeBreakingBlock[SIZE_STRING - 1] = u'\0';
+	listObjects = &listDestroy.axeBreakingObject;
+	listBlocks = &listDestroy.axeBreakingBlock;
 
-	listDestroy.axeBreakingBlock[0] = charBlocks[idBlocks::logOak];
-	listDestroy.axeBreakingBlock[1] = charBlocks[idBlocks::planksBlock];
-	listDestroy.axeBreakingBlock[2] = charBlocks[idBlocks::woodLadder];
-	//////////////////////////////////////
-	// Объекты уничтожаемые топором
-	listDestroy.axeBreakingObject[0] = typesUnlifeObject[idUnlifeObject::oakGrow].name;
-	listDestroy.axeBreakingObject[1] = typesUnlifeObject[idUnlifeObject::oakSmall].name;
-	listDestroy.axeBreakingObject[2] = typesUnlifeObject[idUnlifeObject::appleTree].name;
-	listDestroy.axeBreakingObject[3] = typesUnlifeObject[idUnlifeObject::appleGrowTree].name;
+	listBlocks->push_back(charBlocks[idBlocks::logOak]);
+	listBlocks->push_back(charBlocks[idBlocks::planksBlock]);
+	listBlocks->push_back(charBlocks[idBlocks::woodLadder]);
+
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::oakGrow].name);
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::oakSmall].name);
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleTree].name);
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].name);
 	/////////////////////////////////////////////////////////////////////////
 	// Блоки уничтожаемые киркой
-	listDestroy.pickaxBreakingBlock[SIZE_STRING - 1] = u'\0';
+	listObjects = &listDestroy.pickaxBreakingObject;
+	listBlocks = &listDestroy.passableBlocks;
 
-	listDestroy.pickaxBreakingBlock[0] = charBlocks[idBlocks::stone];
-	listDestroy.pickaxBreakingBlock[1] = charBlocks[idBlocks::stoneBrick];
-	//////////////////////////////////////
-	// Киркой уничтожаемые киркой
-	listDestroy.pickaxBreakingObject[0] = typesUnlifeObject[idUnlifeObject::smallStone].name;
+	listBlocks->push_back(charBlocks[idBlocks::stone]);
+	listBlocks->push_back(charBlocks[idBlocks::stoneBrick]);
+
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::smallStone].name);
 	/////////////////////////////////////////////////////////////////////////
 	// Проходимые блоки
-	listDestroy.passableBlocks[SIZE_STRING - 1] = u'\0';
+	listBlocks = &listDestroy.passableBlocks;
 
-	listDestroy.passableBlocks[0] = charBlocks[idBlocks::air];
-	listDestroy.passableBlocks[1] = charBlocks[idBlocks::water];
-	listDestroy.passableBlocks[2] = charBlocks[idBlocks::woodLadder];
+	listBlocks->push_back(charBlocks[idBlocks::air]);
+	listBlocks->push_back(charBlocks[idBlocks::water]);
+	listBlocks->push_back(charBlocks[idBlocks::woodLadder]);
+
 	/////////////////////////////////////////////////////////////////////////
 	// Проходим по полу
-	listDestroy.notPassableFloor[SIZE_STRING - 1] = u'\0';
+	listBlocks = &listDestroy.notPassableFloor;
 
-	listDestroy.notPassableFloor[0] = charBlocks[idBlocks::air]; 
+	listBlocks->push_back(charBlocks[idBlocks::air]);
 	/////////////////////////////////////////////////////////////////////////
 	// Замедляющие блоки
-	listDestroy.slowingBlocks[SIZE_STRING - 1] = u'\0';
+	listBlocks = &listDestroy.slowingBlocks;
 
-	listDestroy.slowingBlocks[0] = charBlocks[idBlocks::water];
+	listBlocks->push_back(charBlocks[idBlocks::water]);
 	/////////////////////////////////////////////////////////////////////////
 	// Лестницы
-	listDestroy.ladder[SIZE_STRING - 1] = u'\0';
+	listBlocks = &listDestroy.ladder;
 
-	listDestroy.ladder[0] = charBlocks[idBlocks::woodLadder];
+	listBlocks->push_back(charBlocks[idBlocks::woodLadder]);
 	/////////////////////////////////////////////////////////////////////////
-	listDestroy.harvestObjects[0] = typesUnlifeObject[idUnlifeObject::appleGrowTree].name;
+	listObjects = &listDestroy.harvestObjects;
+
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].name);
+	/////////////////////////////////////////////////////////////////////////
+	vector<int> *listIds = &listDestroy.listWoodObject;
+
+	listIds->push_back(idUnlifeObject::appleGrowTree);
+	listIds->push_back(idUnlifeObject::appleTree);
+	listIds->push_back(idUnlifeObject::oakGrow);
+	listIds->push_back(idUnlifeObject::oakSmall);
+	/////////////////////////////////////////////////////////////////////////
+	listIds = &listDestroy.listWoodBlock;
+
+	listIds->push_back(idBlocks::woodLadder);
+	listIds->push_back(idBlocks::logOak);
+	/////////////////////////////////////////////////////////////////////////
+	listIds = &listDestroy.listStoneObject;
+
+	listIds->push_back(idUnlifeObject::smallStone);
+	/////////////////////////////////////////////////////////////////////////
+	listIds = &listDestroy.listtStoneBlock;
+
+	listIds->push_back(idBlocks::stone);
+	listIds->push_back(idBlocks::stoneBrick);
 
 }
 

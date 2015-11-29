@@ -54,3 +54,10 @@ typedef enum
 
 	AMOUNT_DIRECTION
 } Direction;
+
+typedef enum
+{
+	woodNature,
+	stoneNature,
+	dirtNature
+} idNatureObject;

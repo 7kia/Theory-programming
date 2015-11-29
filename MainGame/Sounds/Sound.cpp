@@ -18,6 +18,10 @@ dataSound::dataSound()
 	initSound(idSoundEntity::metalPunchBody1Id, soundPaths[idSoundPaths::metalPunchBody1], 0.f);
 	initSound(idSoundEntity::luggage1IdSound, soundPaths[idSoundPaths::luggage1Sound], 0.f);
 	initSound(idSoundEntity::itemChoiseSound, soundPaths[idSoundPaths::itemChoiseIdPath], 0.f);
+	initSound(idSoundEntity::skeletonDeathSound, soundPaths[idSoundPaths::skeletonDeathPath], 0.f);
+
+	initSound(idSoundUnlifeObjects::dropTreeSound, soundPaths[idSoundPaths::treeDropPath], 0.f);
+	initSound(idSoundUnlifeObjects::choop1Sound, soundPaths[idSoundPaths::chopp1Path], 0.f);
 }
 
 void playSound(const int idSound, dataSound &soundBase, Vector2f pos)

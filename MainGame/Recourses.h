@@ -25,6 +25,11 @@ typedef enum {
 	metalPunchBody1,
 	luggage1Sound,
 	itemChoiseIdPath,
+	skeletonDeathPath,
+
+
+	chopp1Path,
+	treeDropPath,
 	amountSoundPaths
 } idSoundPaths;
 
@@ -51,7 +56,12 @@ const sf::String soundPaths[idSoundPaths::amountSoundPaths] =
 	"recourses\\sounds\\punch_body1.ogg",
 	"recourses\\sounds\\metal_punch_body1.ogg",
 	"recourses\\sounds\\luggage1.ogg",
-	"recourses\\sounds\\item_choose.ogg"
+	"recourses\\sounds\\item_choose.ogg",
+	"recourses\\sounds\\skeleton_death.ogg",
+
+	"recourses\\sounds\\chopper1.ogg",
+	"recourses\\sounds\\wood_drop1.ogg"
+
 
 	
 };

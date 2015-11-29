@@ -97,16 +97,23 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 	void Game::processPanelQuickAccess()
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Num0)) {
+
+			if (mainPerson.idSelectItem != 9) {
+				mainPerson.playSoundChoiseItem();
+			}
 			mainPerson.idSelectItem = 9;
+
 		}
 		else {
 			for (int i = 0; i < mainPerson.amountSlots - 1; i++) {
 				if (Keyboard::isKeyPressed(Keyboard::Key(Keyboard::Num1 + i))) {
+
+					if(mainPerson.idSelectItem != i)
+					{
+						mainPerson.playSoundChoiseItem();
+					}
 					mainPerson.idSelectItem = i;
 
-					Vector2f posPerson = { mainPerson.getXPos(), mainPerson.getYPos() };
-					int id = idSoundEntity::itemChoiseSound;
-					playSound(id, *mainPerson.soundBase, posPerson);
 				}
 			}
 

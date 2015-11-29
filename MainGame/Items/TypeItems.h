@@ -33,11 +33,11 @@ struct featuresItem
 
 struct destroyObjectsAndBlocks
 {
-	sf::String *objects = nullptr;
+	std::vector<sf::String> *objects = nullptr;
 	int amountObjects;
 
-	wchar_t *blocks = nullptr;
-	void init(int countObjects, int countBlock, sf::String *namesObjects, wchar_t *charBlocks);
+	std::vector<wchar_t> *blocks = nullptr;
+	void init(std::vector<sf::String> *namesObjects, std::vector<wchar_t> *charBlocks);
 };
 
 struct TypeItem {

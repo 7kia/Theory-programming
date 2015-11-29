@@ -239,17 +239,21 @@ void Entity::breakItem(Item &currentItem)
 	}
 }
 
-void Entity::dropObject(Vector2i pos, vector<Item> &items, TypeItem* typesItems, bool harvest)
+void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 {
 	//////////////////////////////////////////////////
 	// Выпадение предметов
 	Item* addItem = new Item;
+	vector<Item> &items = *world.items;
+	TypeItem *typesItems = world.typesObjects.typesItem;
 
-	size_t countItem = founds.findObject->typeObject->drop.minCountItems.size();
+	UnlifeObject &findObject = *founds.findObject;
+	TypeUnlifeObject &typeObject = *findObject.typeObject;
+	size_t countItem = typeObject.drop.minCountItems.size();
 
-	vector<int> &minAmount = founds.findObject->typeObject->drop.minCountItems;
-	vector<int> &maxAmount = founds.findObject->typeObject->drop.maxCountItems;
-	vector<int> &idItems = founds.findObject->typeObject->drop.dropItems;
+	vector<int> &minAmount = typeObject.drop.minCountItems;
+	vector<int> &maxAmount = typeObject.drop.maxCountItems;
+	vector<int> &idItems = typeObject.drop.dropItems;
 
 	size_t start = 0;
 	size_t finish = countItem;
@@ -272,7 +276,18 @@ void Entity::dropObject(Vector2i pos, vector<Item> &items, TypeItem* typesItems,
 
 	}
 	delete addItem;
-	//////////////////////////////////////////////////
+	
+	///*
+		switch(typeObject.idNature)
+	{
+	case idNatureObject::woodNature:
+		playSound(0.f, 0.f, idSoundPaths::treeDropPath);
+		break;
+	default:
+		break;
+	}
+
+	//*/
 }
 
 void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
@@ -288,14 +303,14 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 	int level = pos.z;
 
 	wchar_t* block = &field.dataMap[level][y][x];
-	wchar_t *listBlocks = currentItem.typeItem->destroy.blocks;
-	String *listObjects = currentItem.typeItem->destroy.objects;
+	vector<wchar_t> &listBlocks = *currentItem.typeItem->destroy.blocks;
+	vector<String> &listObjects = *currentItem.typeItem->destroy.objects;
 	int countObjects = currentItem.typeItem->destroy.amountObjects;
 
 	bool isObject = founds.findObject != founds.emptyObject;
 	if (isObject) {
 
-		if (isInListObjects(listObjects, countObjects)) {
+		if (isInListObjects(listObjects)) {
 
 			int &toughnessObject = founds.findObject->currentToughness;
 			typeDamageItem &damageItem = currentItem.typeItem->damageItem;
@@ -303,9 +318,19 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 			toughnessObject -= damageItem.cuttingDamage;
 			toughnessObject -= damageItem.crushingDamage;
 
+			TypeUnlifeObject &typeObject = *founds.findObject->typeObject;
+			switch (typeObject.idNature) {
+			case idNatureObject::woodNature:
+				playSound(0.f, 0.f, idSoundPaths::chopp1Path);
+				break;
+			default:
+				break;
+			}
+
+
 			if (toughnessObject < 1) {
 				Vector2i posDrop = { x, y };
-				dropObject(posDrop, items, typesItems, false);
+				dropObject(posDrop, world, false);
 
 				unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
@@ -374,6 +399,7 @@ void Entity::useBlock(Vector3i pos, world &world,
 	}
 
 }
+
 void Entity::upgradeObject(UnlifeObject &object, world &world)
 {
 	redefineObject &redefine = object.typeObject->redefine;
@@ -388,7 +414,7 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
 	Vector2i posItems = { posOnMap.x - 1, posOnMap.y - 1 };
-	dropObject(posItems, *items, typesItems, true);
+	dropObject(posItems, world, true);
 
 	object.setType(nextType);
 	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
@@ -405,14 +431,14 @@ void Entity::actionMain(world &world, Vector2f pos)
 		// Если блок лестница
 		int x = int(pos.x / SIZE_BLOCK);
 		int y = int(pos.y / SIZE_BLOCK);
-		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x]) != NULL) {
+		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], listDestroy.ladder)) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 
 			spriteEntity->setPosition(x * SIZE_BLOCK + posOrigin.x, y * SIZE_BLOCK + posOrigin.y);
 			currentLevelFloor += 1;
 
-		} else if (isInListObjects(listDestroy.harvestObjects, AMOUNT_HARVEST_OBJECTS))
+		} else if (isInListObjects(listDestroy.harvestObjects))
 		{
 			upgradeObject(*founds.findObject, world);
 		}
@@ -431,7 +457,7 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 		int x = int(pos.x / SIZE_BLOCK);
 		int y = int(pos.y / SIZE_BLOCK);
 		// Если блок лестница
-		if (wcschr(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x]) != NULL) {
+		if (isInListBlocks(field.dataMap[currentLevelFloor][y][x], listDestroy.ladder)) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 

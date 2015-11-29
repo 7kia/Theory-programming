@@ -314,20 +314,6 @@ void Entity::playAnimationAtack(const float deltaTime, dataSound& databaseSound)
 	animation.timeAnimation += deltaTime * pauseStep;
 	resetTimeAnimation(animation.timeAnimation, resetAnimation);
 
-	if (animation.timeAnimation == 0.f) {
-		Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
-		int idSound;
-		if (currentItem.typeItem->features.isCutting) {
-			idSound = idSoundEntity::metalPunchBody1Id;
-			playSound(0.f, 0.f, idSound);
-		}
-		else {
-			idSound = idSoundEntity::punchBody1Id;
-			playSound(0.f, 0.f, idSound);
-		}
-	}
-
-
 	int shiftWidth = directions.directionLook / 6;// TODO
 
 	int currentWidth = size.width;
@@ -441,10 +427,10 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		bool isSlowingBlock = false;
 		/////////////////////////////////////////////
 		// Проверяем окружающие объекты
-		for (int i = int(y) / SIZE_BLOCK; i < int(y + size.height) / SIZE_BLOCK; i++) {
-			for (int j = int(x) / SIZE_BLOCK; j < int(x + size.width) / SIZE_BLOCK; j++) {
+		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
 				// Замедляющие блоки
-				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor + 1][i][j])) {// ИСПРАВЬ
+				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.slowingBlocks)) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					isSlowingBlock = true;
 					stamina.needMinusStamina = false;
@@ -456,7 +442,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 
 				// Проверяем по списку проходимых блоков
-				if (wcschr(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j]) == 0) {
+				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.passableBlocks) == false) {
 					wasCollision = true;
 
 					collision.initPos(j, i, currentLevelFloor + 1);
@@ -473,12 +459,12 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		/////////////////////////////////////////////
 		// Проверяем пол
 
-		for (int i = int(y) / SIZE_BLOCK; i < int(y + size.height) / SIZE_BLOCK; i++) {
-			for (int j = int(x) / SIZE_BLOCK; j < int(x + size.width) / SIZE_BLOCK; j++) {
+		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
 
 
 				// Замедляющие блоки
-				if (wcschr(listDestroy.slowingBlocks, map[currentLevelFloor][i][j])) {// ИСПРАВЬ
+				if (isInListBlocks(map[currentLevelFloor][i][j], listDestroy.slowingBlocks)) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					stamina.needMinusStamina = false;
 					break;
@@ -487,14 +473,13 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 				}
 
 				// Является непроходимым
-				if (wcschr(listDestroy.notPassableFloor, map[currentLevelFloor][i][j]) != NULL) {
+				if (isInListBlocks(map[currentLevelFloor][i][j], listDestroy.notPassableFloor)) {
 
 					wasCollision = true;
 
 					collision.initPos(j, i, currentLevelFloor);
 					collision.block = map[currentLevelFloor][i][j];
 
-					directions.directionWalk = NONE_DIRECTION;
 					break;
 				}
 
@@ -519,13 +504,27 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	{
 		if (directions.directionWalk >= Direction::UP_LEFT) {
 			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-			x = getXPos() + DIAGONAL_SCALE_SPEED * dx * deltaTime;
-			y = getYPos() + DIAGONAL_SCALE_SPEED * dy * deltaTime;
+			x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
+			y +=DIAGONAL_SCALE_SPEED * dy * deltaTime;
 		} else {
-			x = getXPos() + dx * deltaTime;
-			y = getYPos() + dy * deltaTime;
+			x += dx * deltaTime;
+			y += dy * deltaTime;
 		}
 		collision.clear();
+	}
+	else
+	{
+		if (directions.directionWalk >= Direction::UP_LEFT) {
+			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
+			x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
+			y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
+		}
+		else {
+			x -= dx * deltaTime;
+			y -= dy * deltaTime;
+		}
+		directions.directionWalk = NONE_DIRECTION;
+
 	}
 
 	if(map[currentLevelFloor][collision.y][collision.x] == field.charBlocks[idBlocks::air])
@@ -764,26 +763,54 @@ void Entity::run()
 
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
-bool Entity::isInListBlocks(wchar_t block, wchar_t *listBlocks) {
-	if (listBlocks) {
+bool Entity::isInListBlocks(wchar_t block, vector<wchar_t> &listObjects) {
+	if(&listObjects != nullptr)
+	{
+			int size = listObjects.size();
+	if (size) {
 		int i = 0;
-		while (listBlocks[i] != u'\0') {
-			if (listBlocks[i] == block) {
+		for (size_t i = 0; i < size; i++) {
+			if (block == listObjects[i]) {
 				return true;
 			}
-			i++;
 		}
+	}
+
 	}
 	
 	return false;
 }
-bool Entity::isInListObjects(String* listObjects, int sizeString) {
-	if (listObjects) {
-		for (size_t i = 0; i < sizeString; i++) {
+
+bool Entity::isInListIds(int id, vector<wchar_t> &listIds) {
+	if (&listIds != nullptr) {
+		int size = listIds.size();
+		if (size) {
+			int i = 0;
+			for (size_t i = 0; i < size; i++) {
+				if (id == listIds[i]) {
+					return true;
+				}
+			}
+		}
+
+	}
+
+	return false;
+}
+
+bool Entity::isInListObjects(vector<String> &listObjects) {
+	if(&listObjects != nullptr)
+	{
+			int size = listObjects.size();
+	if (size) {
+		for (size_t i = 0; i < size; i++) {
 			if (founds.findObject->typeObject->name == listObjects[i]) {
 				return true;
 			}
 		}
+	}
+
+
 	}
 
 

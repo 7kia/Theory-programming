@@ -18,6 +18,7 @@ public:
 
 	void givenForPersonDamage(Enemy & enemy);
 	void updateAtack(world &world, const float deltaTime);
+	void hurtPerson(Enemy &enemy, world &world, const float deltaTime);
 	void attractionEnemy(Enemy &enemy, world &world, const float deltaTime);
 	/*
 		///////////////////////////////////////////////////////
@@ -42,6 +43,7 @@ public:
 
 	void useItem(world &world, Event &event, Vector2f pos);
 
+	void playSoundChoiseItem();
 
 private:
 

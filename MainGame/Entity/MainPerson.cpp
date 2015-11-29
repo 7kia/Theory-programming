@@ -39,6 +39,8 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	mainPerson.textureEntity->loadFromFile(texturePaths[idTexturePaths::mainPerson]);
 	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
 	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.size.width, mainPerson.size.height));
+	//mainPerson.spriteEntity->setOrigin(mainPerson.size.width / 2, mainPerson.size.height / 2);
+
 
 	mainPerson.soundBase = &databaseSound;
 
@@ -142,7 +144,17 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 
 	damage.inputDamage = 0;// TODO
 
-
+	
+		int idSound;
+		if (itemEnemy.typeItem->features.isCutting) {
+			idSound = idSoundEntity::metalPunchBody1Id;
+			playSound(0.f, 0.f, idSound);
+		}
+		else {
+			idSound = idSoundEntity::punchBody1Id;
+			playSound(0.f, 0.f, idSound);
+		}
+	
 
 }
 
@@ -183,12 +195,17 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
+	String nameEnemy = findEnemy->type->name;
+	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 
 	bool isAtack = currenMode == idEntityMode::atack;
 	bool isEnemy = findEnemyFromList > -1;
 	if (isAtack && isEnemy) {
 
 		if (findEnemy->isDeath) {
+
+			// TODO
+			//findEnemy->playSound(0.f, 0.f, idSoundPaths::skeletonDeathPath);
 
 			findEnemy->EnemyDrop(world);
 			world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
@@ -197,6 +214,8 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 
 			currenMode = idEntityMode::walk;
 			giveDamage = false;
+
+
 
 		}
 		else {
@@ -222,20 +241,33 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	}
 }
 
+void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
+{
+	enemy.currenMode = idEntityMode::atack;
+
+	enemy.animation.currentTimeFightAnimation += deltaTime;
+	if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
+		enemy.animation.currentTimeFightAnimation = 0.f;
+
+		enemy.currenMode = idEntityMode::fight;
+		enemy.giveDamage = false;
+		givenForPersonDamage(enemy);
+
+		Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+
+		itemEnemy.currentToughness -= 1;
+		if (itemEnemy.currentToughness < 1) {
+			enemy.redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
+		}
+	}
+
+	enemy.directions.directionWalk = NONE_DIRECTION;
+
+}
 
 void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTime)
 {
-	typesObjectsInWorld &types = world.typesObjects;
 
-	Vector2f personPoint = { getXPos(), getYPos() };
-	Vector2f enemyPoint;
-	Vector2f movemoment;
-	float distanse;
-
-	enemyPoint = enemy.spriteEntity->getPosition();
-
-	distanse = distansePoints(personPoint, enemyPoint);
-	// Если увидел
 	Directions &directions = enemy.directions;
 	entityAnimation &animation = enemy.animation;
 
@@ -244,7 +276,16 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 	bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
 	bool onLevel = onLevelEnemy || feelEnemy;
+
+	Vector2f personPoint = { getXPos(), getYPos() };
+	Vector2f enemyPoint;
+	float distanse;
+
+	enemyPoint = enemy.spriteEntity->getPosition();
+	distanse = distansePoints(personPoint, enemyPoint);
+
 	if (distanse <= radiuseView && onLevel) {
+		Vector2f movemoment;
 		enemy.currenMode = idEntityMode::fight;
 
 		movemoment = vectorDirection(enemyPoint, personPoint);
@@ -252,68 +293,35 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 		enemy.defineDirectionLook(movemoment);
 
 		// TODO
-		bool isFight = enemy.currenMode == idEntityMode::fight;
+
 		if (feelEnemy == false)
 			enemy.checkBlock(world.field, distanse);
 
-		isFight = enemy.currenMode == idEntityMode::fight;
+		bool isFight = enemy.currenMode == idEntityMode::fight;
 		if (isFight) {
 
 			enemy.choiceDirections(movemoment);
 			step.currentTime = 0;
-			Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
 
 			if (enemy.wasCollision) {
 
 				enemy.directions.directionWalk = NONE_DIRECTION;
 				if (!onLevelEnemy && feelEnemy) {
-					Vector3i posEnemy = { int(enemy.getXPos() / SIZE_BLOCK),
-						int(enemy.getXPos() / SIZE_BLOCK),
-						enemy.collision.level };
-					enemy.findLadder(world, posEnemy);
-
-
-					String nameCurrentItem = itemEnemy.typeItem->features.name;
-					String nameEmptyItem = founds.emptyItem->typeItem->features.name;
-
-					bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
-					bool isNotEmpty = nameCurrentItem != nameEmptyItem;
-
-					if (isNotEmpty && isLadder) {
-						enemy.buildLadder(world);
-					}
+					enemy.searchWay(world);
 				}
 				else if (feelEnemy) {
 					enemy.choiceBlock(world);
 				}
 
-
-
-
 			} 
 			else {
 
-				bool noNearFight = distanse >= SIZE_BLOCK;
-				if (noNearFight) {
-					enemy.animation.currentTimeFightAnimation = 0.f;
-				} else if (onLevelEnemy) {
-					enemy.currenMode = idEntityMode::atack;
-
-					enemy.animation.currentTimeFightAnimation += deltaTime;
-					if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
-						enemy.animation.currentTimeFightAnimation = 0.f;
-
-						enemy.currenMode = idEntityMode::fight;
-						enemy.giveDamage = false;
-						givenForPersonDamage(enemy);
-
-						itemEnemy.currentToughness -= 1;
-						if (itemEnemy.currentToughness < 1) {
-							redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
-						}
-					}
-
-					directions.directionWalk = NONE_DIRECTION;
+				bool isNearFight = distanse <= SIZE_BLOCK;
+				if (isNearFight) {
+					hurtPerson(enemy, world, deltaTime);
+				}
+				else if (onLevelEnemy) {
+					enemy.resetFightAnimation();
 				}
 
 			}
@@ -423,6 +431,14 @@ void MainPerson::useItem(world &world,
 	}
 
 }
+
+void MainPerson::playSoundChoiseItem()
+{
+	Vector2f posPerson = { getXPos(), getYPos() };
+	int id = idSoundEntity::itemChoiseSound;
+	::playSound(id, *soundBase, posPerson);
+}
+
 ////////////////////////////////////////////////////////////////////
 // Использую потом (не ВКЛЮЧЕНА)
 void MainPerson::computeAngle(RenderWindow &window)

@@ -13,18 +13,24 @@ const int AMOUNT_HARVEST_OBJECTS = 1;
 
 struct listDestroyObjectsAndBlocks//Game.cpp
 {
-	sf::String axeBreakingObject[AMOUNT_AXE_BREAKING_OBJECTS];
-	sf::String pickaxBreakingObject[AMOUNT_PICKAX_BREAKING_OBJECTS];
-	sf::String backoeBreakingObject[AMOUNT_BACKHOE_BREAKING_BLOCKS];
-	sf::String harvestObjects[AMOUNT_HARVEST_OBJECTS];
+	std::vector<sf::String> axeBreakingObject;
+	std::vector<sf::String>  pickaxBreakingObject;
+	std::vector<sf::String>  backoeBreakingObject;
+	std::vector<sf::String>  harvestObjects;
 
-	wchar_t axeBreakingBlock[SIZE_STRING];
-	wchar_t pickaxBreakingBlock[SIZE_STRING];
-	wchar_t backoeBreakingBlock[SIZE_STRING];
+	std::vector<int>  listWoodObject;
+	std::vector<int>  listWoodBlock;
+	std::vector<int>  listStoneObject;
+	std::vector<int>  listtStoneBlock;
 
-	wchar_t passableBlocks[SIZE_STRING];
-	wchar_t notPassableFloor[SIZE_STRING];
-	wchar_t slowingBlocks[SIZE_STRING];
 
-	wchar_t ladder[SIZE_STRING];
+	std::vector<wchar_t>  axeBreakingBlock;
+	std::vector<wchar_t> pickaxBreakingBlock;
+	std::vector<wchar_t> backoeBreakingBlock;
+
+	std::vector<wchar_t> passableBlocks;
+	std::vector<wchar_t> notPassableFloor;
+	std::vector<wchar_t> slowingBlocks;
+
+	std::vector<wchar_t> ladder;
 };

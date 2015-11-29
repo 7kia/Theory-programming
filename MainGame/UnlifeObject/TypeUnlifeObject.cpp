@@ -1,5 +1,5 @@
 #include "TypeUnlifeObject.h"
-
+#include "../ListObjectsAndBlocks.h"
 
 
 using namespace sf;
@@ -14,8 +14,10 @@ void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound
 
 void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 {
-	////////////////////////////////////////////////////////////////////////////////////////
-	TypeUnlifeObject *typesObject = &typesUnlifeObjects[idUnlifeObject::oakGrow];
+	int id = idUnlifeObject::oakGrow;
+	int idNature = idNatureObject::woodNature;
+
+	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
 
 	String texturePath = texturePaths[idTexturePaths::Trees];
 	String name = "Oak";
@@ -23,8 +25,10 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	int toughness = 100;
 
 	typesObject->mainSize.init(WIDTH_OAK_STUMP, HEIGHT_OAK_STUMP, PIXEL_X_OAK_STUMP, PIXEL_Y_OAK_STUMP);
-	typesObject->Init(texturePath, name, canDestroy, toughness);
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_OAK, HEIGHT_OAK, PIXEL_X_OAK, PIXEL_Y_OAK);
+	typesObject->soundBase = &databaseSound;
 
 	// Предметы
 	objectDropItems drop;
@@ -35,7 +39,8 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
-	typesObject = &typesUnlifeObjects[idUnlifeObject::oakSmall];
+	id = idUnlifeObject::oakSmall;
+	typesObject = &typesUnlifeObjects[id];
 
 	texturePath = texturePaths[idTexturePaths::Trees];
 	name = "Small oak";
@@ -43,9 +48,10 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	toughness = 50;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, canDestroy, toughness);
-
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_SMALL_OAK, HEIGHT_SMALL_OAK, PIXEL_X_SMALL_OAK, PIXEL_Y_SMALL_OAK);
+	typesObject->soundBase = &databaseSound;
 
 	// Предметы
 	drop.addItem(1, 3, idItem::logOakItem);
@@ -55,7 +61,8 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
-	typesObject = &typesUnlifeObjects[idUnlifeObject::appleGrowTree];
+	id = idUnlifeObject::appleGrowTree;
+	typesObject = &typesUnlifeObjects[id];
 
 	texturePath = texturePaths[idTexturePaths::Trees];
 	name = "Apple tree with apple's";
@@ -63,9 +70,10 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	toughness = 50;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, canDestroy, toughness);
-
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_APPLE_TREE, HEIGHT_APPLE_TREE, PIXEL_X_GROW_APPLE_TREE, PIXEL_Y_GROW_APPLE_TREE);
+	typesObject->soundBase = &databaseSound;
 
 	// Предметы
 	drop.addItem(1, 2, idItem::logOakItem);
@@ -75,7 +83,8 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
-	typesObject = &typesUnlifeObjects[idUnlifeObject::appleTree];
+	id = idUnlifeObject::appleTree;
+	typesObject = &typesUnlifeObjects[id];
 
 	texturePath = texturePaths[idTexturePaths::Trees];
 	name = "Apple tree";
@@ -83,9 +92,10 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	toughness = 50;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, canDestroy, toughness);
-
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_APPLE_TREE, HEIGHT_APPLE_TREE, PIXEL_X_APPLE_TREE, PIXEL_Y_APPLE_TREE);
+	typesObject->soundBase = &databaseSound;
 
 	// Предметы
 	drop.addItem(1, 2, idItem::logOakItem);
@@ -94,8 +104,8 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
-	// Саженец дуба
-	typesObject = &typesUnlifeObjects[idUnlifeObject::oakSeadling];
+	id = idUnlifeObject::oakSeadling;
+	typesObject = &typesUnlifeObjects[id];
 
 	texturePath = texturePaths[idTexturePaths::Trees];
 	name = "Seadling oak";
@@ -103,9 +113,10 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	toughness = 30;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, canDestroy, toughness);
-
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_SEADLING_OAK, HEIGHT_SEADLING_OAK, PIXEL_X_SEADLING_OAK, PIXEL_Y_SEADLING_OAK);
+	typesObject->soundBase = &databaseSound;
 
 	// Предметы
 	drop.addItem(1, 1, idItem::seadlingOakItem);
@@ -115,7 +126,8 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
 	// Саженец яблони
-	typesObject = &typesUnlifeObjects[idUnlifeObject::appleSeadling];
+	id = idUnlifeObject::appleSeadling;
+	typesObject = &typesUnlifeObjects[id];
 
 	texturePath = texturePaths[idTexturePaths::Trees];
 	name = "Apple seadling";
@@ -123,9 +135,10 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 	toughness = 30;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, canDestroy, toughness);
-
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_SEADLING_APPLE, HEIGHT_SEADLING_APPLE, PIXEL_X_SEADLING_APPLE, PIXEL_Y_SEADLING_APPLE);
+	typesObject->soundBase = &databaseSound;
 
 	// Предметы
 	drop.addItem(1, 1, idItem::seadlingApple);
@@ -137,16 +150,19 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 
 void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 {
-	TypeUnlifeObject *typesObject = &typesUnlifeObjects[idUnlifeObject::smallStone];
+	int id = idUnlifeObject::smallStone;
+	int idNature = idNatureObject::stoneNature;
+	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
 	String texturePath = texturePaths[idTexturePaths::items];
 	String name = "Small stone";
 	bool canDestroy = true;
 	int toughness = 2;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, canDestroy, toughness);
-
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
+	typesObject->soundBase = &databaseSound;
 
 	objectDropItems drop;
 	drop.addItem(1, 1, idItem::stoneItem);
@@ -158,8 +174,10 @@ void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound)
 
 void initEmpty(TypeUnlifeObject *typesUnlifeObjects)
 {
-	TypeUnlifeObject *typesObject = &typesUnlifeObjects[idUnlifeObject::empty];
-	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", false, 0);
+	int id = idUnlifeObject::empty;
+	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
+	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", id, 0);
+	typesObject->defineToughness(false, 0);
 }
 
 void redefineObject::init(int idType, float time)
@@ -168,19 +186,23 @@ void redefineObject::init(int idType, float time)
 	timeUpdate = time;
 }
 
-////////////////////////////////////////////////////////////////////
-// Виды объектов
-void TypeUnlifeObject::Init(String filenameTexture, String typeName, bool canDestroy, int toughness) {
-	textureObject = new Texture;
-	textureObject->loadFromFile(filenameTexture);
-
-	name = typeName;
-
+void TypeUnlifeObject::defineToughness(bool canDestroy, int toughness)
+{
 	isDestroy = canDestroy;
 	toughnessObject = toughness;
 	if (isDestroy == false) {
 		toughness = 0;
 	}
+
+}
+
+void TypeUnlifeObject::Init(String filenameTexture, String typeName, int idType, int numberNature) {
+	textureObject = new Texture;
+	textureObject->loadFromFile(filenameTexture);
+
+	name = typeName;
+	id = idType;
+	idNature = numberNature;
 
 	// TODO
 	// Звуки 

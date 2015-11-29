@@ -411,8 +411,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	damage.init(1, 10);
 
-	addType.destroy.init(AMOUNT_BACKHOE_BREAKING_OBJECTS, AMOUNT_BACKHOE_BREAKING_BLOCKS,
-							 list.backoeBreakingObject, list.backoeBreakingBlock);
+	addType.destroy.init(&list.backoeBreakingObject, &list.backoeBreakingBlock);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -435,8 +434,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	damage.init(10, 6);
 
-	addType.destroy.init(AMOUNT_PICKAX_BREAKING_OBJECTS, AMOUNT_PICKAX_BREAKING_BLOCKS,
-							 list.pickaxBreakingObject, list.pickaxBreakingBlock);
+	addType.destroy.init(&list.pickaxBreakingObject, &list.pickaxBreakingBlock);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -459,8 +457,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	damage.init(8, 8);
 
-	addType.destroy.init(AMOUNT_AXE_BREAKING_OBJECTS, AMOUNT_AXE_BREAKING_BLOCKS,
-							 list.axeBreakingObject, list.axeBreakingBlock);
+	addType.destroy.init(&list.axeBreakingObject, &list.axeBreakingBlock);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -519,10 +516,9 @@ void featuresItem::defineToughness(bool destroy, int toughnessItem)
 	toughness = toughnessItem;
 }
 
-void destroyObjectsAndBlocks::init(int countObjects, int countBlock, sf::String* namesObjects, wchar_t* charBlocks)
+void destroyObjectsAndBlocks::init(std::vector<sf::String> *namesObjects, std::vector<wchar_t> *charBlocks)
 {
 	objects = namesObjects;
-	amountObjects = countObjects;
 
 	blocks = charBlocks;
 }

@@ -21,6 +21,8 @@ public:
 
 	TypeUnlifeObject *typeObject;// Пренадлежность типу
 
+	Sound soundObject;
+
 	int currentToughness;
 	bool isDestroy;
 

@@ -46,7 +46,9 @@ public:
 	void defineDirectionLook(Vector2f movemoment);
 	void choiceBlock(world &world);
 
-	void findLadder(world &world, sf::Vector3i pos);
+	void resetFightAnimation();
+	void searchWay(world &world);
+	bool findLadder(world &world, sf::Vector3i pos);
 	void buildLadder(world &world);
 
 	void checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts);

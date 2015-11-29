@@ -42,9 +42,14 @@ void UnlifeObject::update(const float deltaTime, dataSound &databaseSound)
 
 void UnlifeObject::playSound(float time, float start, const int idSound)
 {
-	if (time == start)
-	{
-		//soundsEntity[idSound]->play();
+	if (time == start) {
+		soundObject.setBuffer(typeObject->soundBase->soundBuffer[idSound]);
+
+		soundObject.setMinDistance(minDistanse / 2);
+		soundObject.setAttenuation(minDistanse + 1.f);
+
+		soundObject.play();
+		soundObject.setPosition(getXPos(), getYPos(), 0);
 	}
 }
 

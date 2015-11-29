@@ -20,6 +20,8 @@ struct TypeUnlifeObject {
 public:
 
 	sf::String name;
+	int id;
+	int idNature;
 	sf::Texture* textureObject;
 
 	// —сылки на звуки
@@ -28,6 +30,8 @@ public:
 	bool isDestroy;
 	int toughnessObject;
 
+	dataSound *soundBase;
+
 	redefineObject redefine;
 
 
@@ -35,7 +39,8 @@ public:
 	featuresSprite transparentSize;
 	objectDropItems drop;
 
-	void Init(sf::String filenameTexture, sf::String typeName, bool canDestroy, int toughness);
+	void Init(sf::String filenameTexture, sf::String typeName, int idType, int numberNature);
+	void defineToughness(bool canDestroy, int toughness);
 };
 
 void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);

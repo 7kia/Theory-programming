@@ -13,9 +13,18 @@ typedef enum
 	metalPunchBody1Id,
 	luggage1IdSound,
 	itemChoiseSound,
+	skeletonDeathSound,
 	amountIdSoundsEntity
 } idSoundEntity;
-const int sizeBuffer = amountIdSoundsEntity;
+
+typedef enum
+{
+	choop1Sound = amountIdSoundsEntity,
+	dropTreeSound,
+	amountIdUnlifeObjectSound
+} idSoundUnlifeObjects;
+
+const int sizeBuffer = amountIdUnlifeObjectSound;
 
 struct dataSound
 {
