@@ -4,7 +4,7 @@
 using namespace sf;
 using namespace std;
 
-void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
+void initializeTypeEnemy(typesObjectsInWorld &types)
 {
 
 	TypeEnemy *typesEnemy = types.typesEnemy;
@@ -28,7 +28,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	typeEnemy->view.init(RADIUSE_VIEW * 2, false);
 	typeEnemy->converse.init(true, true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_WOLF_SLOTS);
+	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_WOLF_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::ironBackHoerIte);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stonePickaxItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneAxeItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -125,7 +125,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::woodLadderItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound)
 
 	typeEnemy->featuresSprite.init(0, 0, 0, 0);
 	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, databaseSound, 0);
+	typeEnemy->InitOtherFeatures(texturePath, name, 0);
 
 	drop.clear();
 }
@@ -168,7 +168,7 @@ void TypeEnemy::initCurrentItem(TypeItem *typesItem, int id)
 	typeItem = typesItem[id];
 }
 
-void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
+void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy,
 																	int amountEnemySlots)
 {
 	textureEntity = new Texture;
@@ -177,6 +177,4 @@ void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, 
 	amountSlots = amountEnemySlots;
 
 	name = nameEnemy;
-
-	soundBase = &databaseSound;
 }

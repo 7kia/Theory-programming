@@ -197,19 +197,9 @@ void entityThirst::update(const float deltaTime, bool &needMinusHealth)
 
 ////////////////////////////////////////////////////////////////////
 // Передвижение. Его анимация и озвучка
-void Entity::update(const float deltaTime, dataSound &databaseSound)
+void Entity::update(const float deltaTime)
 {
 
-	/*
-	if (outputDamage) {
-	currentTimeFightAnimation += deltaTime;
-	if (currentTimeFightAnimation > timeOutputDamage) {
-	currentTimeFightAnimation = 0;
-
-	outputDamage = 0;
-	}
-	}
-	*/
 	if (currenMode == idEntityMode::atack) {
 		animation.updateFight(deltaTime, giveDamage);
 	}
@@ -269,19 +259,18 @@ void Entity::update(const float deltaTime, dataSound &databaseSound)
 		}
 
 		if (directions.directionWalk) {
-			playAnimationWalk(deltaTime, databaseSound);
+			playAnimationWalk(deltaTime);
 		}
 
 	}
 
-
 	if (animation.currentTimeFightAnimation > 0) {
-		playAnimationAtack(deltaTime, databaseSound);
+		playAnimationAtack(deltaTime);
 
 	}
 }
 
-void Entity::playAnimationWalk(const float deltaTime, dataSound& databaseSound)
+void Entity::playAnimationWalk(const float deltaTime)
 {
 	float pauseStep = 5, resetAnimation = 4;
 
@@ -290,8 +279,8 @@ void Entity::playAnimationWalk(const float deltaTime, dataSound& databaseSound)
 	animation.timeAnimation += deltaTime * pauseStep;
 	resetTimeAnimation(animation.timeAnimation, resetAnimation);
 
-	int id = idSoundEntity::stepGrass;
-	playSound(animation.timeAnimation, databaseSound.startSounds[id], id);
+	int id = idSoundPaths::stepGrass1Sound;
+	playSoundAfterTime(animation.timeAnimation, id);
 
 	int shiftWidth = directions.directionLook / 6;// TODO
 
@@ -305,7 +294,7 @@ void Entity::playAnimationWalk(const float deltaTime, dataSound& databaseSound)
 	spriteEntity->setTextureRect(IntRect(xPos, size.height * int(animation.timeAnimation), currentWidth, size.height));
 }
 
-void Entity::playAnimationAtack(const float deltaTime, dataSound& databaseSound)
+void Entity::playAnimationAtack(const float deltaTime)
 {
 	float pauseStep = 5, resetAnimation = 3;
 	int shiftAnimation = 4;
@@ -327,16 +316,11 @@ void Entity::playAnimationAtack(const float deltaTime, dataSound& databaseSound)
 															 currentWidth, size.height));
 }
 
-void Entity::playSound(float time, float start, const int idSound)
+void Entity::playSoundAfterTime(float time, const int idSound)
 {
-	if (time == start) {
-		soundEntity.setBuffer(soundBase->soundBuffer[idSound]);
-
-		soundEntity.setMinDistance(minDistanse / 2);
-		soundEntity.setAttenuation(minDistanse + 1.f);
-
-		soundEntity.play();
-		soundEntity.setPosition(getXPos(), getYPos(), 0);
+	if (time == soundBase->startSounds[idSound]) {
+		Vector2f posPerson = { getXPos(), getYPos() };
+		::playSound(idSound, *soundBase, soundEntity, posPerson);
 	}
 }
 
@@ -346,6 +330,41 @@ void Entity::resetTimeAnimation(float &time, float &reset)
 		time = 0;
 	}
 }
+
+void Entity::playAtackSound(Item &currentItem)
+{
+	Vector2f posPerson = { getXPos(), getYPos() };
+	int idSound;
+	if (currentItem.typeItem->features.isCutting) {
+		idSound = idSoundPaths::metalPunchBody1Sound;
+		::playSound(idSound, *soundBase, soundEntity, posPerson);
+	}
+	else {
+		idSound = idSoundPaths::punchBody1Sound;
+		::playSound(idSound, *soundBase, soundEntity, posPerson);
+	}
+
+}
+
+void Entity::playBreakSound()
+{
+	TypeUnlifeObject &typeObject = *founds.findObject->typeObject;
+	Vector2f posUse = getPosition();
+	switch (typeObject.idNature) {
+	case idNatureObject::woodNature:
+		playSound(chopp1Sound, *soundBase, soundEntity, posUse);
+		break;
+	default:
+		break;
+	}
+}
+
+void Entity::playDropSound(sf::Vector2f pos)
+{
+	int idSound = idSoundPaths::drop1Sound;
+	playSound(idSound, *soundBase, soundEntity, pos);
+}
+
 ////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////
@@ -358,6 +377,11 @@ float Entity::getXPos()
 float Entity::getYPos()
 {
 	return spriteEntity->getPosition().y;
+}
+
+sf::Vector2f Entity::getPosition()
+{
+	return { getXPos(), getYPos() };
 }
 
 void Entity::choiceDirectionLook(int& xShift, int& yShift)
@@ -652,13 +676,13 @@ bool Entity::isInUseField(float x, float y, bool under)
 	int yPosBlock = int(y / SIZE_BLOCK);
 
 	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + radiusUse > xPosBlock)
-		&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= xPosBlock);
+								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= xPosBlock);
 
 	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + radiusUse > yPosBlock)
-		&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= yPosBlock);
+								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= yPosBlock);
 
-	bool checkUnderPerson = xPosBlock == (((int)getXPos() + SIZE_BLOCK / 2) / SIZE_BLOCK)
-		&& yPosBlock == (((int)getYPos() + SIZE_BLOCK / 2) / SIZE_BLOCK);
+	bool checkUnderPerson = xPosBlock == ((int(getXPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK)
+													&& yPosBlock == ((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);
 
 	if (checkX && checkY) {
 		{
@@ -742,8 +766,7 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		items.push_back(*addItem);
 		delete addItem;
 
-		int idSound = idSoundEntity::dropSound;
-		playSound(0.f, 0.f, idSound);
+		playDropSound(posHero);
 
 		itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
 	}
@@ -764,17 +787,16 @@ void Entity::run()
 ////////////////////////////////////////////////////////////////////////////////////
 // Разрушаемый блок или нет
 bool Entity::isInListBlocks(wchar_t block, vector<wchar_t> &listObjects) {
-	if(&listObjects != nullptr)
-	{
-			int size = listObjects.size();
-	if (size) {
-		int i = 0;
-		for (size_t i = 0; i < size; i++) {
-			if (block == listObjects[i]) {
-				return true;
+	if (&listObjects != nullptr) {
+
+		size_t size = listObjects.size();
+		if (size) {
+			for (size_t i = 0; i < size; i++) {
+				if (block == listObjects[i]) {
+					return true;
+				}
 			}
 		}
-	}
 
 	}
 	
@@ -783,9 +805,9 @@ bool Entity::isInListBlocks(wchar_t block, vector<wchar_t> &listObjects) {
 
 bool Entity::isInListIds(int id, vector<wchar_t> &listIds) {
 	if (&listIds != nullptr) {
-		int size = listIds.size();
+
+		size_t size = listIds.size();
 		if (size) {
-			int i = 0;
 			for (size_t i = 0; i < size; i++) {
 				if (id == listIds[i]) {
 					return true;
@@ -801,15 +823,14 @@ bool Entity::isInListIds(int id, vector<wchar_t> &listIds) {
 bool Entity::isInListObjects(vector<String> &listObjects) {
 	if(&listObjects != nullptr)
 	{
-			int size = listObjects.size();
-	if (size) {
-		for (size_t i = 0; i < size; i++) {
-			if (founds.findObject->typeObject->name == listObjects[i]) {
-				return true;
+		size_t size = listObjects.size();
+		if (size) {
+			for (size_t i = 0; i < size; i++) {
+				if (founds.findObject->typeObject->name == listObjects[i]) {
+					return true;
+				}
 			}
 		}
-	}
-
 
 	}
 

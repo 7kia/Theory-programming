@@ -3,33 +3,42 @@
 using namespace sf;
 
 
-void dataSound::initSound(int id, sf::String path, float start)
+void dataSound::initSound(int id, const sf::String *paths, float start)
 {
-	soundBuffer[id].loadFromFile(path);
+	soundBuffer[id].loadFromFile(paths[id]);
 	startSounds[id] = start;
 }
 
 dataSound::dataSound()
 {
-	initSound(idSoundEntity::stepGrass, soundPaths[idSoundPaths::stepGrass1], 0.f);
-	initSound(idSoundEntity::stepStone, soundPaths[idSoundPaths::stepStone1], 0.f);
-	initSound(idSoundEntity::dropSound, soundPaths[idSoundPaths::drop1], 0.f);
-	initSound(idSoundEntity::punchBody1Id, soundPaths[idSoundPaths::punchBody1], 0.f);
-	initSound(idSoundEntity::metalPunchBody1Id, soundPaths[idSoundPaths::metalPunchBody1], 0.f);
-	initSound(idSoundEntity::luggage1IdSound, soundPaths[idSoundPaths::luggage1Sound], 0.f);
-	initSound(idSoundEntity::itemChoiseSound, soundPaths[idSoundPaths::itemChoiseIdPath], 0.f);
-	initSound(idSoundEntity::skeletonDeathSound, soundPaths[idSoundPaths::skeletonDeathPath], 0.f);
+	globalSound.setRelativeToListener(false);
 
-	initSound(idSoundUnlifeObjects::dropTreeSound, soundPaths[idSoundPaths::treeDropPath], 0.f);
-	initSound(idSoundUnlifeObjects::choop1Sound, soundPaths[idSoundPaths::chopp1Path], 0.f);
+	initSound(stepGrass1Sound, soundPaths, 0.f);
+	initSound(stepGrass1Sound, soundPaths, 0.f);
+	initSound(drop1Sound, soundPaths, 0.f);
+	initSound(punchBody1Sound, soundPaths, 0.f);
+	initSound(metalPunchBody1Sound, soundPaths, 0.f);
+	initSound(luggage1Sound, soundPaths, 0.f);
+	initSound(itemChoiseIdSound, soundPaths, 0.f);
+	initSound(skeletonDeathSound, soundPaths, 0.f);
+
+	initSound(chopp1Sound, soundPaths, 0.f);
+	initSound(treeDropSound, soundPaths, 0.f);
 }
 
-void playSound(const int idSound, dataSound &soundBase, Vector2f pos)
+void playGlobalSound(const int idSound, dataSound &soundBase)
 {
 	sf::Sound &globalSound = soundBase.globalSound;
 
 	globalSound.setBuffer(soundBase.soundBuffer[idSound]);
 
-	globalSound.play();
-	globalSound.setPosition(pos.x, pos.y, 0);
+	globalSound.play();	
+}
+
+void playSound(const int idSound, dataSound& soundBase, sf::Sound &sound, sf::Vector2f pos)
+{
+	sound.setBuffer(soundBase.soundBuffer[idSound]);
+
+	sound.play();
+	sound.setPosition(pos.x, pos.y, 0);
 }

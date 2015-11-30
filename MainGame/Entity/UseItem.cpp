@@ -103,7 +103,7 @@ void Entity::takeItem(world &world, Vector2f pos)
 				}
 				////////////////////////////////////////////////////////////////////
 
-				playSound(0.f, 0.f, idSoundEntity::luggage1IdSound);
+				playSound(idSoundPaths::luggage1Sound, *soundBase, soundEntity, getPosition());
 
 			}
 			//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +239,20 @@ void Entity::breakItem(Item &currentItem)
 	}
 }
 
+void Entity::playDropSoundObject()
+{
+	UnlifeObject &findObject = *founds.findObject;
+	TypeUnlifeObject &typeObject = *findObject.typeObject;
+
+	switch (typeObject.idNature) {
+	case idNatureObject::woodNature:
+		playSound(treeDropSound, *soundBase, soundEntity, getPosition());
+		break;
+	default:
+		break;
+	}
+}
+
 void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 {
 	//////////////////////////////////////////////////
@@ -277,25 +291,12 @@ void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 	}
 	delete addItem;
 	
-	///*
-		switch(typeObject.idNature)
-	{
-	case idNatureObject::woodNature:
-		playSound(0.f, 0.f, idSoundPaths::treeDropPath);
-		break;
-	default:
-		break;
-	}
-
-	//*/
+	playDropSoundObject();
 }
 
 void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 
-	///*
-	TypeItem *typesItems = world.typesObjects.typesItem;
 	Field &field = world.field;
-	vector<Item> &items = *world.items;
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
 
 	int x = pos.x;
@@ -305,7 +306,6 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 	wchar_t* block = &field.dataMap[level][y][x];
 	vector<wchar_t> &listBlocks = *currentItem.typeItem->destroy.blocks;
 	vector<String> &listObjects = *currentItem.typeItem->destroy.objects;
-	int countObjects = currentItem.typeItem->destroy.amountObjects;
 
 	bool isObject = founds.findObject != founds.emptyObject;
 	if (isObject) {
@@ -318,14 +318,7 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 			toughnessObject -= damageItem.cuttingDamage;
 			toughnessObject -= damageItem.crushingDamage;
 
-			TypeUnlifeObject &typeObject = *founds.findObject->typeObject;
-			switch (typeObject.idNature) {
-			case idNatureObject::woodNature:
-				playSound(0.f, 0.f, idSoundPaths::chopp1Path);
-				break;
-			default:
-				break;
-			}
+			playBreakSound();
 
 
 			if (toughnessObject < 1) {
@@ -409,9 +402,6 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 		int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
 
 	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
-
-	vector<Item> *items = world.items;
-	TypeItem *typesItems = world.typesObjects.typesItem;
 
 	Vector2i posItems = { posOnMap.x - 1, posOnMap.y - 1 };
 	dropObject(posItems, world, true);

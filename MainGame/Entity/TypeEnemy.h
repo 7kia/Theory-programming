@@ -43,7 +43,6 @@ struct TypeEnemy
 	viewEnemy view;
 	converseEnemy converse;
 
-	dataSound *soundBase;
 	TypeItem typeItem;
 	int amountSlots;//TODO
 
@@ -55,8 +54,7 @@ struct TypeEnemy
 	objectDropItems drop;
 
 	void initCurrentItem(TypeItem *typesItem, int id);
-	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, dataSound &databaseSound,
-												 int amountEnemySlots);
+	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, int amountEnemySlots);
 };
 
-void initializeTypeEnemy(typesObjectsInWorld &types, dataSound &databaseSound);
+void initializeTypeEnemy(typesObjectsInWorld &types);

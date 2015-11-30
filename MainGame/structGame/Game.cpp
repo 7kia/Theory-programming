@@ -144,11 +144,13 @@ Game::Game()
 
 	initializeField(world.field);
 
+	::sounds = &world.databaseSound;
+
 	typesObjectsInWorld &types = world.typesObjects;
-	initializeTypesItem(types.typesItem, *world.listDestroy, databaseSound);
+	initializeTypesItem(types.typesItem, *world.listDestroy);
 	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
 
-	initializeTypeUnlifeObjects(types.typesUnlifeObject, databaseSound);
+	initializeTypeUnlifeObjects(types.typesUnlifeObject);
 	initializeUnlifeObjects(*world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
 
 	// TODO
@@ -158,10 +160,10 @@ Game::Game()
 
 	world.Enemys = new vector<Enemy>;
 
-	initializeTypeEnemy(types, databaseSound);
+	initializeTypeEnemy(types);
 	initializeEntitys(world);
 
-	initializeMainPerson(mainPerson, databaseSound, world.emptyObjects);
+	initializeMainPerson(mainPerson, world);
 	initializeHotKeys();
 
 	createTextsAndFonts(textGame);

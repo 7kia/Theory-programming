@@ -34,35 +34,6 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 }
 
 ////////////////////////////////////////////////////////////////////
-// Анимация и озвучка объектов НЕРАБОТАЕТ пока
-void UnlifeObject::update(const float deltaTime, dataSound &databaseSound)
-{
-	float pauseStep = 5, resetAnimation = 2;
-}
-
-void UnlifeObject::playSound(float time, float start, const int idSound)
-{
-	if (time == start) {
-		soundObject.setBuffer(typeObject->soundBase->soundBuffer[idSound]);
-
-		soundObject.setMinDistance(minDistanse / 2);
-		soundObject.setAttenuation(minDistanse + 1.f);
-
-		soundObject.play();
-		soundObject.setPosition(getXPos(), getYPos(), 0);
-	}
-}
-
-void UnlifeObject::resetTimeAnimation(float &time, float &reset)
-{
-	if (time > reset)
-	{
-		//time = 0;
-	}
-}
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
 // Вспомагательные функции
 float UnlifeObject::getXPos()
 {

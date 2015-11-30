@@ -28,7 +28,7 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 			xPos = 5;
 			yPos = 11;
 
-			addEnemy->EnemyInit(*types[countTypes], emptyItem, emptyObject, xPos, yPos, levelFloor);
+			addEnemy->EnemyInit(*types[countTypes], world, xPos, yPos, levelFloor);
 			world.Enemys->push_back(*addEnemy);
 
 		}
@@ -119,7 +119,7 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 
 			xTemp = xPos;
 			yTemp = yPos;
-			addEnemy->EnemyInit(*types[countTypes], emptyItem, emptyObject, xTemp, yTemp, levelFloor);
+			addEnemy->EnemyInit(*types[countTypes], world, xTemp, yTemp, levelFloor);
 
 			if(isPlaceForCreate(world, addEnemy, pos))
 			{
@@ -225,6 +225,7 @@ void initializeEntitys(world &world)// ƒŒ¡¿¬À≈Õ»≈ —”ŸÕŒ—“»
 	//////////////////////////////////////////////////////////////
 	Enemy* addEnemy = new Enemy();
 
+	
 	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
@@ -241,7 +242,7 @@ void initializeEntitys(world &world)// ƒŒ¡¿¬À≈Õ»≈ —”ŸÕŒ—“»
 	UnlifeObject &emptyObject = emptyObjects.emptyObject;
 	Enemy &emptyEnemy = emptyObjects.emptyEnemy;
 
-	emptyEnemy.EnemyInit(*typeEnemy, emptyItem, emptyObject, -1, -1, -1);//TODO
+	emptyEnemy.EnemyInit(*typeEnemy, world, -1, -1, -1);//TODO
 
 	delete addEnemy;
 
@@ -250,12 +251,14 @@ void initializeEntitys(world &world)// ƒŒ¡¿¬À≈Õ»≈ —”ŸÕŒ—“»
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // —Û˘ÌÓÒÚË
-void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject,
+void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 											int xPos, int yPos, int level)
 {
 	spriteEntity = new Sprite;
 
 	type = &typesEnemy;
+
+	soundBase = &world.databaseSound;
 
 	itemFromPanelQuickAccess = new Item;
 	itemFromPanelQuickAccess->setType(type->typeItem);
@@ -278,9 +281,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &empt
 	spriteEntity->setTextureRect(IntRect(0, 0, size.width, size.height));
 
 
-	soundBase = type->soundBase;
-
-	founds.init(&emptyItem, &emptyObject);
+	emptyObjects &emptyObjects = world.emptyObjects;
+	founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject);
 
 	// œÓÁËˆËˇ Ë Ì‡Ô‡‚ÎÂÌËÂ
 	currentLevelFloor = level;
@@ -383,15 +385,6 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 		breakItem(currentItem);
 	}
 
-	int idSound;
-	if (currentItem.typeItem->features.isCutting) {
-		idSound = idSoundEntity::metalPunchBody1Id;
-		playSound(0.f, 0.f, idSound);
-	}
-	else {
-		idSound = idSoundEntity::punchBody1Id;
-		playSound(0.f, 0.f, idSound);
-	}
 
 }
 

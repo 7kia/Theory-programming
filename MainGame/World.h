@@ -73,6 +73,9 @@ struct world
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
 
+	dataSound databaseSound;
+
+
 	int configVariable[idConfigVariable::amountId];
 
 	sf::Clock worldTime;

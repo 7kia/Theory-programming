@@ -9,7 +9,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // ќбъ€вление персонажа
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emptyObjects &emptyObjects)
+void initializeMainPerson(MainPerson &mainPerson, world &world)
 {
 	mainPerson.spriteEntity = new Sprite;
 	mainPerson.textureEntity = new Texture;
@@ -42,8 +42,9 @@ void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound, emp
 	//mainPerson.spriteEntity->setOrigin(mainPerson.size.width / 2, mainPerson.size.height / 2);
 
 
-	mainPerson.soundBase = &databaseSound;
+	mainPerson.soundBase = &world.databaseSound;
 
+	emptyObjects &emptyObjects = world.emptyObjects;
 	mainPerson.initFounds(emptyObjects.emptyItem, emptyObjects.emptyObject, emptyObjects.emptyEnemy);
 	emptyObjects.emptyEnemy.type->name;
 	// —оздайм и заполн€ем панель
@@ -142,20 +143,7 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	damage.inputDamage = int(cutDamage + crashDamage);
 	health.currentHealth -= damage.inputDamage;
 
-	damage.inputDamage = 0;// TODO
-
-	
-		int idSound;
-		if (itemEnemy.typeItem->features.isCutting) {
-			idSound = idSoundEntity::metalPunchBody1Id;
-			playSound(0.f, 0.f, idSound);
-		}
-		else {
-			idSound = idSoundEntity::punchBody1Id;
-			playSound(0.f, 0.f, idSound);
-		}
-	
-
+	damage.inputDamage = 0;// TODO	
 }
 
 void Enemy::EnemyDrop(world& world)
@@ -195,8 +183,6 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
-	String nameEnemy = findEnemy->type->name;
-	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 
 	bool isAtack = currenMode == idEntityMode::atack;
 	bool isEnemy = findEnemyFromList > -1;
@@ -245,15 +231,19 @@ void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 {
 	enemy.currenMode = idEntityMode::atack;
 
-	enemy.animation.currentTimeFightAnimation += deltaTime;
-	if (enemy.animation.currentTimeFightAnimation > enemy.animation.timeFightAnimation) {
-		enemy.animation.currentTimeFightAnimation = 0.f;
+	entityAnimation &animation = enemy.animation;
+
+	animation.currentTimeFightAnimation += deltaTime;
+	if (animation.currentTimeFightAnimation > animation.timeFightAnimation) {
+		animation.currentTimeFightAnimation = 0.f;
 
 		enemy.currenMode = idEntityMode::fight;
 		enemy.giveDamage = false;
 		givenForPersonDamage(enemy);
 
 		Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+
+		enemy.playAtackSound(itemEnemy);
 
 		itemEnemy.currentToughness -= 1;
 		if (itemEnemy.currentToughness < 1) {
@@ -267,10 +257,6 @@ void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 
 void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTime)
 {
-
-	Directions &directions = enemy.directions;
-	entityAnimation &animation = enemy.animation;
-
 	float radiuseView = enemy.type->view.radiuseView;
 	bool feelEnemy = enemy.type->view.feelEnemy;
 
@@ -434,9 +420,8 @@ void MainPerson::useItem(world &world,
 
 void MainPerson::playSoundChoiseItem()
 {
-	Vector2f posPerson = { getXPos(), getYPos() };
-	int id = idSoundEntity::itemChoiseSound;
-	::playSound(id, *soundBase, posPerson);
+	int id = idSoundPaths::itemChoiseIdSound;
+	::playGlobalSound(id, *soundBase);
 }
 
 ////////////////////////////////////////////////////////////////////

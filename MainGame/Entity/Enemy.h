@@ -14,8 +14,6 @@ public:
 	// Для направления взгляда
 	float rotation;
 
-	void initStepSounds();
-
 	// Для взаимодействия с миром
 	int currenMode;
 	Item *items;
@@ -31,7 +29,7 @@ public:
 	Enemy *emptyEnemy;
 	int findEnemyFromList;
 	///////////////////////////////////////////////////////
-	void EnemyInit(TypeEnemy &typesEnemy, Item &emptyItem, UnlifeObject &emptyObject, int xPos, int yPos, int level);
+	void EnemyInit(TypeEnemy &typesEnemy, world &world, int xPos, int yPos, int level);
 	void EnemyDrop(world &world);
 	~Enemy();
 

@@ -18,7 +18,7 @@ void Game::update(const float &deltaTime)
 
 void Game::updatePlayer(const float &deltaTime)
 {
-	mainPerson.update(deltaTime, databaseSound);
+	mainPerson.update(deltaTime);
 	mainPerson.updateAtack(world, deltaTime);
 	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
@@ -36,7 +36,7 @@ void Game::updateEntity(const float deltaTime)
 	vector<Enemy>& Enemys = *world.Enemys;
 	Field &field = world.field;
 	for (int i = 0; i < Enemys.size(); ++i) {
-		Enemys[i].update(deltaTime, databaseSound);
+		Enemys[i].update(deltaTime);
 		Enemys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
 		Enemys[i].interactionWithEntity(world.Enemys, i, deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);

@@ -30,8 +30,6 @@ public:
 	bool isDestroy;
 	int toughnessObject;
 
-	dataSound *soundBase;
-
 	redefineObject redefine;
 
 
@@ -43,8 +41,8 @@ public:
 	void defineToughness(bool canDestroy, int toughness);
 };
 
-void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);
-void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);
+void initTree(TypeUnlifeObject *typesUnlifeObjects);
+void initStones(TypeUnlifeObject *typesUnlifeObjects);
 void initEmpty(TypeUnlifeObject *typesUnlifeObjects);
 
-void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &databaseSound);
+void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects);

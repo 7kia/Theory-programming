@@ -63,19 +63,19 @@ public:
 	entityHungry hungry;
 	entityThirst thirst;
 	entityProtection protection;
-
-	void initStepSounds(dataSound& databaseSound);
-
 	void choceShiftUseItem(int &shiftX, int &shiftY, bool prickBlow);
 	void renderCurrentItem(sf::RenderWindow &window);
 
 	// Передвижение. Его анимация и озвучка
-	void update(const float deltaTime, dataSound &databaseSound);
-	void playAnimationWalk(const float deltaTime, dataSound & databaseSound);
-	void playAnimationAtack(const float deltaTime, dataSound & databaseSound);
-	void playSound(float time, float start, const int idSound);
+	void update(const float deltaTime);
+	void playAnimationWalk(const float deltaTime);
+	void playAnimationAtack(const float deltaTime);
+	void playSoundAfterTime(float time, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 
+	void playAtackSound(Item &currentItem);
+	void playBreakSound();
+	void playDropSound(sf::Vector2f pos);
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const float deltaTime);
@@ -86,6 +86,7 @@ public:
 																			//Вспомагательные функции
 	float getXPos();
 	float getYPos();
+	sf::Vector2f getPosition();
 
 	void choiceDirectionLook(int &xShift, int &yShift);
 	//////////////////////////////////////////////////////////////////////////////////////////vv
@@ -104,6 +105,7 @@ public:
 	void breakItem(Item &currentItem);
 
 	void dropObject(Vector2i pos, world &world, bool harvest);
+	void playDropSoundObject();
 
 	void run();
 	//////////////////////////////////////////////////////////////////////////////////////////

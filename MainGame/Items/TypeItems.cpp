@@ -8,18 +8,27 @@
 using namespace sf;
 using namespace std;
 
-void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list, dataSound &databaseSound)
+void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list)
 {
+	initStoneBlock(typesItem, list);
+	initWoodBlock(typesItem, list);
+	initSeadling(typesItem, list);
+	initGroundBlock(typesItem, list);
+	initWeapon(typesItem, list);
+	initTools(typesItem, list);
+	initFoods(typesItem, list);
+	initHaveWater(typesItem, list);
+	initEmptyItem(typesItem, list);
+}
 
-	////////////////////////////////////////////////v
-	// Переменные для записывания данных
+void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
 	TypeItem addType;
 
 	featuresItem featuresAddItem;
 	featuresSprite sizeMain;
 	idCreateObjects idCreated;
 	typeDamageItem damage;
-	destroyObjectsAndBlocks destriy;
 
 	int numberItem = idItem::stoneItem;
 
@@ -41,8 +50,40 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	typesItem[numberItem] = addType;
 	/////////////////////////////
-	// Доски
-	numberItem = idItem::planksBlockItem;
+	// Каменные кирпичи
+	numberItem = idItem::stoneBrickItem;
+
+	featuresAddItem.init("Stone brick", numberItem, idCategoryItem::block, false);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_BRICK, PIXEL_Y_STONE_BRICK);
+
+	damage.init(0, 10);
+
+	idCreated.init(idBlocks::stoneBrick, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 4;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
+	delete pathTexture;
+}
+
+void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
+
+	int numberItem = idItem::planksBlockItem;
 
 	featuresAddItem.init("Planks", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
@@ -59,8 +100,108 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	typesItem[numberItem] = addType;
 	/////////////////////////////
-	// Земля
-	numberItem = idItem::dirtItem;
+	// Деревянная лестница
+	numberItem = idItem::woodLadderItem;
+
+	featuresAddItem.init("Wood ladder", numberItem, idCategoryItem::block, false);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_LADDER, PIXEL_Y_WOOD_LADDER);
+
+	damage.init(0, 4);
+
+	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 4;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Дубовое бревно
+	numberItem = idItem::logOakItem;
+
+	featuresAddItem.init("Log", numberItem, idCategoryItem::block, false);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_LOG_OAK, PIXEL_Y_LOG_OAK);
+
+	damage.init(1, 5);
+
+	idCreated.init(idBlocks::logOak, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 4;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
+	delete pathTexture;
+}
+
+void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
+
+	int numberItem = idItem::seadlingOakItem;
+
+	featuresAddItem.init("Seadling oak", numberItem, idCategoryItem::unlifeObject, false);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_OAK_ITEM, PIXEL_Y_SEADLING_OAK_ITEM);
+
+	damage.init(1, 1);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::oakSeadling);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Саженец дуба
+	numberItem = idItem::seadlingApple;
+
+	featuresAddItem.init("Seadling apple", numberItem, idCategoryItem::unlifeObject, false);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_APPLE_ITEM, PIXEL_Y_SEADLING_APPLE_ITEM);
+
+	damage.init(1, 1);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::appleSeadling);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
+	delete pathTexture;
+}
+
+void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
+
+	int numberItem = idItem::dirtItem;
 
 	featuresAddItem.init("Dirt block", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
@@ -112,180 +253,151 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Деревянная лестница
-	numberItem = idItem::woodLadderItem;
 
-	featuresAddItem.init("Wood ladder", numberItem, idCategoryItem::block, false);
-	featuresAddItem.defineToughness(false, 1);
+	delete pathTexture;
+}
 
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_LADDER, PIXEL_Y_WOOD_LADDER);
+void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
 
-	damage.init(0, 4);
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
 
-	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
 
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
+	int numberItem = idItem::stoneKnifeItem;
 
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Каменные кирпичи
-	numberItem = idItem::stoneBrickItem;
+	featuresAddItem.init("Stone knife", numberItem, idCategoryItem::weapon, true);
+	featuresAddItem.defineToughness(true, 128);
 
-	featuresAddItem.init("Stone brick", numberItem, idCategoryItem::block, false);
-	featuresAddItem.defineToughness(false, 1);
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_KNIFE, PIXEL_Y_STONE_KNIFE);
 
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_BRICK, PIXEL_Y_STONE_BRICK);
-
-	damage.init(0, 10);
-
-	idCreated.init(idBlocks::stoneBrick, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Дубовое бревно
-	numberItem = idItem::logOakItem;
-
-	featuresAddItem.init("Log oak", numberItem, idCategoryItem::block, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_LOG_OAK, PIXEL_Y_LOG_OAK);
-
-	damage.init(1, 5);
-
-	idCreated.init(idBlocks::logOak, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// Саженцы
-
-	/////////////////////////////
-	// Саженец дуба
-	numberItem = idItem::seadlingOakItem;
-
-	featuresAddItem.init("Seadling oak", numberItem, idCategoryItem::unlifeObject, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_OAK_ITEM, PIXEL_Y_SEADLING_OAK_ITEM);
-
-	damage.init(1, 1);
-
-	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::oakSeadling);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Саженец дуба
-	numberItem = idItem::seadlingApple;
-
-	featuresAddItem.init("Seadling apple", numberItem, idCategoryItem::unlifeObject, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_APPLE_ITEM, PIXEL_Y_SEADLING_APPLE_ITEM);
-
-	damage.init(1, 1);
-
-	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::appleSeadling);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// Напитки и сосуды
-
-	/////////////////////////////
-	// Деревянное ведро
-	numberItem = idItem::woodBukketItem;
-
-	featuresAddItem.init("Wood bukket", numberItem, idCategoryItem::bukketEmpty, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET, PIXEL_Y_WOOD_BUKKET);
-
-	damage.init(0, 3);
-
-	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Деревянное ведро с водой
-	numberItem = idItem::woodBukketWithWaterItem;
-
-	featuresAddItem.init("Wood bukket with water", numberItem, idCategoryItem::bukketWithWater, false);
-	featuresAddItem.defineToughness(false, 20);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET_WITH_WATER, PIXEL_Y_WOOD_BUKKET_WITH_WATER);
-
-	damage.init(0, 4);
-
-	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Стеклянная бытылка
-	numberItem = idItem::glassBottleItem;
-
-	featuresAddItem.init("Glass bottle", numberItem, idCategoryItem::bottleEmpty, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE, PIXEL_Y_GLASS_BOTTLE);
-
-	damage.init(0, 2);
-
-	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Стеклянная бытылка с водой
-	numberItem = idItem::glassbukketWithWater;
-
-	featuresAddItem.init("Glass bottle with water", numberItem, idCategoryItem::bottleWithWater, false);
-	featuresAddItem.defineToughness(false, 5);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE_WITH_WATER, PIXEL_Y_GLASS_BOTTLE_WITH_WATER);
-
-	damage.init(0, 2);
+	damage.init(18, 1);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
-	addType.maxAmount = 16;
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Деревянная дубина
+	numberItem = idItem::woodClubItem;
+
+	featuresAddItem.init("Wood club", numberItem, idCategoryItem::weapon, false);
+	featuresAddItem.defineToughness(true, 128);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_CLUB, PIXEL_Y_WOOD_CLUB);
+
+	damage.init(0, 18);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
+	delete pathTexture;
+}
+
+void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
+
+	int numberItem = idItem::ironBackHoerIte;
+
+	featuresAddItem.init("Iron backhoe", numberItem, idCategoryItem::backhoe, false);
+	featuresAddItem.defineToughness(true, 512);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_BACKHOE, PIXEL_Y_IRON_BACKHOE);
+
+	damage.init(1, 10);
+
+	addType.destroy.init(&list.backoeBreakingObject, &list.backoeBreakingBlock);
+
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
 	/////////////////////////////////////////////////////////
-	// Еда
+	// Кирки
+	// Каменная кирка
+	numberItem = idItem::stonePickaxItem;
 
-	/////////////////////////////////////
-	// Гриб
-	numberItem = idItem::mushroomItem;
+	featuresAddItem.init("Stone pickax", numberItem, idCategoryItem::pickax, false);
+	featuresAddItem.defineToughness(true, 128);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_PICKAX, PIXEL_Y_STONE_PICKAX);
+
+	damage.init(10, 6);
+
+	addType.destroy.init(&list.pickaxBreakingObject, &list.pickaxBreakingBlock);
+
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////////////////////////////////
+	// Топоры
+
+	/////////////////////////////
+	// Каменный топор
+	numberItem = idItem::stoneAxeItem;
+
+	featuresAddItem.init("Stone axe", numberItem, idCategoryItem::axe, false);
+	featuresAddItem.defineToughness(true, 128);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_AXE, PIXEL_Y_STONE_AXE);
+
+	damage.init(8, 8);
+
+	addType.destroy.init(&list.axeBreakingObject, &list.axeBreakingBlock);
+
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
+	delete pathTexture;
+}
+
+void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
+
+	int numberItem = idItem::mushroomItem;
 
 	featuresAddItem.init("Mushroom", numberItem, idCategoryItem::food, false);
 	featuresAddItem.defineToughness(false, 4);
@@ -355,122 +467,25 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// Мечи
 
-	/////////////////////////////
-	// Каменный нож
-	numberItem = idItem::stoneKnifeItem;
+	delete pathTexture;
+}
 
-	featuresAddItem.init("Stone knife", numberItem, idCategoryItem::weapon, true);
-	featuresAddItem.defineToughness(true, 128);
+void initEmptyItem(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	////////////////////////////////////////////////v
+	// Переменные для записывания данных
+	TypeItem addType;
 
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_KNIFE, PIXEL_Y_STONE_KNIFE);
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
 
-	damage.init(18, 1);
+	int numberItem = idItem::emptyItem;
 
-	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 1;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// Дубины
-
-	/////////////////////////////
-	// Деревянная дубина
-	numberItem = idItem::woodClubItem;
-
-	featuresAddItem.init("Wood club", numberItem, idCategoryItem::weapon, false);
-	featuresAddItem.defineToughness(true, 128);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_CLUB, PIXEL_Y_WOOD_CLUB);
-
-	damage.init(0, 18);
-
-	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 1;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// Лопаты
-
-	/////////////////////////////
-	// Железная лопата
-	numberItem = idItem::ironBackHoerIte;
-
-	featuresAddItem.init("Iron backhoe", numberItem, idCategoryItem::backhoe, false);
-	featuresAddItem.defineToughness(true, 512);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_BACKHOE, PIXEL_Y_IRON_BACKHOE);
-
-	damage.init(1, 10);
-
-	addType.destroy.init(&list.backoeBreakingObject, &list.backoeBreakingBlock);
-
-	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 1;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// Кирки
-
-	/////////////////////////////
-	// Каменная кирка
-	numberItem = idItem::stonePickaxItem;
-
-	featuresAddItem.init("Stone pickax", numberItem, idCategoryItem::pickax, false);
-	featuresAddItem.defineToughness(true, 128);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_PICKAX, PIXEL_Y_STONE_PICKAX);
-
-	damage.init(10, 6);
-
-	addType.destroy.init(&list.pickaxBreakingObject, &list.pickaxBreakingBlock);
-
-	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 1;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// Топоры
-
-	/////////////////////////////
-	// Каменный топор
-	numberItem = idItem::stoneAxeItem;
-
-	featuresAddItem.init("Stone axe", numberItem, idCategoryItem::axe, false);
-	featuresAddItem.defineToughness(true, 128);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_AXE, PIXEL_Y_STONE_AXE);
-
-	damage.init(8, 8);
-
-	addType.destroy.init(&list.axeBreakingObject, &list.axeBreakingBlock);
-
-	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
-
-	addType.maxAmount = 1;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain, idCreated, damage);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////////////////////////
-	// ДОБАВЛЕНИЕ ПРЕДМЕТА
-	/////////////////////////////
-	// Пустой предмет( нужен для работы с инвентарём
-	numberItem = idItem::emptyItem;
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
 
 	featuresAddItem.init("Empty", numberItem, idCategoryItem::other, false);
 	featuresAddItem.defineToughness(false, 1);
@@ -487,6 +502,98 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list,
 
 	typesItem[numberItem] = addType;
 	/////////////////////////////
+	delete pathTexture;
+}
+
+void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+	idCreateObjects idCreated;
+	typeDamageItem damage;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::items];
+
+	int numberItem = idItem::woodBukketItem;
+
+	/////////////////////////////////////////////////////////
+	// Напитки и сосуды
+
+	/////////////////////////////
+	// Деревянное ведро
+
+	featuresAddItem.init("Wood bukket", numberItem, idCategoryItem::bukketEmpty, false);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET, PIXEL_Y_WOOD_BUKKET);
+
+	damage.init(0, 3);
+
+	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 4;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Деревянное ведро с водой
+	numberItem = idItem::woodBukketWithWaterItem;
+
+	featuresAddItem.init("Wood bukket with water", numberItem, idCategoryItem::bukketWithWater, false);
+	featuresAddItem.defineToughness(false, 20);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET_WITH_WATER, PIXEL_Y_WOOD_BUKKET_WITH_WATER);
+
+	damage.init(0, 4);
+
+	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 4;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Стеклянная бытылка
+	numberItem = idItem::glassBottleItem;
+
+	featuresAddItem.init("Glass bottle", numberItem, idCategoryItem::bottleEmpty, false);
+	featuresAddItem.defineToughness(false, 1);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE, PIXEL_Y_GLASS_BOTTLE);
+
+	damage.init(0, 2);
+
+	idCreated.init(idBlocks::water, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Стеклянная бытылка с водой
+	numberItem = idItem::glassbukketWithWater;
+
+	featuresAddItem.init("Glass bottle with water", numberItem, idCategoryItem::bottleWithWater, false);
+	featuresAddItem.defineToughness(false, 5);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE_WITH_WATER, PIXEL_Y_GLASS_BOTTLE_WITH_WATER);
+
+	damage.init(0, 2);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
 	delete pathTexture;
 }
 

@@ -49,6 +49,5 @@ private:
 
 };
 
-void initializeMainPerson(MainPerson & mainPerson, dataSound &databaseSound,
-													emptyObjects &emptyObjects);
+void initializeMainPerson(MainPerson &mainPerson, world &world);
 

@@ -59,6 +59,7 @@ struct Game
 	TextGame textGame;
 
 	Keyboard::Key keys[hotKeys::amountKeys];
+
 	MainPerson mainPerson;
 
 	world world;
@@ -68,8 +69,6 @@ struct Game
 	float maxTimeWalk = 12.f;// TODO
 
 	sf::Clock clock;
-
-	dataSound databaseSound;
 
 	unsigned int widthMainWindow = DEFAULT_WIDTH_WINDOW;
 	unsigned int heightMainWindow = DEFAULT_HEIGHT_WINDOW;
