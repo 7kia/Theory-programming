@@ -3,7 +3,7 @@
 using namespace sf;
 
 
-void dataSound::initSound(int id, const sf::String *paths, float start)
+void dataSound::initSound(int id, const std::string *paths, float start)
 {
 	soundBuffer[id].loadFromFile(paths[id]);
 	startSounds[id] = start;
@@ -24,6 +24,12 @@ dataSound::dataSound()
 
 	initSound(chopp1Sound, soundPaths, 0.f);
 	initSound(treeDropSound, soundPaths, 0.f);
+	initSound(forage1Sound, soundPaths, 0.f);
+
+	initSound(hitGroundSound, soundPaths, 0.f);
+	initSound(hitSandSound, soundPaths, 0.f);
+	initSound(hitStoneSound, soundPaths, 0.f);
+
 }
 
 void playGlobalSound(const int idSound, dataSound &soundBase)
@@ -31,7 +37,6 @@ void playGlobalSound(const int idSound, dataSound &soundBase)
 	sf::Sound &globalSound = soundBase.globalSound;
 
 	globalSound.setBuffer(soundBase.soundBuffer[idSound]);
-
 	globalSound.play();	
 
 }
@@ -41,5 +46,5 @@ void playSound(const int idSound, dataSound& soundBase, sf::Sound &sound, sf::Ve
 	sound.setBuffer(soundBase.soundBuffer[idSound]);
 
 	sound.play();
-	sound.setPosition(pos.x, pos.y, 0);
+	sound.setPosition(pos.x, pos.y, 1);
 }

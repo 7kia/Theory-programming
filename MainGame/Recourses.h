@@ -31,7 +31,11 @@ typedef enum {
 	chopp1Sound,
 	treeDropSound,
 	forage1Sound,
-	hitGroundSound
+
+	hitGroundSound,
+	hitSandSound,
+	hitStoneSound,
+
 	amountSoundSound
 } idSoundPaths;
 
@@ -50,20 +54,25 @@ const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 	"recourses\\images\\things\\Items.png"
 };
 
-const sf::String soundPaths[idSoundPaths::amountSoundSound]
+const std::string pathToSounds = "recourses\\sounds";
+const std::string soundPaths[idSoundPaths::amountSoundSound]
 {
 	"recourses\\sounds\\step\\grass1.ogg",
 	"recourses\\sounds\\step\\stone1.ogg",
 	"recourses\\sounds\\drop_1.ogg",
-	"recourses\\sounds\\punch_body1.ogg",
-	"recourses\\sounds\\metal_punch_body1.ogg",
+	"recourses\\sounds\\breaking\\punch_body1.ogg",
+	"recourses\\sounds\\breaking\\metal_punch_body1.ogg",
 	"recourses\\sounds\\luggage1.ogg",
 	"recourses\\sounds\\item_choose.ogg",
 	"recourses\\sounds\\skeleton_death.ogg",
 
-	"recourses\\sounds\\chopper1.ogg",
-	"recourses\\sounds\\wood_drop1.ogg",
-	"recourses\\sounds\\forage1.ogg"
+	"recourses\\sounds\\breaking\\chopper1.ogg",
+	"recourses\\sounds\\breaking\\wood_drop1.ogg",
+	"recourses\\sounds\\breaking\\forage1.ogg",
+
+	"recourses\\sounds\\breaking\\hit_ground_1.ogg",
+	"recourses\\sounds\\breaking\\hit_sand_1.ogg",
+	"recourses\\sounds\\breaking\\hit_stone_1.ogg"
 
 
 	

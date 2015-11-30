@@ -218,7 +218,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 				giveDamage = false;
 				findEnemy->takeDamage(damage, currentItem);
 
-				
+				playAtackSound(currentItem);
 			}
 
 		}

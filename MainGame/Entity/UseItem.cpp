@@ -239,7 +239,7 @@ void Entity::breakItem(Item &currentItem)
 	}
 }
 
-void Entity::playDropSoundObject()
+void Entity::playObjectDropSoundObject()
 {
 	UnlifeObject &findObject = *founds.findObject;
 	TypeUnlifeObject &typeObject = *findObject.typeObject;
@@ -311,7 +311,7 @@ void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 	}
 	else
 	{
-		playDropSoundObject();
+		playObjectDropSoundObject();
 	}
 }
 
@@ -328,6 +328,7 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 	vector<wchar_t> &listBlocks = *currentItem.typeItem->destroy.blocks;
 	vector<String> &listObjects = *currentItem.typeItem->destroy.objects;
 
+	int idNature;
 	bool isObject = founds.findObject != founds.emptyObject;
 	if (isObject) {
 
@@ -339,7 +340,8 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 			toughnessObject -= damageItem.cuttingDamage;
 			toughnessObject -= damageItem.crushingDamage;
 
-			playBreakSound();
+			idNature = founds.findObject->typeObject->idNature;
+			playObjectBreakSound(idNature);
 
 
 			if (toughnessObject < 1) {
@@ -356,7 +358,10 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 		}
 	} else if (isInListBlocks(*block, listBlocks)) {
 
-		dropBlock(world, pos, level);
+		idNature = field.idsNature[field.findIdBlock(*block)];
+		playObjectBreakSound(idNature);
+		Vector3i posDrop = { x, y, level };
+		dropBlock(world, posDrop, currentLevelFloor + 1);
 
 		*block = field.charBlocks[idBlocks::air];
 
@@ -445,8 +450,9 @@ void Entity::actionMain(world &world, Vector2f pos)
 		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], listDestroy.ladder)) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
+			Vector2f posCurrent = { float(x * SIZE_BLOCK + posOrigin.x), float(y * SIZE_BLOCK + posOrigin.y) };
 
-			spriteEntity->setPosition(x * SIZE_BLOCK + posOrigin.x, y * SIZE_BLOCK + posOrigin.y);
+			spriteEntity->setPosition(posCurrent.x, posCurrent.y);
 			currentLevelFloor += 1;
 
 		} else if (isInListObjects(listDestroy.harvestObjects))

@@ -142,19 +142,22 @@ Game::Game()
 
 	window.create(VideoMode(widthMainWindow, heightMainWindow), TITLE_PROGRAM);
 
+
 	initializeField(world.field);
 
 	::sounds = &world.databaseSound;
 
 	typesObjectsInWorld &types = world.typesObjects;
-	initializeTypesItem(types.typesItem, *world.listDestroy);
-	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
 
 	initializeTypeUnlifeObjects(types.typesUnlifeObject);
 	initializeUnlifeObjects(*world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
 
-	// TODO
 	initializeCategorysBreakingObject();
+
+	initializeTypesItem(types.typesItem, *world.listDestroy);
+	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
+
+	// TODO
 
 	loadConfig();
 
@@ -278,7 +281,7 @@ void Game::initializeCategorysBreakingObject()
 	/////////////////////////////////////////////////////////////////////////
 	// Блоки уничтожаемые киркой
 	listObjects = &listDestroy.pickaxBreakingObject;
-	listBlocks = &listDestroy.passableBlocks;
+	listBlocks = &listDestroy.pickaxBreakingBlock;
 
 	listBlocks->push_back(charBlocks[idBlocks::stone]);
 	listBlocks->push_back(charBlocks[idBlocks::stoneBrick]);

@@ -74,8 +74,8 @@ public:
 	void resetTimeAnimation(float &time, float &reset);
 
 	void playAtackSound(Item &currentItem);
-	void playBreakSound();
-	void playDropSound(sf::Vector2f pos);
+	void playObjectBreakSound(int idNature);
+	void playObjectDropSound(sf::Vector2f pos);
 	// Взаимодейтсвие с миром
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const float deltaTime);
@@ -105,7 +105,7 @@ public:
 	void breakItem(Item &currentItem);
 
 	void dropObject(Vector2i pos, world &world, bool harvest);
-	void playDropSoundObject();
+	void playObjectDropSoundObject();
 	void playHarvestSoundObject();
 	void run();
 	//////////////////////////////////////////////////////////////////////////////////////////

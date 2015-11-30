@@ -40,4 +40,4 @@ private:
 
 void initializeItems(std::vector<Item> &items, TypeItem *typesItem, Item &emptyItem);
 
-void dropBlock(world &world, sf::Vector3i pos, int level);
+void dropBlock(world &world, sf::Vector3i &pos, int level);

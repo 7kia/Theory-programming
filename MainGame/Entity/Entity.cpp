@@ -348,20 +348,28 @@ void Entity::playAtackSound(Item &currentItem)
 
 }
 
-void Entity::playBreakSound()
+void Entity::playObjectBreakSound(int idNature)
 {
-	TypeUnlifeObject &typeObject = *founds.findObject->typeObject;
 	Vector2f posUse = getPosition();
-	switch (typeObject.idNature) {
+	switch (idNature) {
 	case idNatureObject::woodNature:
 		playSound(chopp1Sound, *soundBase, soundEntity, posUse);
+		break;
+	case idNatureObject::stoneNature:
+		playSound(hitStoneSound, *soundBase, soundEntity, posUse);
+		break;
+	case idNatureObject::sandNature:
+		playSound(hitSandSound, *soundBase, soundEntity, posUse);
+		break;
+	case idNatureObject::groundNature:
+		playSound(hitGroundSound, *soundBase, soundEntity, posUse);
 		break;
 	default:
 		break;
 	}
 }
 
-void Entity::playDropSound(sf::Vector2f pos)
+void Entity::playObjectDropSound(sf::Vector2f pos)
 {
 	int idSound = idSoundPaths::drop1Sound;
 	playSound(idSound, *soundBase, soundEntity, pos);
@@ -768,7 +776,7 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		items.push_back(*addItem);
 		delete addItem;
 
-		playDropSound(posHero);
+		playObjectDropSound(posHero);
 
 		itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
 	}

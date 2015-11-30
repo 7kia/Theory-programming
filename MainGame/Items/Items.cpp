@@ -4,7 +4,7 @@
 using namespace sf;
 using namespace std;
 
-void dropBlock(world &world, Vector3i pos, int level)
+void dropBlock(world &world, Vector3i &pos, int level)
 {
 	vector<Item> &items = *world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
@@ -12,10 +12,10 @@ void dropBlock(world &world, Vector3i pos, int level)
 
 	Item* addItem = new Item;
 
-	wchar_t &block = field.dataMap[pos.z][pos.y][pos.z];
+	wchar_t &block = field.dataMap[pos.z][pos.y][pos.x];
 
 	addItem->setType(typesItems[field.findIdBlock(block)]);
-	addItem->setPosition(pos.x + 1, pos.y + 1, pos.z + 1);
+	addItem->setPosition(pos.x + 1, pos.y + 1, level);
 	items.push_back(*addItem);
 
 	delete addItem;

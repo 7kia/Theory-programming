@@ -7,6 +7,7 @@ using namespace std;
 void initializeField(Field & field)
 {
 	field.charBlocks = new wchar_t[NUMBER_TYPE_BLOCKS];
+	field.idsNature = new int[NUMBER_TYPE_BLOCKS];
 	field.coordinateBloks = new int[NUMBER_TYPE_BLOCKS][NUMBER_COORDINATES];
 
 	field.BLOCK_SIZE = SIZE_BLOCK;
@@ -52,47 +53,64 @@ void Field::initializeDataBlocks()
 	charBlocks[idBlocks::grass] = u'\x010';
 	coordinateBloks[idBlocks::grass][0] = 0;
 	coordinateBloks[idBlocks::grass][1] = 0;
-
+	idsNature[idBlocks::grass] = idNatureObject::groundNature;
 
 	charBlocks[idBlocks::dirt] = u'\x011';
 	coordinateBloks[idBlocks::dirt][0] = 0;
 	coordinateBloks[idBlocks::dirt][1] = BLOCK_SIZE;
+	idsNature[idBlocks::dirt] = idNatureObject::groundNature;
+
 
 	charBlocks[idBlocks::stone] = u'\x012';
 	coordinateBloks[idBlocks::stone][0] = 0;
 	coordinateBloks[idBlocks::stone][1] = BLOCK_SIZE * 2;
+	idsNature[idBlocks::stone] = idNatureObject::stoneNature;
+
 
 	charBlocks[idBlocks::sand] = u'\x013';
 	coordinateBloks[idBlocks::sand][0] = 0;
 	coordinateBloks[idBlocks::sand][1] = BLOCK_SIZE * 3;
+	idsNature[idBlocks::sand] = idNatureObject::sandNature;
+
 
 	charBlocks[idBlocks::water] = u'\x014';
 	coordinateBloks[idBlocks::water][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::water][1] = 0;
+	idsNature[idBlocks::water] = idNatureObject::waterNature;
 
 	charBlocks[idBlocks::logOak] = u'\x015';
 	coordinateBloks[idBlocks::logOak][0] = BLOCK_SIZE * 3;
 	coordinateBloks[idBlocks::logOak][1] = 0;
+	idsNature[idBlocks::logOak] = idNatureObject::woodNature;
+
 
 	charBlocks[idBlocks::planksBlock] = u'\x016';
 	coordinateBloks[idBlocks::planksBlock][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::planksBlock][1] = 0;
+	idsNature[idBlocks::planksBlock] = idNatureObject::woodNature;
+
 
 	charBlocks[idBlocks::stoneBrick] = u'\x017';
 	coordinateBloks[idBlocks::stoneBrick][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::stoneBrick][1] = BLOCK_SIZE * 2;
+	idsNature[idBlocks::stoneBrick] = idNatureObject::stoneNature;
 
 
 	charBlocks[idBlocks::woodLadder] = u'\x018';
 	coordinateBloks[idBlocks::woodLadder][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::woodLadder][1] = BLOCK_SIZE;
+	idsNature[idBlocks::woodLadder] = idNatureObject::woodNature;
 
 	charBlocks[idBlocks::borderBlock] = u'\x019';
 	coordinateBloks[idBlocks::borderBlock][0] = BLOCK_SIZE * 6;
 	coordinateBloks[idBlocks::borderBlock][1] = BLOCK_SIZE * 7;
+	idsNature[idBlocks::borderBlock] = idNatureObject::stoneNature;
+
 
 	coordinateBloks[idBlocks::unknow][0] = BLOCK_SIZE * 7;
 	coordinateBloks[idBlocks::unknow][1] = BLOCK_SIZE * 7;
+	idsNature[idBlocks::unknow] = idNatureObject::stoneNature;
+
 
 }
 //////////////////////////////////////////////////////////////////////

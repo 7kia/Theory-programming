@@ -28,6 +28,7 @@ struct Field
 
 	wchar_t (*dataMap)[LONG_MAP][WIDTH_MAP];// Карта
 	int countBlocks = 0;
+	int (*idsNature);
 	wchar_t (*charBlocks);// символьное обозначение блоков
 	int (*coordinateBloks)[NUMBER_COORDINATES];// текстурные координаты
 	//const sf::String (*nameBlocks) = namesBlocks;

@@ -14,7 +14,7 @@ struct dataSound
 	sf::Sound globalSound;
 
 	dataSound();
-	void initSound(int id, const sf::String *paths, float start);
+	void initSound(int id, const std::string *paths, float start);
 };
 
 static dataSound *sounds;
