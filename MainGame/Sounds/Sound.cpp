@@ -33,6 +33,7 @@ void playGlobalSound(const int idSound, dataSound &soundBase)
 	globalSound.setBuffer(soundBase.soundBuffer[idSound]);
 
 	globalSound.play();	
+
 }
 
 void playSound(const int idSound, dataSound& soundBase, sf::Sound &sound, sf::Vector2f pos)

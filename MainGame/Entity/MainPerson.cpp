@@ -421,7 +421,7 @@ void MainPerson::useItem(world &world,
 void MainPerson::playSoundChoiseItem()
 {
 	int id = idSoundPaths::itemChoiseIdSound;
-	::playGlobalSound(id, *soundBase);
+	::playSound(id, *soundBase, soundEntity, getPosition());
 }
 
 ////////////////////////////////////////////////////////////////////

@@ -30,6 +30,8 @@ typedef enum {
 
 	chopp1Sound,
 	treeDropSound,
+	forage1Sound,
+	hitGroundSound
 	amountSoundSound
 } idSoundPaths;
 
@@ -60,7 +62,8 @@ const sf::String soundPaths[idSoundPaths::amountSoundSound]
 	"recourses\\sounds\\skeleton_death.ogg",
 
 	"recourses\\sounds\\chopper1.ogg",
-	"recourses\\sounds\\wood_drop1.ogg"
+	"recourses\\sounds\\wood_drop1.ogg",
+	"recourses\\sounds\\forage1.ogg"
 
 
 	

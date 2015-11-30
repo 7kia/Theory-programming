@@ -59,5 +59,6 @@ typedef enum
 {
 	woodNature,
 	stoneNature,
-	dirtNature
+	dirtNature,
+	sandNature
 } idNatureObject;

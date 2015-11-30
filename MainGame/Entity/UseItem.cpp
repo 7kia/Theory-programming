@@ -253,6 +253,20 @@ void Entity::playDropSoundObject()
 	}
 }
 
+void Entity::playHarvestSoundObject()
+{
+	UnlifeObject &findObject = *founds.findObject;
+	TypeUnlifeObject &typeObject = *findObject.typeObject;
+
+	switch (typeObject.idNature) {
+	case idNatureObject::woodNature:
+		playSound(forage1Sound, *soundBase, soundEntity, getPosition());
+		break;
+	default:
+		break;
+	}
+}
+
 void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 {
 	//////////////////////////////////////////////////
@@ -291,7 +305,14 @@ void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 	}
 	delete addItem;
 	
-	playDropSoundObject();
+	if(harvest)
+	{
+		playHarvestSoundObject();	
+	}
+	else
+	{
+		playDropSoundObject();
+	}
 }
 
 void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {

@@ -106,7 +106,7 @@ public:
 
 	void dropObject(Vector2i pos, world &world, bool harvest);
 	void playDropSoundObject();
-
+	void playHarvestSoundObject();
 	void run();
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);

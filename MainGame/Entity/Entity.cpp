@@ -200,6 +200,8 @@ void entityThirst::update(const float deltaTime, bool &needMinusHealth)
 void Entity::update(const float deltaTime)
 {
 
+	soundEntity.setPosition(getXPos(), getYPos(), 1.f);
+
 	if (currenMode == idEntityMode::atack) {
 		animation.updateFight(deltaTime, giveDamage);
 	}
