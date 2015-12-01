@@ -2,11 +2,27 @@
 #include "Animation.h"
 
 using namespace sf;
+using namespace std;
 
-
-void blockConstuction::resetCountCircle()
+void variablesFirstStep::reset()
 {
-	countCircle = 0;
+	idBlock = 0;
+	angleBreak = 0.f;
+	countRotations = 0;
+}
+
+void variablesSecondStep::reset()
+{
+	idDirection = 0;
+	direction = directions[idDirection];
+	timeMove = 0.f;
+	zoomPlus = true;
+}
+
+void stateColor::init(float time, bool increase)
+{
+	timeUpdate = time;
+	needIncrease = increase;
 }
 
 blockConstuction::blockConstuction()
@@ -22,21 +38,8 @@ blockConstuction::blockConstuction()
 	}
 
 	setOrigin();
-
-	conditionFirstStep = false;
-
-	Vector2f direction = { shift, shift / 2 };
-	directions.push_back(direction);
-	direction = { -shift, -shift / 2 };
-	directions.push_back(direction);
-	direction = { -shift / 3, -shift / 3 };
-	directions.push_back(direction);
-	direction = { -shift, shift };
-	directions.push_back(direction);
-	direction = { shift, -shift };
-	directions.push_back(direction);
-	direction = { shift / 3, shift / 3 };
-	directions.push_back(direction);
+	defineDirectionsMove();
+	defineUpdateColor();
 }
 
 void blockConstuction::setOrigin()
@@ -45,9 +48,47 @@ void blockConstuction::setOrigin()
 	float shiftStartPosition = -(DEFAULT_SIZE_BLOCK.y + DISTANSE_BETWEEN_BLOCKS) * (AMOUNT_BLOCKS / 2);
 	for (int i = 0; i < AMOUNT_BLOCKS; i++) {
 		yPosition = shiftStartPosition + (DEFAULT_SIZE_BLOCK.y + DISTANSE_BETWEEN_BLOCKS) * i;
-
 		block[i].setOrigin(DEFAULT_SIZE_BLOCK.x / 2 + shiftOrigin.x, yPosition + DEFAULT_SIZE_BLOCK.y / 2 + shiftOrigin.y);
+	}
+}
 
+void blockConstuction::defineDirectionsMove()
+{
+	float shift = variablesSecond.shift;
+	Vector2f &direction = variablesSecond.direction;
+	vector<Vector2f> &directions = variablesSecond.directions;
+
+
+	Vector2f dir = { shift / 2, 0 };
+	directions.push_back(dir);
+
+	dir = { -shift * 0.75f, -shift / 4 };
+	directions.push_back(dir);
+	dir = { -shift * 0.75f, shift / 4 };
+	directions.push_back(dir);
+	dir = { shift * 0.75f, shift / 4 };
+	directions.push_back(dir);
+	dir = { shift * 0.75f, -shift / 4 };
+	directions.push_back(dir);
+
+	dir = { -shift / 2, 0 };
+	directions.push_back(dir);
+
+	direction = directions[0];
+}
+
+void blockConstuction::defineStepAnimation(float deltaTime)
+{
+	if (doFirstStep) {
+		firstStep(deltaTime);
+	}
+	else if (doSecondStep) {
+		secondStep(deltaTime);
+		clockingBlocks();
+	}
+	else
+	{
+		thirdStep();
 	}
 }
 
@@ -56,88 +97,125 @@ void blockConstuction::updatePosition()
 	Vector2f posFirst = block[0].getPosition();
 	for (int i = 1; i < AMOUNT_BLOCKS; i++) {
 		block[i].setPosition(posFirst);
-
 	}
 }
 
-void blockConstuction::update(float &deltaTime)
+void blockConstuction::clockingBlocks()
 {
-	if (conditionFirstStep) {
-		firstStep(deltaTime);
-		conditionFirstStep = countCircle < 8;
-
-	}
-	else if(doSecondStep)
-	{
-		
-		secondStep(deltaTime);
-	}
-
-	updatePosition();
-
-	Vector2f posPrevious;
 	trasformation transformPrevious;
 	for (int i = 1; i < AMOUNT_BLOCKS; i++) {
-		posPrevious = block[i - 1].getPosition();
-
 		transformPrevious.rotate = block[i - 1].getRotation();
 		transformPrevious.scale = block[i - 1].getScale();
 
 		block[i].setRotation(transformPrevious.rotate);
 		block[i].setScale(transformPrevious.scale);
-		//block[i].setRotation(transformPrevious.g);
-		//block[i].getTransform();
-		//block[i].setPosition(CENTER_WINDOW.x, yPosition);
 	}
 }
 
-void blockConstuction::updateColors(float &deltaTime)
+void blockConstuction::update(float deltaTime)
+{
+	defineStepAnimation(deltaTime);
+	updatePosition();
+}
+
+void blockConstuction::scaleConstruction()
+{
+	float &currentScale = variablesSecond.currentScale;
+	bool &zoomPlus = variablesSecond.zoomPlus;
+	int &idDirection = variablesSecond.idDirection;
+
+	if (zoomPlus) {
+		currentScale += SCALE;
+	}
+	else {
+		currentScale -= SCALE;
+	}
+	block[0].setScale(currentScale, currentScale);
+}
+
+void blockConstuction::resetColor(Uint8 &value, const Uint8  defaultValue)
+{
+	if (value > defaultValue) {
+		value -= 1;
+	}
+	else if (value < defaultValue) {
+		value += 1;
+	}
+}
+
+void blockConstuction::resetColorBlocks()
+{
+	Color currentColor;
+	for (int i = 0; i < AMOUNT_BLOCKS; i++) {
+
+		currentColor = block[i].getFillColor();
+
+		resetColor(currentColor.r, DEFAULT_FILL_COLOR.r);
+		resetColor(currentColor.g, DEFAULT_FILL_COLOR.g);
+		resetColor(currentColor.b, DEFAULT_FILL_COLOR.b);
+
+		if (currentColor == DEFAULT_FILL_COLOR) {
+			doFirstStep = true;
+			doSecondStep = true;
+		}
+		else {
+			block[i].setFillColor(currentColor);
+		}
+	}
+}
+
+void blockConstuction::defineUpdateColor()
+{
+	modeRed.init(TIME_UPDATE_RED_COLOR, true);
+	modeGreen.init(TIME_UPDATE_GREEN_COLOR, true);
+	modeBlue.init(TIME_UPDATE_BLUE_COLOR, true);
+}
+
+void blockConstuction::updateColors(float deltaTime)
 {
 		Color currentColor = block[0].getFillColor();
 
-		conditionUpdateColor = countCircle > 2;
-		updateColor(timerGreenColor, timeUpdateGreeenColor, increaseGreen,
-								currentColor.g, deltaTime);
+		conditionUpdateColor = variablesFirst.idBlock > 2;
+		updateColor(modeRed, currentColor.g, deltaTime);
 
-		conditionUpdateColor = countCircle > 3;
-		updateColor(timerBlueColor, timeUpdateBlueColor, increaseBlue,
+		conditionUpdateColor = variablesFirst.idBlock > 3;
+		updateColor(modeBlue,
 								currentColor.b, deltaTime);
 
-		conditionUpdateColor = countCircle > 4;
-		updateColor(timerRedColor, timeUpdateRedColor, increaseRed,
-								currentColor.r, deltaTime);
+		conditionUpdateColor = variablesFirst.idBlock > 4;
+		updateColor(modeGreen, currentColor.r, deltaTime);
 
 		for (int i = 0; i < AMOUNT_BLOCKS; i++) {
 			block[i].setFillColor(currentColor);
 		}
 }
 
-void blockConstuction::updateColor(float &timeCurrent, float timeUpdate, bool &increase,
-																	 Uint8 &value, float &deltaTime)
+void blockConstuction::updateColor(stateColor &stateColor,
+																	 Uint8 &value, float deltaTime)
 {
 	if (conditionUpdateColor) {
-		timeCurrent += deltaTime;
+		stateColor.currentTime += deltaTime;
 
-		if (timeCurrent > timeUpdate) {
+		if (stateColor.currentTime > stateColor.timeUpdate) {
 
-			if (increase) {
-				if (value + 4 < 255) {
-					value += 4;
+			if (stateColor.needIncrease) {
+				if (value + SHIFT_COLOR < 255) {
+					value += SHIFT_COLOR;
 				}
 				else {
-					increase = false;
+					stateColor.needIncrease = false;
 				}
 			}
 			else {
-				if (value - 4 > 0) {
-					value -= 4;
+				if (value - SHIFT_COLOR > 0) {
+					value -= SHIFT_COLOR;
 				}
 				else {
-					increase = true;
+					stateColor.needIncrease = true;
 				}
 			}
 
-			timeCurrent = 0.f;
+			stateColor.currentTime = 0.f;
 		}
 
 	}
@@ -151,36 +229,33 @@ void blockConstuction::draw(sf::RenderWindow& window)
 	}
 }
 
-void blockConstuction::rotateRelativeBlock(int id)
+void blockConstuction::anisochronousRotate()
 {
-	float shift = (DEFAULT_SIZE_BLOCK.y + DISTANSE_BETWEEN_BLOCKS) * (id + AMOUNT_BLOCKS / 2);
-	Vector2f rotation = { 0.f, DEFAULT_SIZE_BLOCK.y * 2 + shift - CENTER_WINDOW.y };
+	variablesFirstStep &var = variablesFirst;
+	int &idBlock = var.idBlock;
+	float &angleBreak = var.angleBreak;
+	int &countRotations = var.countRotations;
 
-	rotate(rotation);
-}
-
-void blockConstuction::rotate(sf::Vector2f origin)
-{
-	Vector2f originFirstBlock = block[0].getOrigin();
-	shiftOrigin = { -origin.x, -origin.y };
-
-	block[0].setOrigin(origin);
-	setOrigin();
-
-	float previousRotate = block[0].getRotation();
-	block[0].setRotation(previousRotate + ROTATE_PER_FRAME);
-
-	if(block[0].getRotation() == 0.f)
-	{
-		countCircle++;
-		printf("circle %d\n", countCircle);
+	float currentAngle = block[idBlock].getRotation();
+	if (currentAngle < angleBreak) {
+		block[idBlock].rotate(ROTATE_BLOCKS * (idBlock + 1));
 	}
+	else {
 
-}
+		block[idBlock].setRotation(angleBreak);
+		idBlock++;
+		if (idBlock > AMOUNT_BLOCKS - 1) {
 
-void blockConstuction::resetRotate()
-{
-	if (shiftOrigin != zeroVector) {
-		shiftOrigin = zeroVector;
+			idBlock = 0;
+			angleBreak += 90.f;
+			countRotations++;
+
+			if (countRotations > 2) {
+				variablesFirst.reset();
+				doFirstStep = false;
+				doSecondStep = true;
+			}
+
+		}
 	}
 }

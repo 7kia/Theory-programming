@@ -30,6 +30,8 @@ void startProgram()
 		}
 
 	}
+
+	delete mainProgram;
 }
 
 int main()

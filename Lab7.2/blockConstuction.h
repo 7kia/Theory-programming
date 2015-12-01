@@ -1,7 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <windows.h>
-
 
 const float DEFAULT_WIDTH_WINDOW = 800;
 const float DEFAULT_HEIGHT_WINDOW = 600;
@@ -10,85 +8,100 @@ const sf::Vector2f CENTER_WINDOW = { float(SIZE_WINDOW.x / 2) , float(SIZE_WINDO
 
 const int AMOUNT_BLOCKS = 7;
 
-const sf::Vector2f DEFAULT_SIZE_BLOCK = { 25.f, 25.f };
+const sf::Vector2f DEFAULT_SIZE_BLOCK = { 15.f, 15.f };
 const sf::Color DEFAULT_FILL_COLOR(255, 0, 0, 255);
 const float DISTANSE_BETWEEN_BLOCKS = 15.f;
 const float THIKNESS_BLOCKS = 3.f;
 const sf::Color THIKNESS_COLOR = sf::Color::Black;
 
 const float ROTATE_PER_FRAME = 5.0f;
-const sf::Vector2f zeroVector = { 0.f, 0.f };
+const sf::Vector2f ZERO_VECTOR = { 0.f, 0.f };
+const float ROTATE_BLOCKS = 1.f;
+const float SCALE = 0.005f;
+const sf::Uint8 SHIFT_COLOR = 10;
 
-const float SCALE = 0.008f;
+const float TIME_UPDATE_RED_COLOR = 0.05f;
+const float TIME_UPDATE_GREEN_COLOR = 0.1f;
+const float TIME_UPDATE_BLUE_COLOR = 0.2f;
 
-enum curremtTransform
-{
-	move,
-	scale,
-	rotate,
-	amendColor
-};
+const float TIME_UPDATE_DIRECTION = 2.f;
+const float SHIFT = 2.f;
 
 struct trasformation
 {
 	float rotate;
 	sf::Vector2f scale;
-
 };
 
-struct blockConstuction
+struct variablesFirstStep
 {
-	sf::RectangleShape block[AMOUNT_BLOCKS];
-	sf::Vector2f shiftOrigin = zeroVector;
+	int idBlock = 0;
+	float angleBreak = 0.f;
+	int countRotations = 0;
+	void reset();
+};
 
-	int idOriginBlock = 0;
-	int countCircle = 0;
-	void resetCountCircle();
-
-	blockConstuction();
-	void setOrigin();
-	void updatePosition();
-
-
-	// Animation.cpp
-	bool conditionFirstStep;
-	void firstStep(float &deltaTime);
-
-	bool doSecondStep = true;
-
+struct variablesSecondStep {
 	float timeMove = 0.f;
-	float timeUpdateDirection = 2.f;
+	float timeUpdateDirection = TIME_UPDATE_DIRECTION;
 	float shift = 2.f;
 	int idDirection = 0;
 	bool zoomPlus = true;
 	sf::Vector2f direction;
 	std::vector<sf::Vector2f> directions;
 	float currentScale = 1.f;
-	void secondStep(float &deltaTime);
-	//
-	bool increaseRed = true;
-	bool increaseGreen = true;
-	bool increaseBlue = true;
+	void reset();
+};
 
-	float timerRedColor = 0.f;
-	float timerGreenColor = 0.f;
-	float timerBlueColor = 0.f;
 
-	float timeUpdateRedColor = 0.05f;
-	float timeUpdateGreeenColor = 0.1f;
-	float timeUpdateBlueColor = 0.2f;
-	void update(float &deltaTime);
-	void updateColors(float &deltaTime);
+struct stateColor
+{
+	float currentTime = 0.f;
+	float timeUpdate = 0.f;
+	bool needIncrease = false;
+	void init(float time, bool increase);
+};
 
+struct blockConstuction
+{
+	sf::RectangleShape block[AMOUNT_BLOCKS];
+	sf::Vector2f shiftOrigin = ZERO_VECTOR;
+
+	blockConstuction();
+	void setOrigin();
+	void defineDirectionsMove();
+
+	stateColor modeRed;
+	stateColor modeGreen;
+	stateColor modeBlue;
 	bool conditionUpdateColor;
-	void updateColor(float &timeCurrent, float timeUpdate, bool &increase, sf::Uint8 &value, float &deltaTime);
+	void defineUpdateColor();
 
+	void updateColor(stateColor &stateColor, sf::Uint8 &value, float deltaTime);
+	void updateColors(float deltaTime);
 
+	void defineStepAnimation(float deltaTime);
+	void updatePosition();
+	void clockingBlocks();
+	void update(float deltaTime);
 
 	void draw(sf::RenderWindow& window);
 
-	void rotateRelativeBlock(int id);
-	void rotate(sf::Vector2f origin);
-	void resetRotate();
+	void anisochronousRotate();
+
+	// Animation.cpp
+	variablesFirstStep variablesFirst;
+	bool doFirstStep = true;
+	void firstStep(float deltaTime);
+
+	variablesSecondStep variablesSecond;
+	bool doSecondStep = true;
+	void scaleConstruction();
+	void secondStep(float deltaTime);
+
+	void resetColor(sf::Uint8 &value, const sf::Uint8 defaultValue);
+	void resetColorBlocks();
+	void thirdStep();
+
 };
 

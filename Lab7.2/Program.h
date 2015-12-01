@@ -10,7 +10,6 @@ struct Program
 	blockConstuction constuction;
 
 	Program();
-	~Program();
 	void processEvents();
 	void update(float deltaTime);
 	void render();

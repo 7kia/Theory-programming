@@ -1,50 +1,51 @@
 #include "Animation.h"
 
-void blockConstuction::firstStep(float &deltaTime)
+using namespace sf;
+using namespace std;
+
+void blockConstuction::firstStep(float deltaTime)
 {
-	rotateRelativeBlock(idOriginBlock);
-
-	if (int(block[0].getRotation()) % 180 == 0) {
-		idOriginBlock++;
-		if (idOriginBlock >= AMOUNT_BLOCKS) {
-			idOriginBlock = 0;
-		}
-	}
-
+	anisochronousRotate();
 	updateColors(deltaTime);
 }
 
-void blockConstuction::secondStep(float& deltaTime)
+void blockConstuction::secondStep(float deltaTime)
 {
+	float &timeMove = variablesSecond.timeMove;
+	float timeUpdateDirection = variablesSecond.timeUpdateDirection;
+	Vector2f &direction = variablesSecond.direction;
+	vector<Vector2f> &directions = variablesSecond.directions;
+	bool &zoomPlus = variablesSecond.zoomPlus;
+	int &idDirection = variablesSecond.idDirection;
+
 	timeMove += deltaTime;
 	if(timeMove < timeUpdateDirection)
 	{
+		scaleConstruction();
 		block[0].move(direction);
-		if(zoomPlus)
-		{
-			currentScale += SCALE;		}
-		else {
-			currentScale -= SCALE;
-		}
-		block[0].setScale(currentScale, currentScale);
-
 	}
 	else
 	{
 		timeMove = 0.f;
+		idDirection++;
 		
-		
-		if(idDirection > directions.size() - 1)
+		if(idDirection >= directions.size())
 		{
-			countCircle = 0;
-			conditionFirstStep = true;
+			doFirstStep = false;
+			doSecondStep = false;
+
+			variablesSecond.reset();
+
 		}
-		else
-		{
+		else {
 			direction = directions[idDirection];
 			zoomPlus = !zoomPlus;
 		}
-		idDirection++;
 
 	}
+}
+
+void blockConstuction::thirdStep()
+{
+	resetColorBlocks();
 }

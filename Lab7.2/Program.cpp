@@ -11,10 +11,6 @@ Program::Program()
 														TITLE_PROGRAM, Style::Default, settings);
 }
 
-Program::~Program()
-{
-}
-
 void Program::processEvents()
 {
 	Event event;
