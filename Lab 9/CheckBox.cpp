@@ -62,7 +62,7 @@ void checkBox::Draw(RenderWindow& window)
 {
 	window.draw(box);
 
-	if(state == Changed)
+	if(state == Changed || state == HoveredChanged)
 	{
 		cross.Draw(window);
 	}
@@ -84,22 +84,32 @@ bool checkBox::OnEvent(const Event& event)
 {
 	switch (event.type) {
 	case Event::MouseMoved:
-		if (state != Changed) {
+		if (state != Changed && state != HoveredChanged) {
 			SetState(mouseMoveHits(event) ? Hovered : NotChanged);
+		}
+		else {
+			SetState(mouseMoveHits(event) ? HoveredChanged : Changed);
 		}
 		break;
 	case Event::MouseButtonReleased:
 		if (state == Hovered) {
-			SetState(mouseButtonHits(event) ? Changed : NotChanged);
-			if (handler) {
-				handler();
-			}
+			SetState(mouseButtonHits(event) ? HoveredChanged : NotChanged);
 			return true;
 		}
 		else if(state == Changed) {
 			if(mouseButtonHits(event))
 			{
 				SetState(Hovered);
+			}
+			return true;
+		}
+		else if (state == HoveredChanged) {
+			SetState(mouseButtonHits(event) ? Hovered : Changed);
+			return true;
+		}
+		else if (state == NotChanged) {
+			if (mouseButtonHits(event)) {
+				SetState(HoveredChanged);
 			}
 			return true;
 		}
@@ -126,6 +136,24 @@ void checkBox::SetState(State newState)
 	case Changed:
 		box.setFillColor(BACK_COLOR_CHANGED);
 		box.setOutlineColor(BORDER_COLOR_CHANGED);
+		cross.firstShape.setFillColor(BORDER_COLOR_CHANGED);
+		cross.secondShape.setFillColor(BORDER_COLOR_CHANGED);
+
+		break;
+	case HoveredChanged:
+		box.setFillColor(BACK_COLOR_HOVERED_CHANGED);
+		box.setOutlineColor(BORDER_COLOR_HOVERED_CHANGED);
+		cross.firstShape.setFillColor(BORDER_COLOR_HOVERED_CHANGED);
+		cross.secondShape.setFillColor(BORDER_COLOR_HOVERED_CHANGED);
 		break;
 	}
+}
+
+bool checkBox::IsChecked() const
+{
+	if(state == Changed || state == HoveredChanged)
+	{
+		return true;
+	}
+	return false;
 }

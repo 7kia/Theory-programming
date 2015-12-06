@@ -16,6 +16,10 @@ namespace featureCheckBox {
 	const sf::Color BACK_COLOR_CHANGED(255, 255, 255, 255);
 	const sf::Color BORDER_COLOR_CHANGED(200, 0, 0, 255);
 
+	const sf::Color BACK_COLOR_HOVERED_CHANGED(255, 255, 255, 255);
+	const sf::Color BORDER_COLOR_HOVERED_CHANGED(255, 100, 100, 255);
+
+
 	const sf::Vector2f SIZE_CROSS = { 5.f, 20.f };
 	const sf::Color CROSS_COLOR(200, 0, 0, 255);
 	const float CROSS_ANGLE = 45.f;
@@ -34,7 +38,8 @@ struct checkBox {
 	enum State {
 		NotChanged,
 		Hovered,
-		Changed
+		Changed,
+		HoveredChanged
 	};
 
 	sf::RectangleShape box;
@@ -52,6 +57,7 @@ struct checkBox {
 	bool OnEvent(sf::Event const& event);
 	void SetState(State newState);
 
-	std::function<void()> handler;
+	bool IsChecked() const;
+	std::function<void(bool cheked, sf::RenderWindow&)> handler;
 	State state;
 };

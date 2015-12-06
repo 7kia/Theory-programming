@@ -8,7 +8,8 @@ const float DEFAULT_HEIGHT_WINDOW = 600;
 const sf::Vector2f SIZE_WINDOW = { DEFAULT_WIDTH_WINDOW , DEFAULT_HEIGHT_WINDOW };
 const sf::Vector2f CENTER_WINDOW = { float(SIZE_WINDOW.x / 2) , float(SIZE_WINDOW.y / 2) };
 
-const std::string TITLE_PROGRAM = "Lab 9.1 \"Elements GUI\"";
+const std::string TITLE_PROGRAM = "CheckBox : unchecked";
+const std::string TWO_TITLE_PROGRAM = "CheckBox : checked";
 const sf::Color CLEAR_COLOR(200, 200, 200, 255);
 };
 

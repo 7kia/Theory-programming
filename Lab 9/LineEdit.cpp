@@ -116,8 +116,7 @@ void lineEdit::enterText(Event const& event)
 	String currentString = text.getString();
 
 	char inputChar = event.text.unicode;
-	bool inputNotBackspace = inputChar != '\b';
-	if (inputNotBackspace) {
+	if (isprint(inputChar)) {
 		currentString += inputChar;
 
 		// Делим на 2 чтобы получить нужный размер

@@ -50,7 +50,7 @@ void Program::processEvents()
 void Program::processGUI(Event& event)
 {
 	if (chechBox1->OnEvent(event)) {
-		
+		chechBox1->handler(chechBox1->IsChecked(), window);
 	}
 	if(lineEdit1->OnEvent(event))
 	{
