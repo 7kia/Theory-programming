@@ -27,12 +27,20 @@ void Game::generateGroups()
 void Game::createGroups(float time)
 {
 	Vector3i pos = { 3, 10, 0 };
+
+	///*
+	pos = { 5, 5, 2 };	
 	createSmallGroupSkelets(world, pos);
 
-	pos = { 5, 5, 2 };
-	createSmallGroupSkelets(world, pos);
 
-	bool updateDifficult = int(time) % TIME_UPDATE_DIFFICULT == 0;
+	createSmallGroupSkelets(world, pos);
+	//pos = { 5, 5, 2 };
+	//createSmallGroupSkelets(world, pos);
+
+	//*/
+
+	/*
+		bool updateDifficult = int(time) % TIME_UPDATE_DIFFICULT == 0;
 	if (updateDifficult)
 		world.difficult++;
 
@@ -44,5 +52,7 @@ void Game::createGroups(float time)
 		pos = { 20, 20, 1 };
 		createBigGroupSkelets(world, pos);
 	}
+
+	*/
 }
 

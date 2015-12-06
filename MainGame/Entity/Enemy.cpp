@@ -12,9 +12,8 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 	Item &emptyItem = emptyObjects.emptyItem;
 	UnlifeObject &emptyObject = emptyObjects.emptyObject;
 
-	int xPos;
-	int yPos;
-	int levelFloor = 1;
+	Vector3i pos;
+	pos.z = 1;
 
 	int &countEnemy = world.countEntity;
 
@@ -25,11 +24,12 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 				break;
 			}
 
-			xPos = 5;
-			yPos = 11;
+			pos.x = 5;
+			pos.y = 11;
 
-			addEnemy->EnemyInit(*types[countTypes], world, xPos, yPos, levelFloor);
+			addEnemy->EnemyInit(*types[countTypes], world, pos.x, pos.y, pos.z);
 			world.Enemys->push_back(*addEnemy);
+			isPlaceForCreate(world, pos);
 
 		}
 	}
@@ -40,44 +40,87 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 	delete addEnemy;
 }
 
-bool isPlaceForCreate(world world, Enemy* enemy, Vector3i &pos)
+bool isPlaceForCreate(world world, Vector3i &pos)
 {
 	// TODO
-	enemy->interactionWithMap(world.field, *world.listDestroy, 0);
-	enemy->interactionWitnUnlifeObject(world.unlifeObjects, 0);
+	vector<Enemy> &enemys = *world.Enemys;
+	Enemy &currentEnemy = enemys[enemys.size() - 1];
 
-	bool isPlace = true;
-	while (pos.z < HEIGHT_MAP && enemy->wasCollision == false) {
+	bool isPlace;
+	bool moveX = false;
+	bool moveY = false;
+	Vector2f movemoment;
+	Vector3i startPosition = pos;
+
+	do {
+		currentEnemy.interactionWithMap(world.field, *world.listDestroy, 0);
+		currentEnemy.interactionWitnUnlifeObject(world.unlifeObjects, 0);
+		currentEnemy.interactionWithEntity(&enemys, enemys.size() - 1, 0.1f);
+
+		isPlace = currentEnemy.wasCollision == false;
+
+		if (isPlace == false) {
+			// —‰‚Ë„‡ÂÏ ‚‰ÓÎ¸ ı
+			pos.x++;
+			if(currentEnemy.isExitFromBorder(pos.x, pos.y))
+			{
+				pos.x = startPosition.x;
+				pos.y++;
+				movemoment.x = 0;
+				if (currentEnemy.isExitFromBorder(pos.x, pos.y)) {
+					pos.x = startPosition.x;
+					pos.y = startPosition.y;
+
+					currentEnemy.currentLevelFloor++;
+					if(currentEnemy.currentLevelFloor > HEIGHT_MAP)
+					{
+						currentEnemy.currentLevelFloor = HEIGHT_MAP - 1;
+						break;
+					}
+
+					movemoment.y = 0;
+				}
+				else
+				{
+					movemoment.y = float(SIZE_BLOCK);
+				}
+			}
+			else
+			{
+				movemoment.x = float(SIZE_BLOCK);
+			}
+			// —‰‚Ë„‡ÂÏ ‚‰ÓÎ¸ y
+			currentEnemy.spriteEntity->move(movemoment);
+		}
+		else
+		{
+			break;
+		}
+
+	} while (currentEnemy.wasCollision);
+
+
+	/*
+	while (pos.z < HEIGHT_MAP && isPlace) {
 
 		isPlace = true;
-		while (enemy->wasCollision) {
+		do {
 			pos.x++;
-			if (enemy->isExitFromBorder(pos.x, pos.y)) {
+			currentEnemy.spriteEntity->move(float((pos.x) * SIZE_BLOCK), 0.f);
+			currentEnemy.interactionWithMap(world.field, *world.listDestroy, 0);
+			currentEnemy.interactionWitnUnlifeObject(world.unlifeObjects, 0);
+			currentEnemy.interactionWithEntity(&enemys, enemys.size() - 1, 0.1f);
 
-				pos.x = 0;
-				enemy->spriteEntity->move(float(-(pos.x + 1) * SIZE_BLOCK), 0.f);
-
-				pos.y++;
-				if (enemy->isExitFromBorder(pos.x, pos.y)) {
-					pos.y--;// TODO
-					isPlace = false;
-					enemy->wasCollision = false;
-					break;
-				} else {
-					enemy->spriteEntity->move(0.f, float(SIZE_BLOCK));
-				}
-
-
-			} else {
-				enemy->spriteEntity->move(float(SIZE_BLOCK), 0.f);
+			if (currentEnemy.isExitFromBorder(pos.x, pos.y)) {
+				pos.x
 			}
 
-			enemy->interactionWithMap(world.field, *world.listDestroy, 0);
-			enemy->interactionWitnUnlifeObject(world.unlifeObjects, 0);
-		}
+		} while (currentEnemy.wasCollision);
 
 		pos.z++;
 	}
+
+	*/
 
 	return isPlace;
 }
@@ -91,6 +134,7 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 	Item &emptyItem = emptyObjects.emptyItem;
 	UnlifeObject &emptyObject = emptyObjects.emptyObject;
 
+	Vector3i posEnemy;
 	int xPos, xTemp;
 	int yPos, yTemp;
 	int levelFloor = pos.z;
@@ -121,10 +165,10 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 			yTemp = yPos;
 			addEnemy->EnemyInit(*types[countTypes], world, xTemp, yTemp, levelFloor);
 
-			if(isPlaceForCreate(world, addEnemy, pos))
-			{
-				world.Enemys->push_back(*addEnemy);
-			}
+			world.Enemys->push_back(*addEnemy);
+			posEnemy = { xTemp, yTemp, pos.z };
+			isPlaceForCreate(world, posEnemy);
+			
 
 			
 
@@ -212,7 +256,7 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 	amount.push_back(config[AMOUNT_SKELET_MINER_IN_BIG_GROUP]);
 	amount.push_back(config[AMOUNT_SKELET_BUILDER_IN_BIG_GROUP]);
 
-	createGroup(world, types, amount, 5, pos);
+	createGroup(world, types, amount, 7, pos);
 }
 
 void initializeEntitys(world &world)// ƒŒ¡¿¬À≈Õ»≈ —”ŸÕŒ—“» 

@@ -21,7 +21,7 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 	mainPerson.radiusUse = 1;
 
 	// Скорость ходьбы
-	mainPerson.step.init(SPEED_ENTITY);
+	mainPerson.step.init(150.f);
 	mainPerson.animation.timeAnimation = 0.f;
 
 	// TODO

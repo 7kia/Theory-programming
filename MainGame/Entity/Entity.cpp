@@ -750,8 +750,8 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 bool Entity::isExitFromBorder(int x, int y)
 {
 
-	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
-			&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
+	if (((x < WIDTH_MAP) && (x > 0))
+			&& (y < (LONG_MAP - 1) && (y > 0))) {
 		return false;
 	}
 	return true;

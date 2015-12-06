@@ -91,7 +91,7 @@ struct world
 
 void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount);
 
-bool isPlaceForCreate(world world, Enemy* enemy, sf::Vector3i &pos);
+bool isPlaceForCreate(world world, sf::Vector3i &pos);
 void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos);
 
 void createSmallGroupSkelets(world &world, Vector3i pos);

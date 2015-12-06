@@ -444,7 +444,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 	listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
 
 	if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
-		// Если блок лестница
+
 		int x = int(pos.x / SIZE_BLOCK);
 		int y = int(pos.y / SIZE_BLOCK);
 		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], listDestroy.ladder)) {
