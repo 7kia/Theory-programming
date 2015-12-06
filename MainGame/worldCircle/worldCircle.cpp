@@ -47,6 +47,8 @@ void Game::updateTimeDay(float &time)
 				if (Enemys[i].protection.deathDay) {
 					Enemys[i].playSoundDeath(world);
 					Enemys.erase(Enemys.begin() + i);
+					world.countEntity--;
+
 					continue;
 				}
 				i++;
@@ -56,17 +58,34 @@ void Game::updateTimeDay(float &time)
 	}
 }
 
+
+void Game::playDayMusic()
+{
+	TimeDay &timeDay = world.timeDay;
+
+	music.openFromFile(musicPaths[idMusicPaths::DayMusic]);
+	timeDay = day;
+	music.play();
+
+}
+
+void Game::playNightMusic()
+{
+	TimeDay &timeDay = world.timeDay;
+
+	music.openFromFile(musicPaths[idMusicPaths::NightMusic]);
+	timeDay = night;
+	music.play();
+}
+
 void Game::switchMusic()
 {
 	TimeDay &timeDay = world.timeDay;
-	if (timeDay == day && timeDay != night) {
-		music.openFromFile(musicPaths[idMusicPaths::NightMusic]);
-		timeDay = night;
-		music.play();
+	if (timeDay == day) {
+		playNightMusic();
 	}
-	else if (timeDay == night && timeDay != day){
-		music.openFromFile(musicPaths[idMusicPaths::DayMusic]);
-		music.play();
+	else if (timeDay == night ){
+		playDayMusic();
 	}
 }
 

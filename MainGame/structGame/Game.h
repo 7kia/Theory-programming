@@ -101,15 +101,18 @@ struct Game
 	void createGroups(float time);
 	void generateGroups();
 	void updateTimeDay(float &time);
+	void playDayMusic();
+	void playNightMusic();
 	void switchMusic();
 	void updateWorldTimeCircles();
 
 	// renderGame.cpp
 	void render();
-	void renderEntitys();
-	void renderUnlifeObjects();
-	void renderItems();
-	void renderMap();
+	void drawInWindow(sf::Sprite &sprite, sf::FloatRect const& rectWindow);
+	void renderEntitys(sf::FloatRect const& rectWindow);
+	void renderUnlifeObjects(sf::FloatRect const& rectWindow);
+	void renderItems(sf::FloatRect const& rectWindow);
+	void renderMap(sf::FloatRect const& rectWindow);
 	void showFPS(const Time timeSinceLastUpdate);
 };
 void initializeCategorysBreakingObject(Game &game);

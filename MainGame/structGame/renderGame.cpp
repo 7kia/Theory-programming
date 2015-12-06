@@ -18,21 +18,27 @@ void Game::render()
 {
 	window.clear();
 
-	renderMap();
-	renderItems();
+	Vector2f centerWindow = window.getView().getCenter();
+	Vector2f sizeWindow = Vector2f(window.getSize());
+	FloatRect rectWindow = FloatRect(centerWindow - sizeWindow, sizeWindow + centerWindow);
+
+	//if(rectWindow.left )
+
+	renderMap(rectWindow);
+	renderItems(rectWindow);
 
 
 	mainPerson.renderCurrentItem(window);
 	window.draw(*mainPerson.spriteEntity);
 
-	renderEntitys();
-	renderUnlifeObjects();
+	renderEntitys(rectWindow);
+	renderUnlifeObjects(rectWindow);
 
 	gui.setPositionGui(window, mainPerson, *world.Enemys, textGame);
 	window.display();
 }
 
-void Game::renderMap()
+void Game::renderMap(FloatRect const& rectWindow)
 {
 	Field &field = world.field;
 
@@ -45,15 +51,33 @@ void Game::renderMap()
 		topBorder = HEIGHT_MAP - 1;
 
 	l = lowBorder;
+	FloatRect rectWallSprite;
+	FloatRect rectFloorSprite;
 	while (l <= topBorder) {
 
 		for (int i = 0; i < LONG_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 				field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
-				window.draw(*field.wallSprite);
-				window.draw(*field.floorSprite);
+				/*
+								rectWallSprite = field.wallSprite->getGlobalBounds();
+				rectFloorSprite = field.floorSprite->getGlobalBounds();
+				// TODO
+				if(rectWallSprite != NULL_RECT)
+				{
+					if (isExitFromWindow(rectWindow, rectWallSprite)) {
+						window.draw(*field.wallSprite);
+					}	
+				}
+				if (rectFloorSprite != NULL_RECT) {
+					if (isExitFromWindow(rectWindow, rectFloorSprite)) {
+						window.draw(*field.floorSprite);
+					}
+				}
 
+				*/
+				drawInWindow(*field.floorSprite, rectWindow);
+				drawInWindow(*field.wallSprite, rectWindow);
 			}
 		}
 
@@ -61,7 +85,7 @@ void Game::renderMap()
 	}
 }
 
-void Game::renderItems()
+void Game::renderItems(FloatRect const& rectWindow)
 {
 	vector<Item> &items = *world.items;
 	for (int i = 0; i != items.size(); ++i) {
@@ -77,14 +101,16 @@ void Game::renderItems()
 				items[i].mainSprite->setColor(UP_VIEW);
 			}
 
-			window.draw(*items[i].mainSprite);
+			drawInWindow(*items[i].mainSprite, rectWindow);
+
+			//window.draw(*items[i].mainSprite);
 			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
 		}
 
 	}
 }
 
-void Game::renderEntitys()
+void Game::renderEntitys(FloatRect const& rectWindow)
 {
 	vector<Enemy>& Enemys = *world.Enemys;
 
@@ -93,6 +119,8 @@ void Game::renderEntitys()
 	for (int i = 0; i < Enemys.size(); ++i) {
 		enemyLevel = Enemys[i].currentLevelFloor;
 		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
+
+			
 			Enemys[i].renderCurrentItem(window);
 
 			Color currentColor;
@@ -100,7 +128,10 @@ void Game::renderEntitys()
 			else if (personLevel - 1) currentColor = DOWN_VIEW;
 			else if (personLevel + 1) currentColor = UP_VIEW;
 			Enemys[i].spriteEntity->setColor(currentColor);
-			window.draw(*Enemys[i].spriteEntity);
+
+			drawInWindow(*Enemys[i].spriteEntity, rectWindow);
+
+			//window.draw(*Enemys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
 		}
 
@@ -108,7 +139,7 @@ void Game::renderEntitys()
 
 }
 
-void Game::renderUnlifeObjects()
+void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 {
 
 	int currentLevel = mainPerson.currentLevelFloor;
@@ -127,9 +158,28 @@ void Game::renderUnlifeObjects()
 				unlifeObjects[i].transparentSpiteObject->setColor(UP_VIEW);
 			}
 
-			window.draw(*unlifeObjects[i].spriteObject);
-			window.draw(*unlifeObjects[i].transparentSpiteObject);
+			drawInWindow(*unlifeObjects[i].spriteObject, rectWindow);
+			drawInWindow(*unlifeObjects[i].transparentSpiteObject, rectWindow);
 		}
 
 	}
+}
+
+bool isExitFromWindow(FloatRect const& rectWindow, FloatRect &rectObject)
+{
+	if (rectObject.intersects(rectWindow))
+	{
+		return true;
+	}
+	return false;
+}
+
+void Game::drawInWindow(sf::Sprite &sprite, sf::FloatRect const& rectWindow)
+{
+	FloatRect rectSprite = sprite.getGlobalBounds();
+	//if (rectSprite != NULL_RECT) {
+		if (isExitFromWindow(rectWindow, rectSprite)) {
+			window.draw(sprite);
+		}
+//	}
 }

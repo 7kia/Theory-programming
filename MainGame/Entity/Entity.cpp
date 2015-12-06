@@ -941,6 +941,7 @@ void Entity::renderCurrentItem(sf::RenderWindow& window)
 		spriteItem.setPosition(pos);
 		window.draw(spriteItem);
 
+
 		spriteItem.setRotation(0);
 		spriteItem.setScale(normalSize);
 		spriteItem.setOrigin(SIZE_ITEM / 2, SIZE_ITEM / 2);

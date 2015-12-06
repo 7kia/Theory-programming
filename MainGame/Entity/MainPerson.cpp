@@ -106,7 +106,7 @@ void MainPerson::updateView(RenderWindow & window)
 	int rightBorder = SIZE_BLOCK * (WIDTH_MAP - BORDER1) - sizeWindow.x / 2;
 	int topBorder = sizeWindow.y / 2;
 	int lowBorder = SIZE_BLOCK * LONG_MAP - sizeWindow.y / 2;
-	/*
+	///*
 	if (x < leftBorder) tempX = leftBorder;//убираем из вида левую сторону
 	else if (x > rightBorder) tempX = rightBorder;//убираем из вида левую сторону
 	if (y < topBorder) tempY = topBorder;//верхнюю сторону
@@ -251,6 +251,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 			findEnemy->EnemyDrop(world);
 			findEnemy->playSoundDeath(world);
 			world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
+			world.countEntity--;
 
 			animation.currentTimeFightAnimation = 0.f;
 

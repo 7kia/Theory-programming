@@ -174,6 +174,8 @@ Game::Game()
 	initializeGUI(gui, textGame);
 
 	initializeClock(clock);
+
+	playDayMusic();
 }
 
 void Game::loadConfig(char *nameConfig, int *variables)
@@ -345,6 +347,7 @@ void Game::initializeHotKeys()
 }
 
 //*/
+
 
 void destroyGame(Game & game)
 {
