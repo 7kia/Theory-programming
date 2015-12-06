@@ -53,13 +53,27 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 	for (int i = 0; i < objects.size(); ++i) {
 		objects[i].timeLife += deltaTime;
 
-		redefineObject &redefine = objects[i].typeObject->redefine;
-		float timeUpdate = redefine.timeUpdate;
-		if (timeUpdate) {
-			if (objects[i].timeLife > timeUpdate) {
-				upgradeObject(objects[i]);
+		int idTypeObject = objects[i].typeObject->id;
+		if (idTypeObject < idUnlifeObject::shiftEffects) {
+
+			redefineObject &redefine = objects[i].typeObject->redefine;
+			float timeUpdate = redefine.timeUpdate;
+			if (timeUpdate) {
+				if (objects[i].timeLife > timeUpdate) {
+					upgradeObject(objects[i]);
+				}
 			}
 		}
+		/////////////////////////////////
+		// Обновление эффектов( пока звуковых
+		else {
+			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();
+			if (stateSound == sf::SoundSource::Status::Stopped) {
+				objects.erase(objects.begin() + i);
+			}
+		}
+		/////////////////////////////////
+		
 
 	}
 }

@@ -57,6 +57,7 @@ typedef enum
 
 typedef enum
 {
+	NoneNature,
 	woodNature,
 	stoneNature,
 	groundNature,

@@ -21,6 +21,7 @@ dataSound::dataSound()
 	initSound(luggage1Sound, soundPaths, 0.f);
 	initSound(itemChoiseIdSound, soundPaths, 0.f);
 	initSound(skeletonDeathSound, soundPaths, 0.f);
+	initSound(wolfDeathSound, soundPaths, 0.f);
 
 	initSound(chopp1Sound, soundPaths, 0.f);
 	initSound(treeDropSound, soundPaths, 0.f);
@@ -46,5 +47,7 @@ void playSound(const int idSound, dataSound& soundBase, sf::Sound &sound, sf::Ve
 	sound.setBuffer(soundBase.soundBuffer[idSound]);
 
 	sound.play();
+	sound.setMinDistance(minDistanse);
+	sound.setAttenuation(minDistanse);
 	sound.setPosition(pos.x, pos.y, 1);
 }

@@ -179,6 +179,61 @@ void Enemy::EnemyDrop(world& world)
 
 }
 
+void Enemy::playSoundDeath(world& world)
+{
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	TypeUnlifeObject *typeObjects = world.typesObjects.typesUnlifeObject;
+	UnlifeObject addObject;
+	Vector3i pos = { int(getXPos() / SIZE_BLOCK),
+									int(getYPos() / SIZE_BLOCK),
+									currentLevelFloor + 1 };
+
+	bool findSound = true;
+	switch(type->id)
+	{
+	case idEntity::wolfEnemy:
+		addObject.setType(typeObjects[idUnlifeObject::wolfDeathEffect]);
+		addObject.setPosition(pos.x, pos.y, pos.z);
+		break;
+	case idEntity::skeletEnemy:
+	case idEntity::skeletBuilderEnemy:
+	case idEntity::skeletDiggerEnemy:
+	case idEntity::skeletLumbermillEnemy:
+	case idEntity::skeletMinerEnemy:
+		addObject.setType(typeObjects[idUnlifeObject::skeletDeathEffect]);
+		addObject.setPosition(pos.x, pos.y, pos.z);
+		break;
+	default:
+		findSound = false;
+		break;
+	}
+
+	if(findSound)
+	{
+			objects.push_back(addObject);
+
+			Sound &soundObject = objects[objects.size() - 1].soundObject;
+
+			switch (type->id) {
+			case idEntity::wolfEnemy:
+				playSound(idSoundPaths::wolfDeathSound, *soundBase, soundObject, getPosition());
+				break;
+			case idEntity::skeletEnemy:
+			case idEntity::skeletBuilderEnemy:
+			case idEntity::skeletDiggerEnemy:
+			case idEntity::skeletLumbermillEnemy:
+			case idEntity::skeletMinerEnemy:
+				playSound(idSoundPaths::skeletonDeathSound, *soundBase, soundObject, getPosition());
+				break;
+			default:
+				break;
+			}
+
+	}
+
+
+}
+
 void MainPerson::updateAtack(world &world, const float deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
@@ -194,6 +249,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 			//findEnemy->playSound(0.f, 0.f, idSoundPaths::skeletonDeathPath);
 
 			findEnemy->EnemyDrop(world);
+			findEnemy->playSoundDeath(world);
 			world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
 
 			animation.currentTimeFightAnimation = 0.f;

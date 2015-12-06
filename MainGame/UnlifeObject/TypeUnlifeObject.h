@@ -44,5 +44,6 @@ public:
 void initTree(TypeUnlifeObject *typesUnlifeObjects);
 void initStones(TypeUnlifeObject *typesUnlifeObjects);
 void initEmpty(TypeUnlifeObject *typesUnlifeObjects);
+void initEffects(TypeUnlifeObject *typesUnlifeObjects);
 
 void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects);

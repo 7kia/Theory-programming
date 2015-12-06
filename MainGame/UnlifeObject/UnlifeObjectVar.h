@@ -56,5 +56,10 @@ typedef enum
 	appleTree,
 	appleGrowTree,
 	smallStone,
+
+	// Effects
+	shiftEffects,
+	skeletDeathEffect,
+	wolfDeathEffect,
 	empty
 } idUnlifeObject;

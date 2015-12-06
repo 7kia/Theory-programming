@@ -11,7 +11,8 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	TypeItem *typesItem = types.typesItem;
 	////////////////////////////////////////////////////////////////
 	// Волк
-	TypeEnemy* typeEnemy = &typesEnemy[idEntity::wolfEnemy];
+	int id = idEntity::wolfEnemy;
+	TypeEnemy* typeEnemy = &typesEnemy[id];
 
 	String texturePath = texturePaths[idTexturePaths::wolf];
 	String name = "Wolf";
@@ -28,12 +29,13 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	typeEnemy->view.init(RADIUSE_VIEW * 2, false);
 	typeEnemy->converse.init(true, true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_WOLF_SLOTS);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_WOLF_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
 	// Волк
-	typeEnemy = &typesEnemy[idEntity::skeletEnemy];
+	id = idEntity::skeletEnemy;
+	typeEnemy = &typesEnemy[id];
 
 	texturePath = texturePaths[idTexturePaths::skelet];
 	name = "Skelet";
@@ -49,11 +51,13 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEntity::skeletDiggerEnemy];
+	id = idEntity::skeletDiggerEnemy;
+
+	typeEnemy = &typesEnemy[id];
 
 	name = "Skelet digger";
 
@@ -68,11 +72,13 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::ironBackHoerIte);
-	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEntity::skeletMinerEnemy];
+	id = idEntity::skeletMinerEnemy;
+
+	typeEnemy = &typesEnemy[id];
 
 	name = "Skelet miner";
 
@@ -87,11 +93,13 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stonePickaxItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEntity::skeletLumbermillEnemy];
+	id = idEntity::skeletLumbermillEnemy;
+
+	typeEnemy = &typesEnemy[id];
 
 	name = "Skelet lumbermill";
 
@@ -106,11 +114,12 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneAxeItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEntity::skeletBuilderEnemy];
+	id = idEntity::skeletBuilderEnemy;
+	typeEnemy = &typesEnemy[id];
 
 	name = "Skelet builder";
 
@@ -125,17 +134,18 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::woodLadderItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, AMOUNT_SKELET_SLOTS);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	typeEnemy = &typesEnemy[idEntity::emptyEnemy];
+	id = idEntity::emptyEnemy;
+	typeEnemy = &typesEnemy[id];
 
 	name = "Empty";
 
 	typeEnemy->featuresSprite.init(0, 0, 0, 0);
 	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
-	typeEnemy->InitOtherFeatures(texturePath, name, 0);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, 0);
 
 	drop.clear();
 }
@@ -168,7 +178,7 @@ void TypeEnemy::initCurrentItem(TypeItem *typesItem, int id)
 	typeItem = typesItem[id];
 }
 
-void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy,
+void TypeEnemy::InitOtherFeatures(int idType, sf::String texturePath, sf::String nameEnemy,
 																	int amountEnemySlots)
 {
 	textureEntity = new Texture;
@@ -176,5 +186,6 @@ void TypeEnemy::InitOtherFeatures(sf::String texturePath, sf::String nameEnemy,
 
 	amountSlots = amountEnemySlots;
 
+	id = idType;
 	name = nameEnemy;
 }

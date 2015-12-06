@@ -26,7 +26,7 @@ typedef enum {
 	luggage1Sound,
 	itemChoiseIdSound,
 	skeletonDeathSound,
-
+	wolfDeathSound,
 
 	chopp1Sound,
 	treeDropSound,
@@ -65,6 +65,7 @@ const std::string soundPaths[idSoundPaths::amountSoundSound]
 	"recourses\\sounds\\luggage1.ogg",
 	"recourses\\sounds\\item_choose.ogg",
 	"recourses\\sounds\\skeleton_death.ogg",
+	"recourses\\sounds\\wolf_death.ogg",
 
 	"recourses\\sounds\\breaking\\chopper1.ogg",
 	"recourses\\sounds\\breaking\\wood_drop1.ogg",

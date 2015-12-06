@@ -37,6 +37,7 @@ struct TypeEnemy
 {
 	sf::Texture *textureEntity;
 	sf::String name;
+	int id;
 
 	sf::SoundBuffer *soundsEntity[sizeBuffer];
 
@@ -54,7 +55,7 @@ struct TypeEnemy
 	objectDropItems drop;
 
 	void initCurrentItem(TypeItem *typesItem, int id);
-	void InitOtherFeatures(sf::String texturePath, sf::String nameEnemy, int amountEnemySlots);
+	void InitOtherFeatures(int idType, sf::String texturePath, sf::String nameEnemy, int amountEnemySlots);
 };
 
 void initializeTypeEnemy(typesObjectsInWorld &types);

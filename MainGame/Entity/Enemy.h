@@ -31,6 +31,7 @@ public:
 	///////////////////////////////////////////////////////
 	void EnemyInit(TypeEnemy &typesEnemy, world &world, int xPos, int yPos, int level);
 	void EnemyDrop(world &world);
+	void playSoundDeath(world &world);
 	~Enemy();
 
 	void checkLevelHealth(Vector2f& movemoment);
