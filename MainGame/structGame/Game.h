@@ -6,7 +6,7 @@
 
 const sf::String TITLE_PROGRAM = "MainGame v1.7.3";
 
-const float faultWorldTime = 0.03f;
+const float faultWorldTime = 0.05f;
 
 namespace hotKeys
 {
@@ -50,18 +50,19 @@ namespace hotKeys
 	};
 }
 
-
 struct Game
 {
 	sf::RenderWindow window;
 
 	GUI gui;
 	TextGame textGame;
+	Music music;
 
 	Keyboard::Key keys[hotKeys::amountKeys];
 
 	MainPerson mainPerson;
 
+	int countDay = 0;
 	world world;
 	////////////////////////////////////
 	// Ходьба по карте(для противников
@@ -75,7 +76,7 @@ struct Game
 
 
 	Game();
-	void loadConfig();
+	void loadConfig(char *nameConfig, int *variables);
 	void initializeCategorysBreakingObject();
 	void initializeHotKeys();
 
@@ -99,6 +100,8 @@ struct Game
 	// worldCircle.cpp
 	void createGroups(float time);
 	void generateGroups();
+	void updateTimeDay(float &time);
+	void switchMusic();
 	void updateWorldTimeCircles();
 
 	// renderGame.cpp

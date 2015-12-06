@@ -6,7 +6,7 @@ void Game::updateWorldTimeCircles()
 
 	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
 		generateGroups();
-
+		updateTimeDay(currentWorldTime);
 		printf("World time: %f\n", currentWorldTime);
 	}
 }
@@ -15,14 +15,60 @@ void Game::generateGroups()
 {
 	bool &needGenerateWave = world.waveEnemysCreated;
 	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
-	int *config = world.configVariable;
+	int *config = world.enemyWaveVariables;
 
 	bool condition = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
+	condition &= world.timeDay == night;
 	if (condition && needGenerateWave == false) {
 		createGroups(currentWorldTime);
 	}
 }
 
+void Game::updateTimeDay(float &time)
+{
+	TimeDay &timeDay = world.timeDay;
+	if (timeDay == day) {
+		if (time > float(world.enemyWaveVariables[TIME_DAY])) {
+			world.worldTime.restart();
+			switchMusic();
+			timeDay = night;
+		}
+
+	}
+	else {
+		if (time > float(world.enemyWaveVariables[TIME_NIGHT])) {
+			world.worldTime.restart();
+			switchMusic();
+			timeDay = day;
+
+			std::vector<Enemy>& Enemys = *world.Enemys;
+			int i = 0;
+			while (i < Enemys.size()) {
+				if (Enemys[i].protection.deathDay) {
+					Enemys[i].playSoundDeath(world);
+					Enemys.erase(Enemys.begin() + i);
+					continue;
+				}
+				i++;
+			}
+
+		}
+	}
+}
+
+void Game::switchMusic()
+{
+	TimeDay &timeDay = world.timeDay;
+	if (timeDay == day && timeDay != night) {
+		music.openFromFile(musicPaths[idMusicPaths::NightMusic]);
+		timeDay = night;
+		music.play();
+	}
+	else if (timeDay == night && timeDay != day){
+		music.openFromFile(musicPaths[idMusicPaths::DayMusic]);
+		music.play();
+	}
+}
 
 void Game::createGroups(float time)
 {

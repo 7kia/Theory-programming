@@ -39,6 +39,12 @@ typedef enum {
 	amountSoundSound
 } idSoundPaths;
 
+typedef enum {
+	DayMusic,
+	NightMusic,
+	amountMusicPaths
+} idMusicPaths;
+
 const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 {
 	"recourses\\images\\entity\\mainPerson.png",
@@ -53,6 +59,8 @@ const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 	"recourses\\images\\gui\\inventory.png",
 	"recourses\\images\\things\\Items.png"
 };
+
+
 
 const std::string pathToSounds = "recourses\\sounds";
 const std::string soundPaths[idSoundPaths::amountSoundSound]
@@ -74,7 +82,10 @@ const std::string soundPaths[idSoundPaths::amountSoundSound]
 	"recourses\\sounds\\breaking\\hit_ground_1.ogg",
 	"recourses\\sounds\\breaking\\hit_sand_1.ogg",
 	"recourses\\sounds\\breaking\\hit_stone_1.ogg"
+};
 
-
-	
+const std::string musicPaths[idMusicPaths::amountMusicPaths]
+{
+	"recourses\\sounds\\Music\\Day_ambient.ogg",
+	"recourses\\sounds\\Music\\Night_ambient.ogg"
 };

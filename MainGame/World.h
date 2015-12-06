@@ -24,8 +24,10 @@ const int AMOUNT_SKELET_BUILDER_IN_BIG_GROUP = 4;
 */
 
 
-enum idConfigVariable
+enum idEnemyWaveVariable
 {
+	TIME_DAY,
+	TIME_NIGHT,
 	TIME_GENERATE_WAVE_ENEMYS,
 	AMOUNT_WAVE_FOR_UPDATE_DIFFICULT,
 	TIME_UPDATE_DIFFICULT,
@@ -46,7 +48,7 @@ enum idConfigVariable
 	AMOUNT_SKELET_MINER_IN_BIG_GROUP,
 	AMOUNT_SKELET_BUILDER_IN_BIG_GROUP,
 
-	amountId
+	amountIdsEnemyWaveVariable
 };
 
 struct typesObjectsInWorld
@@ -64,6 +66,11 @@ struct emptyObjects
 	Enemy emptyEnemy;
 };
 
+enum TimeDay {
+	day,
+	night
+};
+
 struct world
 {
 	std::vector<Item>* items;
@@ -73,10 +80,11 @@ struct world
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
 
+	TimeDay timeDay = day;
 	dataSound databaseSound;
 
 
-	int configVariable[idConfigVariable::amountId];
+	int enemyWaveVariables[idEnemyWaveVariable::amountIdsEnemyWaveVariable];
 
 	sf::Clock worldTime;
 	int difficult = 0;

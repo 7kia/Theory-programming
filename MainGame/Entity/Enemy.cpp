@@ -200,7 +200,7 @@ void createSmallGroupSkelets(world &world, Vector3i pos)
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
 
-	int *config = world.configVariable;
+	int *config = world.enemyWaveVariables;
 
 	types.push_back(&typesEnemy[idEntity::skeletEnemy]);
 	types.push_back(&typesEnemy[idEntity::skeletDiggerEnemy]);
@@ -219,7 +219,7 @@ void createMiddleGroupSkelets(world &world, Vector3i pos)
 
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
-	int *config = world.configVariable;
+	int *config = world.enemyWaveVariables;
 
 	types.push_back(&typesEnemy[idEntity::skeletEnemy]);
 	types.push_back(&typesEnemy[idEntity::skeletDiggerEnemy]);
@@ -242,7 +242,7 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
-	int *config = world.configVariable;
+	int *config = world.enemyWaveVariables;
 
 	types.push_back(&typesEnemy[idEntity::skeletEnemy]);
 	types.push_back(&typesEnemy[idEntity::skeletDiggerEnemy]);
@@ -263,7 +263,7 @@ void initializeEntitys(world &world)// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ
 {
 	srand(time(nullptr)); // àâòîìàòè÷åñêàÿ ñëó÷àéíîñòü
 
-	int *config = world.configVariable;
+	int *config = world.enemyWaveVariables;
 	config[TIME_UPDATE_DIFFICULT] = config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]
 																	* config[TIME_GENERATE_WAVE_ENEMYS];
 	//////////////////////////////////////////////////////////////
@@ -364,6 +364,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 
 	protection.init(type->protection.protectionCut,
 									type->protection.protectionCrash);
+	protection.deathDay = type->protection.deathDay;
 
 	float timeAtack = 1.f;
 	animation.init(type->damage.timeOutputDamage, timeAtack);

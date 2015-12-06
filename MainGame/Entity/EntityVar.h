@@ -154,6 +154,7 @@ struct entityThirst {
 struct entityProtection {
 	float protectionCut;
 	float protectionCrash;
+	bool deathDay = false;
 	void init(float cut, float crash);
 };
 

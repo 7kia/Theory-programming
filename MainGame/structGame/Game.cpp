@@ -158,8 +158,7 @@ Game::Game()
 	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
 
 	// TODO
-
-	loadConfig();
+	loadConfig("Configs\\EnemeWaves.conf", world.enemyWaveVariables);
 
 	world.Enemys = new vector<Enemy>;
 
@@ -177,14 +176,13 @@ Game::Game()
 	initializeClock(clock);
 }
 
-void Game::loadConfig()
+void Game::loadConfig(char *nameConfig, int *variables)
 {
 
 	FILE *pConfigFile;
-	errno_t eMapFile = fopen_s(&pConfigFile, "config.txt", "r");
+	errno_t eMapFile = fopen_s(&pConfigFile, nameConfig, "r");
 
 	const int amountHelpSymblos = 4;
-	wchar_t buff[amountHelpSymblos];
 
 	// Если файл открыт
 	if (pConfigFile) {
@@ -217,8 +215,8 @@ void Game::loadConfig()
 					value += currentSymbol;
 				}
 				else {
-					//std::cout << "value = %s " << value << std::endl;
-					stringToInt(world.configVariable[id], value);
+					std::cout << "value = %s " << value << std::endl;
+					stringToInt(variables[id], value);
 
 					id++;
 					value.clear();
