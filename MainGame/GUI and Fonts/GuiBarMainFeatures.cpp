@@ -42,8 +42,11 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 	currentText->setString(toStringCharacter(current, max));
 
 	// TODO
-	//position.x += middleString * scale.x;
-	position.y -= (HEIGHT_BARS_GUI / 2) * scale.y;
+	float middleString = computeMiddleString(*currentText);
+	position = { position.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, position.y - Y_SHIFT_BARS / 2 };
+	//position.x += middleString;// *scale.x;
+	// * scale.y
+	//position.y += (HEIGHT_BARS_GUI / 2);
 
 	currentText->setPosition(position);
 
@@ -100,10 +103,10 @@ void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, 
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 	Vector2f pos;
-	pos.x = centerWindow.x - sizeWindow.x / 2;//mainPerson.getXPos() mainPerson.getYPos()
-	pos.y = centerWindow.y + sizeWindow.y / 2 - float(HEIGHT_BARS_GUI) * scaleGuiForEnemy.y * shift;
+	pos.x = centerWindow.x - sizeWindow.x / 2;//* scaleGuiForEnemy.y
+	pos.y = centerWindow.y + sizeWindow.y / 2 - float(HEIGHT_BARS_GUI)  * shift;
 
-	renderBar(current, max, sprite, scaleGuiForMainPerson,
+	renderBar(current, max, sprite, NORMAL_SCALE,
 						sizes, textGame, pos, window);
 
 }

@@ -31,9 +31,9 @@ void barHungry::renderBar(int& current, int& max, Vector2f centerWindow, Vector2
 	pos = centerWindow;
 	
 	// TODO
-	highHungry.setScale(scaleGuiForMainPerson);
-	lowHungry.setScale(scaleGuiForMainPerson);
-	levelHungry.setScale(scaleGuiForMainPerson);
+	//highHungry.setScale(scaleGuiForMainPerson);
+	//lowHungry.setScale(scaleGuiForMainPerson);
+	//levelHungry.setScale(scaleGuiForMainPerson);
 
 	renderHigh(pos, sizeWindow, window);
 	renderLevel(current, max, pos, window);
@@ -42,8 +42,10 @@ void barHungry::renderBar(int& current, int& max, Vector2f centerWindow, Vector2
 
 void barHungry::renderHigh(Vector2f& pos, Vector2u sizeWindow, RenderWindow& window)
 {
-	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) * scaleGuiForMainPerson.x;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) * scaleGuiForMainPerson.y;
+	//* scaleGuiForMainPerson.x
+	// * scaleGuiForMainPerson.y
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) ;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
 
 	highHungry.setPosition(pos);
 	window.draw(highHungry);
@@ -53,18 +55,21 @@ void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow&
 {
 	float level = float(current) / max;
 
-	pos.y += (LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level)) * scaleGuiForMainPerson.y;
+	// * scaleGuiForMainPerson.y
+	pos.y += (LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level));
 	int currentLevel = int(LEVEL_HUNGY_GUI * level);
 	levelHungry.setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
 	levelHungry.setPosition(pos);
 	window.draw(levelHungry);
 }
 
-void barHungry::renderLow(Vector2f& pos, Vector2f centerWindow, Vector2u sizeWindow, RenderWindow& window)
+void barHungry::renderLow(Vector2f pos, Vector2f centerWindow, Vector2u sizeWindow, RenderWindow& window)
 {
+	//* scaleGuiForMainPerson.x
+	//* scaleGuiForMainPerson.y
 	pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) * scaleGuiForMainPerson.x;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) * scaleGuiForMainPerson.y;
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) ;
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) ;
 	lowHungry.setPosition(pos);
 	window.draw(lowHungry);
 
@@ -73,12 +78,14 @@ void barHungry::renderLow(Vector2f& pos, Vector2f centerWindow, Vector2u sizeWin
 void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow, sf::RenderWindow& window)
 {
 	Vector2f pos = centerWindow;
-	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) * scaleGuiForMainPerson.x;
-	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI) * scaleGuiForMainPerson.x;
+	// * scaleGuiForMainPerson.x
+	//* scaleGuiForMainPerson.x
+	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
+	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI) ;
 
 
 	//TODO
-	bottle.setScale(scaleGuiForMainPerson);
+	//bottle.setScale(scaleGuiForMainPerson);
 	bottle.setPosition(pos);
 	window.draw(bottle);
 
@@ -88,7 +95,7 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 	int currentLevel = int(LEVEL_THIRST * level);
 	int currentShift = int(LEVEL_THIRST * (1 - level));
 	// TODO
-	levelThirst.setScale(scaleGuiForMainPerson);
+	//levelThirst.setScale(scaleGuiForMainPerson);
 	levelThirst.setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
 	levelThirst.setPosition(pos);
 	window.draw(levelThirst);

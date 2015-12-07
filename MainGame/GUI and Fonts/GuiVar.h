@@ -73,6 +73,7 @@ const int Y_LEVEL_STAMINA_GUI = 0;
 const int X_LEVEL_MANA_GUI = WIDTH_BARS_GUI + WIDTH_LEVEL_BAR_GUI;// добавление gui
 const int Y_LEVEL_MANA_GUI = 0;
 
+const sf::Vector2f NORMAL_SCALE = { 1.f, 1.f };
 const sf::Vector2f scaleGuiForEnemy = { 0.5f, 0.5f };
 const sf::Vector2f scaleGuiForMainPerson = { 0.5f, 0.5f };
 const sf::Vector2f normalSizeGuiForEnemy = { 1.f, 1.f };
