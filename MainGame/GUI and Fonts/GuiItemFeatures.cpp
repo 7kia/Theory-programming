@@ -102,12 +102,15 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 	// Перевод из числа в строку
 	int itemCutDam = typeItem->damageItem.cuttingDamage;
 	int itemCrashDam = typeItem->damageItem.crushingDamage;
+	int itemUnlifeDam = typeItem->damageItem.unlifeDamage;
 
 	string itemCut;
 	string itemCrash;
+	string itemUnlife;
 
 	intToString(itemCutDam, itemCut);
 	intToString(itemCrashDam, itemCrash);
+	intToString(itemUnlifeDam, itemUnlife);
 
 
 	renderIconWithScale(cutSprite, pos, window);
@@ -116,6 +119,11 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 	pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
 	renderIconWithScale(crashSprite, pos, window);
 	renderValueMiddle(itemCrash, currentText, pos, window);
+
+	pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+	renderIconWithScale(unlifeSprite, pos, window);
+	renderValueMiddle(itemUnlife, currentText, pos, window);
+
 	//////////////////////////////////////////////////////////
 	// Отображение характеристик
 

@@ -9,7 +9,8 @@ struct typeDamageItem
 {
 	int cuttingDamage;// Режущий
 	int crushingDamage;// Дробящий
-	void init(int cut, int crush);
+	int unlifeDamage;
+	void init(int cut, int crush, int unlife);
 };
 
 struct idCreateObjects

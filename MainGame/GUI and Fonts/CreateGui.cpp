@@ -86,6 +86,10 @@ void createGUI(itemFeatures& gui, Texture &textureWidgets, Texture &textureBars)
 	gui.cutSprite.setOrigin(WIDTH_DAMAGE_GUI / 2, HEIGHT_DAMAGE_GUI / 2);
 	gui.cutSprite.setTextureRect(IntRect(X_CUT_DAMAGE_GUI, Y_CUT_DAMAGE_GUI, WIDTH_DAMAGE_GUI, HEIGHT_DAMAGE_GUI));
 
+	gui.unlifeSprite.setTexture(textureBars);
+	gui.unlifeSprite.setOrigin(WIDTH_DAMAGE_GUI / 2, HEIGHT_DAMAGE_GUI / 2);
+	gui.unlifeSprite.setTextureRect(IntRect(X_UNLIFE_DAMAGE_GUI, Y_UNLIFE_DAMAGE_GUI, WIDTH_DAMAGE_GUI, HEIGHT_DAMAGE_GUI));
+
 	gui.hungrySprite.setTexture(textureBars);
 	gui.hungrySprite.setOrigin(WIDTH_DAMAGE_GUI / 2, HEIGHT_DAMAGE_GUI / 2);
 	gui.hungrySprite.setTextureRect(IntRect(X_HUNGRY_ITEM_GUI, Y_HUNGRY_ITEM_GUI, WIDTH_DAMAGE_GUI, HEIGHT_DAMAGE_GUI));

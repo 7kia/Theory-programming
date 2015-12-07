@@ -6,6 +6,7 @@ struct itemFeatures
 {
 	sf::Sprite cutSprite;
 	sf::Sprite crashSprite;
+	sf::Sprite unlifeSprite;
 	sf::Sprite hungrySprite;
 	sf::Sprite thirstSprite;
 	void renderValueMiddle(std::string string, Text* text, sf::Vector2f &position, sf::RenderWindow &window);

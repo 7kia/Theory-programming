@@ -69,12 +69,14 @@ struct DamageInputAndOutput {
 	float timeOutputDamage;
 	int cuttingDamage = 0;// Значение по умолчанию
 	int crushingDamage = 1;// Значение по умолчанию
+	int unlifeDamage = 0;
 
 	int outputDamage;
 
 	int inputDamage;
 	int inputCutDamage;
 	int inputCrashDamage;
+	int inputUnlifeDamage;
 
 	float timeInputDamage;// Показывает урон в течении ... секунд
 
@@ -147,8 +149,10 @@ struct entityThirst {
 struct entityProtection {
 	float protectionCut;
 	float protectionCrash;
+	float protectionUnlife;
+
 	bool deathDay = false;
-	void init(float cut, float crash);
+	void init(float cut, float crash, float unlife);
 };
 
 struct foundObjects {

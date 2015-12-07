@@ -7,10 +7,11 @@ using namespace sf;
 using namespace std;
 
 
-void entityProtection::init(float cut, float crash)
+void entityProtection::init(float cut, float crash, float unlife)
 {
 	protectionCut = cut;
 	protectionCrash = crash;
+	protectionUnlife = unlife;
 }
 
 void foundObjects::init(Item *item, UnlifeObject *object)
@@ -193,7 +194,7 @@ void entityThirst::update(const float deltaTime, bool &needMinusHealth)
 	} else {
 		needMinusHealth = true;
 	}
-};
+}
 
 ////////////////////////////////////////////////////////////////////
 // Передвижение. Его анимация и озвучка

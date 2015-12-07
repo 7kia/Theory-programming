@@ -77,6 +77,7 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 	entityProtection &protection = mainPerson.protection;
 	protection.protectionCut = 0.15f;
 	protection.protectionCrash = 1.f;
+	protection.protectionUnlife = 0.f;
 
 	mainPerson.damage.damageMultiplirer = 1;
 

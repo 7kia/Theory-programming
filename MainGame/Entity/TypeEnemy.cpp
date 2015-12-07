@@ -21,7 +21,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	drop.addItem(1, 4, idItem::rawMeatWolfItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_WOLF, HEIGHT_WOLF, 0, 0);
-	typeEnemy->protection.init(1.5f, 1.f);
+	typeEnemy->protection.init(1.5f, 1.f, 0.f);
 	typeEnemy->protection.deathDay = false;
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(100, 25, 0, 20, 20);
@@ -44,7 +44,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	drop.addItem( 1, 2, idItem::dirtItem );
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
-	typeEnemy->protection.init(0.f, 1.f);
+	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(75, 0, 0, 20, 20);
@@ -66,7 +66,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	drop.addItem(1, 2, idItem::dirtItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
-	typeEnemy->protection.init(0.f, 1.f);
+	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(75, 0, 0, 20, 20);
@@ -88,7 +88,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	drop.addItem(1, 2, idItem::dirtItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
-	typeEnemy->protection.init(0.f, 1.f);
+	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(75, 0, 0, 20, 20);
@@ -110,7 +110,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	drop.addItem(1, 2, idItem::dirtItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
-	typeEnemy->protection.init(0.f, 1.f);
+	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(75, 0, 0, 20, 20);
@@ -131,7 +131,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	drop.addItem(1, 2, idItem::dirtItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
-	typeEnemy->protection.init(0.f, 1.f);
+	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(75, 0, 0, 20, 20);

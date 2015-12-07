@@ -363,7 +363,8 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 	hungry.currentHungry = hungry.maxHungry;
 
 	protection.init(type->protection.protectionCut,
-									type->protection.protectionCrash);
+									type->protection.protectionCrash,
+									type->protection.protectionUnlife);
 	protection.deathDay = type->protection.deathDay;
 
 	float timeAtack = 1.f;
@@ -413,16 +414,22 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 
 	damage.inputCutDamage = int(multiplirer * (damage.cuttingDamage + damagePersonItem.cuttingDamage));
 	damage.inputCrashDamage = int(multiplirer * (damage.crushingDamage + damagePersonItem.crushingDamage));
+	damage.inputUnlifeDamage = int(multiplirer * (damage.unlifeDamage + damagePersonItem.unlifeDamage));
+
 	int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
 	int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
+	int unlifingDamage = currentItem.typeItem->damageItem.unlifeDamage;
+
 
 	float cutDamage = damage.damageMultiplirer * cuttingDamage;
 	float crashDamage = damage.damageMultiplirer * crushingDamage;
+	float unlifeDamage = damage.damageMultiplirer * unlifingDamage;
 
 	cutDamage *= protection.protectionCut;
 	crashDamage *= protection.protectionCrash;
+	unlifeDamage *= protection.protectionUnlife;
 
-	damage.inputDamage = int(cutDamage + crashDamage);
+	damage.inputDamage = int(cutDamage + crashDamage + unlifeDamage);
 	health.currentHealth -= damage.inputDamage;
 
 	int categoryItem = currentItem.typeItem->features.category;
