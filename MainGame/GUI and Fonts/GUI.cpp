@@ -153,7 +153,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	////////////////////////////////////////////////////////////////
 	// для противников
-	int shiftHelathEnemy = 2;
+	int shiftHelathEnemy = 1;//2
 	int healthEnemy;
 	int healthMaxEnemy;
 
@@ -189,7 +189,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	////////////////////////////////////////////////////////////////
 	// для противников
 
-	int shiftStaminaEnemy = 1;
+	int shiftStaminaEnemy = 0;//1
 	int staminaEnemy;
 	int staminaMaxEnemy;
 

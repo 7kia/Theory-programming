@@ -62,7 +62,7 @@ void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, in
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
 	pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shift);
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * shift;
 
 
 	currentText->setString(toStringCharacter(current, max));
@@ -123,8 +123,11 @@ void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int s
 	renderDamageForEnemy(enemy, textGame, window, shiftBar);
 
 	if (max) {
-		renderBar(current, max, sprite, scaleGuiForEnemy,
-							sizes, textGame, pos, window);
+		render(current, max, sprite, scaleGuiForEnemy,
+					 sizes, pos, window);
+
+		renderTextEnemy(enemy, current, max, shift,
+										window, textGame);
 	}
 
 }
