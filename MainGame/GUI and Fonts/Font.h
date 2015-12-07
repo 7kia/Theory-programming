@@ -5,6 +5,11 @@ const int SIZE_BIG_TEXT = 32;
 const int SIZE_NORMAL_TEXT = 18;
 const int SIZE_SMALL_TEXT = 14;
 
+const sf::String TEXT_AWARD = "Award";
+const sf::String TEXT_WAVE_END = "Wave enemys is end!";
+
+const int SHIFT_Y_AWARD_TEXT = 20;
+
 typedef enum {
 	infoWindowBlock,
 	infoWindowFloor,
@@ -15,6 +20,9 @@ typedef enum {
 	levelBar,
 	itemGui,
 	mainPersonIsDeath,
+
+	panelText,
+	panelTitleText,
 	amountTexts
 } idText;
 

@@ -3,6 +3,15 @@
 #include "../Entity/MainPerson.h"
 #include "Font.h"
 
+
+enum idGuiTexture {
+	widgetsTexture,
+	awardTexture,
+	menuTexture,
+	barTexture,
+	amoundIdGuiTexture
+};
+
 const int numberTextReference = 8;
 const int AMOUNT_TEXT_GUI = 4;
 
@@ -87,6 +96,13 @@ const int HEIGHT_ITEM_OVER_PANEL_INFO = 60;
 
 const int X_ITEM_OVER_PANEL_INFO = 0;
 const int Y_ITEM_OVER_PANEL_INFO = heightPanelQuickAccess + heightSelectInPanelQuickAccess;
+// Панель наград
+const int WIDTH_AWARD_GUI = 633;
+const int HEIGHT_AWARD_GUI = 444;
+// Панель наград
+const int WIDTH_MENU_GUI = 739;
+const int HEIGHT_MENU_GUI = 885;
+
 // Отображение характеристик предмета
 const int AMOUNT_DAMAGE_FEATURES = 2;
 

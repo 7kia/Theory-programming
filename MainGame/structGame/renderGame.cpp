@@ -38,6 +38,9 @@ void Game::render()
 	renderUnlifeObjects(rectWindow);
 
 	gui.setPositionGui(window, mainPerson, *world.Enemys, textGame);
+
+	renderGui();
+
 	window.display();
 }
 
@@ -163,6 +166,64 @@ void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 
 			drawInWindow(*unlifeObjects[i].spriteObject, rectWindow);
 			drawInWindow(*unlifeObjects[i].transparentSpiteObject, rectWindow);
+		}
+
+	}
+}
+
+
+void Game::setPositionAwardText()
+{
+	Vector2f centerWindow = mainPerson.view->getCenter();
+	Text *currentText = &textGame.texts[idText::panelTitleText];
+	Vector2f posText = centerWindow;
+
+	currentText->setString(TEXT_AWARD);
+	int sizeText = currentText->getCharacterSize();
+	float middleText = computeMiddleString(*currentText);
+	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TEXT;
+	posText.x -= middleText;
+
+	currentText->setPosition(posText);
+	////////////////////////////////////////
+	currentText = &textGame.texts[idText::panelText];
+	posText = centerWindow;
+	currentText->setString(TEXT_WAVE_END);
+	middleText = computeMiddleString(*currentText);
+	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TEXT * 2 + sizeText;
+	posText.x -= middleText;
+
+	currentText->setPosition(posText);
+
+}
+
+void Game::drawAwardPanel()
+{
+	panel &awardPanel = gui.panels.awardPanel;
+
+	awardPanel.draw = true;
+	setPositionAwardText();
+	playGlobalSound(idSoundPaths::waveEndSound, world.databaseSound);
+
+	stateGame = pauseState;
+}
+
+void Game::renderGui()
+{
+	if (stateGame == pauseState) {
+		Vector2f centerWindow = mainPerson.view->getCenter();
+		panels &panels = gui.panels;
+
+		panel &panel = panels.awardPanel;
+		Sprite &sprite = panel.sprite;
+
+		if (panel.draw) {
+			panel.setPosition(centerWindow);
+			window.draw(sprite);
+
+			window.draw(textGame.texts[idText::panelTitleText]);		
+			window.draw(textGame.texts[idText::panelText]);
+
 		}
 
 	}

@@ -64,7 +64,7 @@ void panelQuickAccess::renderAmountItem(int amount, Vector2f pos, TextGame &text
 void panels::renderItemPanel(sf::Vector2f position, RenderWindow& window)
 {
 	itemInfoOverPanel.setPosition(position);
-	window.draw(itemInfoOverPanel);
+	window.draw(itemInfoOverPanel.sprite);
 }
 
 void panelQuickAccess::renderItems(MainPerson& mainPerson, featuresWindow features,
@@ -107,4 +107,9 @@ void panelQuickAccess::renderItems(MainPerson& mainPerson, featuresWindow featur
 
 	}
 
+}
+
+void panel::setPosition(sf::Vector2f position)
+{
+	sprite.setPosition(position);
 }

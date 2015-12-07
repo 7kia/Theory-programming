@@ -5,14 +5,16 @@ using namespace std;
 
 void initializeGUI(GUI &gui, TextGame &textGame)
 {
-	createGUITexture(gui.widgetsTexture, texturePaths[idTexturePaths::widgets]);
-	createPanels(gui.panels, gui.widgetsTexture);
+	createGUITexture(gui.textureGui[widgetsTexture], texturePaths[idTexturePaths::widgets]);
+	createGUITexture(gui.textureGui[awardTexture], texturePaths[idTexturePaths::awardGui]);
+	createGUITexture(gui.textureGui[menuTexture], texturePaths[idTexturePaths::menuGui]);
+	createPanels(gui.panels, gui.textureGui);
 
-	createGUITexture(gui.textureBar, texturePaths[idTexturePaths::bars]);
-	createGUI(gui.hungry, &gui.textureBar);
-	createGUI(gui.thirst, &gui.textureBar);
-	createGUI(gui.mainFeatures, &gui.textureBar);
-	createGUI(gui.itemFeatures, &gui.widgetsTexture, &gui.textureBar);
+	createGUITexture(gui.textureGui[barTexture], texturePaths[idTexturePaths::bars]);
+	createGUI(gui.hungry, gui.textureGui[barTexture]);
+	createGUI(gui.thirst, gui.textureGui[barTexture]);
+	createGUI(gui.mainFeatures, gui.textureGui[barTexture]);
+	createGUI(gui.itemFeatures, gui.textureGui[widgetsTexture], gui.textureGui[barTexture]);
 
 	///////////////////////////////////////////////////////////////////
 	// ÈÑÏÐÀÂÜ
@@ -252,6 +254,7 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	hungry.renderBar(mainPerson.hungry.currentHungry, mainPerson.hungry.maxHungry, centerWindow, sizeWindow, window);
 	thirst.renderBar(mainPerson.thirst.currentThirst, mainPerson.thirst.maxThirst, centerWindow, sizeWindow, window);
 	////////////////////////////////////////////////////////////////////////
+
 
 }
 

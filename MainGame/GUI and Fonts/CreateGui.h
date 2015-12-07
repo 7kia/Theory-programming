@@ -24,12 +24,12 @@ struct barThirst
 
 void createGUITexture(sf::Texture &texture, sf::String fileName);
 
-void createGUI(sf::Sprite &itemInfoOverPanel, sf::Texture &texture);
+void createGUI(panel &panel, Texture &texture, featuresSprite features);
 void createGUI(infoAboutSelect &gui);
-void createGUI(panelQuickAccess &gui, sf::Texture *texture);
-void createPanels(panels &gui, sf::Texture &texture);
+void createGUI(panelQuickAccess &gui, sf::Texture &texture);
+void createPanels(panels &gui, sf::Texture *texture);
 
-void createGUI(barHungry &gui, sf::Texture *texture);
-void createGUI(barThirst &gui, sf::Texture *texture);
-void createGUI(barMainFeatures &gui, sf::Texture *texture);
-void createGUI(itemFeatures &gui, sf::Texture *textureWidgets, sf::Texture *textureBars);
+void createGUI(barHungry &gui, sf::Texture &texture);
+void createGUI(barThirst &gui, sf::Texture &texture);
+void createGUI(barMainFeatures &gui, sf::Texture &texture);
+void createGUI(itemFeatures &gui, sf::Texture &textureWidgets, sf::Texture &textureBars);

@@ -30,6 +30,9 @@ void initializeTexts(TextGame &textGame)
 
 	textGame.InitText(idText::itemGui, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
 
+	textGame.InitText(idText::panelText, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::panelTitleText, Color::White, Text::Regular | Text::Underlined, SIZE_BIG_TEXT);
+
 	/*
 	// Определение количества символов
 	int sizeString = 0;

@@ -57,7 +57,8 @@ enum StateGame
 {
 	gameState,
 	pauseState,
-	menuState
+	menuState,
+	waveEndState
 };
 
 struct Game
@@ -112,6 +113,10 @@ struct Game
 	// worldCircle.cpp
 	void createGroups(float time);
 	void generateGroups();
+
+	void drawAwardPanel();
+	void setPositionAwardText();
+
 	void updateTimeDay(float &time);
 	void playDayMusic();
 	void playNightMusic();
@@ -125,6 +130,7 @@ struct Game
 	void renderUnlifeObjects(sf::FloatRect const& rectWindow);
 	void renderItems(sf::FloatRect const& rectWindow);
 	void renderMap(sf::FloatRect const& rectWindow);
+	void renderGui();
 	void showFPS(const Time timeSinceLastUpdate);
 };
 void initializeCategorysBreakingObject(Game &game);

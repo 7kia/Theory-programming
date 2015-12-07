@@ -349,7 +349,6 @@ void Game::initializeHotKeys()
 
 //*/
 
-
 void destroyGame(Game & game)
 {
 	// TODO

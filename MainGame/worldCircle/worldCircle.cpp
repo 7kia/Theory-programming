@@ -49,6 +49,7 @@ void Game::updateTimeDay(float &time)
 					Enemys.erase(Enemys.begin() + i);
 					world.countEntity--;
 
+					drawAwardPanel();
 					continue;
 				}
 				i++;

@@ -53,10 +53,18 @@ void Game::processInterface()
 	if (Keyboard::isKeyPressed(keys[pauseGame])) {
 		if (stateGame == gameState) {
 			stateGame = pauseState;
-
+			music.pause();
 		}
 		else if (stateGame == pauseState) {
 			stateGame = gameState;
+			music.play();
+
+
+			panels &panels = gui.panels;
+			panel &panel = panels.awardPanel;
+			Sprite &sprite = panel.sprite;
+
+			panel.draw = false;
 		}
 	}
 }

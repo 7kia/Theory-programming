@@ -4,10 +4,10 @@
 struct GUI
 {// добавление gui
 
-	sf::Texture widgetsTexture;
+	sf::Texture textureGui[amoundIdGuiTexture];
+
 	panels panels;
 
-	sf::Texture textureBar;
 	barHungry hungry;
 	barThirst thirst;
 	barMainFeatures mainFeatures;

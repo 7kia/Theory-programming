@@ -21,10 +21,19 @@ struct panelQuickAccess
 									 TextGame &textGame, barMainFeatures &bars, itemFeatures &itemFeatures);
 };
 
+struct panel
+{
+	sf::Sprite sprite;
+	bool draw = false;
+	void setPosition(sf::Vector2f position);
+};
+
 struct panels
 {
 	infoAboutSelect infoAboutSelect;
 	panelQuickAccess panelQuickAccess;
-	sf::Sprite itemInfoOverPanel;
+	panel itemInfoOverPanel;
+	panel awardPanel;
+	panel menuPanel;
 	void renderItemPanel(Vector2f position, RenderWindow& window);
 };
