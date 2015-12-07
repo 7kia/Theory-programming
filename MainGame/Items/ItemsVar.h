@@ -72,6 +72,10 @@ const int PIXEL_Y_WOOD_BUKKET = SIZE_ITEM * 2;
 const int PIXEL_X_WOOD_BUKKET_WITH_WATER = SIZE_ITEM * 9;
 const int PIXEL_Y_WOOD_BUKKET_WITH_WATER = SIZE_ITEM * 2;
 
+// wood bukket with water - ведро с водой
+const int PIXEL_X_HEALTH_POTION = SIZE_ITEM * 10;
+const int PIXEL_Y_HEALTH_POTION = SIZE_ITEM * 2;
+
 // stone knife - каменный нож
 const int PIXEL_X_STONE_KNIFE = SIZE_ITEM * 4;
 const int PIXEL_Y_STONE_KNIFE = SIZE_ITEM * 3;
@@ -83,6 +87,27 @@ const int PIXEL_Y_WOOD_CLUB = SIZE_ITEM * 3;
 // iton backhoe - железна€ лопата
 const int PIXEL_X_IRON_BACKHOE = SIZE_ITEM * 2;
 const int PIXEL_Y_IRON_BACKHOE = SIZE_ITEM * 4;
+
+// iton pickax - железна€ лопата
+const int PIXEL_X_IRON_PICKAK = SIZE_ITEM * 3;
+const int PIXEL_Y_IRON_PICKAK = SIZE_ITEM * 4;
+
+// iton sword - железна€ лопата
+const int PIXEL_X_IRON_SWORD = SIZE_ITEM * 4;
+const int PIXEL_Y_IRON_SWORD = SIZE_ITEM * 4;
+
+// iton sword - железна€ лопата
+const int PIXEL_X_SILVER_SWORD = SIZE_ITEM * 4;
+const int PIXEL_Y_SILVER_SWORD = SIZE_ITEM * 5;
+
+// iton sword - железна€ лопата
+const int PIXEL_X_IRON_AXE = SIZE_ITEM * 5;
+const int PIXEL_Y_IRON_AXE = SIZE_ITEM * 4;
+
+// iton sword - железна€ лопата
+const int PIXEL_X_IRON_CLUB = SIZE_ITEM * 6;
+const int PIXEL_Y_IRON_CLUB = SIZE_ITEM * 4;
+
 
 // raw meat wolf - сырое м€со волка
 const int PIXEL_X_RAW_MEAT_WOLF = SIZE_ITEM * 6;
@@ -131,16 +156,23 @@ namespace idItem {
 		// »нструменты
 		stonePickaxItem,
 		stoneAxeItem,
-		ironBackHoerIte,
+		ironBackHoerItem,
+		ironAxeItem,
+		ironPickaxItem,
 		// ћечи
 		stoneKnifeItem,
+		ironSwordItem,
+		silverSwordItem,
 		// ƒубины
 		woodClubItem,
+		ironClubItem,
 		// —осуды с водой и без
 		glassBottleItem,
 		glassbukketWithWater,
 		woodBukketItem,
 		woodBukketWithWaterItem,
+
+		healthPotionItem,
 
 		amountItem
 	};
@@ -157,6 +189,7 @@ typedef enum
 	pickax,
 	bottleEmpty,
 	bottleWithWater,
+	healthPotion,
 	bukketWithWater,
 	bukketEmpty,
 	weapon,

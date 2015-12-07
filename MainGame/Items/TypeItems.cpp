@@ -285,6 +285,42 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
+
+	// железный меч
+	numberItem = idItem::ironSwordItem;
+
+	featuresAddItem.init("Iron sword", numberItem, idCategoryItem::weapon, false);
+	featuresAddItem.defineToughness(true, 512);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_SWORD, PIXEL_Y_IRON_SWORD);
+
+	damage.init(32, 4);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
+	// Серебрянный меч
+	numberItem = idItem::silverSwordItem;
+
+	featuresAddItem.init("Silver  sword", numberItem, idCategoryItem::weapon, false);
+	featuresAddItem.defineToughness(true, 5000);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SILVER_SWORD, PIXEL_Y_SILVER_SWORD);
+
+	damage.init(45, 45);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
 	/////////////////////////////
 	// Деревянная дубина
 	numberItem = idItem::woodClubItem;
@@ -295,6 +331,24 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_CLUB, PIXEL_Y_WOOD_CLUB);
 
 	damage.init(0, 18);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
+	// железная дубина
+	numberItem = idItem::ironClubItem;
+
+	featuresAddItem.init("Iron club", numberItem, idCategoryItem::weapon, false);
+	featuresAddItem.defineToughness(true, 512);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_CLUB, PIXEL_Y_IRON_CLUB);
+
+	damage.init(0, 32);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
@@ -319,7 +373,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	String* pathTexture = new String;
 	*pathTexture = texturePaths[idTexturePaths::items];
 
-	int numberItem = idItem::ironBackHoerIte;
+	int numberItem = idItem::ironBackHoerItem;
 
 	featuresAddItem.init("Iron backhoe", numberItem, idCategoryItem::backhoe, false);
 	featuresAddItem.defineToughness(true, 512);
@@ -358,6 +412,28 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
+
+	// Железная кирка
+	numberItem = idItem::ironPickaxItem;
+
+	featuresAddItem.init("Iron pickax", numberItem, idCategoryItem::pickax, false);
+	featuresAddItem.defineToughness(true, 512);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_PICKAK, PIXEL_Y_IRON_PICKAK);
+
+	damage.init(18, 12);
+
+	addType.destroy.init(&list.pickaxBreakingObject, &list.pickaxBreakingBlock);
+
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+	/////////////////////////////////////////////////////////
+
 	/////////////////////////////////////////////////////////
 	// Топоры
 
@@ -381,6 +457,26 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
+	// Железный топор
+	numberItem = idItem::ironAxeItem;
+
+	featuresAddItem.init("Iron axe", numberItem, idCategoryItem::axe, false);
+	featuresAddItem.defineToughness(true, 512);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_AXE, PIXEL_Y_IRON_AXE);
+
+	damage.init(18, 18);
+
+	addType.destroy.init(&list.axeBreakingObject, &list.axeBreakingBlock);
+
+	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
+
 
 	delete pathTexture;
 }
@@ -593,7 +689,24 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
+	/////////////////////////////
+	// Стеклянная бытылка с водой
+	numberItem = idItem::healthPotionItem;
 
+	featuresAddItem.init("Health potion", numberItem, idCategoryItem::healthPotion, false);
+	featuresAddItem.defineToughness(false, 100);
+
+	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_HEALTH_POTION, PIXEL_Y_HEALTH_POTION);
+
+	damage.init(0, 2);
+
+	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain, idCreated, damage);
+
+	typesItem[numberItem] = addType;
 	delete pathTexture;
 }
 

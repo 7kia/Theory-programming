@@ -462,6 +462,9 @@ void MainPerson::useItem(world &world,
 		case idCategoryItem::bottleWithWater:
 			useAsBottleWithWater(currentItem, world, event);
 			break;
+		case idCategoryItem::healthPotion:
+			useAsHealthPotion(currentItem, world, event);
+			break;
 		case idCategoryItem::bukketEmpty:// ÈÑÏÐÀÂÜ
 			if (isInUseField(pos.x, pos.y, true)) {
 				int level;

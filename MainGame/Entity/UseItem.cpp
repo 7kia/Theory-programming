@@ -121,6 +121,16 @@ void Entity::useAsBottleWithWater(Item &currentItem, world &world, Event event)
 		redefineType(currentItem, world, -1);
 	}
 
+}
+
+void Entity::useAsHealthPotion(Item &currentItem, world &world, Event event)
+{
+	bool drinking = event.key.code == Mouse::Right;
+	bool lowHealth = health.currentHealth < (health.maxHealth / 2);
+	if (drinking && lowHealth) {
+		health.currentHealth += currentItem.currentToughness;
+		redefineType(currentItem, world, -(idItem::healthPotionItem - idItem::glassBottleItem - 1));
+	}
 
 }
 

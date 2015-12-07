@@ -158,6 +158,7 @@ Game::Game()
 	initializeTypesItem(types.typesItem, *world.listDestroy);
 	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
 
+
 	// TODO
 	loadConfig("Configs\\EnemeWaves.conf", world.enemyWaveVariables);
 
@@ -345,6 +346,20 @@ void Game::initializeHotKeys()
 	{
 		keys[i] = hotKeys::defaultValue[i];
 	}
+}
+
+void Game::createListAward()
+{
+	awardForLevel = new vector<int>[NUMBER_LEVELS];
+	awardForWave = new vector<int>;
+
+	awardForLevel[0].push_back(idItem::stoneAxeItem);
+
+	awardForLevel[1].push_back(idItem::stonePickaxItem);
+
+	awardForLevel[2].push_back(idItem::stoneKnifeItem);
+
+
 }
 
 //*/

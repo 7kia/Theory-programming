@@ -8,6 +8,8 @@ const sf::String TITLE_PROGRAM = "MainGame v1.7.3";
 
 const float faultWorldTime = 0.05f;
 
+const int NUMBER_LEVELS = 3;
+
 namespace hotKeys
 {
 	enum id {
@@ -76,6 +78,8 @@ struct Game
 
 	int countDay = 0;
 	world world;
+	std::vector<int> *awardForLevel;
+	std::vector<int> *awardForWave;
 	////////////////////////////////////
 	// Ходьба по карте(для противников
 	float minTimeWalk = 4.f;
@@ -92,6 +96,7 @@ struct Game
 	void initializeCategorysBreakingObject();
 	void initializeHotKeys();
 
+	void createListAward();
 	void informationAboutSelect(float x, float y);
 
 	// processEvents.cpp

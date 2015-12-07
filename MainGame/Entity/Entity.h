@@ -116,6 +116,7 @@ public:
 	void defineLevel(int &number, sf::Event event);
 	void redefineType(Item &currentItem, world &world, int shift);
 	void useAsBottleWithWater(Item &currentItem, world &world, sf::Event event);
+	void useAsHealthPotion(Item& currentItem, world& world, Event event);
 	void useAsFood(Item &currentItem, sf::Event event);
 	void useAsEmptyBottle(Item &currentItem, world &world, int level);
 	void useAsEmptyBukket(Item &currentItem, world &world, int level);

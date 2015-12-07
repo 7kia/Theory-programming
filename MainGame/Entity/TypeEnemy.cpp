@@ -74,7 +74,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true);
 	typeEnemy->converse.init(true, false, false);
-	typeEnemy->initCurrentItem(typesItem, idItem::ironBackHoerIte);
+	typeEnemy->initCurrentItem(typesItem, idItem::ironBackHoerItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
 	drop.clear();
