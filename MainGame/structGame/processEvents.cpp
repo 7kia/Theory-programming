@@ -48,6 +48,19 @@ void Game::processArrows()
 	}
 }
 
+void Game::processInterface()
+{
+	if (Keyboard::isKeyPressed(keys[pauseGame])) {
+		if (stateGame == gameState) {
+			stateGame = pauseState;
+
+		}
+		else if (stateGame == pauseState) {
+			stateGame = gameState;
+		}
+	}
+}
+
 void Game::processPersonAction(Vector2f pos)
 {
 	if (Keyboard::isKeyPressed(keys[actionAlternate])) {
@@ -74,24 +87,23 @@ void Game::processPersonAction(Vector2f pos)
 void Game::processOtherAction(Event &event, Vector2f pos)
 {
 
-	
-
-		switch (event.type) {
-		case Event::KeyPressed:
-			processPersonAction(pos);
-			break;
-		case Event::MouseButtonPressed:
-			mainPerson.useItem(world, event, pos);
-			break;
-		case Event::Closed:
-			window.close();
-			break;
-		case Event::Resized:
-			resizeWindow();
-			break;
-		default:
-			break;
-		}
+	switch (event.type) {
+	case Event::KeyPressed:
+		processInterface();
+		processPersonAction(pos);
+		break;
+	case Event::MouseButtonPressed:
+		mainPerson.useItem(world, event, pos);
+		break;
+	case Event::Closed:
+		window.close();
+		break;
+	case Event::Resized:
+		resizeWindow();
+		break;
+	default:
+		break;
+	}
 }
 
 	void Game::processPanelQuickAccess()

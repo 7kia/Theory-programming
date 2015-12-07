@@ -32,7 +32,6 @@ public:
 
 	redefineObject redefine;
 
-
 	featuresSprite mainSize;
 	featuresSprite transparentSize;
 	objectDropItems drop;

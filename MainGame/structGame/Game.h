@@ -27,6 +27,8 @@ namespace hotKeys
 		actionMain,
 		actionAlternate,
 
+		pauseGame,
+
 		amountKeys
 	};
 
@@ -46,9 +48,17 @@ namespace hotKeys
 		Keyboard::Q,
 
 		Keyboard::E,
-		Keyboard::C
+		Keyboard::C,
+		Keyboard::P
 	};
 }
+
+enum StateGame
+{
+	gameState,
+	pauseState,
+	menuState
+};
 
 struct Game
 {
@@ -57,6 +67,7 @@ struct Game
 	GUI gui;
 	TextGame textGame;
 	Music music;
+	StateGame stateGame = StateGame::gameState;
 
 	Keyboard::Key keys[hotKeys::amountKeys];
 
@@ -85,6 +96,7 @@ struct Game
 	// processEvents.cpp
 	void processEvents(const float deltaTime);
 	void processArrows();
+	void processInterface();
 	void processPersonAction(Vector2f pos);
 	void processOtherAction(Event& event, Vector2f pos);
 	void processPanelQuickAccess();

@@ -180,7 +180,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	int id = idUnlifeObject::skeletDeathEffect;
 	int idNature = idNatureObject::NoneNature;
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
-	String texturePath = texturePaths[idTexturePaths::items];
+	String texturePath = texturePaths[idTexturePaths::skelet];
 	String name = "Skelet Death";
 	bool canDestroy = false;
 	int toughness = 1;
@@ -188,7 +188,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	typesObject->mainSize.init(0, 0, 0, 0);
 	typesObject->Init(texturePath, name, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
-	typesObject->transparentSize.init(0, 0, 0, 0);
+	typesObject->transparentSize.init(WIDTH_SKELET, HEIGHT_SKELET, 0, HEIGHT_SKELET * 7);
 
 	objectDropItems drop;
 	drop.addItem(0, 0, idItem::stoneItem);
@@ -200,7 +200,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	id = idUnlifeObject::wolfDeathEffect;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::items];
+	texturePath = texturePaths[idTexturePaths::wolf];
 	name = "Wolf death";
 	canDestroy = false;
 	toughness = 0;
@@ -208,7 +208,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	typesObject->mainSize.init(0, 0, 0, 0);
 	typesObject->Init(texturePath, name, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
-	typesObject->transparentSize.init(0, 0, 0, 0);
+	typesObject->transparentSize.init(WIDTH_WOLF, HEIGHT_WOLF, 0, HEIGHT_WOLF * 7);
 
 	// Предметы
 	drop.addItem(0, 0, idItem::stoneItem);

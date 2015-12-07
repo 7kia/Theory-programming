@@ -8,7 +8,8 @@ void Game::update(const float &deltaTime)
 {
 	processEvents(deltaTime);
 
-	if (mainPerson.isDeath == false) {
+	if (mainPerson.isDeath == false
+			&& stateGame != pauseState) {
 		updatePlayer(deltaTime);
 		updateEntity(deltaTime);
 		updateUnlifeObjects(deltaTime);
@@ -19,7 +20,10 @@ void Game::update(const float &deltaTime)
 void Game::updatePlayer(const float &deltaTime)
 {
 	mainPerson.update(deltaTime);
-	mainPerson.updateAtack(world, deltaTime);
+	if(mainPerson.currenMode == idEntityMode::atack)
+	{
+		mainPerson.updateAtack(world, deltaTime);
+	}
 	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 	mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());

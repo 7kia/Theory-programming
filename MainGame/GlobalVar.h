@@ -20,6 +20,18 @@ const sf::String stringDeathPerson = "DEATH";
 const int DEFAULT_WIDTH_WINDOW = 1200;
 const int DEFAULT_HEIGHT_WINDOW = 500;
 
+
+/////////////////////////////
+// TODO
+const int WIDTH_WOLF = 81;
+const int HEIGHT_WOLF = 81;
+const int AMOUNT_WOLF_SLOTS = 8;
+
+const int WIDTH_SKELET = 32;
+const int HEIGHT_SKELET = 32;
+const int AMOUNT_SKELET_SLOTS = 8;
+/////////////////////////////
+
 const int BORDER1 = 1;
 const int BORDER10 = 10;
 const int LONG_MAP = 25;

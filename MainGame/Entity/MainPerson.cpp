@@ -185,9 +185,10 @@ void Enemy::playSoundDeath(world& world)
 	vector<UnlifeObject> &objects = *world.unlifeObjects;
 	TypeUnlifeObject *typeObjects = world.typesObjects.typesUnlifeObject;
 	UnlifeObject addObject;
-	Vector3i pos = { int(getXPos() / SIZE_BLOCK),
-									int(getYPos() / SIZE_BLOCK),
-									currentLevelFloor };
+	sizeSprite &sizeSprite = type->featuresSprite.size;
+	Vector3i pos = { int((getXPos() + sizeSprite.width / 2) / SIZE_BLOCK),
+		int((getYPos() + sizeSprite.height / 2) / SIZE_BLOCK),
+									currentLevelFloor + 1 };
 
 	bool findSound = true;
 	switch(type->id)
@@ -243,7 +244,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	TypeEnemy &typeEmptyEnemy = *emptyEnemy->type;
 
 	bool isAtack = currenMode == idEntityMode::atack;
-	bool isEnemy = findEnemyFromList > -1 && (typeFindEnemy.name != typeEmptyEnemy.name);
+	bool isEnemy = findEnemyFromList > -1;// && (typeFindEnemy.name != typeEmptyEnemy.name);
 	if (isAtack && isEnemy) {
 
 		if (findEnemy->isDeath) {
