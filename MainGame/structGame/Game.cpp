@@ -46,6 +46,7 @@ void Game::informationAboutSelect(float x, float y)
 
 	emptyObjects &emptyObjects = world.emptyObjects;
 	mainPerson.founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject);
+	mainPerson.findEnemy = mainPerson.emptyEnemy;
 	mainPerson.founds.findObjectFromList = -1;
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (int i = 0; i != unlifeObjects.size(); ++i) {

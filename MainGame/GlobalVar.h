@@ -18,7 +18,7 @@
 const sf::String stringDeathPerson = "DEATH";
 
 const int DEFAULT_WIDTH_WINDOW = 1200;
-const int DEFAULT_HEIGHT_WINDOW = 550;
+const int DEFAULT_HEIGHT_WINDOW = 500;
 
 const int BORDER1 = 1;
 const int BORDER10 = 10;

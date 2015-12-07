@@ -46,7 +46,6 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 
 	emptyObjects &emptyObjects = world.emptyObjects;
 	mainPerson.initFounds(emptyObjects.emptyItem, emptyObjects.emptyObject, emptyObjects.emptyEnemy);
-	emptyObjects.emptyEnemy.type->name;
 	// Создайм и заполняем панель
 	mainPerson.idSelectItem = 0;
 	mainPerson.amountSlots = AMOUNT_ACTIVE_SLOTS;
@@ -91,6 +90,8 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 void MainPerson::updateView(RenderWindow & window)
 {
 	Vector2u sizeWindow = window.getSize();
+	//sizeWindow.x /= 1.5;
+	//sizeWindow.y /= 1.5;
 	view->setSize(Vector2f(sizeWindow));// ИСПРАВЬ
 
 	float tempX = getXPos();
@@ -186,7 +187,7 @@ void Enemy::playSoundDeath(world& world)
 	UnlifeObject addObject;
 	Vector3i pos = { int(getXPos() / SIZE_BLOCK),
 									int(getYPos() / SIZE_BLOCK),
-									currentLevelFloor + 1 };
+									currentLevelFloor };
 
 	bool findSound = true;
 	switch(type->id)
@@ -238,9 +239,11 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
+	TypeEnemy &typeFindEnemy = *findEnemy->type;
+	TypeEnemy &typeEmptyEnemy = *emptyEnemy->type;
 
 	bool isAtack = currenMode == idEntityMode::atack;
-	bool isEnemy = findEnemyFromList > -1;
+	bool isEnemy = findEnemyFromList > -1 && (typeFindEnemy.name != typeEmptyEnemy.name);
 	if (isAtack && isEnemy) {
 
 		if (findEnemy->isDeath) {
@@ -280,6 +283,12 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 
 		}
 
+	}
+	else
+	{
+		animation.currentTimeFightAnimation = 0.f;
+
+		currenMode = idEntityMode::walk;
 
 	}
 }

@@ -18,8 +18,11 @@ void Game::render()
 {
 	window.clear();
 
+	mainPerson.updateView(window);
 	Vector2f centerWindow = window.getView().getCenter();
-	Vector2f sizeWindow = Vector2f(window.getSize());
+	//Vector2f sizeWindow = Vector2f(window.getSize());
+
+	Vector2f sizeWindow = { float(DEFAULT_WIDTH_WINDOW), float(DEFAULT_HEIGHT_WINDOW) };
 	FloatRect rectWindow = FloatRect(centerWindow - sizeWindow, sizeWindow + centerWindow);
 
 	//if(rectWindow.left )
@@ -167,7 +170,13 @@ void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 
 bool isExitFromWindow(FloatRect const& rectWindow, FloatRect &rectObject)
 {
-	if (rectObject.intersects(rectWindow))
+	bool checkLeft = rectObject.left > rectWindow.left;
+	bool checkRight = rectObject.left < rectWindow.left + rectWindow.width;
+	bool checkTop = rectObject.top + rectObject.height < rectWindow.top;
+	bool checkLow = rectObject.top < rectWindow.top + rectWindow.height;
+	//rectWindow.intersects(rectObject)
+	//
+	if ((checkLeft || checkRight) && (checkTop || checkLow))
 	{
 		return true;
 	}
@@ -177,9 +186,9 @@ bool isExitFromWindow(FloatRect const& rectWindow, FloatRect &rectObject)
 void Game::drawInWindow(sf::Sprite &sprite, sf::FloatRect const& rectWindow)
 {
 	FloatRect rectSprite = sprite.getGlobalBounds();
-	//if (rectSprite != NULL_RECT) {
+	if (rectSprite != NULL_RECT) {
 		if (isExitFromWindow(rectWindow, rectSprite)) {
 			window.draw(sprite);
 		}
-//	}
+	}
 }
