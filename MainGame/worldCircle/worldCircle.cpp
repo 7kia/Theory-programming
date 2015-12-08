@@ -1,5 +1,8 @@
 #include  "worldCircle.h"
 
+using namespace sf;
+using namespace std;
+
 void Game::updateWorldTimeCircles()
 {
 	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
@@ -48,31 +51,44 @@ void Game::updateTimeDay(float &time)
 					Enemys[i].playSoundDeath(world);
 					Enemys.erase(Enemys.begin() + i);
 					world.countEntity--;
-
-					drawAwardPanel();
 					continue;
 				}
 				i++;
 			}
+
+			//if(need)
+			if (difficult < NUMBER_LEVELS) {
+				if (updateDifficult) {
+					dropAward(awardForLevel[difficult]);
+				}
+				drawAwardPanel();
+				dropAward(*awardForWave);
+			}
+
 
 		}
 	}
 }
 
 
-void Game::dropAward()
+void Game::dropAward(vector<Vector2i> &listAward)
 {
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	Item *addItem = new Item;
 
-	for (size_t i = 0; i < awardForWave->size(); i++) {
+	for (size_t i = 0; i < listAward.size(); i++) {
+		addItem->setType(typesItems[listAward[i].x]);
+		addItem->setPosition(CENTER_WORLD.x, CENTER_WORLD.y, 2);
+		addItem->mainSprite->setScale(scaleOutItems);
+
+		for (int count = 0; count < listAward[i].y; count++) {
+			world.items->push_back(*addItem);
+
+		}
+
 	}
 
 	delete addItem;
-}
-
-void Game::dropAwardLevelUp()
-{
 }
 
 void Game::playDayMusic()
@@ -107,6 +123,7 @@ void Game::switchMusic()
 
 void Game::createGroups(float time)
 {
+	countWave++;
 	Vector3i pos = { 3, 10, 0 };
 
 	///*
@@ -120,20 +137,26 @@ void Game::createGroups(float time)
 
 	//*/
 
-	/*
-		bool updateDifficult = int(time) % TIME_UPDATE_DIFFICULT == 0;
-	if (updateDifficult)
-		world.difficult++;
+	///*
+	int *config = world.enemyWaveVariables;
 
-	if (world.difficult > 0) {
+	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
+	if (updateDifficult)
+	{
+		countWave = 0;
+		difficult++;
+		//world.worldTime.restart();
+	}
+
+	if (difficult > 0) {
 		pos = { 10, 10, 1 };
 		createMiddleGroupSkelets(world, pos);
 	}
-	if (world.difficult > 1) {
+	if (difficult > 1) {
 		pos = { 20, 20, 1 };
 		createBigGroupSkelets(world, pos);
 	}
 
-	*/
+	//*/
 }
 

@@ -171,15 +171,15 @@ void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 	}
 }
 
-void Game::drawAwardItems()
+void Game::drawAwardItems(vector<Vector2i> &listAward)
 {
-	int currentLevel = world.difficult;
+	int currentLevel = difficult;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	Item *drawItem = new Item;
 
 	Vector2f centerWindow = mainPerson.view->getCenter();
 	Vector2f posImage = centerWindow;
-	size_t amountTypeItems = awardForWave->size();// + awardForLevel[currentLevel].size();
+	size_t amountTypeItems = listAward.size();// + awardForLevel[currentLevel].size();
 	posImage.x -= amountTypeItems / 2 * (SIZE_ITEM + DISTANSE_BETWEEN_AWARD_ITEMS);
 	//posImage.y += HEIGHT_AWARD_GUI / 2;
 	/*
@@ -193,9 +193,9 @@ void Game::drawAwardItems()
 	Text *currentText = &textGame.texts[idText::panelText];
 	Vector2f posText = centerWindow;
 
-	for (size_t i = 0; i < awardForWave->size(); i++) {
+	for (size_t i = 0; i < listAward.size(); i++) {
 		string amountItems;
-		intToString((*awardForWave)[i].y, amountItems);
+		intToString(listAward[i].y, amountItems);
 		currentText->setString(amountItems);
 		int sizeText = currentText->getCharacterSize();
 		float middleText = computeMiddleString(*currentText);
@@ -207,7 +207,7 @@ void Game::drawAwardItems()
 		window.draw(*currentText);
 
 
-		drawItem->setType(typesItems[(*awardForWave)[i].x]);
+		drawItem->setType(typesItems[listAward[i].x]);
 		drawItem->mainSprite->setPosition(posImage);
 		drawItem->mainSprite->setScale(SCALE_AWARD_ITEMS, SCALE_AWARD_ITEMS);
 		posImage.x += DISTANSE_BETWEEN_AWARD_ITEMS + SIZE_ITEM;
@@ -274,7 +274,23 @@ void Game::renderGui()
 			window.draw(textGame.texts[idText::panelTitleText]);		
 			//window.draw(textGame.texts[idText::panelText]);
 
-			drawAwardItems();
+			if (updateDifficult) {
+				vector<Vector2i> award;
+
+				for (size_t i = 0; i < awardForWave->size(); i++) {
+					award.push_back((*awardForWave)[i]);
+				}
+				for (size_t i = 0; i < awardForLevel[difficult].size(); i++) {
+					award.push_back(awardForLevel[difficult][i]);
+				}
+
+				drawAwardItems(award);
+
+			}
+			else
+			{
+				drawAwardItems(*awardForWave);
+			}
 		}
 
 	}

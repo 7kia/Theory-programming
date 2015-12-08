@@ -131,7 +131,7 @@ const int PIXEL_Y_SEADLING_APPLE_ITEM = SIZE_ITEM * 2;
 // днаюбкемхе опедлерю
 
 
-const int DISTANSE_BETWEEN_AWARD_ITEMS = 25;
+const int DISTANSE_BETWEEN_AWARD_ITEMS = SIZE_ITEM;
 
 namespace idItem {
 	enum

@@ -87,7 +87,6 @@ struct world
 	int enemyWaveVariables[idEnemyWaveVariable::amountIdsEnemyWaveVariable];
 
 	sf::Clock worldTime;
-	int difficult = 0;
 	bool waveEnemysCreated = false;
 	float lastSecond = 0;
 

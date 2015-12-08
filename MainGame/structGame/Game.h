@@ -76,6 +76,10 @@ struct Game
 
 	MainPerson mainPerson;
 
+	bool updateDifficult = false;
+	int difficult = 0;
+	int countWave = 0;
+
 	int countDay = 0;
 	world world;
 	std::vector<Vector2i> *awardForLevel;
@@ -121,9 +125,8 @@ struct Game
 
 	void drawAwardPanel();
 	void setPositionAwardText();
-	void drawAwardItems();
-	void dropAward();
-	void dropAwardLevelUp();
+	void drawAwardItems(std::vector<sf::Vector2i> &listAward);
+	void dropAward(std::vector<sf::Vector2i> &listAward);
 
 	void updateTimeDay(float &time);
 	void playDayMusic();

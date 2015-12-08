@@ -193,11 +193,6 @@ void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 {
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	Field& field = world.field;
-	bool drinking = event.key.code == Mouse::Right;
-	bool isThirts = thirst.currentThirst < thirst.maxThirst;
-	if (isThirts && drinking) {
-		thirst.currentThirst += currentItem.currentToughness;
-	}
 
 	bool pouredWater = event.key.code == Mouse::Left;
 	if (pouredWater) {
@@ -220,22 +215,17 @@ void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 				}
 
 			}
-
+	
 		}
 
 	}
 
-	if (event.key.code == Mouse::Left || event.key.code == Mouse::Right) {
-		int *idItem = &currentItem.typeItem->features.id;
-		int defineType = *idItem - 1;
-
-		*idItem = defineType + 1;
-
-		currentItem.setType(typesItems[defineType]);
-		currentItem.mainSprite->scale(normalSize);
-
+	bool drinking = event.key.code == Mouse::Right;
+	bool isThirts = thirst.currentThirst < thirst.maxThirst;
+	if (drinking && isThirts) {
+		thirst.currentThirst += currentItem.currentToughness;
+		redefineType(currentItem, world, -1);
 	}
-
 
 }
 
