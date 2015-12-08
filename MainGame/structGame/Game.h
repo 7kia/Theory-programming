@@ -8,7 +8,7 @@ const sf::String TITLE_PROGRAM = "MainGame v1.7.3";
 
 const float faultWorldTime = 0.05f;
 
-const int NUMBER_LEVELS = 3;
+const int NUMBER_LEVELS = 4;
 
 namespace hotKeys
 {

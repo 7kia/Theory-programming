@@ -180,7 +180,16 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	Vector2f centerWindow = mainPerson.view->getCenter();
 	Vector2f posImage = centerWindow;
 	size_t amountTypeItems = listAward.size();// + awardForLevel[currentLevel].size();
-	posImage.x -= amountTypeItems / 2 * (SIZE_ITEM + DISTANSE_BETWEEN_AWARD_ITEMS);
+
+	float shift = float(amountTypeItems / 2);
+	if (amountTypeItems > 2) {
+		//shift += 0.5f;
+	}
+	else if (amountTypeItems <= 2)
+	{
+			shift -= 0.5f;
+	}
+	posImage.x -= shift * (SIZE_ITEM + DISTANSE_BETWEEN_AWARD_ITEMS);
 	//posImage.y += HEIGHT_AWARD_GUI / 2;
 	/*
 		for (size_t i = 0; i < awardForLevel[currentLevel].size(); i++)
