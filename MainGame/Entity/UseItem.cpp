@@ -334,6 +334,29 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	addObject.currentToughness = toughness;
 	objects.push_back(addObject);
 
+	/////////////////////////////
+	// CheckObjectInserts
+	int idObject;
+	Sprite *spriteCheck;
+	Sprite *spriteLastObject = objects[objects.size() - 1].spriteObject;
+	size_t i = 0;
+	while (i < objects.size() - 1) {
+
+		idObject = objects[i].typeObject->id;
+		spriteCheck = objects[i].spriteObject;
+		if(idObject == idUnlifeObject::destroyBlockEffect)
+		{
+			if(spriteCheck->getPosition() == spriteLastObject->getPosition())
+			{
+				objects.pop_back();
+				i = 0;
+				continue;
+			}
+		}
+
+	i++;
+	}
+
 }
 
 void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
@@ -346,28 +369,32 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	int level = pos.z;
 
 	wchar_t* block = &field.dataMap[level][y][x];
-	vector<wchar_t> &listBlocks = *currentItem.typeItem->destroy.blocks;
-	vector<String> &listObjects = *currentItem.typeItem->destroy.objects;
+	vector<int> *listTypes = currentItem.typeItem->destroy;
 	UnlifeObject *findObject = founds.findObject;
 
 	int idNature;
-	bool isObject = findObject != founds.emptyObject;
+	idNature = field.idsNature[field.findIdBlock(*block)];
+	bool isObject = findObject != founds.emptyObject
+		&& findObject;
 	if (isObject) {
 
-		if (isInListObjects(listObjects)) {
+		bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect; 
+		bool idNatureEqual = idNature == field.idsNature[field.findIdBlock(collision.block)];
+		if (isInListObjects(*listTypes, findObject->typeObject->idNature)
+				|| (isDestroyEffect)) {
 
 			int &toughnessObject = founds.findObject->currentToughness;
 			typeDamageItem &damageItem = currentItem.typeItem->damageItem;
 			
-			toughnessObject -= damageItem.cuttingDamage;
+			//toughnessObject -= damageItem.cuttingDamage;
 			toughnessObject -= damageItem.crushingDamage;
 
-			idNature = findObject->typeObject->idNature;
+			//idNature = findObject->typeObject->idNature;
 			playObjectBreakSound(idNature);
 
 
 			if (toughnessObject < 1) {
-				bool isDropObject = findObject->typeObject->drop.minCountItems[0] == 0;
+				bool isDropObject = findObject->typeObject->drop.maxCountItems[0] == 0;
 				if (isDropObject) {
 					Vector2i posDrop = { x, y };
 					dropObject(posDrop, world, false);
@@ -376,6 +403,8 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 				else {
 					Vector3i posDropBlock = { x, y, level };
 					dropBlock(world, posDropBlock, currentLevelFloor + 1);
+
+					*block = field.charBlocks[idBlocks::air];
 				}
 
 				unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
@@ -386,9 +415,7 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 
 		}
-	} else if (isInListBlocks(*block, listBlocks)) {
-
-		idNature = field.idsNature[field.findIdBlock(*block)];
+	} else if (isInListObjects(*listTypes, idNature)) {
 
 		createDestroyEffect(world, pos);
 		playObjectBreakSound(idNature);
@@ -480,7 +507,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 
 		int x = int(pos.x / SIZE_BLOCK);
 		int y = int(pos.y / SIZE_BLOCK);
-		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], listDestroy.ladder)) {
+		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], *listDestroy.ladder)) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 			Vector2f posCurrent = { float(x * SIZE_BLOCK + posOrigin.x), float(y * SIZE_BLOCK + posOrigin.y) };
@@ -488,7 +515,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 			spriteEntity->setPosition(posCurrent.x, posCurrent.y);
 			currentLevelFloor += 1;
 
-		} else if (isInListObjects(listDestroy.harvestObjects))
+		} else if (isInListObjects(*listDestroy.harvestObjects, founds.findObject->typeObject->id))
 		{
 			upgradeObject(*founds.findObject, world);
 		}
@@ -507,7 +534,7 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 		int x = int(pos.x / SIZE_BLOCK);
 		int y = int(pos.y / SIZE_BLOCK);
 		// Если блок лестница
-		if (isInListBlocks(field.dataMap[currentLevelFloor][y][x], listDestroy.ladder)) {
+		if (isInListBlocks(field.dataMap[currentLevelFloor][y][x], *listDestroy.ladder)) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 

@@ -79,14 +79,29 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 			}
 		}
 		/////////////////////////////////
-		else
-		{
-				if (objects[i].timeLife > TIME_LIFE_DESTROY_BLOCK_EFFECT) {
+		else {
+			int &currentToughness = objects[i].currentToughness;
+			int &maxToughnessObject = objects[i].typeObject->toughnessObject;
+
+			if (currentToughness > maxToughnessObject) {
+				currentToughness = maxToughnessObject;
+			}
+
+			if (objects[i].timeLife > TIME_LIFE_DESTROY_BLOCK_EFFECT) {
+				objects[i].timeLife = 0.f;
+
+				if (currentToughness < 1) {
 					objects.erase(objects.begin() + i);
 					i = 0;
 					continue;
 				}
-			
+				else {
+					float partToughness = (PERCENT_INCREASE_TOUGHNESS_BLOCK / 100.f);
+					currentToughness += partToughness * maxToughnessObject;
+				}
+
+			}
+
 		}
 
 		i++;

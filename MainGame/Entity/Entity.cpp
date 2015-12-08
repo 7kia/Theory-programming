@@ -465,7 +465,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
 			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
 				// Замедляющие блоки
-				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.slowingBlocks)) {// ИСПРАВЬ
+				if (isInListBlocks(map[currentLevelFloor + 1][i][j], *listDestroy.slowingBlocks)) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					isSlowingBlock = true;
 					stamina.needMinusStamina = false;
@@ -477,7 +477,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 
 				// Проверяем по списку проходимых блоков
-				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.passableBlocks) == false) {
+				if (isInListBlocks(map[currentLevelFloor + 1][i][j], *listDestroy.passableBlocks) == false) {
 					wasCollision = true;
 
 					collision.initPos(j, i, currentLevelFloor + 1);
@@ -499,7 +499,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 
 				// Замедляющие блоки
-				if (isInListBlocks(map[currentLevelFloor][i][j], listDestroy.slowingBlocks)) {// ИСПРАВЬ
+				if (isInListBlocks(map[currentLevelFloor][i][j], *listDestroy.slowingBlocks)) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					stamina.needMinusStamina = false;
 					break;
@@ -508,7 +508,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 				}
 
 				// Является непроходимым
-				if (isInListBlocks(map[currentLevelFloor][i][j], listDestroy.notPassableFloor)) {
+				if (isInListBlocks(map[currentLevelFloor][i][j], *listDestroy.notPassableFloor)) {
 
 					wasCollision = true;
 
@@ -592,6 +592,8 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 		Sprite *transparentSpiteObject;
 		FloatRect objectAltBound;
 		FloatRect entityBound;
+
+		founds.findObject = nullptr;
 
 		vector<UnlifeObject> &objects = *unlifeObjects;
 		for (int i = 0; i != objects.size(); ++i) {
@@ -831,13 +833,13 @@ bool Entity::isInListIds(int id, vector<wchar_t> &listIds) {
 	return false;
 }
 
-bool Entity::isInListObjects(vector<String> &listObjects) {
+bool Entity::isInListObjects(vector<int> &listObjects, int id) {
 	if(&listObjects != nullptr)
 	{
 		size_t size = listObjects.size();
 		if (size) {
 			for (size_t i = 0; i < size; i++) {
-				if (founds.findObject->typeObject->name == listObjects[i]) {
+				if (id == listObjects[i]) {
 					return true;
 				}
 			}

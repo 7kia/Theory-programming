@@ -52,7 +52,10 @@ public:
 	int maxAmount;
 	featuresItem features;
 
-	destroyObjectsAndBlocks destroy;
+	std::vector<int> *destroy;
+	void initListDestroy(std::vector<int> *idsNature);
+
+
 	featuresSprite sizeMain;
 	featuresSprite sizeAlternative;
 	typeDamageItem damageItem;

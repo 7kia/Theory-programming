@@ -96,7 +96,7 @@ public:
 	// Использование предметов
 	bool isInListBlocks(wchar_t block, std::vector<wchar_t> &listObjects);
 	bool isInListIds(int id, std::vector<wchar_t>& listIds);
-	bool isInListObjects(std::vector<sf::String> &listObjects);
+	bool isInListObjects(std::vector<int> &listTypes, int id);
 
 
 	void transferInInventory(std::vector<Item> &items);

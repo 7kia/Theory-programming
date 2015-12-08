@@ -29,6 +29,7 @@ void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	featuresSprite sizeMain;
 	idCreateObjects idCreated;
 	typeDamageItem damage;
+	std::vector<int> listDestroy;
 
 	int numberItem = idItem::stoneItem;
 
@@ -41,6 +42,8 @@ void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
 
 	damage.init(0, 10, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::stone, idUnlifeObject::NONE_OBJECT);
 
@@ -59,6 +62,8 @@ void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_STONE_BRICK, PIXEL_Y_STONE_BRICK);
 
 	damage.init(0, 10, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::stoneBrick, idUnlifeObject::NONE_OBJECT);
 
@@ -92,6 +97,8 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(0, 5, 0);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::planksBlock, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 4;
@@ -110,6 +117,8 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(0, 4, 0);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 4;
@@ -127,6 +136,8 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_LOG_OAK, PIXEL_Y_LOG_OAK);
 
 	damage.init(1, 5, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::logOak, idUnlifeObject::NONE_OBJECT);
 
@@ -160,6 +171,8 @@ void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(1, 1, 0);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::oakSeadling);
 
 	addType.maxAmount = 16;
@@ -177,6 +190,8 @@ void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SEADLING_APPLE_ITEM, PIXEL_Y_SEADLING_APPLE_ITEM);
 
 	damage.init(1, 1, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::appleSeadling);
 
@@ -210,6 +225,8 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(0, 1, 0);
 
+	addType.initListDestroy(list.none);
+
 	addType.maxAmount = 4;
 	idCreated.init(idBlocks::dirt, idUnlifeObject::NONE_OBJECT);
 
@@ -228,6 +245,8 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(0, 1, 0);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::grass, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 4;
@@ -245,6 +264,8 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SAND, PIXEL_Y_SAND);
 
 	damage.init(0, 1, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::sand, idUnlifeObject::NONE_OBJECT);
 
@@ -278,6 +299,8 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(18, 1, 0);
 
+	addType.initListDestroy(list.stoneKnife);
+
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 1;
@@ -295,6 +318,8 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_SWORD, PIXEL_Y_IRON_SWORD);
 
 	damage.init(32, 4, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
@@ -314,6 +339,8 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(45, 5, 75);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 1;
@@ -332,6 +359,8 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(0, 18, 0);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 1;
@@ -349,6 +378,8 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_IRON_CLUB, PIXEL_Y_IRON_CLUB);
 
 	damage.init(0, 32, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
@@ -382,7 +413,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(1, 10, 0);
 
-	addType.destroy.init(&list.backoeBreakingObject, &list.backoeBreakingBlock);
+	addType.initListDestroy(list.backhoe);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -403,7 +434,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(10, 6, 0);
 
-	addType.destroy.init(&list.pickaxBreakingObject, &list.pickaxBreakingBlock);
+	addType.initListDestroy(list.pickax);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -423,7 +454,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(18, 12, 0);
 
-	addType.destroy.init(&list.pickaxBreakingObject, &list.pickaxBreakingBlock);
+	addType.initListDestroy(list.pickax);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -448,7 +479,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(8, 8, 0);
 
-	addType.destroy.init(&list.axeBreakingObject, &list.axeBreakingBlock);
+	addType.initListDestroy(list.axe);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -467,7 +498,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(18, 18, 0);
 
-	addType.destroy.init(&list.axeBreakingObject, &list.axeBreakingBlock);
+	addType.initListDestroy(list.axe);
 
 	idCreated.init(idBlocks::air, idUnlifeObject::NONE_OBJECT);
 
@@ -502,6 +533,8 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(0, 1, 0);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 16;
@@ -519,6 +552,8 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_RAW_MEAT_WOLF, PIXEL_Y_RAW_MEAT_WOLF);
 
 	damage.init(0, 1, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
@@ -538,6 +573,8 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	damage.init(0, 1, 0);
 
+	addType.initListDestroy(list.none);
+
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
 	addType.maxAmount = 16;
@@ -555,6 +592,8 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_APPLE, PIXEL_Y_APPLE);
 
 	damage.init(0, 1, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
@@ -589,6 +628,8 @@ void initEmptyItem(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	sizeMain.init(0, 0, 0, 0);
 
 	damage.init(0, 1, 0);
+
+	addType.initListDestroy(list.none);
 
 	idCreated.init(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
 
@@ -742,6 +783,11 @@ void destroyObjectsAndBlocks::init(std::vector<sf::String> *namesObjects, std::v
 	objects = namesObjects;
 
 	blocks = charBlocks;
+}
+
+void TypeItem::initListDestroy(std::vector<int>* idsNature)
+{
+	destroy = idsNature;
 }
 
 ////////////////////////////////////////////////////////////////////

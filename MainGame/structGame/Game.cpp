@@ -260,39 +260,40 @@ void Game::initializeCategorysBreakingObject()
 
 	//////////////////////////////////////
 	// Блоки уничтожаемые лопатой
-	vector<String> *listObjects = &listDestroy.backoeBreakingObject;
-	vector<wchar_t> *listBlocks = &listDestroy.backoeBreakingBlock;
+	listDestroy.backhoe = new vector<int>;
+	vector<int> *listIds = listDestroy.backhoe;
 
-	listBlocks->push_back(charBlocks[idBlocks::grass]);
-	listBlocks->push_back(charBlocks[idBlocks::dirt]);
-	listBlocks->push_back(charBlocks[idBlocks::sand]);
-
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::oakSeadling].name);
+	listIds->push_back(idNatureObject::groundNature);
+	listIds->push_back(idNatureObject::sandNature);
 	//////////////////////////////////////
 	// Блоки уничтожаемые топором
-	listObjects = &listDestroy.axeBreakingObject;
-	listBlocks = &listDestroy.axeBreakingBlock;
+	listDestroy.axe = new vector<int>;
+	listIds = listDestroy.axe;
 
-	listBlocks->push_back(charBlocks[idBlocks::logOak]);
-	listBlocks->push_back(charBlocks[idBlocks::planksBlock]);
-	listBlocks->push_back(charBlocks[idBlocks::woodLadder]);
-
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::oakGrow].name);
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::oakSmall].name);
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleTree].name);
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].name);
-	/////////////////////////////////////////////////////////////////////////
+	listIds->push_back(idNatureObject::woodNature);
+	//////////////////////////////////////
 	// Блоки уничтожаемые киркой
-	listObjects = &listDestroy.pickaxBreakingObject;
-	listBlocks = &listDestroy.pickaxBreakingBlock;
+	listDestroy.pickax = new vector<int>;
+	listIds = listDestroy.pickax;
 
-	listBlocks->push_back(charBlocks[idBlocks::stone]);
-	listBlocks->push_back(charBlocks[idBlocks::stoneBrick]);
+	listIds->push_back(idNatureObject::stoneNature);
+	//////////////////////////////////////
+	// Блоки уничтожаемые каменным ножом
+	listDestroy.stoneKnife = new vector<int>;
+	listIds = listDestroy.stoneKnife;
 
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::smallStone].name);
+	listIds->push_back(idNatureObject::stoneNature);
+	listIds->push_back(idNatureObject::woodNature);
+	listIds->push_back(idNatureObject::groundNature);
+	listIds->push_back(idNatureObject::sandNature);
+
+	listDestroy.none = new vector<int>;
+	listIds = listDestroy.none;
+	listIds->push_back(idNatureObject::NoneNature);
 	/////////////////////////////////////////////////////////////////////////
 	// Проходимые блоки
-	listBlocks = &listDestroy.passableBlocks;
+	listDestroy.passableBlocks = new vector<wchar_t>;
+	vector<wchar_t> *listBlocks = listDestroy.passableBlocks;
 
 	listBlocks->push_back(charBlocks[idBlocks::air]);
 	listBlocks->push_back(charBlocks[idBlocks::water]);
@@ -300,44 +301,28 @@ void Game::initializeCategorysBreakingObject()
 
 	/////////////////////////////////////////////////////////////////////////
 	// Проходим по полу
-	listBlocks = &listDestroy.notPassableFloor;
+	listDestroy.notPassableFloor = new vector<wchar_t>;
+	listBlocks = listDestroy.notPassableFloor;
 
 	listBlocks->push_back(charBlocks[idBlocks::air]);
 	/////////////////////////////////////////////////////////////////////////
 	// Замедляющие блоки
-	listBlocks = &listDestroy.slowingBlocks;
+	listDestroy.slowingBlocks = new vector<wchar_t>;
+	listBlocks = listDestroy.slowingBlocks;
 
 	listBlocks->push_back(charBlocks[idBlocks::water]);
 	/////////////////////////////////////////////////////////////////////////
 	// Лестницы
-	listBlocks = &listDestroy.ladder;
+	listDestroy.ladder = new vector<wchar_t>;
+	listBlocks = listDestroy.ladder;
 
 	listBlocks->push_back(charBlocks[idBlocks::woodLadder]);
 	/////////////////////////////////////////////////////////////////////////
-	listObjects = &listDestroy.harvestObjects;
+	listDestroy.harvestObjects = new vector<int>;
+	vector<int> *listObjects = listDestroy.harvestObjects;
 
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].name);
+	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].id);
 	/////////////////////////////////////////////////////////////////////////
-	vector<int> *listIds = &listDestroy.listWoodObject;
-
-	listIds->push_back(idUnlifeObject::appleGrowTree);
-	listIds->push_back(idUnlifeObject::appleTree);
-	listIds->push_back(idUnlifeObject::oakGrow);
-	listIds->push_back(idUnlifeObject::oakSmall);
-	/////////////////////////////////////////////////////////////////////////
-	listIds = &listDestroy.listWoodBlock;
-
-	listIds->push_back(idBlocks::woodLadder);
-	listIds->push_back(idBlocks::logOak);
-	/////////////////////////////////////////////////////////////////////////
-	listIds = &listDestroy.listStoneObject;
-
-	listIds->push_back(idUnlifeObject::smallStone);
-	/////////////////////////////////////////////////////////////////////////
-	listIds = &listDestroy.listtStoneBlock;
-
-	listIds->push_back(idBlocks::stone);
-	listIds->push_back(idBlocks::stoneBrick);
 
 }
 
