@@ -42,7 +42,7 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 	currentText->setString(toStringCharacter(current, max));
 
 	// TODO
-	float middleString = computeMiddleString(*currentText);
+	float middleString = float(computeMiddleString(*currentText));
 	position = { position.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, position.y - Y_SHIFT_BARS / 2 };
 	//position.x += middleString;// *scale.x;
 	// * scale.y

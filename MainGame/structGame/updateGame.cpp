@@ -54,7 +54,9 @@ void Game::updateEntity(const float deltaTime)
 void Game::updateUnlifeObjects(const float &deltaTime)
 {
 	vector<UnlifeObject> &objects = *world.unlifeObjects;
-	for (int i = 0; i < objects.size(); ++i) {
+	size_t i = 0;
+
+	while(i < objects.size()) {
 		objects[i].timeLife += deltaTime;
 
 		int idTypeObject = objects[i].typeObject->id;
@@ -69,16 +71,25 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 			}
 		}
 		/////////////////////////////////
-		// Обновление эффектов( пока звуковых
-		else {
+		// Обновление  звуковых эффектов
+		else if(idTypeObject != destroyBlockEffect){
 			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();
 			if (stateSound == sf::SoundSource::Status::Stopped) {
 				objects.erase(objects.begin() + i);
 			}
 		}
 		/////////////////////////////////
-		
+		else
+		{
+				if (objects[i].timeLife > TIME_LIFE_DESTROY_BLOCK_EFFECT) {
+					objects.erase(objects.begin() + i);
+					i = 0;
+					continue;
+				}
+			
+		}
 
+		i++;
 	}
 }
 

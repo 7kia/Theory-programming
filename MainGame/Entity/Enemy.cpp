@@ -55,7 +55,7 @@ bool isPlaceForCreate(world world, Vector3i &pos)
 	do {
 		currentEnemy.interactionWithMap(world.field, *world.listDestroy, 0);
 		currentEnemy.interactionWitnUnlifeObject(world.unlifeObjects, 0);
-		currentEnemy.interactionWithEntity(&enemys, enemys.size() - 1, 0.1f);
+		currentEnemy.interactionWithEntity(&enemys, int(enemys.size() - 1), 0.1f);
 
 		isPlace = currentEnemy.wasCollision == false;
 

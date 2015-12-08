@@ -109,10 +109,10 @@ void MainPerson::updateView(RenderWindow & window)
 	int topBorder = sizeWindow.y / 2;
 	int lowBorder = SIZE_BLOCK * LONG_MAP - sizeWindow.y / 2;
 	///*
-	if (x < leftBorder) tempX = leftBorder;//убираем из вида левую сторону
-	else if (x > rightBorder) tempX = rightBorder;//убираем из вида левую сторону
-	if (y < topBorder) tempY = topBorder;//верхнюю сторону
-	else if (y > lowBorder) tempY = lowBorder;//нижнюю сторону	
+	if (int(x) < leftBorder) tempX = leftBorder;//убираем из вида левую сторону
+	else if (int(x) > rightBorder) tempX = rightBorder;//убираем из вида левую сторону
+	if (int(y) < topBorder) tempY = topBorder;//верхнюю сторону
+	else if (int(y) > lowBorder) tempY = lowBorder;//нижнюю сторону	
 	//*/
 	
 

@@ -71,7 +71,7 @@ void createGUI(panel &panel, Texture &texture, featuresSprite features)
 {
 	Sprite &spritePanel = panel.sprite;
 	spritePanel.setTexture(texture);
-	spritePanel.setOrigin(features.size.width / 2, features.size.height / 2);
+	spritePanel.setOrigin(float(features.size.width / 2), float(features.size.height / 2));
 	spritePanel.setTextureRect(IntRect(features.pixPos.x, features.pixPos.y,
 																	 features.size.width, features.size.height));
 }

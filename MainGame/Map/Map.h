@@ -31,6 +31,7 @@ struct Field
 	int (*idsNature);
 	wchar_t (*charBlocks);// символьное обозначение блоков
 	int (*coordinateBloks)[NUMBER_COORDINATES];// текстурные координаты
+	int (*toughness);
 	//const sf::String (*nameBlocks) = namesBlocks;
 
 	sf::Sprite *floorSprite;

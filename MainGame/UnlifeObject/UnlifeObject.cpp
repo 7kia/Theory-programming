@@ -23,12 +23,17 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 	unlifeObjects.push_back(addObject);
 
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::appleSeadling]);
-	addObject.setPosition(12, 8, topLevel);
+	addObject.setPosition(12, 18, topLevel);
 	unlifeObjects.push_back(addObject);
 
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::smallStone]);
 	addObject.setPosition(5, 11, topLevel);
 	unlifeObjects.push_back(addObject);
+
+	addObject.setType(typesUnlifeObjects[idUnlifeObject::wolfDeathEffect]);
+	addObject.setPosition(2, 2, topLevel);
+	unlifeObjects.push_back(addObject);
+
 
 	emptyObject.setType(typesUnlifeObjects[idUnlifeObject::empty]);
 }

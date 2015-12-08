@@ -216,6 +216,28 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	//typesObject->redefine.init(idUnlifeObject::appleTree, 0);
 	typesObject->drop.init(drop);
 	drop.clear();
+	////////////////////////////////////////////////////////////////////////////////////////
+	id = idUnlifeObject::destroyBlockEffect;
+	typesObject = &typesUnlifeObjects[id];
+
+	texturePath = texturePaths[idTexturePaths::destroyBlock];
+	name = "Destroy block";
+	canDestroy = true;
+	toughness = 50;
+
+	typesObject->mainSize.init(WIDTH_DESTROY_BLOCK_EFFECT, HEIGHT_DESTROY_BLOCK_EFFECT, 0, 0);
+	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->defineToughness(canDestroy, toughness);
+	typesObject->transparentSize.init(0, 0, 0, 0);
+
+	// Предметы
+	drop.addItem(1, 3, idItem::logOakItem);
+	drop.addItem(1, 2, idItem::seadlingOakItem);
+
+	typesObject->redefine.init(idUnlifeObject::destroyBlockEffect, 0);
+	typesObject->drop.init(drop);
+	drop.clear();
+	////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void redefineObject::init(int idType, float time)

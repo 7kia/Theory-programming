@@ -182,22 +182,12 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	size_t amountTypeItems = listAward.size();// + awardForLevel[currentLevel].size();
 
 	float shift = float(amountTypeItems / 2);
-	if (amountTypeItems > 2) {
-		//shift += 0.5f;
-	}
-	else if (amountTypeItems <= 2)
+	if (amountTypeItems <= 2)
 	{
 			shift -= 0.5f;
 	}
 	posImage.x -= shift * (SIZE_ITEM + DISTANSE_BETWEEN_AWARD_ITEMS);
-	//posImage.y += HEIGHT_AWARD_GUI / 2;
-	/*
-		for (size_t i = 0; i < awardForLevel[currentLevel].size(); i++)
-	{
-		
-	}
 
-	*/
 	// TODO
 	Text *currentText = &textGame.texts[idText::panelText];
 	Vector2f posText = centerWindow;
@@ -207,7 +197,7 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 		intToString(listAward[i].y, amountItems);
 		currentText->setString(amountItems);
 		int sizeText = currentText->getCharacterSize();
-		float middleText = computeMiddleString(*currentText);
+		float middleText = float(computeMiddleString(*currentText));
 
 		posText = posImage;
 		posText.y += SIZE_ITEM;
@@ -235,7 +225,7 @@ void Game::setPositionAwardText()
 
 	currentText->setString(TEXT_AWARD);
 	int sizeText = currentText->getCharacterSize();
-	float middleText = computeMiddleString(*currentText);
+	float middleText = float(computeMiddleString(*currentText));
 	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TEXT;
 	posText.x -= middleText;
 

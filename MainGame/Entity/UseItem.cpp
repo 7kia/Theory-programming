@@ -210,8 +210,10 @@ void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 				bool isFloor = field.dataMap[level - 1][y][x] != field.charBlocks[idBlocks::air];
 				if (isFloor == false) {
 					field.dataMap[level - 1][y][x] = field.charBlocks[idUseBlock];
+					minusAmount(currentItem);
 				} else {
 					field.dataMap[level][y][x] = field.charBlocks[idUseBlock];
+					minusAmount(currentItem);
 				}
 
 			}
@@ -315,7 +317,26 @@ void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 	}
 }
 
-void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
+void Entity::createDestroyEffect(world &world, Vector3i &pos)
+{
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	TypeUnlifeObject *typesObject = world.typesObjects.typesUnlifeObject;
+	UnlifeObject addObject;
+	Field &field = world.field;
+	wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
+	int idBlock = field.findIdBlock(*block);
+	//int idNature = field.idsNature[idBlock];
+	int toughness = field.toughness[idBlock];
+
+
+	addObject.setType(typesObject[idUnlifeObject::destroyBlockEffect]);
+	addObject.setPosition(pos.x + 1, pos.y + 1 , pos.z);
+	addObject.currentToughness = toughness;
+	objects.push_back(addObject);
+
+}
+
+void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 	Field &field = world.field;
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
@@ -327,9 +348,10 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 	wchar_t* block = &field.dataMap[level][y][x];
 	vector<wchar_t> &listBlocks = *currentItem.typeItem->destroy.blocks;
 	vector<String> &listObjects = *currentItem.typeItem->destroy.objects;
+	UnlifeObject *findObject = founds.findObject;
 
 	int idNature;
-	bool isObject = founds.findObject != founds.emptyObject;
+	bool isObject = findObject != founds.emptyObject;
 	if (isObject) {
 
 		if (isInListObjects(listObjects)) {
@@ -340,13 +362,21 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 			toughnessObject -= damageItem.cuttingDamage;
 			toughnessObject -= damageItem.crushingDamage;
 
-			idNature = founds.findObject->typeObject->idNature;
+			idNature = findObject->typeObject->idNature;
 			playObjectBreakSound(idNature);
 
 
 			if (toughnessObject < 1) {
-				Vector2i posDrop = { x, y };
-				dropObject(posDrop, world, false);
+				bool isDropObject = findObject->typeObject->drop.minCountItems[0] == 0;
+				if (isDropObject) {
+					Vector2i posDrop = { x, y };
+					dropObject(posDrop, world, false);
+
+				}
+				else {
+					Vector3i posDropBlock = { x, y, level };
+					dropBlock(world, posDropBlock, currentLevelFloor + 1);
+				}
 
 				unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
@@ -359,13 +389,16 @@ void Entity::useTool(Vector3i pos, world &world, Item &currentItem) {
 	} else if (isInListBlocks(*block, listBlocks)) {
 
 		idNature = field.idsNature[field.findIdBlock(*block)];
-		playObjectBreakSound(idNature);
-		Vector3i posDrop = { x, y, level };
-		dropBlock(world, posDrop, currentLevelFloor + 1);
 
-		*block = field.charBlocks[idBlocks::air];
+		createDestroyEffect(world, pos);
+		playObjectBreakSound(idNature);
+
+		/*
+				*block = field.charBlocks[idBlocks::air];
 
 		breakItem(currentItem);
+
+		*/
 
 	}
 

@@ -46,6 +46,10 @@ const int HEIGHT_SEADLING_APPLE = 45;
 const int PIXEL_X_SEADLING_APPLE = WIDTH_OAK_STUMP;
 const int PIXEL_Y_SEADLING_APPLE = PIXEL_Y_OAK_STUMP;
 
+// Саженец яблони
+const int WIDTH_DESTROY_BLOCK_EFFECT = 48;
+const int HEIGHT_DESTROY_BLOCK_EFFECT = 48;
+
 typedef enum
 {
 	NONE_OBJECT = -1,
@@ -59,7 +63,9 @@ typedef enum
 
 	// Effects
 	shiftEffects,
+
 	skeletDeathEffect,
 	wolfDeathEffect,
+	destroyBlockEffect,
 	empty
 } idUnlifeObject;

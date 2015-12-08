@@ -74,6 +74,8 @@ public:
 	void resetTimeAnimation(float &time, float &reset);
 
 	void playAtackSound(Item &currentItem);
+	void createDestroyEffect(world &world, Vector3i &pos);
+
 	void playObjectBreakSound(int idNature);
 	void playObjectDropSound(sf::Vector2f pos);
 	// Взаимодейтсвие с миром
@@ -122,7 +124,7 @@ public:
 	void useAsEmptyBukket(Item &currentItem, world &world, int level);
 	void useAsBukketWithWater(Item &currentItem, world &world, sf::Event event);
 
-	void useTool(sf::Vector3i pos, world &world, Item &currentItem);
+	void useTool(sf::Vector3i &pos, world &world, Item &currentItem);
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	void upgradeObject(UnlifeObject& object, world& world);
 	//private:

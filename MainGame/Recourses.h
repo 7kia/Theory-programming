@@ -11,6 +11,7 @@ typedef enum {
 	mapWall,
 
 	Trees,
+	destroyBlock,
 
 	infoSelectBlock,
 	widgets,
@@ -67,6 +68,7 @@ const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 	"recourses\\images\\blocks\\mapWall.png",
 
 	"recourses\\images\\unlife\\Trees.png",
+	"recourses\\images\\unlife\\destroyBlock.png",
 
 	"recourses\\images\\gui\\InfoWindow.png",
 	"recourses\\images\\gui\\widgets.png",

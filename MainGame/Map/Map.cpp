@@ -9,6 +9,7 @@ void initializeField(Field & field)
 	field.charBlocks = new wchar_t[NUMBER_TYPE_BLOCKS];
 	field.idsNature = new int[NUMBER_TYPE_BLOCKS];
 	field.coordinateBloks = new int[NUMBER_TYPE_BLOCKS][NUMBER_COORDINATES];
+	field.toughness = new int[NUMBER_TYPE_BLOCKS];
 
 	field.BLOCK_SIZE = SIZE_BLOCK;
 
@@ -54,62 +55,74 @@ void Field::initializeDataBlocks()
 	coordinateBloks[idBlocks::grass][0] = 0;
 	coordinateBloks[idBlocks::grass][1] = 0;
 	idsNature[idBlocks::grass] = idNatureObject::groundNature;
+	toughness[idBlocks::grass] = 40;
 
 	charBlocks[idBlocks::dirt] = u'\x011';
 	coordinateBloks[idBlocks::dirt][0] = 0;
 	coordinateBloks[idBlocks::dirt][1] = BLOCK_SIZE;
 	idsNature[idBlocks::dirt] = idNatureObject::groundNature;
+	toughness[idBlocks::dirt] = 40;
 
 
 	charBlocks[idBlocks::stone] = u'\x012';
 	coordinateBloks[idBlocks::stone][0] = 0;
 	coordinateBloks[idBlocks::stone][1] = BLOCK_SIZE * 2;
 	idsNature[idBlocks::stone] = idNatureObject::stoneNature;
+	toughness[idBlocks::stone] = 360;
 
 
 	charBlocks[idBlocks::sand] = u'\x013';
 	coordinateBloks[idBlocks::sand][0] = 0;
 	coordinateBloks[idBlocks::sand][1] = BLOCK_SIZE * 3;
 	idsNature[idBlocks::sand] = idNatureObject::sandNature;
+	toughness[idBlocks::sand] = 20;
 
 
 	charBlocks[idBlocks::water] = u'\x014';
 	coordinateBloks[idBlocks::water][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::water][1] = 0;
 	idsNature[idBlocks::water] = idNatureObject::waterNature;
+	toughness[idBlocks::water] = 1;
+
 
 	charBlocks[idBlocks::logOak] = u'\x015';
 	coordinateBloks[idBlocks::logOak][0] = BLOCK_SIZE * 3;
 	coordinateBloks[idBlocks::logOak][1] = 0;
 	idsNature[idBlocks::logOak] = idNatureObject::woodNature;
+	toughness[idBlocks::logOak] = 160;
 
 
 	charBlocks[idBlocks::planksBlock] = u'\x016';
 	coordinateBloks[idBlocks::planksBlock][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::planksBlock][1] = 0;
 	idsNature[idBlocks::planksBlock] = idNatureObject::woodNature;
+	toughness[idBlocks::planksBlock] = 220;
 
 
 	charBlocks[idBlocks::stoneBrick] = u'\x017';
 	coordinateBloks[idBlocks::stoneBrick][0] = BLOCK_SIZE;
 	coordinateBloks[idBlocks::stoneBrick][1] = BLOCK_SIZE * 2;
 	idsNature[idBlocks::stoneBrick] = idNatureObject::stoneNature;
+	toughness[idBlocks::stoneBrick] = 600;
 
 
 	charBlocks[idBlocks::woodLadder] = u'\x018';
 	coordinateBloks[idBlocks::woodLadder][0] = BLOCK_SIZE * 2;
 	coordinateBloks[idBlocks::woodLadder][1] = BLOCK_SIZE;
 	idsNature[idBlocks::woodLadder] = idNatureObject::woodNature;
+	toughness[idBlocks::woodLadder] = 100;
 
 	charBlocks[idBlocks::borderBlock] = u'\x019';
 	coordinateBloks[idBlocks::borderBlock][0] = BLOCK_SIZE * 6;
 	coordinateBloks[idBlocks::borderBlock][1] = BLOCK_SIZE * 7;
-	idsNature[idBlocks::borderBlock] = idNatureObject::stoneNature;
+	idsNature[idBlocks::borderBlock] = idNatureObject::NoneNature;
+	toughness[idBlocks::borderBlock] = 1;
 
 
 	coordinateBloks[idBlocks::unknow][0] = BLOCK_SIZE * 7;
 	coordinateBloks[idBlocks::unknow][1] = BLOCK_SIZE * 7;
 	idsNature[idBlocks::unknow] = idNatureObject::stoneNature;
+	toughness[idBlocks::unknow] = 10;
 
 
 }
