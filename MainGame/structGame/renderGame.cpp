@@ -171,6 +171,52 @@ void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 	}
 }
 
+void Game::drawAwardItems()
+{
+	int currentLevel = world.difficult;
+	TypeItem *typesItems = world.typesObjects.typesItem;
+	Item *drawItem = new Item;
+
+	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f posImage = centerWindow;
+	size_t amountTypeItems = awardForWave->size();// + awardForLevel[currentLevel].size();
+	posImage.x -= amountTypeItems / 2 * (SIZE_ITEM + DISTANSE_BETWEEN_AWARD_ITEMS);
+	//posImage.y += HEIGHT_AWARD_GUI / 2;
+	/*
+		for (size_t i = 0; i < awardForLevel[currentLevel].size(); i++)
+	{
+		
+	}
+
+	*/
+	// TODO
+	Text *currentText = &textGame.texts[idText::panelText];
+	Vector2f posText = centerWindow;
+
+	for (size_t i = 0; i < awardForWave->size(); i++) {
+		string amountItems;
+		intToString((*awardForWave)[i].y, amountItems);
+		currentText->setString(amountItems);
+		int sizeText = currentText->getCharacterSize();
+		float middleText = computeMiddleString(*currentText);
+
+		posText = posImage;
+		posText.y += SIZE_ITEM;
+		posText.x -= middleText;
+		currentText->setPosition(posText);
+		window.draw(*currentText);
+
+
+		drawItem->setType(typesItems[(*awardForWave)[i].x]);
+		drawItem->mainSprite->setPosition(posImage);
+		drawItem->mainSprite->setScale(SCALE_AWARD_ITEMS, SCALE_AWARD_ITEMS);
+		posImage.x += DISTANSE_BETWEEN_AWARD_ITEMS + SIZE_ITEM;
+		window.draw(*drawItem->mainSprite);
+	}
+
+	delete drawItem;
+
+}
 
 void Game::setPositionAwardText()
 {
@@ -185,7 +231,8 @@ void Game::setPositionAwardText()
 	posText.x -= middleText;
 
 	currentText->setPosition(posText);
-	////////////////////////////////////////
+	/*
+		////////////////////////////////////////
 	currentText = &textGame.texts[idText::panelText];
 	posText = centerWindow;
 	currentText->setString(TEXT_WAVE_END);
@@ -195,6 +242,8 @@ void Game::setPositionAwardText()
 
 	currentText->setPosition(posText);
 
+	*/
+
 }
 
 void Game::drawAwardPanel()
@@ -203,6 +252,7 @@ void Game::drawAwardPanel()
 
 	awardPanel.draw = true;
 	setPositionAwardText();
+
 	playGlobalSound(idSoundPaths::waveEndSound, world.databaseSound);
 
 	stateGame = pauseState;
@@ -222,8 +272,9 @@ void Game::renderGui()
 			window.draw(sprite);
 
 			window.draw(textGame.texts[idText::panelTitleText]);		
-			window.draw(textGame.texts[idText::panelText]);
+			//window.draw(textGame.texts[idText::panelText]);
 
+			drawAwardItems();
 		}
 
 	}

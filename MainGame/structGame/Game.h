@@ -78,8 +78,8 @@ struct Game
 
 	int countDay = 0;
 	world world;
-	std::vector<int> *awardForLevel;
-	std::vector<int> *awardForWave;
+	std::vector<Vector2i> *awardForLevel;
+	std::vector<Vector2i> *awardForWave;
 	////////////////////////////////////
 	// Ходьба по карте(для противников
 	float minTimeWalk = 4.f;
@@ -121,6 +121,9 @@ struct Game
 
 	void drawAwardPanel();
 	void setPositionAwardText();
+	void drawAwardItems();
+	void dropAward();
+	void dropAwardLevelUp();
 
 	void updateTimeDay(float &time);
 	void playDayMusic();

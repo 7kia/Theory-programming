@@ -60,6 +60,21 @@ void Game::updateTimeDay(float &time)
 }
 
 
+void Game::dropAward()
+{
+	TypeItem *typesItems = world.typesObjects.typesItem;
+	Item *addItem = new Item;
+
+	for (size_t i = 0; i < awardForWave->size(); i++) {
+	}
+
+	delete addItem;
+}
+
+void Game::dropAwardLevelUp()
+{
+}
+
 void Game::playDayMusic()
 {
 	TimeDay &timeDay = world.timeDay;

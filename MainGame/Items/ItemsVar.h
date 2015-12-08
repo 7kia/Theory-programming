@@ -9,7 +9,7 @@ const int shiftAngleUseItem = 2;
 const sf::Vector2f scaleOutItems = { 0.75f, 0.75f };
 const sf::Vector2f scaleUseItems = { 0.5f, 0.5f };
 const sf::Vector2f normalSize = { 1.f, 1.f };
-
+const float SCALE_AWARD_ITEMS = 2.f;
 const int SIZE_ITEM = SIZE_BLOCK;
 
 // stoneItem - йЮЛЕМЭ
@@ -129,6 +129,9 @@ const int PIXEL_Y_SEADLING_OAK_ITEM = SIZE_ITEM;
 const int PIXEL_X_SEADLING_APPLE_ITEM = SIZE_ITEM * 5;
 const int PIXEL_Y_SEADLING_APPLE_ITEM = SIZE_ITEM * 2;
 // днаюбкемхе опедлерю
+
+
+const int DISTANSE_BETWEEN_AWARD_ITEMS = 25;
 
 namespace idItem {
 	enum
