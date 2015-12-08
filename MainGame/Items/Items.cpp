@@ -14,9 +14,12 @@ void dropBlock(world &world, Vector3i &pos, int level)
 
 	wchar_t &block = field.dataMap[pos.z][pos.y][pos.x];
 
-	addItem->setType(typesItems[field.findIdBlock(block)]);
-	addItem->setPosition(pos.x + 1, pos.y + 1, level);
-	items.push_back(*addItem);
+	int id = field.findIdBlock(block);
+	if (id > idItem::airItem) {
+		addItem->setType(typesItems[id]);
+		addItem->setPosition(pos.x + 1, pos.y + 1, level);
+		items.push_back(*addItem);
+	}
 
 	delete addItem;
 }

@@ -338,7 +338,8 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	// CheckObjectInserts
 	int idObject;
 	Sprite *spriteCheck;
-	Sprite *spriteLastObject = objects[objects.size() - 1].spriteObject;
+	UnlifeObject *lastObject = &objects[objects.size() - 1];
+	Sprite *spriteLastObject = lastObject->spriteObject;
 	size_t i = 0;
 	while (i < objects.size() - 1) {
 
@@ -346,7 +347,7 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 		spriteCheck = objects[i].spriteObject;
 		if(idObject == idUnlifeObject::destroyBlockEffect)
 		{
-			if(spriteCheck->getPosition() == spriteLastObject->getPosition())
+			if(spriteCheck->getGlobalBounds().intersects(spriteLastObject->getGlobalBounds()))
 			{
 				objects.pop_back();
 				i = 0;
@@ -368,7 +369,7 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	int y = pos.y;
 	int level = pos.z;
 
-	wchar_t* block = &field.dataMap[level][y][x];
+	wchar_t	*block = &field.dataMap[level][y][x];
 	vector<int> *listTypes = currentItem.typeItem->destroy;
 	UnlifeObject *findObject = founds.findObject;
 
@@ -389,22 +390,23 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 			//toughnessObject -= damageItem.cuttingDamage;
 			toughnessObject -= damageItem.crushingDamage;
 
-			//idNature = findObject->typeObject->idNature;
+			if (!isDestroyEffect) {
+				idNature = findObject->typeObject->idNature;
+			}
 			playObjectBreakSound(idNature);
 
 
 			if (toughnessObject < 1) {
-				bool isDropObject = findObject->typeObject->drop.maxCountItems[0] == 0;
-				if (isDropObject) {
-					Vector2i posDrop = { x, y };
-					dropObject(posDrop, world, false);
 
-				}
-				else {
+				if (isDestroyEffect) {
 					Vector3i posDropBlock = { x, y, level };
 					dropBlock(world, posDropBlock, currentLevelFloor + 1);
 
 					*block = field.charBlocks[idBlocks::air];
+				}
+				else {
+					Vector2i posDrop = { x, y };
+					dropObject(posDrop, world, false);
 				}
 
 				unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
