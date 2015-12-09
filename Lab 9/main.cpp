@@ -21,10 +21,22 @@ void renameTitle(bool cheked, RenderWindow &window)
 
 void startProgram()
 {
+	//setlocale(LC_ALL, "Windows-1251");
+
 	Program *mainProgram = new Program();
 
 	RenderWindow &window = mainProgram->window;
-	mainProgram->chechBox1->handler = renameTitle;
+
+	mainProgram->chechBox1->handler=[&window](bool cheked)
+	{
+		if (cheked) {
+			window.setTitle(featureWindow::TITLE_PROGRAM);
+		}
+		else {
+			window.setTitle(featureWindow::TWO_TITLE_PROGRAM);
+		}
+	};
+
 
 	Clock clock;
 	Time timeSinceLastUpdate = Time::Zero;

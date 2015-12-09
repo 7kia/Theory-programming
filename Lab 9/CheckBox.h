@@ -58,6 +58,6 @@ struct checkBox {
 	void SetState(State newState);
 
 	bool IsChecked() const;
-	std::function<void(bool cheked, sf::RenderWindow&)> handler;
+	std::function<void(bool cheked)> handler;
 	State state;
 };

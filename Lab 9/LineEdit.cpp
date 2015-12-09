@@ -1,4 +1,5 @@
 #include "LineEdit.h"
+#include <iostream>
 
 using namespace sf;
 using namespace featureLineEdit;
@@ -113,15 +114,16 @@ void lineEdit::SetState(State newState)
 
 void lineEdit::enterText(Event const& event)
 {
-	String currentString = text.getString();
+	std::wstring currentString = text.getString();
 
-	char inputChar = event.text.unicode;
-	if (isprint(inputChar)) {
+	wchar_t inputChar = event.text.unicode;
+
+	if (iswprint(inputChar)) {
 		currentString += inputChar;
 
 		// Делим на 2 чтобы получить нужный размер
 		unsigned int characterSize = text.getCharacterSize() / 2;
-		size_t sizeString = (currentString.getSize() + 2) * characterSize;
+		size_t sizeString = (currentString.size() + 2) * characterSize;
 		if (sizeString < (SIZE_LINE_EDIT.x - THIKNESS * 5)) {
 			text.setString(currentString);
 		}

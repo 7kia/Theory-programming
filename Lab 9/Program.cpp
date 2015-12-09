@@ -16,6 +16,7 @@ Program::Program()
 
 	pos.y += featureCheckBox::SIZE_CHECKBOX.y * 2;
 	lineEdit1 = new lineEdit(pos, assets);
+
 }
 
 Program::~Program()
@@ -50,7 +51,7 @@ void Program::processEvents()
 void Program::processGUI(Event& event)
 {
 	if (chechBox1->OnEvent(event)) {
-		chechBox1->handler(chechBox1->IsChecked(), window);
+		chechBox1->handler(chechBox1->IsChecked());
 	}
 	if(lineEdit1->OnEvent(event))
 	{

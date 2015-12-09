@@ -128,6 +128,7 @@ void checkBox::SetState(State newState)
 	case NotChanged:
 		box.setFillColor(BACK_COLOR_NOT_CHANGED);
 		box.setOutlineColor(BORDER_COLOR_NOT_CHANGED);
+		handler(IsChecked());
 		break;
 	case Hovered:
 		box.setFillColor(BACK_COLOR_HOVERED);
@@ -138,7 +139,7 @@ void checkBox::SetState(State newState)
 		box.setOutlineColor(BORDER_COLOR_CHANGED);
 		cross.firstShape.setFillColor(BORDER_COLOR_CHANGED);
 		cross.secondShape.setFillColor(BORDER_COLOR_CHANGED);
-
+		handler(IsChecked());
 		break;
 	case HoveredChanged:
 		box.setFillColor(BACK_COLOR_HOVERED_CHANGED);
