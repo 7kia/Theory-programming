@@ -17,6 +17,14 @@ Program::Program()
 	pos.y += featureCheckBox::SIZE_CHECKBOX.y * 2;
 	lineEdit1 = new lineEdit(pos, assets);
 
+	chechBox1->handler = [&](bool cheked) {
+		if (cheked) {
+			window.setTitle(featureWindow::TITLE_PROGRAM);
+		}
+		else {
+			window.setTitle(featureWindow::TWO_TITLE_PROGRAM);
+		}
+	};
 }
 
 Program::~Program()
