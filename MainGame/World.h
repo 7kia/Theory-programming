@@ -1,5 +1,5 @@
 #pragma once
-#include "../Entity/Enemy.h"
+#include "../Entity/Entity.h"
 
 /*
 const int TIME_GENERATE_WAVE_ENEMYS = 2;
@@ -24,7 +24,7 @@ const int AMOUNT_SKELET_BUILDER_IN_BIG_GROUP = 4;
 */
 
 
-enum idEnemyWaveVariable
+enum idEntityWaveVariable
 {
 	TIME_DAY,
 	TIME_NIGHT,
@@ -48,13 +48,13 @@ enum idEnemyWaveVariable
 	AMOUNT_SKELET_MINER_IN_BIG_GROUP,
 	AMOUNT_SKELET_BUILDER_IN_BIG_GROUP,
 
-	amountIdsEnemyWaveVariable
+	amountIdsEntityWaveVariable
 };
 
 struct typesObjectsInWorld
 {
 	TypeItem typesItem[AMOUNT_TYPES_ITEM];
-	TypeEnemy typesEnemy[amountEnemy];
+	TypeEntity typesEntity[amountEntity];
 	TypeUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
 
 };
@@ -63,7 +63,7 @@ struct emptyObjects
 {
 	Item emptyItem;
 	UnlifeObject emptyObject;
-	Enemy emptyEnemy;
+	Entity emptyEntity;
 };
 
 enum TimeDay {
@@ -75,7 +75,7 @@ struct world
 {
 	std::vector<Item>* items;
 	std::vector<UnlifeObject>* unlifeObjects;
-	std::vector<Enemy>* Enemys;
+	std::vector<Entity>* Entitys;
 	typesObjectsInWorld typesObjects;
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
@@ -84,10 +84,10 @@ struct world
 	dataSound databaseSound;
 
 
-	int enemyWaveVariables[idEnemyWaveVariable::amountIdsEnemyWaveVariable];
+	int enemyWaveVariables[idEntityWaveVariable::amountIdsEntityWaveVariable];
 
 	sf::Clock worldTime;
-	bool waveEnemysCreated = false;
+	bool waveEntitysCreated = false;
 	float lastSecond = 0;
 
 	int countUnlifeObject = 0;
@@ -96,10 +96,10 @@ struct world
 	emptyObjects emptyObjects;
 };
 
-void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount);
+void createOnlyEntity(world &world, std::vector<TypeEntity*> &types, std::vector<int> amount);
 
 bool isPlaceForCreate(world world, sf::Vector3i &pos);
-void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos);
+void createGroup(world &world, std::vector<TypeEntity*> &types, std::vector<int> amount, int square, sf::Vector3i pos);
 
 void createSmallGroupSkelets(world &world, Vector3i pos);
 void createMiddleGroupSkelets(world &world, Vector3i pos);

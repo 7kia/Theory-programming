@@ -1,22 +1,26 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
+#include "TypeEnity.h"
 
-#include "EntityVar.h"
+struct TypeEntity;
+
+
+
+const float minTimeWalk = 4.f;
+const float maxTimeWalk = 12.f;
 
 struct world;
 struct destroyObjectsAndBlocks;
 struct Field;
 const int AMOUNT_ENTITY = 30;
-const int AMOUNT_ACTIVE_SLOTS = 10;
 
 const float TIME_ATTENTION_SHOW_DAMAGE = 1.5f;
 
 const sf::Color NORMAL_COLOR(255, 255, 255, 255);
 const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
 
-class Entity
+struct Entity
 {
-public:
 	sf::Sprite *spriteEntity;
 	sizeSprite size;
 	entityAnimation animation;
@@ -33,6 +37,9 @@ public:
 
 	int radiusUse;
 	int currentLevelFloor;
+
+	float rotation;
+	int amountSlots;
 
 	foundObjects founds;
 	//////////////////////////////////////////////////
@@ -128,8 +135,47 @@ public:
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	void upgradeObject(UnlifeObject& object, world& world);
 	//private:
+	//////////////////////////////////////////////////////////////////
+
+	//////////////
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	TypeEntity *type;
+
+
+	void EntityInit(TypeEntity &typesEntity, world &world, int xPos, int yPos, int level);
+	void EntityDrop(world &world);
+	void playSoundDeath(world &world);
+	~Entity();
+
+	void checkLevelHealth(Vector2f& movemoment);
+	void entityStandPanic(sf::Vector2f &movemoment);
+
+	void randomWalk(const float deltaTime);
+
+	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
+
+	void choiceDirections(Vector2f movemoment);
+	void defineDirectionLook(Vector2f movemoment);
+	void choiceBlock(world &world);
+
+	void resetFightAnimation();
+	void searchWay(world &world);
+	bool findLadder(world &world, sf::Vector3i pos);
+	void buildLadder(world &world);
+
+	void checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts);
+	void redefineDirectionWalk();
+	void checkBlock(Field &field, float distanse);
+	void interactionWithEntity(std::vector<Entity>* enemys, int id, const float deltaTime);
+
 
 };
+
+
 
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
 							int &findObjectFromList, int &current, int currentLevel);

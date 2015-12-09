@@ -14,12 +14,14 @@ void entityProtection::init(float cut, float crash, float unlife)
 	protectionUnlife = unlife;
 }
 
-void foundObjects::init(Item *item, UnlifeObject *object)
+void foundObjects::init(Item *item, UnlifeObject *object, Entity *enemy)
 {
 	emptyItem = item;
 	emptyObject = object;
+	emptyEntity = enemy;
 	findItem = emptyItem;
 	findObject = emptyObject;
+	findEntity = emptyEntity;
 }
 
 void currentCollision::initPos(int xPos, int yPos, int zPos)

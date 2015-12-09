@@ -9,7 +9,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
-void initializeMainPerson(MainPerson &mainPerson, world &world)
+void initializeMainPerson(MainPerson &mainPerson, world &world, View &view)
 {
 	mainPerson.spriteEntity = new Sprite;
 	mainPerson.textureEntity = new Texture;
@@ -27,9 +27,8 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 	// TODO
 	float posX = float(CENTER_WORLD.x * SIZE_BLOCK);
 	float posY = float(CENTER_WORLD.y * SIZE_BLOCK);
-	mainPerson.view = new View;
-	mainPerson.view->setSize(640, 480);
-	mainPerson.view->setCenter(posX, posY);
+	view.setSize(640, 480);
+	view.setCenter(posX, posY);
 
 	// TODO
 	sf::Listener::setUpVector(0.f, 1.f, 0.f);
@@ -45,7 +44,7 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 	mainPerson.soundBase = &world.databaseSound;
 
 	emptyObjects &emptyObjects = world.emptyObjects;
-	mainPerson.initFounds(emptyObjects.emptyItem, emptyObjects.emptyObject, emptyObjects.emptyEnemy);
+	mainPerson.founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject, &emptyObjects.emptyEntity);
 	// Создайм и заполняем панель
 	mainPerson.idSelectItem = 0;
 	mainPerson.amountSlots = AMOUNT_ACTIVE_SLOTS;
@@ -88,12 +87,12 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 
 ////////////////////////////////////////////////////////////////////
 // Обновление камеры
-void MainPerson::updateView(RenderWindow & window)
+void MainPerson::updateView(RenderWindow & window, View &view)
 {
 	Vector2u sizeWindow = window.getSize();
 	//sizeWindow.x /= 1.5;
 	//sizeWindow.y /= 1.5;
-	view->setSize(Vector2f(sizeWindow));// ИСПРАВЬ
+	view.setSize(Vector2f(sizeWindow));// ИСПРАВЬ
 
 	float tempX = getXPos();
 	float tempY = getYPos();//считываем коорд игрока и проверяем их, чтобы убрать края
@@ -116,26 +115,22 @@ void MainPerson::updateView(RenderWindow & window)
 	//*/
 	
 
-	view->setCenter(tempX, tempY);
+	view.setCenter(tempX, tempY);
 }
 
-void MainPerson::initFounds(::Item &item, UnlifeObject& object, ::Enemy& enemy)
-{
-	founds.init(&item, &object);
-	emptyEnemy = &enemy;
-}
 
-void MainPerson::givenForPersonDamage(Enemy &enemy)
+
+void MainPerson::givenForPersonDamage(Entity &enemy)
 {
-	Item& itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
-	typeDamageItem damageEnemyItem = itemEnemy.typeItem->damageItem;
+	Item& itemEntity = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+	typeDamageItem damageEntityItem = itemEntity.typeItem->damageItem;
 	DamageInputAndOutput &enemyDamege = enemy.damage;
 	float cutDamage;
 	float crashDamage;
 	float multiplirer = enemyDamege.damageMultiplirer;
 
-	cutDamage = multiplirer * (enemyDamege.cuttingDamage + damageEnemyItem.cuttingDamage);
-	crashDamage = multiplirer * (enemyDamege.crushingDamage + damageEnemyItem.crushingDamage);
+	cutDamage = multiplirer * (enemyDamege.cuttingDamage + damageEntityItem.cuttingDamage);
+	crashDamage = multiplirer * (enemyDamege.crushingDamage + damageEntityItem.crushingDamage);
 	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
 	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
@@ -148,18 +143,18 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	damage.inputDamage = 0;// TODO	
 }
 
-void Enemy::EnemyDrop(world& world)
+void Entity::EntityDrop(world& world)
 {
 	Field &field = world.field;
 	vector<Item> &items = *world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
 	Item* addItem = new Item;
-	TypeEnemy& typeEnemy = *type;
-	size_t countItem = typeEnemy.drop.minCountItems.size();
+	TypeEntity& typeEntity = *type;
+	size_t countItem = typeEntity.drop.minCountItems.size();
 
-	vector<int> &minAmount = typeEnemy.drop.minCountItems;
-	vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
+	vector<int> &minAmount = typeEntity.drop.minCountItems;
+	vector<int> &maxAmount = typeEntity.drop.maxCountItems;
 
 	throwItem(field, items);
 
@@ -168,7 +163,7 @@ void Enemy::EnemyDrop(world& world)
 
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
 		for (int j = 0; j < currentAmount; j++) {
-			addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
+			addItem->setType(typesItems[typeEntity.drop.dropItems[i]]);
 			addItem->setPosition(founds.currentTarget.x + 1,
 													 founds.currentTarget.y + 1,
 													 currentLevelFloor + 1);
@@ -181,7 +176,7 @@ void Enemy::EnemyDrop(world& world)
 
 }
 
-void Enemy::playSoundDeath(world& world)
+void Entity::playSoundDeath(world& world)
 {
 	vector<UnlifeObject> &objects = *world.unlifeObjects;
 	TypeUnlifeObject *typeObjects = world.typesObjects.typesUnlifeObject;
@@ -194,15 +189,15 @@ void Enemy::playSoundDeath(world& world)
 	bool findSound = true;
 	switch(type->id)
 	{
-	case idEntity::wolfEnemy:
+	case idEntity::wolfEntity:
 		addObject.setType(typeObjects[idUnlifeObject::wolfDeathEffect]);
 		addObject.setPosition(pos.x, pos.y, pos.z);
 		break;
-	case idEntity::skeletEnemy:
-	case idEntity::skeletBuilderEnemy:
-	case idEntity::skeletDiggerEnemy:
-	case idEntity::skeletLumbermillEnemy:
-	case idEntity::skeletMinerEnemy:
+	case idEntity::skeletEntity:
+	case idEntity::skeletBuilderEntity:
+	case idEntity::skeletDiggerEntity:
+	case idEntity::skeletLumbermillEntity:
+	case idEntity::skeletMinerEntity:
 		addObject.setType(typeObjects[idUnlifeObject::skeletDeathEffect]);
 		addObject.setPosition(pos.x, pos.y, pos.z);
 		break;
@@ -218,14 +213,14 @@ void Enemy::playSoundDeath(world& world)
 			Sound &soundObject = objects[objects.size() - 1].soundObject;
 
 			switch (type->id) {
-			case idEntity::wolfEnemy:
+			case idEntity::wolfEntity:
 				playSound(idSoundPaths::wolfDeathSound, *soundBase, soundObject, getPosition());
 				break;
-			case idEntity::skeletEnemy:
-			case idEntity::skeletBuilderEnemy:
-			case idEntity::skeletDiggerEnemy:
-			case idEntity::skeletLumbermillEnemy:
-			case idEntity::skeletMinerEnemy:
+			case idEntity::skeletEntity:
+			case idEntity::skeletBuilderEntity:
+			case idEntity::skeletDiggerEntity:
+			case idEntity::skeletLumbermillEntity:
+			case idEntity::skeletMinerEntity:
 				playSound(idSoundPaths::skeletonDeathSound, *soundBase, soundObject, getPosition());
 				break;
 			default:
@@ -241,21 +236,23 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
-	TypeEnemy &typeFindEnemy = *findEnemy->type;
-	TypeEnemy &typeEmptyEnemy = *emptyEnemy->type;
+	Entity &findEntity = *founds.findEntity;
+	Entity &emptyEntity = *founds.emptyEntity;
+	TypeEntity &typeFindEntity = *findEntity.type;
+	TypeEntity &typeEmptyEntity = *emptyEntity.type;
 
 	bool isAtack = currenMode == idEntityMode::atack;
-	bool isEnemy = findEnemyFromList > -1;// && (typeFindEnemy.name != typeEmptyEnemy.name);
-	if (isAtack && isEnemy) {
+	bool isEntity = founds.findEntityFromList > -1;// && (typeFindEntity.name != typeEmptyEntity.name);
+	if (isAtack && isEntity) {
 
-		if (findEnemy->isDeath) {
+		if (findEntity.isDeath) {
 
 			// TODO
-			//findEnemy->playSound(0.f, 0.f, idSoundPaths::skeletonDeathPath);
+			//findEntity->playSound(0.f, 0.f, idSoundPaths::skeletonDeathPath);
 
-			findEnemy->EnemyDrop(world);
-			findEnemy->playSoundDeath(world);
-			world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
+			findEntity.EntityDrop(world);
+			findEntity.playSoundDeath(world);
+			world.Entitys->erase(world.Entitys->begin() + founds.findEntityFromList);
 			world.countEntity--;
 
 			animation.currentTimeFightAnimation = 0.f;
@@ -270,15 +267,15 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 			currenMode = idEntityMode::atack;
 
 			Vector2f posPerson = { getXPos(), getYPos() };
-			Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
-			float distanse = distansePoints(posPerson, posEnemy);
+			Vector2f posEntity = { findEntity.getXPos(), findEntity.getYPos() };
+			float distanse = distansePoints(posPerson, posEntity);
 
 			if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
 				animation.currentTimeFightAnimation = 0.f;
 
 				currenMode = idEntityMode::walk;
 				giveDamage = false;
-				findEnemy->takeDamage(damage, currentItem);
+				findEntity.takeDamage(damage, currentItem);
 
 				playAtackSound(currentItem);
 			}
@@ -295,7 +292,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	}
 }
 
-void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
+void MainPerson::hurtPerson(Entity& enemy, world& world, const float deltaTime)
 {
 	enemy.currenMode = idEntityMode::atack;
 
@@ -309,13 +306,13 @@ void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 		enemy.giveDamage = false;
 		givenForPersonDamage(enemy);
 
-		Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+		Item &itemEntity = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
 
-		enemy.playAtackSound(itemEnemy);
+		enemy.playAtackSound(itemEntity);
 
-		itemEnemy.currentToughness -= 1;
-		if (itemEnemy.currentToughness < 1) {
-			enemy.redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
+		itemEntity.currentToughness -= 1;
+		if (itemEntity.currentToughness < 1) {
+			enemy.redefineType(itemEntity, world, -itemEntity.typeItem->features.id);
 		}
 	}
 
@@ -323,13 +320,13 @@ void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 
 }
 
-void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTime)
+void MainPerson::attractionEntity(Entity &enemy, world &world, const float deltaTime)
 {
 	float radiuseView = enemy.type->view.radiuseView;
-	bool feelEnemy = enemy.type->view.feelEnemy;
+	bool feelEntity = enemy.type->view.feelEntity;
 
-	bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
-	bool onLevel = onLevelEnemy || feelEnemy;
+	bool onLevelEntity = currentLevelFloor == enemy.currentLevelFloor;
+	bool onLevel = onLevelEntity || feelEntity;
 
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
@@ -348,7 +345,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 		// TODO
 
-		if (feelEnemy == false)
+		if (feelEntity == false)
 			enemy.checkBlock(world.field, distanse);
 
 		bool isFight = enemy.currenMode == idEntityMode::fight;
@@ -360,10 +357,10 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 			if (enemy.wasCollision) {
 
 				enemy.directions.directionWalk = NONE_DIRECTION;
-				if (!onLevelEnemy && feelEnemy) {
+				if (!onLevelEntity && feelEntity) {
 					enemy.searchWay(world);
 				}
-				else if (feelEnemy) {
+				else if (feelEntity) {
 					enemy.choiceBlock(world);
 				}
 
@@ -375,7 +372,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				if (isNearFight) {
 					hurtPerson(enemy, world, deltaTime);
 				}
-				else if (onLevelEnemy) {
+				else if (onLevelEntity) {
 					enemy.resetFightAnimation();
 				}
 
@@ -397,18 +394,21 @@ void MainPerson::useItem(world &world,
 
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
+	Entity &findEntity = *founds.findEntity;
+	Entity &emptyEntity = *founds.emptyEntity;
+
 
 
 	int x = int(pos.x / SIZE_BLOCK);
 	int y = int(pos.y / SIZE_BLOCK);
 	founds.currentTarget = { x, y };
 
-	bool isEnemy = findEnemy != emptyEnemy;
+	bool isEntity = findEntity.type != emptyEntity.type;
 	bool isAtack = event.key.code == Mouse::Left;
-	if (isEnemy && isAtack) {
+	if (isEntity && isAtack) {
 
 		if (isInUseField(pos.x, pos.y, true)) {
-			if (findEnemy->currentLevelFloor == currentLevelFloor) {
+			if (findEntity.currentLevelFloor == currentLevelFloor) {
 
 				if (animation.currentTimeFightAnimation == 0.f) {
 					currenMode = idEntityMode::atack;
@@ -513,54 +513,7 @@ void MainPerson::computeAngle(RenderWindow &window)
 
 ////////////////////////////////////////////////////////////////////
 // View
-void MainPerson::getCoordinateForView(float x, float y)//функция для считывания координат игрока
+void MainPerson::getCoordinateForView(Vector2f pos, View &view)//функция для считывания координат игрока
 {
-	view->setCenter(x, y);//следим за игроком, передавая его координаты. 
+	view.setCenter(pos.x, pos.y);//следим за игроком, передавая его координаты. 
 }
-
-/*
-void MainPerson::viewmap(float time)
-{
-	if (Keyboard::isKeyPressed(Keyboard::Right)) {
-		view->move(0.1*time, 0);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Down)) {
-		view->move(0, 0.1*time);//скроллим карту вниз (см урок, когда мы двигали героя - всё тоже самое)
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Left)) {
-		view->move(-0.1*time, 0);//скроллим карту влево (см урок, когда мы двигали героя - всё тоже самое)
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Up)) {
-		view->move(0, -0.1*time);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
-	}
-
-}
-
-*/
-// Возможно пригодится (не ВКЛЮЧЕНА)
-// Возможно пригодится (не ВКЛЮЧЕНА)
-void MainPerson::changeview()
-{
-	if (Keyboard::isKeyPressed(Keyboard::U)) {
-		view->zoom(1.0100f); //масштабируем, уменьшение
-							 //view.zoom(1.0006f); //тоже самое помедленнее соответственно
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::R)) {
-		//view.setRotation(90);//сразу же задает поворот камере
-		view->rotate(1);//постепенно поворачивает камеру (отрицательное значение - в обратную сторону)
-	}
-
-
-	if (Keyboard::isKeyPressed(Keyboard::I)) {
-		view->setSize(640, 480);//устанавливает размер камеры (наш исходный)
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::P)) {
-		view->setSize(540, 380);//например другой размер
-	}
-
-}
-////////////////////////////////////////////////////////////////////

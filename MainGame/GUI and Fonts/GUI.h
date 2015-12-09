@@ -17,7 +17,7 @@ struct GUI
 	sf::Text *textGui[numberTextReference];
 
 	void renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::RenderWindow &window, TextGame &textGame);
-	void setPositionGui(sf::RenderWindow &window, MainPerson &mainPerson, std::vector<Enemy>& enemy, TextGame &textGame);
+	void setPositionGui(sf::RenderWindow &window, MainPerson &mainPerson, sf::View &view, std::vector<Entity>& enemy, TextGame &textGame);
 	~GUI();
 };
 

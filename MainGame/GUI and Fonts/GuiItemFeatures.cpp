@@ -38,9 +38,9 @@ void itemFeatures::renderIconWithScale(Sprite &sprite, sf::Vector2f position, sf
 void itemFeatures::renderBar(Sprite &sprite, sf::Vector2f position, sf::RenderWindow& window)
 {
 	sprite.setPosition(position);
-	sprite.setScale(scaleGuiForEnemy);
+	sprite.setScale(scaleGuiForEntity);
 	window.draw(sprite);
-	sprite.setScale(normalSizeGuiForEnemy);
+	sprite.setScale(normalSizeGuiForEntity);
 }
 
 void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow features,
@@ -86,8 +86,8 @@ void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow feature
 
 		float levelToughness = float(currentItem.currentToughness) / currentItem.maxToughness;
 
-		pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
-		pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
+		pos.x += X_SHIFT_BARS * scaleGuiForEntity.x;
+		pos.y += Y_SHIFT_BARS * scaleGuiForEntity.y;
 		int currentToughness = int(WIDTH_LEVEL_BAR_GUI * levelToughness);
 		bars.levelStamina.setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
 

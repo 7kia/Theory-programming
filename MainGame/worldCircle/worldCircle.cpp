@@ -16,14 +16,14 @@ void Game::updateWorldTimeCircles()
 
 void Game::generateGroups()
 {
-	bool &waveEnemysCreated = world.waveEnemysCreated;
+	bool &waveEntitysCreated = world.waveEntitysCreated;
 	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
 	int *config = world.enemyWaveVariables;
 
 	bool nowNight = world.timeDay == night;
 	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
 
-	if (nowNight && needGenerateWave && !waveEnemysCreated) {
+	if (nowNight && needGenerateWave && !waveEntitysCreated) {
 		createGroups(currentWorldTime);
 	}
 
@@ -48,7 +48,7 @@ void Game::updateTimeDay(float &time)
 		{
 			drawEndGamepanel();
 		}
-		world.waveEnemysCreated = false;
+		world.waveEntitysCreated = false;
 	}
 }
 
@@ -68,12 +68,12 @@ void Game::setDay()
 
 void Game::destroyUnlife()
 {
-	std::vector<Enemy>& Enemys = *world.Enemys;
+	std::vector<Entity>& Entitys = *world.Entitys;
 	int i = 0;
-	while (i < Enemys.size()) {
-		if (Enemys[i].protection.deathDay) {
-			Enemys[i].playSoundDeath(world);
-			Enemys.erase(Enemys.begin() + i);
+	while (i < Entitys.size()) {
+		if (Entitys[i].protection.deathDay) {
+			Entitys[i].playSoundDeath(world);
+			Entitys.erase(Entitys.begin() + i);
 			world.countEntity--;
 			continue;
 		}
@@ -144,7 +144,7 @@ void Game::playNightMusic()
 void Game::createGroups(float time)
 {
 	countWave++;
-	world.waveEnemysCreated = true;
+	world.waveEntitysCreated = true;
 	Vector3i pos = { 3, 10, 0 };
 
 	///*

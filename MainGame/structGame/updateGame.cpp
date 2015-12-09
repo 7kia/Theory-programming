@@ -27,10 +27,10 @@ void Game::updatePlayer(const float &deltaTime)
 	}
 	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
-	mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
+	mainPerson.getCoordinateForView(mainPerson.getPosition(), *view);
 
-	mainPerson.updateView(window);
-	window.setView(*mainPerson.view);
+	mainPerson.updateView(window, *view);
+	window.setView(*view);
 
 	//printf("Angle %f \n", mainPerson.rotation);
 }
@@ -38,16 +38,16 @@ void Game::updatePlayer(const float &deltaTime)
 
 void Game::updateEntity(const float deltaTime)
 {
-	vector<Enemy>& Enemys = *world.Enemys;
+	vector<Entity>& Entitys = *world.Entitys;
 	Field &field = world.field;
-	for (int i = 0; i < Enemys.size(); ++i) {
-		Enemys[i].update(deltaTime);
-		Enemys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
-		Enemys[i].interactionWithEntity(world.Enemys, i, deltaTime);
-		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
+	for (int i = 0; i < Entitys.size(); ++i) {
+		Entitys[i].update(deltaTime);
+		Entitys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
+		Entitys[i].interactionWithEntity(world.Entitys, i, deltaTime);
+		Entitys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
-		mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
-		Enemys[i].randomWalk(deltaTime);
+		mainPerson.attractionEntity(Entitys[i], world, deltaTime);
+		Entitys[i].randomWalk(deltaTime);
 	}
 }
 

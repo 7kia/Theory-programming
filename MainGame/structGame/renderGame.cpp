@@ -18,7 +18,7 @@ void Game::render()
 {
 	window.clear();
 
-	mainPerson.updateView(window);
+	mainPerson.updateView(window, *view);
 	Vector2f centerWindow = window.getView().getCenter();
 	//Vector2f sizeWindow = Vector2f(window.getSize());
 
@@ -37,7 +37,7 @@ void Game::render()
 	renderEntitys(rectWindow);
 	renderUnlifeObjects(rectWindow);
 
-	gui.setPositionGui(window, mainPerson, *world.Enemys, textGame);
+	gui.setPositionGui(window, mainPerson, *view, *world.Entitys, textGame);
 
 	renderGui();
 
@@ -118,26 +118,26 @@ void Game::renderItems(FloatRect const& rectWindow)
 
 void Game::renderEntitys(FloatRect const& rectWindow)
 {
-	vector<Enemy>& Enemys = *world.Enemys;
+	vector<Entity>& Entitys = *world.Entitys;
 
 	int enemyLevel;
 	const int personLevel = mainPerson.currentLevelFloor;
-	for (int i = 0; i < Enemys.size(); ++i) {
-		enemyLevel = Enemys[i].currentLevelFloor;
+	for (int i = 0; i < Entitys.size(); ++i) {
+		enemyLevel = Entitys[i].currentLevelFloor;
 		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
 
 			
-			Enemys[i].renderCurrentItem(window);
+			Entitys[i].renderCurrentItem(window);
 
 			Color currentColor;
 			if (personLevel) currentColor = NORMAL_COLOR;
 			else if (personLevel - 1) currentColor = DOWN_VIEW;
 			else if (personLevel + 1) currentColor = UP_VIEW;
-			Enemys[i].spriteEntity->setColor(currentColor);
+			Entitys[i].spriteEntity->setColor(currentColor);
 
-			drawInWindow(*Enemys[i].spriteEntity, rectWindow);
+			drawInWindow(*Entitys[i].spriteEntity, rectWindow);
 
-			//window.draw(*Enemys[i].spriteEntity);
+			//window.draw(*Entitys[i].spriteEntity);
 			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
 		}
 
@@ -177,7 +177,7 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	Item *drawItem = new Item;
 
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f centerWindow = view->getCenter();
 	Vector2f posImage = centerWindow;
 	size_t amountTypeItems = listAward.size();// + awardForLevel[currentLevel].size();
 
@@ -219,7 +219,7 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 
 void Game::setPositionAwardText()
 {
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f centerWindow = view->getCenter();
 	Text *currentText = &textGame.texts[idText::panelTitleText];
 	Vector2f posText = centerWindow;
 
@@ -247,7 +247,7 @@ void Game::setPositionAwardText()
 
 void Game::setPositionEndGameText()
 {
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f centerWindow = view->getCenter();
 	Text *currentText = &textGame.texts[idText::panelTitleText];
 	Vector2f posText = centerWindow;
 
@@ -300,7 +300,7 @@ void Game::renderGui()
 {
 	if (stateGame == pauseState
 			|| stateGame == endGameState) {
-		Vector2f centerWindow = mainPerson.view->getCenter();
+		Vector2f centerWindow = view->getCenter();
 		panels &panels = gui.panels;
 
 		panel &panel = panels.awardPanel;

@@ -114,10 +114,10 @@ void GUI::renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::Ren
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<Enemy>& enemy, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, View &view, vector<Entity>& enemy, TextGame &textGame)
 {
 
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f centerWindow = view.getCenter();
 	Vector2u sizeWindow = window.getSize();
 	featuresWindow featuresWindow;
 	Vector2f pos = { centerWindow.x + sizeWindow.x / 2 - widthInfo , centerWindow.y + sizeWindow.y / 2 - heightInfo};
@@ -155,24 +155,24 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 
 	////////////////////////////////////////////////////////////////
 	// для противников
-	int shiftHelathEnemy = 1;//2
-	int healthEnemy;
-	int healthMaxEnemy;
+	int shiftHelathEntity = 1;//2
+	int healthEntity;
+	int healthMaxEntity;
 
-	bool isFindedEnemy;
+	bool isFindedEntity;
 	bool isInView;
 	for (int i = 0; i != enemy.size(); ++i) {
 
-		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isFindedEntity = i == mainPerson.founds.findEntityFromList;
 		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
 						&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
-		if (isInView && isFindedEnemy) {
+		if (isInView && isFindedEntity) {
 
-			healthEnemy = enemy[i].health.currentHealth;
-			healthMaxEnemy = enemy[i].health.maxHealth;
+			healthEntity = enemy[i].health.currentHealth;
+			healthMaxEntity = enemy[i].health.maxHealth;
 
-			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, mainFeatures.levelHealth,
+			mainFeatures.renderBarEntity(enemy[i], healthEntity, healthMaxEntity, shiftHelathEntity, mainFeatures.levelHealth,
 																	sizes, textGame, window);
 		}	
 
@@ -191,23 +191,23 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	////////////////////////////////////////////////////////////////
 	// для противников
 
-	int shiftStaminaEnemy = 0;//1
-	int staminaEnemy;
-	int staminaMaxEnemy;
+	int shiftStaminaEntity = 0;//1
+	int staminaEntity;
+	int staminaMaxEntity;
 
 	for (int i = 0; i != enemy.size(); ++i) {
 
-		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isFindedEntity = i == mainPerson.founds.findEntityFromList;
 		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
 			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
-		if (isInView && isFindedEnemy) {
+		if (isInView && isFindedEntity) {
 
-			staminaEnemy = enemy[i].stamina.currentStamina;
-			staminaMaxEnemy = enemy[i].stamina.maxStamina;
+			staminaEntity = enemy[i].stamina.currentStamina;
+			staminaMaxEntity = enemy[i].stamina.maxStamina;
 
-			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, mainFeatures.levelStamina,
+			if (staminaMaxEntity) {
+				mainFeatures.renderBarEntity(enemy[i], staminaEntity, staminaMaxEntity, shiftStaminaEntity, mainFeatures.levelStamina,
 																		sizes, textGame, window);
 			}
 			
@@ -226,23 +226,23 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 																	 sizes, featuresWindow, textGame);
 
 
-	int shiftManaEnemy = 0;
-	int manaEnemy;
-	int manaMaxEnemy;
+	int shiftManaEntity = 0;
+	int manaEntity;
+	int manaMaxEntity;
 
 	for (int i = 0; i != enemy.size(); ++i) {
 
-		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isFindedEntity = i == mainPerson.founds.findEntityFromList;
 		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
 			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
-		if (isInView && isFindedEnemy) {
+		if (isInView && isFindedEntity) {
 
-			manaEnemy = enemy[i].mana.currentMana;
-			manaMaxEnemy = enemy[i].mana.maxMana;
+			manaEntity = enemy[i].mana.currentMana;
+			manaMaxEntity = enemy[i].mana.maxMana;
 
-			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, mainFeatures.levelMana,
+			if (staminaMaxEntity) {
+				mainFeatures.renderBarEntity(enemy[i], manaEntity, manaMaxEntity, shiftManaEntity, mainFeatures.levelMana,
 																		sizes, textGame, window);
 			}
 
