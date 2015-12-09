@@ -129,6 +129,10 @@ struct Game
 	void dropAward(std::vector<sf::Vector2i> &listAward);
 
 	void updateTimeDay(float &time);
+	void setNight();
+	void setDay();
+	void destroyUnlife();
+	void giveAward();
 	void playDayMusic();
 	void playNightMusic();
 	void switchMusic();

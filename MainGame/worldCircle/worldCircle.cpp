@@ -16,58 +16,75 @@ void Game::updateWorldTimeCircles()
 
 void Game::generateGroups()
 {
-	bool &needGenerateWave = world.waveEnemysCreated;
+	bool &waveEnemysCreated = world.waveEnemysCreated;
 	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
 	int *config = world.enemyWaveVariables;
 
-	bool condition = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
-	condition &= world.timeDay == night;
-	if (condition && needGenerateWave == false) {
+	bool nowNight = world.timeDay == night;
+	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
+
+	if (nowNight && needGenerateWave && !waveEnemysCreated) {
 		createGroups(currentWorldTime);
 	}
+
 }
 
 void Game::updateTimeDay(float &time)
 {
 	TimeDay &timeDay = world.timeDay;
-	if (timeDay == day) {
-		if (time > float(world.enemyWaveVariables[TIME_DAY])) {
-			world.worldTime.restart();
-			switchMusic();
-			timeDay = night;
-		}
+	bool endDay = time > float(world.enemyWaveVariables[TIME_DAY]);
+	bool endNight = time > float(world.enemyWaveVariables[TIME_NIGHT]);
 
+	if (timeDay == day && endDay) {
+		setNight();
 	}
-	else {
-		if (time > float(world.enemyWaveVariables[TIME_NIGHT])) {
-			world.worldTime.restart();
-			switchMusic();
-			timeDay = day;
-
-			std::vector<Enemy>& Enemys = *world.Enemys;
-			int i = 0;
-			while (i < Enemys.size()) {
-				if (Enemys[i].protection.deathDay) {
-					Enemys[i].playSoundDeath(world);
-					Enemys.erase(Enemys.begin() + i);
-					world.countEntity--;
-					continue;
-				}
-				i++;
-			}
-
-			//if(need)
-			if (difficult < NUMBER_LEVELS) {
-				if (updateDifficult) {
-					dropAward(awardForLevel[difficult]);
-				}
-				drawAwardPanel();
-				dropAward(*awardForWave);
-			}
-
-
-		}
+	else if (endNight) {
+		setDay();
+		destroyUnlife();
+		giveAward();
+		world.waveEnemysCreated = false;
 	}
+}
+
+void Game::setNight()
+{
+	world.worldTime.restart();
+	switchMusic();
+	world.timeDay = night;
+}
+
+void Game::setDay()
+{
+	world.worldTime.restart();
+	switchMusic();
+	world.timeDay = day;
+}
+
+void Game::destroyUnlife()
+{
+	std::vector<Enemy>& Enemys = *world.Enemys;
+	int i = 0;
+	while (i < Enemys.size()) {
+		if (Enemys[i].protection.deathDay) {
+			Enemys[i].playSoundDeath(world);
+			Enemys.erase(Enemys.begin() + i);
+			world.countEntity--;
+			continue;
+		}
+		i++;
+	}
+}
+
+void Game::giveAward()
+{
+	if (difficult < NUMBER_LEVELS) {
+		if (updateDifficult) {
+			dropAward(awardForLevel[difficult]);
+		}
+		drawAwardPanel();
+		dropAward(*awardForWave);
+	}
+
 }
 
 
@@ -91,6 +108,17 @@ void Game::dropAward(vector<Vector2i> &listAward)
 	delete addItem;
 }
 
+void Game::switchMusic()
+{
+	TimeDay &timeDay = world.timeDay;
+	if (timeDay == day) {
+		playNightMusic();
+	}
+	else if (timeDay == night) {
+		playDayMusic();
+	}
+}
+
 void Game::playDayMusic()
 {
 	TimeDay &timeDay = world.timeDay;
@@ -110,20 +138,10 @@ void Game::playNightMusic()
 	music.play();
 }
 
-void Game::switchMusic()
-{
-	TimeDay &timeDay = world.timeDay;
-	if (timeDay == day) {
-		playNightMusic();
-	}
-	else if (timeDay == night ){
-		playDayMusic();
-	}
-}
-
 void Game::createGroups(float time)
 {
 	countWave++;
+	world.waveEnemysCreated = true;
 	Vector3i pos = { 3, 10, 0 };
 
 	///*
@@ -148,11 +166,11 @@ void Game::createGroups(float time)
 		//world.worldTime.restart();
 	}
 
-	if (difficult > 0) {
+	if (difficult > 1) {
 		pos = { 10, 10, 1 };
 		createMiddleGroupSkelets(world, pos);
 	}
-	if (difficult > 1) {
+	if (difficult > 2) {
 		pos = { 20, 20, 1 };
 		createBigGroupSkelets(world, pos);
 	}
