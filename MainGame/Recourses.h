@@ -45,6 +45,7 @@ typedef enum {
 	hitStoneSound,
 
 	waveEndSound,
+	levelUpSound,
 	itemChoiseIdSound,
 	luggage1Sound,
 	buttonClickSound,
@@ -105,6 +106,7 @@ const std::string soundPaths[idSoundPaths::amountSoundSound]
 	pathToSounds + "breaking\\hit_stone_1.ogg",
 
 	pathToSounds + "GUI\\wave_end.ogg",
+	pathToSounds + "GUI\\level_up.ogg",
 	pathToSounds + "GUI\\item_choose.ogg",
 	pathToSounds + "GUI\\luggage1.ogg",
 	pathToSounds + "GUI\\button_click.ogg"

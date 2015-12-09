@@ -226,24 +226,50 @@ void Game::setPositionAwardText()
 	currentText->setString(TEXT_AWARD);
 	int sizeText = currentText->getCharacterSize();
 	float middleText = float(computeMiddleString(*currentText));
-	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TEXT;
+	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TITLE_TEXT;
 	posText.x -= middleText;
 
 	currentText->setPosition(posText);
-	/*
+	///*
 		////////////////////////////////////////
-	currentText = &textGame.texts[idText::panelText];
-	posText = centerWindow;
-	currentText->setString(TEXT_WAVE_END);
-	middleText = computeMiddleString(*currentText);
-	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TEXT * 2 + sizeText;
+	currentText = &textGame.texts[idText::panelHelpText];
+	posText.x = centerWindow.x;
+	currentText->setString(TEXT_HELP_AWARD);
+	middleText = float(computeMiddleString(*currentText));
+	posText.y += SHIFT_Y_AWARD_HELP_TEXT + sizeText;
 	posText.x -= middleText;
 
 	currentText->setPosition(posText);
 
-	*/
+	//*/
 
 }
+
+void Game::setPositionEndGameText()
+{
+	Vector2f centerWindow = mainPerson.view->getCenter();
+	Text *currentText = &textGame.texts[idText::panelTitleText];
+	Vector2f posText = centerWindow;
+
+	currentText->setString(TEXT_VICTORY);
+	int sizeText = currentText->getCharacterSize();
+	float middleText = float(computeMiddleString(*currentText));
+	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TITLE_TEXT;
+	posText.x -= middleText;
+
+	currentText->setPosition(posText);
+
+	currentText = &textGame.texts[idText::panelHelpText];
+	posText.x = centerWindow.x;
+	currentText->setString(TEXT_UNDER_VICTORY);
+	middleText = float(computeMiddleString(*currentText));
+	posText.y += SHIFT_Y_AWARD_HELP_TEXT + sizeText;
+	posText.x -= middleText;
+
+	currentText->setPosition(posText);
+
+}
+
 
 void Game::drawAwardPanel()
 {
@@ -257,9 +283,23 @@ void Game::drawAwardPanel()
 	stateGame = pauseState;
 }
 
+void Game::drawEndGamepanel()
+{
+	panel &awardPanel = gui.panels.awardPanel;
+
+	awardPanel.draw = true;
+	setPositionEndGameText();
+
+	playGlobalSound(idSoundPaths::levelUpSound, world.databaseSound);
+
+	stateGame = endGameState;
+	updateDifficult = false;
+}
+
 void Game::renderGui()
 {
-	if (stateGame == pauseState) {
+	if (stateGame == pauseState
+			|| stateGame == endGameState) {
 		Vector2f centerWindow = mainPerson.view->getCenter();
 		panels &panels = gui.panels;
 
@@ -271,7 +311,7 @@ void Game::renderGui()
 			window.draw(sprite);
 
 			window.draw(textGame.texts[idText::panelTitleText]);		
-			//window.draw(textGame.texts[idText::panelText]);
+			window.draw(textGame.texts[idText::panelHelpText]);
 
 			if (updateDifficult) {
 				vector<Vector2i> award;
@@ -285,8 +325,8 @@ void Game::renderGui()
 
 				drawAwardItems(award);
 
-			}
-			else
+			}// TODO
+			else if(stateGame != endGameState)
 			{
 				drawAwardItems(*awardForWave);
 			}

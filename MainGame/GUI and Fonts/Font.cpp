@@ -24,30 +24,13 @@ void initializeTexts(TextGame &textGame)
 
 	initTextAboutSelect(textGame);
 	initDeathText(textGame);
+	initPanelText(textGame);
 
 	textGame.InitText(idText::inputDamage, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
 	textGame.InitText(idText::levelBar, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-
 	textGame.InitText(idText::itemGui, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
 
-	textGame.InitText(idText::panelText, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-	textGame.InitText(idText::panelTitleText, Color::White, Text::Regular | Text::Underlined, SIZE_BIG_TEXT);
 
-	/*
-	// Определение количества символов
-	int sizeString = 0;
-	for (int i = 0; i < SIZE_STRING; i++) {
-		if (stringDeathPerson[i] != '\0') {
-			sizeString += 1;
-		} else {
-			break;
-		}
-	}
-
-	int widthText = currentText->getCharacterSize() * sizeString;
-	Vector2f origin = { (float)widthText / 4 , 0.f };
-	currentText->setOrigin(origin);
-	*/
 	
 }
 
@@ -65,10 +48,17 @@ void initDeathText(TextGame& textGame)
 
 void initTextAboutSelect(TextGame& textGame)
 {
-	textGame.InitText(idText::infoWindowBlock, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-	textGame.InitText(idText::infoWindowFloor, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-	textGame.InitText(idText::infoWindowUnlifeObject, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-	textGame.InitText(idText::infoWindowItem, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-	textGame.InitText(idText::infoEntity, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::infoWindowBlock, Color::White, Text::Regular, SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::infoWindowFloor, Color::White, Text::Regular, SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::infoWindowUnlifeObject, Color::White, Text::Regular, SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::infoWindowItem, Color::White, Text::Regular, SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::infoEntity, Color::White, Text::Regular, SIZE_NORMAL_TEXT);
 
+}
+
+void initPanelText(TextGame &textGame)
+{
+	textGame.InitText(idText::panelText, Color::White, Text::Regular, SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::panelHelpText, Color::White, Text::Regular | Text::Underlined, SIZE_BIG_TEXT);
+	textGame.InitText(idText::panelTitleText, Color::White, Text::Bold, SIZE_BIG_TEXT);
 }

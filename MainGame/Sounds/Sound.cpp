@@ -32,6 +32,8 @@ dataSound::dataSound()
 	initSound(hitStoneSound, soundPaths, 0.f);
 
 	initSound(waveEndSound, soundPaths, 0.f);
+	initSound(levelUpSound, soundPaths, 0.f);
+
 }
 
 void playGlobalSound(const int idSound, dataSound &soundBase)

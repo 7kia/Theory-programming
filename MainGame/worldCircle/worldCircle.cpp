@@ -41,7 +41,13 @@ void Game::updateTimeDay(float &time)
 	else if (endNight) {
 		setDay();
 		destroyUnlife();
-		giveAward();
+		if (difficult < NUMBER_LEVELS) {
+			giveAward();
+		}
+		else
+		{
+			drawEndGamepanel();
+		}
 		world.waveEnemysCreated = false;
 	}
 }
@@ -77,14 +83,11 @@ void Game::destroyUnlife()
 
 void Game::giveAward()
 {
-	if (difficult < NUMBER_LEVELS) {
-		if (updateDifficult) {
-			dropAward(awardForLevel[difficult]);
-		}
-		drawAwardPanel();
-		dropAward(*awardForWave);
+	if (updateDifficult) {
+		dropAward(awardForLevel[difficult]);
 	}
-
+	drawAwardPanel();
+	dropAward(*awardForWave);
 }
 
 
@@ -149,22 +152,25 @@ void Game::createGroups(float time)
 	createSmallGroupSkelets(world, pos);
 
 
-	createSmallGroupSkelets(world, pos);
-	//pos = { 5, 5, 2 };
-	//createSmallGroupSkelets(world, pos);
+	checkDifficult();
+	generateStrongGroups();
+}
 
-	//*/
-
-	///*
+void Game::checkDifficult()
+{
 	int *config = world.enemyWaveVariables;
 
 	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
-	if (updateDifficult)
-	{
+	if (updateDifficult) {
 		countWave = 0;
 		difficult++;
-		//world.worldTime.restart();
 	}
+
+}
+
+void Game::generateStrongGroups()
+{
+	Vector3i pos;
 
 	if (difficult > 1) {
 		pos = { 10, 10, 1 };
@@ -175,6 +181,4 @@ void Game::createGroups(float time)
 		createBigGroupSkelets(world, pos);
 	}
 
-	//*/
 }
-

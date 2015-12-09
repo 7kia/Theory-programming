@@ -9,7 +9,8 @@ void Game::update(const float &deltaTime)
 	processEvents(deltaTime);
 
 	if (mainPerson.isDeath == false
-			&& stateGame != pauseState) {
+			&& stateGame != pauseState
+			&& stateGame != endGameState) {
 		updatePlayer(deltaTime);
 		updateEntity(deltaTime);
 		updateUnlifeObjects(deltaTime);

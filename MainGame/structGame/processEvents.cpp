@@ -66,6 +66,10 @@ void Game::processInterface()
 
 			panel.draw = false;
 		}
+		else if(stateGame == endGameState)
+		{
+			window.close();
+		}
 	}
 }
 

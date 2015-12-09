@@ -60,7 +60,8 @@ enum StateGame
 	gameState,
 	pauseState,
 	menuState,
-	waveEndState
+	waveEndState,
+	endGameState
 };
 
 struct Game
@@ -120,11 +121,15 @@ struct Game
 	void upgradeObject(UnlifeObject& object);
 
 	// worldCircle.cpp
+	void checkDifficult();
+	void generateStrongGroups();
 	void createGroups(float time);
 	void generateGroups();
 
 	void drawAwardPanel();
+	void drawEndGamepanel();
 	void setPositionAwardText();
+	void setPositionEndGameText();
 	void drawAwardItems(std::vector<sf::Vector2i> &listAward);
 	void dropAward(std::vector<sf::Vector2i> &listAward);
 

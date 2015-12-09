@@ -6,9 +6,13 @@ const int SIZE_NORMAL_TEXT = 18;
 const int SIZE_SMALL_TEXT = 14;
 
 const sf::String TEXT_AWARD = "Award";
-const sf::String TEXT_WAVE_END = "Wave enemys is end!";
+const sf::String TEXT_HELP_AWARD = "Items will drop in center map.";
+const sf::String TEXT_VICTORY = "Victory";
+const sf::String TEXT_UNDER_VICTORY = "You end game.";
 
-const int SHIFT_Y_AWARD_TEXT = 20;
+const int SHIFT_Y_AWARD_TITLE_TEXT = 20;
+const int SHIFT_Y_AWARD_HELP_TEXT = 40;
+
 
 typedef enum {
 	infoWindowBlock,
@@ -22,6 +26,7 @@ typedef enum {
 	mainPersonIsDeath,
 
 	panelText,
+	panelHelpText,
 	panelTitleText,
 	amountTexts
 } idText;
@@ -38,3 +43,4 @@ void initializeTexts(TextGame &textGame);
 
 void initTextAboutSelect(TextGame& textGame);
 void initDeathText(TextGame &textGame);
+void initPanelText(TextGame &textGame);
