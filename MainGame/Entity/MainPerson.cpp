@@ -367,6 +367,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 					enemy.choiceBlock(world);
 				}
 
+
 			} 
 			else {
 
