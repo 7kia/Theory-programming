@@ -30,10 +30,10 @@ struct lineEdit {
 	sf::RectangleShape box;
 	sf::Text text;
 
-	void BoxInitialize(sf::Vector2f const& position);
-	void TextInitialize(sf::Vector2f const& position, Assets &assets);
+	void BoxInitialize(sf::Vector2f const& position, sf::Vector2f const& sizeBox);
+	void TextInitialize(sf::Vector2f const& position, sf::Vector2f const& sizeBox, Assets &assets);
 
-	lineEdit(sf::Vector2f const& position, Assets &assets);
+	lineEdit(sf::Vector2f const& position, sf::Vector2f const& sizeBox, Assets &assets);
 	bool DoesHit(sf::Vector2f const& point) const;
 
 	void Draw(sf::RenderWindow &window);

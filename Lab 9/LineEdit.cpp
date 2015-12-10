@@ -4,15 +4,15 @@
 using namespace sf;
 using namespace featureLineEdit;
 
-lineEdit::lineEdit(::sf::Vector2f const& position, Assets &assets)
+lineEdit::lineEdit(::sf::Vector2f const& position, sf::Vector2f const& sizeBox, Assets &assets)
 {
-	BoxInitialize(position);
-	TextInitialize(position, assets);
+	BoxInitialize(position, sizeBox);
+	TextInitialize(position, sizeBox, assets);
 }
 
-void lineEdit::BoxInitialize(::sf::Vector2f const& position)
+void lineEdit::BoxInitialize(::sf::Vector2f const& position, sf::Vector2f const& sizeBox)
 {
-	box.setSize(SIZE_LINE_EDIT);
+	box.setSize(sizeBox);
 	box.setFillColor(BACK_COLOR_NOT_CHANGED);
 
 	box.setOutlineThickness(THIKNESS);
@@ -20,12 +20,12 @@ void lineEdit::BoxInitialize(::sf::Vector2f const& position)
 	box.setPosition(position);
 }
 
-void lineEdit::TextInitialize(Vector2f const& position, Assets & assets)
+void lineEdit::TextInitialize(Vector2f const& position, sf::Vector2f const& sizeBox, Assets & assets)
 {
 	Vector2f positionText = { position.x + SHIFT_TEXT, position.y };
 	text.setPosition(positionText);
 	text.setFont(assets.fontMain);
-	text.setCharacterSize(SIZE_TEXT);
+	text.setCharacterSize(sizeBox.y - 2 * SHIFT_TEXT);
 
 	text.setString("");
 }
