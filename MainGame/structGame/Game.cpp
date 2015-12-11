@@ -141,6 +141,11 @@ Game::Game()
 	world.items = new vector<Item>;
 	world.listDestroy = new listDestroyObjectsAndBlocks;
 
+	world.deleteUnlifeObjects = new vector<int>;
+	world.deleteItems = new vector<int>;
+	world.deleteEnemys = new vector<int>;;
+
+
 	window.create(VideoMode(widthMainWindow, heightMainWindow), TITLE_PROGRAM);
 
 

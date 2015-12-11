@@ -3,9 +3,27 @@
 using namespace sf;
 using namespace std;
 
+void world::deleteObjects()
+{
+	int i = 0;
+	int id;
+	while (i < deleteUnlifeObjects->size())
+	{
+		id = (*deleteUnlifeObjects)[i];
+		if(!unlifeObjects->empty())
+		{
+			unlifeObjects->erase(unlifeObjects->begin() + id);
+		}
+		i++;
+	}
+	deleteUnlifeObjects->clear();
+}
+
 void Game::updateWorldTimeCircles()
 {
 	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+
+	world.deleteObjects();
 
 	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
 		generateGroups();

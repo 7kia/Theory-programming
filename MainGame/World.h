@@ -76,6 +76,12 @@ struct world
 	std::vector<Item>* items;
 	std::vector<UnlifeObject>* unlifeObjects;
 	std::vector<Enemy>* Enemys;
+
+	std::vector<int>* deleteItems;
+	std::vector<int>* deleteUnlifeObjects;
+	std::vector<int>* deleteEnemys;
+
+
 	typesObjectsInWorld typesObjects;
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
@@ -94,6 +100,8 @@ struct world
 	int countEntity = 0;
 
 	emptyObjects emptyObjects;
+
+	void deleteObjects();
 };
 
 void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount);

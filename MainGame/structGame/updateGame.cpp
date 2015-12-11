@@ -25,8 +25,9 @@ void Game::updatePlayer(const float &deltaTime)
 	{
 		mainPerson.updateAtack(world, deltaTime);
 	}
-	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
+
+	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
 	mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
 	mainPerson.updateView(window);
@@ -42,9 +43,10 @@ void Game::updateEntity(const float deltaTime)
 	Field &field = world.field;
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime);
-		Enemys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
-		Enemys[i].interactionWithEntity(world.Enemys, i, deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
+
+		//Enemys[i].interactionWithEntity(world.Enemys, i, deltaTime);
+		Enemys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
 
 		mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);

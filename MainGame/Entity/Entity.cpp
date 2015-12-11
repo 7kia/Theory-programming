@@ -448,8 +448,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	float x = getXPos();
 	float y = getYPos();
 
-	wasCollision = false;
-
 	//wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
@@ -570,6 +568,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	}
 
 	spriteEntity->setPosition(x, y);
+	movement = { 0.f, 0.f };
 }
 
 
@@ -583,6 +582,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 		float y;
 		x = getXPos();
 		y = getYPos();
+		wasCollision = false;
 
 
 		Sprite *spriteObject;
@@ -593,10 +593,10 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 		FloatRect objectAltBound;
 		FloatRect entityBound;
 
-		founds.findObject = nullptr;
+		//founds.findObject = founds.emptyObject;
 
 		vector<UnlifeObject> &objects = *unlifeObjects;
-		for (int i = 0; i != objects.size(); ++i) {
+		for (int i = 0; i < objects.size(); i++) {
 			levelUnlifeObject = objects[i].currentLevel;
 
 			spriteObject = objects[i].spriteObject;
@@ -607,16 +607,9 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 			entityBound = spriteEntity->getGlobalBounds();
 
 			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-				if (directions.directionWalk >= Direction::UP_LEFT) {
-					// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-					x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
-					y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
-				} else {
-					x -= dx * deltaTime;
-					y -= dy * deltaTime;
-				}
 				wasCollision = true;
 
+				//founds.init(pos)
 				founds.findObject = &objects[i];
 				founds.findObjectFromList = i;
 				directions.directionWalk = NONE_DIRECTION;
@@ -629,10 +622,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 
 		}
 
-
-
-		spriteEntity->setPosition(x, y);
-		movement = { 0.f, 0.f };
 	//}
 }
 

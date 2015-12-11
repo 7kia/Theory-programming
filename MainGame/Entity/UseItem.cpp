@@ -329,33 +329,44 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	int toughness = field.toughness[idBlock];
 
 
+	Item &currecntItem = itemFromPanelQuickAccess[idSelectItem];
+
+	Vector2f posAdd;
 	addObject.setType(typesObject[idUnlifeObject::destroyBlockEffect]);
 	addObject.setPosition(pos.x + 1, pos.y + 1 , pos.z);
-	addObject.currentToughness = toughness;
-	objects.push_back(addObject);
+
+	bool add = true;
+	posAdd = addObject.spriteObject->getPosition();
+	addObject.currentToughness = toughness - currecntItem.typeItem->damageItem.crushingDamage;
 
 	/////////////////////////////
 	// CheckObjectInserts
 	int idObject;
 	Sprite *spriteCheck;
-	UnlifeObject *lastObject = &objects[objects.size() - 1];
-	Sprite *spriteLastObject = lastObject->spriteObject;
 	size_t i = 0;
-	while (i < objects.size() - 1) {
+	while (i < objects.size()) {
+
 
 		idObject = objects[i].typeObject->id;
 		spriteCheck = objects[i].spriteObject;
 		if(idObject == idUnlifeObject::destroyBlockEffect)
 		{
-			if(spriteCheck->getGlobalBounds().intersects(spriteLastObject->getGlobalBounds()))
+			if(spriteCheck->getGlobalBounds().intersects(addObject.spriteObject->getGlobalBounds()))
 			{
-				objects.pop_back();
+				add = false;
 				i = 0;
-				continue;
+				break;
 			}
 		}
 
 	i++;
+	}
+
+
+
+
+	if (add) {
+		objects.push_back(addObject);
 	}
 
 }
@@ -375,16 +386,17 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 	int idNature;
 	idNature = field.idsNature[field.findIdBlock(*block)];
-	bool isObject = findObject != founds.emptyObject
+	bool isObject = findObject->typeObject->id != founds.emptyObject->typeObject->id
 		&& findObject;
-	if (isObject) {
+
+	if (founds.findObjectFromList > -1) {
 
 		bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect; 
 		bool idNatureEqual = idNature == field.idsNature[field.findIdBlock(collision.block)];
 		if (isInListObjects(*listTypes, findObject->typeObject->idNature)
 				|| (isDestroyEffect)) {
 
-			int &toughnessObject = founds.findObject->currentToughness;
+			int &toughnessObject = findObject->currentToughness;
 			typeDamageItem &damageItem = currentItem.typeItem->damageItem;
 			
 			//toughnessObject -= damageItem.cuttingDamage;
@@ -398,18 +410,32 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 			if (toughnessObject < 1) {
 
-				if (isDestroyEffect) {
-					Vector3i posDropBlock = { x, y, level };
-					dropBlock(world, posDropBlock, currentLevelFloor + 1);
 
-					*block = field.charBlocks[idBlocks::air];
-				}
-				else {
-					Vector2i posDrop = { x, y };
-					dropObject(posDrop, world, false);
-				}
+				// TODO
+				vector<int> *deleteUnlifeObjects = world.deleteUnlifeObjects;
+				if (isInListObjects(*deleteUnlifeObjects, founds.findObjectFromList) == false) {
+					deleteUnlifeObjects->push_back(founds.findObjectFromList);	
 
-				unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
+					if (isDestroyEffect) {
+						Vector3i posDropBlock = { x, y, level };
+						dropBlock(world, posDropBlock, currentLevelFloor + 1);
+
+						*block = field.charBlocks[idBlocks::air];
+					}
+					else {
+						Vector2i posDrop = { x, y };
+						dropObject(posDrop, world, false);
+					}
+
+
+
+				}
+				else
+				{
+									founds.findObjectFromList = -1;
+
+				}
+				//unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
 				breakItem(currentItem);
 			}
@@ -417,7 +443,9 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 
 		}
-	} else if (isInListObjects(*listTypes, idNature)) {
+	}
+	/**/
+	else if (isInListObjects(*listTypes, idNature)) {
 
 		createDestroyEffect(world, pos);
 		playObjectBreakSound(idNature);

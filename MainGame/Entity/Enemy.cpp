@@ -577,7 +577,6 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 		
 
 		spriteEntity->setPosition(x, y);
-		movement = { 0.f, 0.f };
 
 	}
 }

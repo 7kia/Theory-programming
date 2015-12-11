@@ -173,6 +173,11 @@ void initEmpty(TypeUnlifeObject *typesUnlifeObjects)
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
 	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", id, 0);
 	typesObject->defineToughness(false, 0);
+
+	typesObject->mainSize.init(0, 0, 0, 0);
+	typesObject->defineToughness(false, 0);
+	typesObject->transparentSize.init(0, 0, 0, 0);
+
 }
 
 void initEffects(TypeUnlifeObject* typesUnlifeObjects)
