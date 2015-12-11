@@ -389,7 +389,7 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	bool isObject = findObject->typeObject->id != founds.emptyObject->typeObject->id
 		&& findObject;
 
-	if (founds.findObjectFromList > -1) {
+	if (isObject) {
 
 		bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect; 
 		bool idNatureEqual = idNature == field.idsNature[field.findIdBlock(collision.block)];
@@ -410,32 +410,22 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 			if (toughnessObject < 1) {
 
+				if (isDestroyEffect) {
+					Vector3i posDropBlock = { x, y, level };
+					dropBlock(world, posDropBlock, currentLevelFloor + 1);
 
-				// TODO
-				vector<int> *deleteUnlifeObjects = world.deleteUnlifeObjects;
-				if (isInListObjects(*deleteUnlifeObjects, founds.findObjectFromList) == false) {
-					deleteUnlifeObjects->push_back(founds.findObjectFromList);	
-
-					if (isDestroyEffect) {
-						Vector3i posDropBlock = { x, y, level };
-						dropBlock(world, posDropBlock, currentLevelFloor + 1);
-
-						*block = field.charBlocks[idBlocks::air];
-					}
-					else {
-						Vector2i posDrop = { x, y };
-						dropObject(posDrop, world, false);
-					}
-
-
-
+					*block = field.charBlocks[idBlocks::air];
 				}
-				else
+				else {
+					Vector2i posDrop = { x, y };
+					dropObject(posDrop, world, false);
+				}
+
+				if(founds.findObjectFromList < unlifeObjects.size())
 				{
-									founds.findObjectFromList = -1;
+									unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
 				}
-				//unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
 				breakItem(currentItem);
 			}
@@ -446,9 +436,39 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	}
 	/**/
 	else if (isInListObjects(*listTypes, idNature)) {
+		/////////////////////////////
+		// CheckObjectInserts
+		vector<UnlifeObject> &objects = *world.unlifeObjects;
 
-		createDestroyEffect(world, pos);
+		bool add = true;
+		Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
+												float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
+
+		int idObject;
+		Sprite *spriteCheck;
+		size_t i = 0;
+		while (i < objects.size()) {
+
+
+			idObject = objects[i].typeObject->id;
+			spriteCheck = objects[i].spriteObject;
+			if (idObject == idUnlifeObject::destroyBlockEffect) {
+				if (spriteCheck->getGlobalBounds().contains(posAdd)){
+					add = false;
+					i = 0;
+					break;
+				}
+			}
+
+			i++;
+		}
+
+		if(add)
+		{
+					createDestroyEffect(world, pos);
 		playObjectBreakSound(idNature);
+
+		}
 
 		/*
 				*block = field.charBlocks[idBlocks::air];
