@@ -18,7 +18,7 @@ void Game::render()
 {
 	window.clear();
 
-	mainPerson.updateView(window, *view);
+	mainPerson->updateView(window, *view);
 	Vector2f centerWindow = window.getView().getCenter();
 	//Vector2f sizeWindow = Vector2f(window.getSize());
 
@@ -31,13 +31,13 @@ void Game::render()
 	renderItems(rectWindow);
 
 
-	mainPerson.renderCurrentItem(window);
-	window.draw(*mainPerson.spriteEntity);
+	mainPerson->renderCurrentItem(window);
+	window.draw(*mainPerson->spriteEntity);
 
 	renderEntitys(rectWindow);
 	renderUnlifeObjects(rectWindow);
 
-	gui.setPositionGui(window, mainPerson, *view, *world.Entitys, textGame);
+	gui.setPositionGui(window, *mainPerson, *view, *world.Entitys, textGame);
 
 	renderGui();
 
@@ -48,7 +48,7 @@ void Game::renderMap(FloatRect const& rectWindow)
 {
 	Field &field = world.field;
 
-	int l = mainPerson.currentLevelFloor;
+	int l = mainPerson->currentLevelFloor;
 	int lowBorder = l - 1;
 	if (lowBorder < 0)
 		lowBorder = 0;
@@ -63,7 +63,7 @@ void Game::renderMap(FloatRect const& rectWindow)
 
 		for (int i = 0; i < LONG_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
-				field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
+				field.setTypeSprite(mainPerson->currentLevelFloor, l, i, j);
 
 				/*
 								rectWallSprite = field.wallSprite->getGlobalBounds();
@@ -95,15 +95,15 @@ void Game::renderItems(FloatRect const& rectWindow)
 {
 	vector<Item> &items = *world.items;
 	for (int i = 0; i != items.size(); ++i) {
-		if (items[i].currentLevel >= mainPerson.currentLevelFloor
-				&& items[i].currentLevel <= mainPerson.currentLevelFloor + 2) {
+		if (items[i].currentLevel >= mainPerson->currentLevelFloor
+				&& items[i].currentLevel <= mainPerson->currentLevelFloor + 2) {
 
 
-			if (items[i].currentLevel == mainPerson.currentLevelFloor) {
+			if (items[i].currentLevel == mainPerson->currentLevelFloor) {
 				items[i].mainSprite->setColor(DOWN_VIEW);
-			} else if (items[i].currentLevel == mainPerson.currentLevelFloor + 1) {
+			} else if (items[i].currentLevel == mainPerson->currentLevelFloor + 1) {
 				items[i].mainSprite->setColor(NORMAL_VIEW);
-			} else if (items[i].currentLevel == mainPerson.currentLevelFloor + 2) {
+			} else if (items[i].currentLevel == mainPerson->currentLevelFloor + 2) {
 				items[i].mainSprite->setColor(UP_VIEW);
 			}
 
@@ -121,7 +121,7 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 	vector<Entity>& Entitys = *world.Entitys;
 
 	int enemyLevel;
-	const int personLevel = mainPerson.currentLevelFloor;
+	const int personLevel = mainPerson->currentLevelFloor;
 	for (int i = 0; i < Entitys.size(); ++i) {
 		enemyLevel = Entitys[i].currentLevelFloor;
 		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
@@ -148,7 +148,7 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 {
 
-	int currentLevel = mainPerson.currentLevelFloor;
+	int currentLevel = mainPerson->currentLevelFloor;
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
 	bool inView;
 	for (int i = 0; i != unlifeObjects.size(); ++i) {

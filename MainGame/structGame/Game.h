@@ -77,7 +77,7 @@ struct Game
 
 	sf::View *view;
 
-	MainPerson mainPerson;
+	Entity *mainPerson;
 
 	bool updateDifficult = false;
 	int difficult = 0;

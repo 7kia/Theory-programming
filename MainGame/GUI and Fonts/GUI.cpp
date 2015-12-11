@@ -104,7 +104,7 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void GUI::renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::RenderWindow& window, TextGame& textGame)
+void GUI::renderTextDeath(Entity &mainPerson, sf::Vector2f position, sf::RenderWindow& window, TextGame& textGame)
 {
 	Text *currentText = &textGame.texts[idText::mainPersonIsDeath];
 	currentText->setPosition(position);
@@ -114,7 +114,7 @@ void GUI::renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::Ren
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, View &view, vector<Entity>& enemy, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, View &view, vector<Entity>& enemy, TextGame &textGame)
 {
 
 	Vector2f centerWindow = view.getCenter();

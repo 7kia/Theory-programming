@@ -8,7 +8,7 @@ void Game::update(const float &deltaTime)
 {
 	processEvents(deltaTime);
 
-	if (mainPerson.isDeath == false
+	if (mainPerson->isDeath == false
 			&& stateGame != pauseState
 			&& stateGame != endGameState) {
 		updatePlayer(deltaTime);
@@ -20,19 +20,19 @@ void Game::update(const float &deltaTime)
 
 void Game::updatePlayer(const float &deltaTime)
 {
-	mainPerson.update(deltaTime);
-	if(mainPerson.currenMode == idEntityMode::atack)
+	mainPerson->update(deltaTime);
+	if(mainPerson->currenMode == idEntityMode::atack)
 	{
-		mainPerson.updateAtack(world, deltaTime);
+		mainPerson->updateAtack(world, deltaTime);
 	}
-	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
-	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
-	mainPerson.getCoordinateForView(mainPerson.getPosition(), *view);
+	mainPerson->interactionWithMap(world.field, *world.listDestroy, deltaTime);
+	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
+	mainPerson->getCoordinateForView(mainPerson->getPosition(), *view);
 
-	mainPerson.updateView(window, *view);
+	mainPerson->updateView(window, *view);
 	window.setView(*view);
 
-	//printf("Angle %f \n", mainPerson.rotation);
+	//printf("Angle %f \n", mainPerson->rotation);
 }
 
 
@@ -46,7 +46,7 @@ void Game::updateEntity(const float deltaTime)
 		Entitys[i].interactionWithEntity(world.Entitys, i, deltaTime);
 		Entitys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
-		mainPerson.attractionEntity(Entitys[i], world, deltaTime);
+		mainPerson->attractionEntity(Entitys[i], world, deltaTime);
 		Entitys[i].randomWalk(deltaTime);
 	}
 }

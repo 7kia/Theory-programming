@@ -87,11 +87,15 @@ void Entity::EntityInit(TypeEntity &typesEntity, world &world,
 	type = &typesEntity;
 
 	soundBase = &world.databaseSound;
-
-	itemFromPanelQuickAccess = new Item;
+	
+	itemFromPanelQuickAccess = new Item[type->amountSlots];
 	itemFromPanelQuickAccess->setType(type->typeItem);
 	idSelectItem = 0;
 	itemFromPanelQuickAccess[idSelectItem].amount = type->typeItem.maxAmount;
+	for (int i = 1; i < type->amountSlots; i++)
+	{
+		itemFromPanelQuickAccess[i] = world.emptyObjects.emptyItem;
+	}
 
 	size.width = type->featuresSprite.size.width;
 	size.height = type->featuresSprite.size.height;

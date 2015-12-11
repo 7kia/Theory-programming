@@ -20,7 +20,7 @@ struct barMainFeatures
 
 	void renderDamageForEntity(Entity & enemy, TextGame & textGame, sf::RenderWindow & window, int shift);
 
-	void renderBarMainPerson(MainPerson &mainPerson, int & current, int & max, int shift, sf::Sprite &sprite, featuresSprite & sizes,
+	void renderBarMainPerson(Entity &mainPerson, int & current, int & max, int shift, sf::Sprite &sprite, featuresSprite & sizes,
 													 featuresWindow features, TextGame & textGame);
 	void renderBarEntity(Entity & enemy, int & current, int & max, int shift, sf::Sprite &sprite,
 											featuresSprite & sizes, TextGame & textGame, RenderWindow & window);

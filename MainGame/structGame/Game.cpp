@@ -11,7 +11,7 @@ void Game::informationAboutSelect(float x, float y)
 
 	Field &field = world.field;
 
-	foundObjects &founds = mainPerson.founds;
+	foundObjects &founds = mainPerson->founds;
 
 	int xPosBlock = int(x / SIZE_BLOCK);
 	int yPosBlock = int(y / SIZE_BLOCK);
@@ -23,16 +23,16 @@ void Game::informationAboutSelect(float x, float y)
 	infoFloor.setString("Floor : not select");
 	for (int l = 0; l < HEIGHT_MAP; l++) {
 		// Рисуем только текущий уровень
-		if (l >= mainPerson.currentLevelFloor - 1
-				&& l <= mainPerson.currentLevelFloor + 2) {
+		if (l >= mainPerson->currentLevelFloor - 1
+				&& l <= mainPerson->currentLevelFloor + 2) {
 			for (int i = 0; i < LONG_MAP; i++) {
 				for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 
 
 					if ((xPosBlock == j) && (yPosBlock == i)) {
-						if (l == mainPerson.currentLevelFloor) {
+						if (l == mainPerson->currentLevelFloor) {
 							infoFloor.setString("Floor : " + field.findCharBlocks(field.dataMap[l][i][j]));
-						} else if (l == mainPerson.currentLevelFloor + 1) {
+						} else if (l == mainPerson->currentLevelFloor + 1) {
 							infoBlock.setString("Block : " + field.findCharBlocks(field.dataMap[l][i][j]));
 						}
 					}
@@ -62,8 +62,8 @@ void Game::informationAboutSelect(float x, float y)
 		FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) || objectAltBound.contains(x, y)) {
-			if (level >= mainPerson.currentLevelFloor
-					&& level <= mainPerson.currentLevelFloor + 1) {
+			if (level >= mainPerson->currentLevelFloor
+					&& level <= mainPerson->currentLevelFloor + 1) {
 				String name = unlifeObjects[i].typeObject->name;
 				if (name != "") {
 
@@ -93,8 +93,8 @@ void Game::informationAboutSelect(float x, float y)
 		//FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
 		//|| itemUseBound.contains(x, y)
 		if (itemBound.contains(x, y)) {
-			if (level >= mainPerson.currentLevelFloor
-					&& level <= mainPerson.currentLevelFloor + 2) {
+			if (level >= mainPerson->currentLevelFloor
+					&& level <= mainPerson->currentLevelFloor + 2) {
 				String name = items[i].typeItem->features.name;
 				if (name != "") {
 					founds.findItemFromList = i;
@@ -120,8 +120,8 @@ void Game::informationAboutSelect(float x, float y)
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y)) {
-			if (level >= mainPerson.currentLevelFloor - 1
-					&& level <= mainPerson.currentLevelFloor + 1) {
+			if (level >= mainPerson->currentLevelFloor - 1
+					&& level <= mainPerson->currentLevelFloor + 1) {
 				String name = Entitys[i].type->name;
 				if (name != "") {
 
@@ -171,7 +171,8 @@ Game::Game()
 	initializeEntitys(world);
 
 	view = new View;
-	initializeMainPerson(mainPerson, world, *view);
+	mainPerson = new Entity;
+	initializeMainPerson(*mainPerson, world, *view);
 	initializeHotKeys();
 
 	createTextsAndFonts(textGame);
@@ -366,12 +367,13 @@ void Game::createListAward()
 void destroyGame(Game & game)
 {
 	// TODO
+	delete game.mainPerson;
+
 	delete game.world.items;
 	delete game.world.unlifeObjects;
 	delete game.world.Entitys;
 	delete game.world.listDestroy;
 
-	delete &game;
 }
 
 void initializeClock(Clock &clock)// ИСПРАВЬ

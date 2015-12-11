@@ -25,5 +25,5 @@ private:
 
 };
 
-void initializeMainPerson(MainPerson &mainPerson, world &world, sf::View &view);
+void initializeMainPerson(Entity &mainPerson, world &world, sf::View &view);
 

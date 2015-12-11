@@ -2,7 +2,7 @@
 
 using namespace std;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, featuresWindow features,
+void itemFeatures::renderNameItem(Entity &mainPerson, Vector2f& position, featuresWindow features,
 																	TextGame &textGame)
 {
 	RenderWindow &window = *features.window;
@@ -43,7 +43,7 @@ void itemFeatures::renderBar(Sprite &sprite, sf::Vector2f position, sf::RenderWi
 	sprite.setScale(normalSizeGuiForEntity);
 }
 
-void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow features,
+void itemFeatures::renderFeatures(Entity &mainPerson, featuresWindow features,
 																	TextGame &textGame, barMainFeatures &bars)
 {
 	RenderWindow &window = *features.window;

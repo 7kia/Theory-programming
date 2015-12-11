@@ -9,22 +9,8 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////
 // Объявление персонажа
-void initializeMainPerson(MainPerson &mainPerson, world &world, View &view)
+void initializeMainPerson(Entity &mainPerson, world &world, View &view)
 {
-	mainPerson.spriteEntity = new Sprite;
-	mainPerson.textureEntity = new Texture;
-
-	// Задание размера
-	mainPerson.size.init(32, 32);
-
-	// Дальность подбора предметов
-	mainPerson.radiusUse = 1;
-
-	// Скорость ходьбы
-	mainPerson.step.init(150.f);
-	mainPerson.animation.timeAnimation = 0.f;
-
-	// TODO
 	float posX = float(CENTER_WORLD.x * SIZE_BLOCK);
 	float posY = float(CENTER_WORLD.y * SIZE_BLOCK);
 	view.setSize(640, 480);
@@ -34,60 +20,14 @@ void initializeMainPerson(MainPerson &mainPerson, world &world, View &view)
 	sf::Listener::setUpVector(0.f, 1.f, 0.f);
 	sf::Listener::setGlobalVolume(100.f);
 
-	// Текстура
-	mainPerson.textureEntity->loadFromFile(texturePaths[idTexturePaths::mainPerson]);
-	mainPerson.spriteEntity->setTexture(*mainPerson.textureEntity);
-	mainPerson.spriteEntity->setTextureRect(IntRect(0, 0, mainPerson.size.width, mainPerson.size.height));
-	//mainPerson.spriteEntity->setOrigin(mainPerson.size.width / 2, mainPerson.size.height / 2);
-
-
-	mainPerson.soundBase = &world.databaseSound;
-
-	emptyObjects &emptyObjects = world.emptyObjects;
-	mainPerson.founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject, &emptyObjects.emptyEntity);
-	// Создайм и заполняем панель
-	mainPerson.idSelectItem = 0;
-	mainPerson.amountSlots = AMOUNT_ACTIVE_SLOTS;
-	mainPerson.itemFromPanelQuickAccess = new Item[AMOUNT_ACTIVE_SLOTS];
-	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		mainPerson.itemFromPanelQuickAccess[i].typeItem = emptyObjects.emptyItem.typeItem;
-	}
-
-	// Позиция и направление
-	mainPerson.currentLevelFloor = 1;
-	mainPerson.currenMode = idEntityMode::walk;
-	mainPerson.spriteEntity->setPosition(posX, posY);
-
-	entityAnimation &animation = mainPerson.animation;
-	animation.init(1.5f, 1.f);
-
-	Directions &directions = mainPerson.directions;
-	directions.directionWalk = NONE_DIRECTION;
-	directions.directionLook = DOWN;
-
-	mainPerson.health.maxHealth = 1000;
-	mainPerson.health.currentHealth = 900;
-	mainPerson.stamina.currentStamina = 35;
-	mainPerson.mana.currentMana = 10;
-
-	mainPerson.thirst.currentThirst = 5;
-	mainPerson.hungry.currentHungry = 5;
-
-	entityProtection &protection = mainPerson.protection;
-	protection.protectionCut = 0.15f;
-	protection.protectionCrash = 1.f;
-	protection.protectionUnlife = 0.f;
-
-	mainPerson.damage.damageMultiplirer = 1;
-
-
+	mainPerson.EntityInit(world.typesObjects.typesEntity[idEntity::mainPersonEntity], world, CENTER_WORLD.x, CENTER_WORLD.y, 2);
 }
 
 ////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////
 // Обновление камеры
-void MainPerson::updateView(RenderWindow & window, View &view)
+void Entity::updateView(RenderWindow & window, View &view)
 {
 	Vector2u sizeWindow = window.getSize();
 	//sizeWindow.x /= 1.5;
@@ -120,7 +60,7 @@ void MainPerson::updateView(RenderWindow & window, View &view)
 
 
 
-void MainPerson::givenForPersonDamage(Entity &enemy)
+void Entity::givenForPersonDamage(Entity &enemy)
 {
 	Item& itemEntity = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
 	typeDamageItem damageEntityItem = itemEntity.typeItem->damageItem;
@@ -232,7 +172,7 @@ void Entity::playSoundDeath(world& world)
 
 }
 
-void MainPerson::updateAtack(world &world, const float deltaTime)
+void Entity::updateAtack(world &world, const float deltaTime)
 {
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -292,7 +232,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	}
 }
 
-void MainPerson::hurtPerson(Entity& enemy, world& world, const float deltaTime)
+void Entity::hurtPerson(Entity& enemy, world& world, const float deltaTime)
 {
 	enemy.currenMode = idEntityMode::atack;
 
@@ -320,7 +260,7 @@ void MainPerson::hurtPerson(Entity& enemy, world& world, const float deltaTime)
 
 }
 
-void MainPerson::attractionEntity(Entity &enemy, world &world, const float deltaTime)
+void Entity::attractionEntity(Entity &enemy, world &world, const float deltaTime)
 {
 	float radiuseView = enemy.type->view.radiuseView;
 	bool feelEntity = enemy.type->view.feelEntity;
@@ -388,7 +328,7 @@ void MainPerson::attractionEntity(Entity &enemy, world &world, const float delta
 
 ////////////////////////////////////////////////////////////////////
 
-void MainPerson::useItem(world &world,
+void Entity::useItem(world &world,
 												Event &event, Vector2f pos)
 {
 
@@ -490,7 +430,7 @@ void MainPerson::useItem(world &world,
 
 }
 
-void MainPerson::playSoundChoiseItem()
+void Entity::playSoundChoiseItem()
 {
 	int id = idSoundPaths::itemChoiseIdSound;
 	::playSound(id, *soundBase, soundEntity, getPosition());
@@ -498,7 +438,7 @@ void MainPerson::playSoundChoiseItem()
 
 ////////////////////////////////////////////////////////////////////
 // Использую потом (не ВКЛЮЧЕНА)
-void MainPerson::computeAngle(RenderWindow &window)
+void Entity::computeAngle(RenderWindow &window)
 {
 	Vector2i pixelPos = Mouse::getPosition(window);//забираем коорд курсора
 	Vector2f pos = window.mapPixelToCoords(pixelPos);//переводим их в игровые (уходим от коорд окна)
@@ -513,7 +453,7 @@ void MainPerson::computeAngle(RenderWindow &window)
 
 ////////////////////////////////////////////////////////////////////
 // View
-void MainPerson::getCoordinateForView(Vector2f pos, View &view)//функция для считывания координат игрока
+void Entity::getCoordinateForView(Vector2f pos, View &view)//функция для считывания координат игрока
 {
 	view.setCenter(pos.x, pos.y);//следим за игроком, передавая его координаты. 
 }

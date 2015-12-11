@@ -96,7 +96,7 @@ void barMainFeatures::renderDamageForEntity(Entity &enemy, TextGame &textGame, R
 	}
 }
 
-void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
+void barMainFeatures::renderBarMainPerson(Entity &mainPerson, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																					featuresWindow features, TextGame &textGame)
 {
 	RenderWindow &window = *features.window;
