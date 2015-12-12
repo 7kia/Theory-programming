@@ -278,21 +278,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 		{
 			if (giveDamage) 
 			{
-				Vector3i &posUse = founds.currentTarget;
-				Field &field = world.field;
-				wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
-				int idNature;
-				idNature = field.idsNature[field.findIdBlock(*block)];
-
-				if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
-					createDestroyEffect(world, posUse);
-					playObjectBreakSound(idNature);
-					resetAtack();
-				}
-				else if(isDestroyEffect(posUse, world))
-				{
-					useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
-				}
+				breakBlockForHelpItem(world);
 
 			}
 		}
@@ -395,7 +381,8 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 					enemy.playAnimationAtack(deltaTime);
 					if (enemy.giveDamage) {
-						Vector3i &posUse = founds.currentTarget;
+						/*
+												Vector3i &posUse = founds.currentTarget;
 						Field &field = world.field;
 						wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
 						int idNature;
@@ -405,30 +392,47 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 
 						if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
-							createDestroyEffect(world, posUse);
-							enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
-							playObjectBreakSound(idNature);
-							resetAtack();
+							enemy.createDestroyEffect(world, posUse);
+							//enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
+							enemy.playObjectBreakSound(idNature);
+							enemy.resetAtack();
 						}
-						else if (isDestroyEffect(posUse, world)) {
+						else {
 
-							useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
+							enemy.useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
 						}
-					resetAtack();
+						//enemy.resetAtack();
 
+						*/
+						enemy.breakBlockForHelpItem(world);
 					}
 				}
-				else
-				{
-									enemy.currenMode = idEntityMode::walk;
-				enemy.resetAtack();
-
+				else {
+					enemy.currenMode = idEntityMode::walk;
+					enemy.resetAtack();
 				}
 			}
 		}
 	}
 }
 	
+void Entity::breakBlockForHelpItem(world &world)
+{
+	Vector3i &posUse = founds.currentTarget;
+	Field &field = world.field;
+	wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
+	int idNature;
+	idNature = field.idsNature[field.findIdBlock(*block)];
+
+	if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+		createDestroyEffect(world, posUse);
+		playObjectBreakSound(idNature);
+		resetAtack();
+	}
+	else if (isDestroyEffect(posUse, world)) {
+		useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////
 

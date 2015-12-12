@@ -76,6 +76,7 @@ public:
 
 	void playAtackSound(Item &currentItem);
 	void createDestroyEffect(world &world, Vector3i &pos);
+	void defineToughnesBlock(UnlifeObject &object, sf::Vector3i pos, Field &field);
 
 	void playObjectBreakSound(int idNature);
 	void playObjectDropSound(sf::Vector2f pos);
@@ -127,8 +128,21 @@ public:
 	void useAsEmptyBukket(Item &currentItem, world &world, int level);
 	void useAsBukketWithWater(Item &currentItem, world &world, sf::Event event);
 
+	void defineIdNatureBreakSound(int &variable, Field &field, sf::Vector3i pos);
+	void breakObjectForHelpItem(sf::Vector3i pos, Item &item, world &world);
+	void destroyObject(sf::Vector3i &pos, world &world, Item &currentItem);
+	void recordInDeleteObjects(world &world);
+	void createDropItems(bool isBlock, world &world, sf::Vector3i pos);
+
+
+	void breakBlockForHelpItem(world &world);
 	void useTool(sf::Vector3i &pos, world &world, Item &currentItem);
+	void processObject(sf::Vector3i &pos, world &world, Item &currentItem);
+
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
+	void addBlock(wchar_t *place, int id, Field &field, Item &itemBlock);
+	void addObject(int id, sf::Vector3i pos, world &world, Item &itemObject);
+
 	void upgradeObject(UnlifeObject& object, world& world);
 	//private:
 

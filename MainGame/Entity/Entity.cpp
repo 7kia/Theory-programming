@@ -268,10 +268,9 @@ void Entity::update(const float deltaTime)
 	//animation.currentTimeFightAnimation > 0
 	if (currenMode == idEntityMode::atack) {
 		animation.updateFight(deltaTime, giveDamage, currenMode);
-
 		playAnimationAtack(deltaTime);
-
 	}
+
 }
 
 void Entity::resetAtack()
@@ -358,8 +357,12 @@ void Entity::playAtackSound(Item &currentItem)
 
 }
 
+
 void Entity::playObjectBreakSound(int idNature)
 {
+
+
+
 	Vector2f posUse = getPosition();
 	switch (idNature) {
 	case idNatureObject::woodNature:
@@ -639,7 +642,6 @@ bool Entity::isEmptySlot()
 	}
 	return false;
 }
-
 
 //////////////////////////////////////////////////////
 // Поиск неживого объекта

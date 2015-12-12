@@ -269,227 +269,32 @@ void Entity::playHarvestSoundObject()
 	}
 }
 
-void Entity::dropObject(Vector2i pos, world &world, bool harvest)
-{
-	//////////////////////////////////////////////////
-	// Выпадение предметов
-	Item* addItem = new Item;
-	vector<Item> &items = *world.items;
-	TypeItem *typesItems = world.typesObjects.typesItem;
-
-	UnlifeObject &findObject = *founds.findObject;
-	TypeUnlifeObject &typeObject = *findObject.typeObject;
-	size_t countItem = typeObject.drop.minCountItems.size();
-
-	vector<int> &minAmount = typeObject.drop.minCountItems;
-	vector<int> &maxAmount = typeObject.drop.maxCountItems;
-	vector<int> &idItems = typeObject.drop.dropItems;
-
-	size_t start = 0;
-	size_t finish = countItem;
-
-	if(harvest)
-	{
-		start = 1;
-	}
-
-	int currentAmount;
-	for (size_t i = start; i < finish; i++) {
-
-		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
-		for (int j = 0; j < currentAmount; j++) {
-			addItem->setType(typesItems[idItems[i]]);
-			addItem->setPosition(pos.x + 1, pos.y + 1, currentLevelFloor + 1);
-			items.push_back(*addItem);
-
-		}
-
-	}
-	delete addItem;
-	
-	if(harvest)
-	{
-		playHarvestSoundObject();	
-	}
-	else
-	{
-		playObjectDropSoundObject();
-	}
-}
-
 void Entity::createDestroyEffect(world &world, Vector3i &pos)
 {
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
-	TypeUnlifeObject *typesObject = world.typesObjects.typesUnlifeObject;
-	UnlifeObject addObject;
 	Field &field = world.field;
-	wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
-	int idBlock = field.findIdBlock(*block);
-	//int idNature = field.idsNature[idBlock];
-	int toughness = field.toughness[idBlock];
+	UnlifeObject addObject;
+	TypeUnlifeObject *typesObject = world.typesObjects.typesUnlifeObject;
 
-
-	Item &currecntItem = itemFromPanelQuickAccess[idSelectItem];
-
-	Vector2f posAdd;
 	addObject.setType(typesObject[idUnlifeObject::destroyBlockEffect]);
 	addObject.setPosition(pos.x + 1, pos.y + 1 , pos.z);
 
-	bool add = true;
-	posAdd = addObject.spriteObject->getPosition();
-	addObject.currentToughness = toughness - currecntItem.typeItem->damageItem.crushingDamage;
+	defineToughnesBlock(addObject, pos, field);
 
-	/*
-	
-	/////////////////////////////
-	// CheckObjectInserts
-	int idObject;
-	Sprite *spriteCheck;
-	size_t i = 0;
-	while (i < objects.size()) {
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	objects.push_back(addObject);
+	founds.findObject = &objects[objects.size() - 1];
+}
 
-
-		idObject = objects[i].typeObject->id;
-		spriteCheck = objects[i].spriteObject;
-		if(idObject == idUnlifeObject::destroyBlockEffect)
-		{
-			if(spriteCheck->getGlobalBounds().intersects(addObject.spriteObject->getGlobalBounds()))
-			{
-				add = false;
-				i = 0;
-				break;
-			}
-		}
-
-	i++;
-	}
-	*/
-
-	if (add) {
-		objects.push_back(addObject);
-		founds.findObject = &objects[objects.size() - 1];
-
-	}
+void Entity::defineToughnesBlock(UnlifeObject &object, Vector3i pos, Field &field)
+{	
+	Item &currecntItem = itemFromPanelQuickAccess[idSelectItem];
+	wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
+	int idBlock = field.findIdBlock(*block);
+	int toughness = field.toughness[idBlock];
+	object.currentToughness = toughness - currecntItem.typeItem->damageItem.crushingDamage;
 
 }
 
-void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
-
-	Field &field = world.field;
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
-
-	int x = pos.x;
-	int y = pos.y;
-	int level = pos.z;
-
-	wchar_t	*block = &field.dataMap[level][y][x];
-	vector<int> *listTypes = currentItem.typeItem->destroy;
-	UnlifeObject *findObject = founds.findObject;
-
-	int idNature;
-	idNature = field.idsNature[field.findIdBlock(*block)];
-	bool isObject = findObject->typeObject->id != founds.emptyObject->typeObject->id
-		&& findObject;
-
-
-
-	if (isObject) {
-
-		resetAtack();
-
-		bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
-		bool idNatureEqual = idNature == field.idsNature[field.findIdBlock(collision.block)];
-		if (isInListObjects(*listTypes, findObject->typeObject->idNature)
-				|| (isDestroyEffect)) {
-
-			int &toughnessObject = findObject->currentToughness;
-			typeDamageItem &damageItem = currentItem.typeItem->damageItem;
-
-			//toughnessObject -= damageItem.cuttingDamage;
-			toughnessObject -= damageItem.crushingDamage;
-
-			if (!isDestroyEffect) {
-				idNature = findObject->typeObject->idNature;
-			}
-			playObjectBreakSound(idNature);
-
-
-			if (toughnessObject < 1) {
-
-				if (isDestroyEffect) {
-					Vector3i posDropBlock = { x, y, level };
-					dropBlock(world, posDropBlock, currentLevelFloor + 1);
-
-					*block = field.charBlocks[idBlocks::air];
-				}
-				else {
-					Vector2i posDrop = { x, y };
-					dropObject(posDrop, world, false);
-				}
-
-				if (founds.findObjectFromList < unlifeObjects.size()) {
-					unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
-
-				}
-
-				breakItem(currentItem);
-			}
-
-
-
-
-		}
-	}
-	/*
-		else if (isInListObjects(*listTypes, idNature)) {
-
-		currenMode = idEntityMode::atack;
-		animation.currentTimeFightAnimation = 0.f;
-		giveDamage = false;
-		/////////////////////////////
-		// CheckObjectInserts
-		vector<UnlifeObject> &objects = *world.unlifeObjects;
-
-		bool add = true;
-		Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
-												float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
-
-		int idObject;
-		Sprite *spriteCheck;
-		size_t i = 0;
-		while (i < objects.size()) {
-
-
-			idObject = objects[i].typeObject->id;
-			spriteCheck = objects[i].spriteObject;
-			if (idObject == idUnlifeObject::destroyBlockEffect) {
-				if (spriteCheck->getGlobalBounds().contains(posAdd)){
-					add = false;
-					i = 0;
-					break;
-				}
-			}
-
-			i++;
-		}
-
-		if(add)
-		{
-					createDestroyEffect(world, pos);
-		playObjectBreakSound(idNature);
-
-		}
-
-		/*
-				*block = field.charBlocks[idBlocks::air];
-
-		breakItem(currentItem);
-
-		*/
-
-	//}
-	//*/
-}
 
 bool Entity::isDestroyEffect(sf::Vector3i & pos, world & world)
 {
@@ -517,71 +322,6 @@ bool Entity::isDestroyEffect(sf::Vector3i & pos, world & world)
 	}
 
 	return false;
-}
-
-void Entity::useBlock(Vector3i pos, world &world,
-											Item & currentItem)
-{
-
-	TypeUnlifeObject *typesUnlifeObjects = world.typesObjects.typesUnlifeObject;
-
-	Field &field = world.field;
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
-
-	bool useForAnyLevel = pos.z > -1;
-	if (useForAnyLevel) {
-		bool successfullUse;
-
-		wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
-
-		int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
-		int idUseObject = currentItem.typeItem->idAdd.idUnlideOnjectForUse;
-
-		bool isIdBlock = idUseBlock > -1;
-		bool isAir = *block == field.charBlocks[idBlocks::air];
-		if (isIdBlock && isAir) {
-			*block = field.charBlocks[idUseBlock];
-			successfullUse = true;
-		}
-		// Неживой объет
-		else if (idUseObject > -1) {
-			UnlifeObject* addObject = new UnlifeObject;
-
-			addObject->setType(typesUnlifeObjects[idUseObject]);
-			addObject->setPosition(pos.x + 1, pos.y + 1, currentLevelFloor + 1);
-			unlifeObjects.push_back(*addObject);
-
-			delete addObject;
-			successfullUse = true;
-		} else {
-			successfullUse = false;
-		}
-
-		////////////////////////////////
-		// Если успешно применён
-		if (successfullUse) {
-			breakItem(currentItem);
-		}
-		////////////////////////////////
-	}
-
-}
-
-void Entity::upgradeObject(UnlifeObject &object, world &world)
-{
-	redefineObject &redefine = object.typeObject->redefine;
-	Sprite &spriteObject = *object.spriteObject;
-	Vector2f currentPos = spriteObject.getPosition();
-	Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
-		int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
-
-	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
-
-	Vector2i posItems = { posOnMap.x - 1, posOnMap.y - 1 };
-	dropObject(posItems, world, true);
-
-	object.setType(nextType);
-	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
 }
 
 // TODO
