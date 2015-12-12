@@ -293,7 +293,11 @@ void Enemy::choiceBlock(world &world)
 	int yShift = 0;
 	choiceDirectionLook(xShift, yShift);
 
-	founds.currentTarget = { x, y, level };
+	if(founds.findObjectFromList > -1)
+	{
+			founds.currentTarget = { x, y, level };
+
+	}
 
 	/////////////////////////////////////////////
 	Field &field = world.field;

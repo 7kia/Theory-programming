@@ -283,6 +283,22 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	vector<UnlifeObject> &objects = *world.unlifeObjects;
 	objects.push_back(addObject);
 	founds.findObject = &objects[objects.size() - 1];
+
+	if(objects.size() > 1)
+	{
+			Vector2f posAdd = addObject.spriteObject->getPosition();
+	for (int i = 0; i < objects.size() - 1; i++) {
+		if (objects[i].spriteObject->getGlobalBounds().contains(posAdd)) {
+			vector<int> &deleteUnlifeObjects = *world.deleteUnlifeObjects;
+			if (isInListObjects(deleteUnlifeObjects, i) == false) {
+				deleteUnlifeObjects.push_back(i);
+			}
+		}
+
+	}
+
+	}
+
 }
 
 void Entity::defineToughnesBlock(UnlifeObject &object, Vector3i pos, Field &field)

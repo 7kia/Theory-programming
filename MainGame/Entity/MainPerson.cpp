@@ -272,18 +272,11 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 		}
 
 	}
-	else
+	else if (!isEnemy && giveDamage)
 	{
-		if(!isEnemy)
-		{
-			if (giveDamage) 
-			{
-				breakBlockForHelpItem(world);
-
-			}
-		}
-		
+		breakBlockForHelpItem(world);
 	}
+
 }
 
 void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
@@ -375,35 +368,13 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				}
 			}
 			else {
-				Vector2i posBlock = { founds.currentTarget.x,founds.currentTarget.y };
+				Vector2i posBlock = { founds.currentTarget.x, founds.currentTarget.y };
 				if (posBlock != ZERO_VECTOR_2I)
 				{
+
 					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 					enemy.playAnimationAtack(deltaTime);
-					if (enemy.giveDamage) {
-						/*
-												Vector3i &posUse = founds.currentTarget;
-						Field &field = world.field;
-						wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
-						int idNature;
-						idNature = field.idsNature[field.findIdBlock(*block)];
-
-
-
-
-						if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
-							enemy.createDestroyEffect(world, posUse);
-							//enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
-							enemy.playObjectBreakSound(idNature);
-							enemy.resetAtack();
-						}
-						else {
-
-							enemy.useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
-						}
-						//enemy.resetAtack();
-
-						*/
+					if (enemy.giveDamage && enemy.founds.findObjectFromList > -1) {
 						enemy.breakBlockForHelpItem(world);
 					}
 				}
@@ -424,12 +395,15 @@ void Entity::breakBlockForHelpItem(world &world)
 	int idNature;
 	idNature = field.idsNature[field.findIdBlock(*block)];
 
-	if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+	bool isReuse = isInListObjects(*world.deleteUnlifeObjects, founds.findObjectFromList);
+
+
+	if (idNature > idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
 		createDestroyEffect(world, posUse);
 		playObjectBreakSound(idNature);
 		resetAtack();
 	}
-	else if (isDestroyEffect(posUse, world)) {
+	else if(!isReuse){
 		useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
 	}
 }
