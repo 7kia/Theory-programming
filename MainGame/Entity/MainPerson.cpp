@@ -380,15 +380,50 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 		{
 			bool isNearFight = distanse <= SIZE_BLOCK;
 			if (isNearFight) {
+				// TODO
 				enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
+				enemy.playAnimationAtack(deltaTime);
 				if (enemy.giveDamage) {
 					hurtPerson(enemy, world, deltaTime);
 					enemy.resetAtack();
 				}
 			}
 			else {
-				enemy.currenMode = idEntityMode::walk;
+				Vector2i posBlock = { founds.currentTarget.x,founds.currentTarget.y };
+				if (posBlock != ZERO_VECTOR_2I)
+				{
+					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
+					enemy.playAnimationAtack(deltaTime);
+					if (enemy.giveDamage) {
+						Vector3i &posUse = founds.currentTarget;
+						Field &field = world.field;
+						wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
+						int idNature;
+						idNature = field.idsNature[field.findIdBlock(*block)];
+
+
+
+
+						if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+							createDestroyEffect(world, posUse);
+							enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
+							playObjectBreakSound(idNature);
+							resetAtack();
+						}
+						else if (isDestroyEffect(posUse, world)) {
+
+							useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
+						}
+					resetAtack();
+
+					}
+				}
+				else
+				{
+									enemy.currenMode = idEntityMode::walk;
 				enemy.resetAtack();
+
+				}
 			}
 		}
 	}

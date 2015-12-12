@@ -72,7 +72,7 @@ public:
 	void playAnimationWalk(const float deltaTime);
 	void playAnimationAtack(const float deltaTime);
 	void playSoundAfterTime(float time, const int idSound);
-	void resetTimeAnimation(float &time, float &reset);
+	void resetTimeAnimation(float &time, float reset);
 
 	void playAtackSound(Item &currentItem);
 	void createDestroyEffect(world &world, Vector3i &pos);

@@ -1,6 +1,8 @@
 #pragma once
 #include "../GlobalVar.h"
 
+const sf::Vector2i ZERO_VECTOR_2I = { 0, 0 };
+
 float distansePoints(sf::Vector2f firstPoint, sf::Vector2f secondPoint);
 sf::Vector2f vectorDirection(sf::Vector2f firstPoint, sf::Vector2f secondPoint);
 

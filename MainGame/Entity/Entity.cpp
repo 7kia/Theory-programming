@@ -311,7 +311,7 @@ void Entity::playAnimationAtack(const float deltaTime)
 	int shiftAnimation = 4;
 
 
-	animation.currentTimeFightAnimation += deltaTime * pauseStep;
+	animation.currentTimeFightAnimation += deltaTime;
 	resetTimeAnimation(animation.currentTimeFightAnimation, animation.timeFightAnimation);
 
 
@@ -336,7 +336,7 @@ void Entity::playSoundAfterTime(float time, const int idSound)
 	}
 }
 
-void Entity::resetTimeAnimation(float &time, float &reset)
+void Entity::resetTimeAnimation(float &time, float reset)
 {
 	if (time > reset) {
 		time = 0;
@@ -532,16 +532,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 		/////////////////////////////////////////////
 	} else {
-		if (directions.directionWalk >= Direction::UP_LEFT) {
-			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-			x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
-			y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
-		} else {
-			x -= dx * deltaTime;
-			y -= dy * deltaTime;
-		}
 		wasCollision = true;
-		directions.directionWalk = NONE_DIRECTION;
 	}
 
 	if(wasCollision == false)

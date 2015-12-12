@@ -293,8 +293,20 @@ void Enemy::choiceBlock(world &world)
 	int yShift = 0;
 	choiceDirectionLook(xShift, yShift);
 
-	Vector3i pos = { x, y, level };
-	useTool(pos, world, currentItem);
+	founds.currentTarget = { x, y, level };
+
+	/////////////////////////////////////////////
+	Field &field = world.field;
+	wchar_t	*block = &field.dataMap[level][y][x];
+	int idNature;
+	idNature = field.idsNature[field.findIdBlock(*block)];
+
+	if (idNature != idNatureObject::Unbreaking) {
+		currenMode = idEntityMode::atack;
+		giveDamage = false;
+	}
+	//Vector3i pos = {  };
+	//useTool(pos, world, currentItem);
 
 	//bool isObject = founds.findObject != founds.emptyObject;
 	//if (isObject) {

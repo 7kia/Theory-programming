@@ -367,6 +367,8 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 
 	if (add) {
 		objects.push_back(addObject);
+		founds.findObject = &objects[objects.size() - 1];
+
 	}
 
 }
@@ -506,6 +508,7 @@ bool Entity::isDestroyEffect(sf::Vector3i & pos, world & world)
 		spriteCheck = objects[i].spriteObject;
 		if (idObject == idUnlifeObject::destroyBlockEffect) {
 			if (spriteCheck->getGlobalBounds().contains(posAdd)) {
+				founds.findObject = &objects[i];
 				return true;
 			}
 		}
