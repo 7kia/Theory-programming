@@ -337,8 +337,10 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 
 	bool add = true;
 	posAdd = addObject.spriteObject->getPosition();
-	addObject.currentToughness = toughness - currecntItem.typeItem->damageItem.crushingDamage;
+	addObject.currentToughness = toughness;// -currecntItem.typeItem->damageItem.crushingDamage;
 
+	/*
+	
 	/////////////////////////////
 	// CheckObjectInserts
 	int idObject;
@@ -361,9 +363,7 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 
 	i++;
 	}
-
-
-
+	*/
 
 	if (add) {
 		objects.push_back(addObject);
@@ -389,7 +389,12 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	bool isObject = findObject->typeObject->id != founds.emptyObject->typeObject->id
 		&& findObject;
 
+
+
 	if (isObject) {
+		currenMode = idEntityMode::atack;
+		animation.currentTimeFightAnimation = 0.f;
+		giveDamage = false;
 
 		bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect; 
 		bool idNatureEqual = idNature == field.idsNature[field.findIdBlock(collision.block)];
@@ -436,6 +441,10 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	}
 	/**/
 	else if (isInListObjects(*listTypes, idNature)) {
+
+		currenMode = idEntityMode::atack;
+		animation.currentTimeFightAnimation = 0.f;
+		giveDamage = false;
 		/////////////////////////////
 		// CheckObjectInserts
 		vector<UnlifeObject> &objects = *world.unlifeObjects;

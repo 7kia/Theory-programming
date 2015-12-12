@@ -83,13 +83,14 @@ void entityAnimation::init(float input, float output)
 	currentTimeFightAnimation = 0.f;
 }
 
-void entityAnimation::updateFight(const float deltaTime, bool &giveDamage)
+void entityAnimation::updateFight(const float deltaTime, bool &giveDamage, idEntityMode &idMode)
 {
 
 		currentTimeFightAnimation += deltaTime;
 
 		if (currentTimeFightAnimation > timeFightAnimation) {
 			giveDamage = true;
+			idMode = idEntityMode::walk;
 			currentTimeFightAnimation = 0;
 		}
 
@@ -204,7 +205,7 @@ void Entity::update(const float deltaTime)
 	soundEntity.setPosition(getXPos(), getYPos(), 1.f);
 
 	if (currenMode == idEntityMode::atack) {
-		animation.updateFight(deltaTime, giveDamage);
+		animation.updateFight(deltaTime, giveDamage, currenMode);
 	}
 	damage.updateInputDamage(deltaTime);
 	mana.update(deltaTime);

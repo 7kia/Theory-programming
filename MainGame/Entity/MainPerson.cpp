@@ -288,9 +288,13 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	}
 	else
 	{
-		animation.currentTimeFightAnimation = 0.f;
+		if(founds.findObject->typeObject->id == founds.emptyObject->typeObject->id)
+		{
+					animation.currentTimeFightAnimation = 0.f;
 
 		currenMode = idEntityMode::walk;
+
+		}
 
 	}
 }

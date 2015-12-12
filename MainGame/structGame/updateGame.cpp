@@ -48,7 +48,10 @@ void Game::updateEntity(const float deltaTime)
 		//Enemys[i].interactionWithEntity(world.Enemys, i, deltaTime);
 		Enemys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
 
-		mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
+		if(Enemys[i].currenMode != idEntityMode::atack)
+		{
+			mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
+		}
 		Enemys[i].randomWalk(deltaTime);
 	}
 }

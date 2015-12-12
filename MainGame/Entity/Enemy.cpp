@@ -527,8 +527,8 @@ void Enemy::checkBlock(Field& field, float distanse)
 void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
 	if (wasCollision == false) {
-		float dx(movement.x);
-		float dy(movement.y);
+		float &dx(movement.x);
+		float &dy(movement.y);
 
 		float x;
 		float y;
@@ -555,14 +555,7 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 
 
 					if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor)) {
-						if (directions.directionWalk >= Direction::UP_LEFT) {
-							// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-							x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
-							y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
-						} else {
-							x -= dx * deltaTime;
-							y -= dy * deltaTime;
-						}
+						dx = dy = 0;
 						wasCollision = true;
 
 						findEnemy = &objects[i];
@@ -576,7 +569,6 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 			}
 		
 
-		spriteEntity->setPosition(x, y);
 
 	}
 }

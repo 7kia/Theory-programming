@@ -60,7 +60,7 @@ struct entityAnimation {
 	float currentTimeFightAnimation;
 
 	void init(float input, float output);
-	void updateFight(const float deltaTime, bool &giveDamage);
+	void updateFight(const float deltaTime, bool &giveDamage, idEntityMode &idMode);
 
 };
 

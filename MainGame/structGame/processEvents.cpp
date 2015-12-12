@@ -105,7 +105,10 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 		processPersonAction(pos);
 		break;
 	case Event::MouseButtonPressed:
-		mainPerson.useItem(world, event, pos);
+		if(mainPerson.currenMode != idEntityMode::atack)
+		{
+			mainPerson.useItem(world, event, pos);
+		}
 		break;
 	case Event::Closed:
 		window.close();
