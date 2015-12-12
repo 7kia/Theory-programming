@@ -15,7 +15,7 @@ public:
 	float rotation;
 
 	// Для взаимодействия с миром
-	int currenMode;
+	idEntityMode currenMode;
 	Item *items;
 	Item *emptyItem;// ИСПРАВЬ
 	int idSelectItem;

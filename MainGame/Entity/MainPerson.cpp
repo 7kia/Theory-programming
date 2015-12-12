@@ -302,14 +302,6 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 
 void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 {
-	enemy.currenMode = idEntityMode::atack;
-
-	entityAnimation &animation = enemy.animation;
-
-	if (animation.currentTimeFightAnimation > animation.timeFightAnimation) {
-		animation.currentTimeFightAnimation = 0.f;
-
-		enemy.resetAtack();
 		givenForPersonDamage(enemy);
 
 		Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
@@ -320,9 +312,6 @@ void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 		if (itemEnemy.currentToughness < 1) {
 			enemy.redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
 		}
-	}
-
-	enemy.directions.directionWalk = NONE_DIRECTION;
 
 }
 
@@ -333,7 +322,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 	bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
 	bool onLevel = onLevelEnemy || feelEnemy;
-
+	bool noAtack = enemy.currenMode != idEntityMode::atack;
 	Vector2f personPoint = { getXPos(), getYPos() };
 	Vector2f enemyPoint;
 	float distanse;
@@ -343,51 +332,66 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 	if (distanse <= radiuseView && onLevel) {
 		Vector2f movemoment;
-		enemy.currenMode = idEntityMode::fight;
+		if (noAtack) {
+			enemy.currenMode = idEntityMode::fight;
 
-		movemoment = vectorDirection(enemyPoint, personPoint);
-		enemy.checkLevelHealth(movemoment);
-		enemy.defineDirectionLook(movemoment);
+			movemoment = vectorDirection(enemyPoint, personPoint);
+			enemy.checkLevelHealth(movemoment);
+			enemy.defineDirectionLook(movemoment);
 
-		// TODO
+			// TODO
 
-		if (feelEnemy == false)
-			enemy.checkBlock(world.field, distanse);
+			if (feelEnemy == false)
+				enemy.checkBlock(world.field, distanse);
 
-		bool isFight = enemy.currenMode == idEntityMode::fight;
-		if (isFight) {
+			bool isFight = enemy.currenMode == idEntityMode::fight;
+			if (isFight) {
 
-			enemy.choiceDirections(movemoment);
-			step.currentTime = 0;
+				enemy.choiceDirections(movemoment);
+				step.currentTime = 0;
 
-			if (enemy.wasCollision) {
+				if (enemy.wasCollision) {
 
-				enemy.directions.directionWalk = NONE_DIRECTION;
-				if (!onLevelEnemy && feelEnemy) {
-					enemy.searchWay(world);
+					enemy.directions.directionWalk = NONE_DIRECTION;
+					if (!onLevelEnemy && feelEnemy) {
+						enemy.searchWay(world);
+					}
+					else if (feelEnemy) {
+						enemy.choiceBlock(world);
+					}
+
 				}
-				else if (feelEnemy) {
-					enemy.choiceBlock(world);
+				else {
+
+					bool isNearFight = distanse <= SIZE_BLOCK;
+					if (isNearFight) {
+						enemy.currenMode = idEntityMode::atack;
+						enemy.directions.directionWalk = NONE_DIRECTION;
+					}
+
 				}
 
-			} 
-			else {
-
-				bool isNearFight = distanse <= SIZE_BLOCK;
-				if (isNearFight) {
-					hurtPerson(enemy, world, deltaTime);
-				}
-				else if (onLevelEnemy) {
-					enemy.resetFightAnimation();
-				}
 
 			}
 
 
 		}
-
+		else
+		{
+			bool isNearFight = distanse <= SIZE_BLOCK;
+			if (isNearFight) {
+				enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
+				if (enemy.giveDamage) {
+					hurtPerson(enemy, world, deltaTime);
+					enemy.resetAtack();
+				}
+			}
+			else {
+				enemy.currenMode = idEntityMode::walk;
+				enemy.resetAtack();
+			}
+		}
 	}
-
 }
 	
 

@@ -311,8 +311,8 @@ void Entity::playAnimationAtack(const float deltaTime)
 	int shiftAnimation = 4;
 
 
-	animation.timeAnimation += deltaTime * pauseStep;
-	resetTimeAnimation(animation.timeAnimation, resetAnimation);
+	animation.currentTimeFightAnimation += deltaTime * pauseStep;
+	resetTimeAnimation(animation.currentTimeFightAnimation, animation.timeFightAnimation);
 
 
 	int shiftWidth = directions.directionLook / 6;// TODO
