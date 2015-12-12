@@ -249,22 +249,12 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	if (isAtack && isEnemy) {
 
 		if (findEnemy->isDeath) {
-
-			// TODO
-			//findEnemy->playSound(0.f, 0.f, idSoundPaths::skeletonDeathPath);
-
 			findEnemy->EnemyDrop(world);
 			findEnemy->playSoundDeath(world);
 			world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
 			world.countEntity--;
 
-			animation.currentTimeFightAnimation = 0.f;
-
-			currenMode = idEntityMode::walk;
-			giveDamage = false;
-
-
-
+			resetAtack();
 		}
 		else {
 			currenMode = idEntityMode::atack;
@@ -274,12 +264,8 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 			float distanse = distansePoints(posPerson, posEnemy);
 
 			if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
-				animation.currentTimeFightAnimation = 0.f;
-
-				currenMode = idEntityMode::walk;
-				giveDamage = false;
+				resetAtack();
 				findEnemy->takeDamage(damage, currentItem);
-
 				playAtackSound(currentItem);
 			}
 
@@ -288,14 +274,29 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 	}
 	else
 	{
-		if(founds.findObject->typeObject->id == founds.emptyObject->typeObject->id)
+		if(!isEnemy)
 		{
-					animation.currentTimeFightAnimation = 0.f;
+			if (giveDamage) 
+			{
+				Vector3i &posUse = founds.currentTarget;
+				Field &field = world.field;
+				wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
+				int idNature;
+				idNature = field.idsNature[field.findIdBlock(*block)];
 
-		currenMode = idEntityMode::walk;
+				if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+					createDestroyEffect(world, posUse);
+					playObjectBreakSound(idNature);
+					resetAtack();
+				}
+				else if(isDestroyEffect(posUse, world))
+				{
+					useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
+				}
 
+			}
 		}
-
+		
 	}
 }
 
@@ -305,12 +306,10 @@ void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 
 	entityAnimation &animation = enemy.animation;
 
-	animation.currentTimeFightAnimation += deltaTime;
 	if (animation.currentTimeFightAnimation > animation.timeFightAnimation) {
 		animation.currentTimeFightAnimation = 0.f;
 
-		enemy.currenMode = idEntityMode::fight;
-		enemy.giveDamage = false;
+		enemy.resetAtack();
 		givenForPersonDamage(enemy);
 
 		Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
@@ -404,9 +403,13 @@ void MainPerson::useItem(world &world,
 
 	int x = int(pos.x / SIZE_BLOCK);
 	int y = int(pos.y / SIZE_BLOCK);
-	founds.currentTarget = { x, y };
+	founds.currentTarget.x = x;
+	founds.currentTarget.y = y;
+
+	Vector3i &posUse = founds.currentTarget;
 
 	bool isEnemy = findEnemy != emptyEnemy;
+	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
 	bool isAtack = event.key.code == Mouse::Left;
 	if (isEnemy && isAtack) {
 
@@ -425,7 +428,6 @@ void MainPerson::useItem(world &world,
 	}
 	else {
 		
-		Vector3i posUse;
 		int category = currentItem.typeItem->features.category;
 		switch (category) {
 		case idCategoryItem::backhoe:
@@ -435,10 +437,22 @@ void MainPerson::useItem(world &world,
 				int level;
 				defineLevel(level, event);
 
-				x = founds.currentTarget.x;
-				y = founds.currentTarget.y;
+				
 				posUse = { x, y, level };
-				useTool(posUse, world, currentItem);
+
+				Field &field = world.field;
+				wchar_t	*block = &field.dataMap[level][y][x];
+				int idNature;
+				idNature = field.idsNature[field.findIdBlock(*block)];
+
+				if (idNature != idNatureObject::Unbreaking ) {
+					currenMode = idEntityMode::atack;
+					giveDamage = false;
+				}
+
+
+				//					createDestroyEffect(world, posUse);&& !isDestroyEffect(posUse, world)
+
 			}
 			break;
 			////////////////////////////////////////////////////////////////////////
@@ -449,8 +463,6 @@ void MainPerson::useItem(world &world,
 				int level;
 				defineLevel(level, event);
 
-				x = founds.currentTarget.x;
-				y = founds.currentTarget.y;
 				posUse = { x, y, level };
 
 				useBlock(posUse, world,

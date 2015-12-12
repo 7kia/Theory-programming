@@ -160,7 +160,7 @@ struct foundObjects {
 	int findObjectFromList;
 	UnlifeObject* emptyObject;
 
-	sf::Vector2i currentTarget;
+	sf::Vector3i currentTarget;
 
 	Item *findItem;
 	Item *emptyItem;

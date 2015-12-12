@@ -68,6 +68,7 @@ public:
 
 	// Передвижение. Его анимация и озвучка
 	void update(const float deltaTime);
+	void resetAtack();
 	void playAnimationWalk(const float deltaTime);
 	void playAnimationAtack(const float deltaTime);
 	void playSoundAfterTime(float time, const int idSound);
@@ -79,6 +80,8 @@ public:
 	void playObjectBreakSound(int idNature);
 	void playObjectDropSound(sf::Vector2f pos);
 	// Взаимодейтсвие с миром
+	bool isDestroyEffect(sf::Vector3i &pos, world &world);
+
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const float deltaTime);
 	bool isInUseField(float x, float y, bool under);

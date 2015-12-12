@@ -21,7 +21,7 @@ void Game::update(const float &deltaTime)
 void Game::updatePlayer(const float &deltaTime)
 {
 	mainPerson.update(deltaTime);
-	if(mainPerson.currenMode == idEntityMode::atack)
+	if(mainPerson.currenMode == idEntityMode::atack || mainPerson.giveDamage)
 	{
 		mainPerson.updateAtack(world, deltaTime);
 	}
@@ -48,10 +48,10 @@ void Game::updateEntity(const float deltaTime)
 		//Enemys[i].interactionWithEntity(world.Enemys, i, deltaTime);
 		Enemys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
 
-		if(Enemys[i].currenMode != idEntityMode::atack)
-		{
+		//if(Enemys[i].currenMode != idEntityMode::atack)
+		//{
 			mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
-		}
+		//}
 		Enemys[i].randomWalk(deltaTime);
 	}
 }

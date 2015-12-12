@@ -204,9 +204,6 @@ void Entity::update(const float deltaTime)
 
 	soundEntity.setPosition(getXPos(), getYPos(), 1.f);
 
-	if (currenMode == idEntityMode::atack) {
-		animation.updateFight(deltaTime, giveDamage, currenMode);
-	}
 	damage.updateInputDamage(deltaTime);
 	mana.update(deltaTime);
 	stamina.update(deltaTime, directions.directionWalk, step);
@@ -268,10 +265,20 @@ void Entity::update(const float deltaTime)
 
 	}
 
-	if (animation.currentTimeFightAnimation > 0) {
+	//animation.currentTimeFightAnimation > 0
+	if (currenMode == idEntityMode::atack) {
+		animation.updateFight(deltaTime, giveDamage, currenMode);
+
 		playAnimationAtack(deltaTime);
 
 	}
+}
+
+void Entity::resetAtack()
+{
+	animation.currentTimeFightAnimation = 0.f;
+	currenMode = idEntityMode::walk;
+	giveDamage = false;
 }
 
 void Entity::playAnimationWalk(const float deltaTime)
@@ -306,6 +313,7 @@ void Entity::playAnimationAtack(const float deltaTime)
 
 	animation.timeAnimation += deltaTime * pauseStep;
 	resetTimeAnimation(animation.timeAnimation, resetAnimation);
+
 
 	int shiftWidth = directions.directionLook / 6;// TODO
 
@@ -376,6 +384,8 @@ void Entity::playObjectDropSound(sf::Vector2f pos)
 	int idSound = idSoundPaths::drop1Sound;
 	playSound(idSound, *soundBase, soundEntity, pos);
 }
+
+
 
 ////////////////////////////////////////////////////////////////////
 

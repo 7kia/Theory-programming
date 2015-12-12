@@ -337,7 +337,7 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 
 	bool add = true;
 	posAdd = addObject.spriteObject->getPosition();
-	addObject.currentToughness = toughness;// -currecntItem.typeItem->damageItem.crushingDamage;
+	addObject.currentToughness = toughness - currecntItem.typeItem->damageItem.crushingDamage;
 
 	/*
 	
@@ -392,18 +392,17 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 
 	if (isObject) {
-		currenMode = idEntityMode::atack;
-		animation.currentTimeFightAnimation = 0.f;
-		giveDamage = false;
 
-		bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect; 
+		resetAtack();
+
+		bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
 		bool idNatureEqual = idNature == field.idsNature[field.findIdBlock(collision.block)];
 		if (isInListObjects(*listTypes, findObject->typeObject->idNature)
 				|| (isDestroyEffect)) {
 
 			int &toughnessObject = findObject->currentToughness;
 			typeDamageItem &damageItem = currentItem.typeItem->damageItem;
-			
+
 			//toughnessObject -= damageItem.cuttingDamage;
 			toughnessObject -= damageItem.crushingDamage;
 
@@ -426,21 +425,21 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 					dropObject(posDrop, world, false);
 				}
 
-				if(founds.findObjectFromList < unlifeObjects.size())
-				{
-									unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
+				if (founds.findObjectFromList < unlifeObjects.size()) {
+					unlifeObjects.erase(unlifeObjects.begin() + founds.findObjectFromList);
 
 				}
 
 				breakItem(currentItem);
 			}
-			
+
+
 
 
 		}
 	}
-	/**/
-	else if (isInListObjects(*listTypes, idNature)) {
+	/*
+		else if (isInListObjects(*listTypes, idNature)) {
 
 		currenMode = idEntityMode::atack;
 		animation.currentTimeFightAnimation = 0.f;
@@ -486,8 +485,35 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 		*/
 
+	//}
+	//*/
+}
+
+bool Entity::isDestroyEffect(sf::Vector3i & pos, world & world)
+{
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+
+	Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
+		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
+
+	int idObject;
+	Sprite *spriteCheck;
+	size_t i = 0;
+	while (i < objects.size()) {
+
+
+		idObject = objects[i].typeObject->id;
+		spriteCheck = objects[i].spriteObject;
+		if (idObject == idUnlifeObject::destroyBlockEffect) {
+			if (spriteCheck->getGlobalBounds().contains(posAdd)) {
+				return true;
+			}
+		}
+
+		i++;
 	}
 
+	return false;
 }
 
 void Entity::useBlock(Vector3i pos, world &world,
