@@ -620,7 +620,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 					int((objects[i].getYPos() - heightMain / 2) / SIZE_BLOCK),
 				objects[i].currentLevel};
 
-
 				directions.directionWalk = NONE_DIRECTION;
 				break;
 			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {

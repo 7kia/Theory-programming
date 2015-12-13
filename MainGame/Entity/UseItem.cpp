@@ -458,7 +458,7 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 				}
 
 				if (founds.findObjectFromList < unlifeObjects.size()) {
-					if(isInListObjects(*world.deleteUnlifeObjects, founds.findObjectFromList))
+					if(isInListObjects(*world.deleteUnlifeObjects, founds.findObjectFromList) == false)
 					{
 						world.deleteUnlifeObjects->push_back(founds.findObjectFromList);
 					}
