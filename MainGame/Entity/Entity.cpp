@@ -614,6 +614,13 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 				//founds.init(pos)
 				founds.findObject = &objects[i];
 				founds.findObjectFromList = i;
+
+				int heightMain = objects[i].typeObject->mainSize.size.height;
+				founds.currentTarget = { int((objects[i].getXPos() - SIZE_BLOCK / 2) / SIZE_BLOCK),
+					int((objects[i].getYPos() - heightMain / 2) / SIZE_BLOCK),
+				objects[i].currentLevel};
+
+
 				directions.directionWalk = NONE_DIRECTION;
 				break;
 			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {

@@ -386,6 +386,34 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	vector<int> *listTypes = currentItem.typeItem->destroy;
 	UnlifeObject *findObject = founds.findObject;
 
+
+
+	Vector2f posFind = { (x + 0.5f) * SIZE_BLOCK,
+		(y + 0.5f) * SIZE_BLOCK };
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	bool find = true;
+	int idObject;
+	Sprite *spriteCheck;
+	size_t i = 0;
+	while (i < objects.size() - 1) {
+		if (objects[i].spriteObject->getGlobalBounds().contains(posFind)
+			&& objects[i].currentLevel == level) {
+			find = true;
+			findObject = &objects[i];
+			founds.findObjectFromList = i;
+			break;
+		}
+		i++;
+	}
+
+	if (!find) {
+		findObject = founds.emptyObject;
+	}
+
+
+
+
+
 	int idNature;
 	idNature = field.idsNature[field.findIdBlock(*block)];
 	bool isObject = findObject->typeObject->id != founds.emptyObject->typeObject->id
@@ -394,6 +422,8 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 
 	if (isObject) {
+
+
 
 		resetAtack();
 
