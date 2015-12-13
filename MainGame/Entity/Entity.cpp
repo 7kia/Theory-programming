@@ -268,9 +268,10 @@ void Entity::update(const float deltaTime)
 	//animation.currentTimeFightAnimation > 0
 	if (currenMode == idEntityMode::atack) {
 		animation.updateFight(deltaTime, giveDamage, currenMode);
-		playAnimationAtack(deltaTime);
-	}
 
+		playAnimationAtack(deltaTime);
+
+	}
 }
 
 void Entity::resetAtack()
@@ -357,12 +358,8 @@ void Entity::playAtackSound(Item &currentItem)
 
 }
 
-
 void Entity::playObjectBreakSound(int idNature)
 {
-
-
-
 	Vector2f posUse = getPosition();
 	switch (idNature) {
 	case idNatureObject::woodNature:
@@ -617,16 +614,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 				//founds.init(pos)
 				founds.findObject = &objects[i];
 				founds.findObjectFromList = i;
-
-				Vector2f posObject = spriteObject->getPosition();
-				if(objects[i].typeObject->id != idUnlifeObject::destroyBlockEffect)
-				{
-									founds.currentTarget = { int(posObject.x - SIZE_BLOCK / 2) / SIZE_BLOCK + 1,
-																	int(posObject.y - SIZE_BLOCK / 2) / SIZE_BLOCK + 1,
-																	objects[i].currentLevel };
-
-
-				}
 				directions.directionWalk = NONE_DIRECTION;
 				break;
 			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
@@ -652,6 +639,7 @@ bool Entity::isEmptySlot()
 	}
 	return false;
 }
+
 
 //////////////////////////////////////////////////////
 // Поиск неживого объекта

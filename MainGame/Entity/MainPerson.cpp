@@ -246,7 +246,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 
 	bool isAtack = currenMode == idEntityMode::atack;
 	bool isEnemy = findEnemyFromList > -1;// && (typeFindEnemy.name != typeEmptyEnemy.name);
-	if (isAtack && isEnemy) {
+	if (giveDamage && isEnemy) {
 
 		if (findEnemy->isDeath) {
 			findEnemy->EnemyDrop(world);
@@ -263,6 +263,7 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 			Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
 			float distanse = distansePoints(posPerson, posEnemy);
 
+			animation.updateFight(deltaTime, giveDamage, currenMode);
 			if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
 				resetAtack();
 				findEnemy->takeDamage(damage, currentItem);
@@ -272,11 +273,32 @@ void MainPerson::updateAtack(world &world, const float deltaTime)
 		}
 
 	}
-	else if (!isEnemy && giveDamage)
+	else
 	{
-		breakBlockForHelpItem(world);
-	}
+		if(!isEnemy)
+		{
+			if (giveDamage) 
+			{
+				Vector3i &posUse = founds.currentTarget;
+				Field &field = world.field;
+				wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
+				int idNature;
+				idNature = field.idsNature[field.findIdBlock(*block)];
 
+				if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+					createDestroyEffect(world, posUse);
+					playObjectBreakSound(idNature);
+					resetAtack();
+				}
+				else
+				{
+					useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
+				}
+
+			}
+		}
+		
+	}
 }
 
 void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
@@ -368,45 +390,46 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				}
 			}
 			else {
-				Vector2i posBlock = { founds.currentTarget.x, founds.currentTarget.y };
+				Vector2i posBlock = { founds.currentTarget.x,founds.currentTarget.y };
 				if (posBlock != ZERO_VECTOR_2I)
 				{
-
 					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 					enemy.playAnimationAtack(deltaTime);
-					if (enemy.giveDamage && enemy.founds.findObjectFromList > -1) {
-						enemy.breakBlockForHelpItem(world);
+					if (enemy.giveDamage) {
+						Vector3i &posUse = founds.currentTarget;
+						Field &field = world.field;
+						wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
+						int idNature;
+						idNature = field.idsNature[field.findIdBlock(*block)];
+
+
+
+
+						if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+							createDestroyEffect(world, posUse);
+							enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
+							playObjectBreakSound(idNature);
+							resetAtack();
+						}
+						else  {
+
+							useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
+						}
+					resetAtack();
+
 					}
 				}
-				else {
-					enemy.currenMode = idEntityMode::walk;
-					enemy.resetAtack();
+				else
+				{
+									enemy.currenMode = idEntityMode::walk;
+				enemy.resetAtack();
+
 				}
 			}
 		}
 	}
 }
 	
-void Entity::breakBlockForHelpItem(world &world)
-{
-	Vector3i &posUse = founds.currentTarget;
-	Field &field = world.field;
-	wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
-	int idNature;
-	idNature = field.idsNature[field.findIdBlock(*block)];
-
-	bool isReuse = isInListObjects(*world.deleteUnlifeObjects, founds.findObjectFromList);
-
-
-	if (idNature > idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
-		createDestroyEffect(world, posUse);
-		playObjectBreakSound(idNature);
-		resetAtack();
-	}
-	else if(!isReuse){
-		useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
-	}
-}
 
 ////////////////////////////////////////////////////////////////////
 
@@ -462,6 +485,10 @@ void MainPerson::useItem(world &world,
 				int idNature;
 				idNature = field.idsNature[field.findIdBlock(*block)];
 
+				if(idNature <= idNatureObject::Unbreaking)
+				{
+					idNature = founds.findObject->typeObject->idNature;
+				}
 				if (idNature != idNatureObject::Unbreaking ) {
 					currenMode = idEntityMode::atack;
 					giveDamage = false;
