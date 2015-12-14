@@ -29,8 +29,11 @@ public:
 	void setType(TypeUnlifeObject &type);
 	void setPosition(int x, int y, int Level);
 
+	bool isDestroyed();
+
 	float getXPos();
 	float getYPos();
+	
 private:
 
 };

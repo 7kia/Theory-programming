@@ -93,3 +93,8 @@ void UnlifeObject::setPosition(int xPos, int yPos, int Level)
 	spriteObject->setPosition(numberX, numberY);
 	transparentSpiteObject->setPosition(numberX, numberY - (height - heightMain) / 2);
 }
+
+bool UnlifeObject::isDestroyed()
+{
+	return currentToughness < 1;
+}

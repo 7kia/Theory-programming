@@ -12,7 +12,7 @@ void world::deleteObjects()
 		id = (*deleteUnlifeObjects)[i];
 		if(!unlifeObjects->empty())
 		{
-			//unlifeObjects->erase(unlifeObjects->begin() + id);
+			unlifeObjects->erase(unlifeObjects->begin() + id);
 		}
 		i++;
 	}

@@ -576,7 +576,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
-	//if (wasCollision == false) {
 		float dx(movement.x);
 		float dy(movement.y);
 
@@ -594,8 +593,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 		Sprite *transparentSpiteObject;
 		FloatRect objectAltBound;
 		FloatRect entityBound;
-
-		//founds.findObject = founds.emptyObject;
 
 		vector<UnlifeObject> &objects = *unlifeObjects;
 		for (int i = 0; i < objects.size(); i++) {
@@ -615,6 +612,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 				founds.findObject = &objects[i];
 				founds.findObjectFromList = i;
 
+				// ÊÎÑÒÛËÜ
 				TypeUnlifeObject *typeObject = objects[i].typeObject;
 				if (typeObject->id != idUnlifeObject::destroyBlockEffect) {
 					Vector2f posObject = spriteObject->getPosition();
@@ -628,7 +626,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 					founds.currentTarget = { xPos, yPos, objects[i].currentLevel };
 
 				}
-				//spriteObject
 
 				directions.directionWalk = NONE_DIRECTION;
 				break;
@@ -639,8 +636,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 			}
 
 		}
-
-	//}
 }
 
 
