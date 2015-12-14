@@ -17,7 +17,11 @@ public:
 	void initFounds(Item& item, UnlifeObject& object, Enemy& enemy);
 
 	void givenForPersonDamage(Enemy & enemy);
+
+	void killFindEnemy(world &world);
+	void hurtEnemy(Item &currentItem, const float deltaTime);
 	void updateAtack(world &world, const float deltaTime);
+
 	void hurtPerson(Enemy &enemy, world &world, const float deltaTime);
 	void attractionEnemy(Enemy &enemy, world &world, const float deltaTime);
 	/*

@@ -148,6 +148,7 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	damage.inputDamage = 0;// TODO	
 }
 
+
 void Enemy::EnemyDrop(world& world)
 {
 	Field &field = world.field;
@@ -239,81 +240,62 @@ void Enemy::playSoundDeath(world& world)
 
 void MainPerson::updateAtack(world &world, const float deltaTime)
 {
-	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
 
-	TypeEnemy &typeFindEnemy = *findEnemy->type;
-	TypeEnemy &typeEmptyEnemy = *emptyEnemy->type;
-
-	bool isAtack = currenMode == idEntityMode::atack;
-	bool isEnemy = findEnemyFromList > -1;// && (typeFindEnemy.name != typeEmptyEnemy.name);
+	bool isEnemy = findEnemyFromList > -1;
 	if (giveDamage && isEnemy) {
 
 		if (findEnemy->isDeath) {
-			findEnemy->EnemyDrop(world);
-			findEnemy->playSoundDeath(world);
-			world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
-			world.countEntity--;
-
-			resetAtack();
+			killFindEnemy(world);
 		}
 		else {
-			currenMode = idEntityMode::atack;
-
-			Vector2f posPerson = { getXPos(), getYPos() };
-			Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
-			float distanse = distansePoints(posPerson, posEnemy);
-
-			animation.updateFight(deltaTime, giveDamage, currenMode);
-			if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
-				resetAtack();
-				findEnemy->takeDamage(damage, currentItem);
-				playAtackSound(currentItem);
-			}
-
+			Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+			hurtEnemy(currentItem, deltaTime);
 		}
-
 	}
-	else
-	{
-		if(!isEnemy)
-		{
-			if (giveDamage) 
-			{
-				Vector3i &posUse = founds.currentTarget;
-				Field &field = world.field;
-				wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
-				int idNature;
-				idNature = field.idsNature[field.findIdBlock(*block)];
+	else if(!isEnemy && giveDamage)
+	{	
+		breakNearCollision(world);	
+	}
+}
 
-				if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
-					createDestroyEffect(world, posUse);
-					playObjectBreakSound(idNature);
-					resetAtack();
-				}
-				else
-				{
-					useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
-				}
+void MainPerson::killFindEnemy(world& world)
+{
+	findEnemy->EnemyDrop(world);
+	findEnemy->playSoundDeath(world);
+	world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
+	world.countEntity--;
 
-			}
-		}
-		
+	resetAtack();
+}
+
+void MainPerson::hurtEnemy(Item &currentItem, const float deltaTime)
+{
+	currenMode = idEntityMode::atack;
+
+	Vector2f posPerson = { getXPos(), getYPos() };
+	Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
+	float distanse = distansePoints(posPerson, posEnemy);
+
+	animation.updateFight(deltaTime, giveDamage, currenMode);
+	if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
+		resetAtack();
+		findEnemy->takeDamage(damage, currentItem);
+		playAtackSound(currentItem);
 	}
 }
 
 void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
 {
-		givenForPersonDamage(enemy);
+	givenForPersonDamage(enemy);
 
-		Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+	Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
 
-		enemy.playAtackSound(itemEnemy);
+	enemy.playAtackSound(itemEnemy);
 
-		itemEnemy.currentToughness -= 1;
-		if (itemEnemy.currentToughness < 1) {
-			enemy.redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
-		}
-
+	itemEnemy.currentToughness -= 1;
+	if (itemEnemy.currentToughness < 1) {
+		enemy.redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
+	}
 }
 
 void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTime)
@@ -390,6 +372,8 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				}
 			}
 			else {
+				////////////////////////////////////
+				// TODO
 				Vector2i posBlock = { enemy.founds.currentTarget.x, enemy.founds.currentTarget.y };
 				if (posBlock != ZERO_VECTOR_2I)
 				{
@@ -405,7 +389,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 
 
-						if (idNature > idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+						if (idNature > idNatureObject::Unbreaking && !enemy.isDestroyEffect(posUse, world)) {
 							enemy.createDestroyEffect(world, posUse);
 							enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
 							enemy.playObjectBreakSound(idNature);
@@ -419,12 +403,14 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 					}
 				}
-				else
-				{
-									enemy.currenMode = idEntityMode::walk;
-				enemy.resetAtack();
-
+				else {
+					/////////
+					// TODO
+					enemy.currenMode = idEntityMode::walk;
+					/////////
+					enemy.resetAtack();
 				}
+				////////////////////////////////////
 			}
 		}
 	}

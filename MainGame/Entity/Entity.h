@@ -129,10 +129,10 @@ public:
 	void useAsEmptyBukket(Item &currentItem, world &world, int level);
 	void useAsBukketWithWater(Item &currentItem, world &world, sf::Event event);
 
+	void breakNearCollision(world &world);
 	void useTool(sf::Vector3i &pos, world &world, Item &currentItem);
 	void useToolToObject(sf::Vector3i &pos, world &world, Item &currentItem);
 	void breakFindObject(Item &currentItem);
-	void breakNearCollision(world &world);
 
 	void destroyFindObject(bool isEffect, Vector3i pos, world& world);
 	int defineIdNature(Field &field, bool isEffect, sf::Vector3i pos);
