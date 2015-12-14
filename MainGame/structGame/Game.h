@@ -78,7 +78,7 @@ struct Game
 	MainPerson mainPerson;
 
 	bool updateDifficult = false;
-	int difficult = 2;
+	int difficult = 0;
 	int countWave = 0;
 
 	int countDay = 0;

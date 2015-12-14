@@ -615,10 +615,17 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 				founds.findObject = &objects[i];
 				founds.findObjectFromList = i;
 
-				int heightMain = objects[i].typeObject->mainSize.size.height;
-				founds.currentTarget = { int((objects[i].getXPos() - SIZE_BLOCK / 2) / SIZE_BLOCK),
-					int((objects[i].getYPos() - heightMain / 2) / SIZE_BLOCK),
-				objects[i].currentLevel};
+				Vector2f posObject = spriteObject->getPosition();
+				TypeUnlifeObject *typeObject = objects[i].typeObject;
+
+				int heightMain = typeObject->mainSize.size.height;
+				int height = typeObject->transparentSize.size.height;
+
+				int xPos = int((posObject.x + SIZE_BLOCK / 2) / SIZE_BLOCK);
+				int yPos = int((posObject.y + (height - heightMain) / 2 + SIZE_BLOCK / 2) / SIZE_BLOCK);
+
+				founds.currentTarget = { xPos, yPos, objects[i].currentLevel };
+				//spriteObject
 
 				directions.directionWalk = NONE_DIRECTION;
 				break;
