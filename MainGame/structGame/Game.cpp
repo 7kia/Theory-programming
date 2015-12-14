@@ -167,6 +167,7 @@ Game::Game()
 
 	// TODO
 	loadConfig("Configs\\EnemeWaves.conf", world.enemyWaveVariables);
+	difficult = world.enemyWaveVariables[CURRENT_DIFFICULT];
 
 	world.Enemys = new vector<Enemy>;
 
