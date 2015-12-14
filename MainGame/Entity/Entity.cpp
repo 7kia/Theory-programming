@@ -613,15 +613,15 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 				founds.findObjectFromList = i;
 
 				// ÊÎÑÒÛËÜ
-				TypeUnlifeObject *typeObject = objects[i].typeObject;
-				if (typeObject->id != idUnlifeObject::destroyBlockEffect) {
+				TypeUnlifeObject *typeObject = objects[i].typeObject;//typeObject->id != idUnlifeObject::destroyBlockEffect
+				if (true) {
 					Vector2f posObject = spriteObject->getPosition();
 
 					int heightMain = typeObject->mainSize.size.height;
 					int height = typeObject->transparentSize.size.height;
 
 					int xPos = int((posObject.x + SIZE_BLOCK / 2) / SIZE_BLOCK);
-					int yPos = int((posObject.y + (height - heightMain) / 2 + SIZE_BLOCK / 2) / SIZE_BLOCK);
+					int yPos = int((posObject.y + SIZE_BLOCK / 2) / SIZE_BLOCK);
 
 					founds.currentTarget = { xPos, yPos, objects[i].currentLevel };
 

@@ -5,8 +5,10 @@ using namespace sf;
 
 void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
-	UnlifeObject *findObject = founds.findObject;
+	UnlifeObject &findObject = *founds.findObject;
 
+	int shift = 0;
+	
 	Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
 		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
 
@@ -18,21 +20,31 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 	for (int i = 0; i < objects.size(); i++) {
 		idObject = objects[i].typeObject->id;
 		spriteCheck = objects[i].spriteObject;
+		//if (idObject == idUnlifeObject::destroyBlockEffect) {
 		if (idObject == idUnlifeObject::destroyBlockEffect) {
+			shift = 1;
+		}
+		else {
+			shift = 0;
+		}
+		posAdd = { float(pos.x + shift) * SIZE_BLOCK - SIZE_BLOCK / 2,
+			float(pos.y + shift) * SIZE_BLOCK - SIZE_BLOCK / 2 };
+
 			if (spriteCheck->getGlobalBounds().contains(posAdd)) {
 				// ÊÎÑÒÛËÜ
 				founds.findObject = &objects[i];
 				find = true;
+				break;
 			}
-		}
+		//}
 	}
 
 
 	if (find) {
 
-		int idFinded = findObject->typeObject->id;
+		int idFinded = founds.findObject->typeObject->id;
 		int idEmpty = founds.emptyObject->typeObject->id;
-		bool isObject = idFinded != idEmpty && findObject;
+		bool isObject = idFinded != idEmpty && &findObject;
 
 		if (isObject) {
 			useToolToObject(pos, world, currentItem);
@@ -45,7 +57,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 	resetAtack();
 
 	UnlifeObject *findObject = founds.findObject;
-	vector<int> *listBreaking = currentItem.typeItem->destroy;
+			vector<int> *listBreaking = currentItem.typeItem->destroy;
 
 	bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
 	bool canBreakTheItem = isInListObjects(*listBreaking, findObject->typeObject->idNature);
@@ -77,6 +89,29 @@ void Entity::breakFindObject(Item &currentItem)
 
 	int &toughnessObject = findObject->currentToughness;
 	toughnessObject -= damageItem.crushingDamage;
+}
+
+void Entity::breakNearCollision(world &world)
+{
+	Vector3i &posUse = founds.currentTarget;
+	Field &field = world.field;
+	wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
+	int idNature;
+	idNature = field.idsNature[field.findIdBlock(*block)];
+
+
+
+
+	if (idNature > idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+		createDestroyEffect(world, posUse);
+		founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
+		playObjectBreakSound(idNature);
+		resetAtack();
+	}
+	else {
+
+		useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
+	}
 }
 
 void Entity::destroyFindObject(bool isEffect, Vector3i pos, world &world)

@@ -405,13 +405,13 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 
 
-						if (idNature != idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+						if (idNature > idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
 							enemy.createDestroyEffect(world, posUse);
 							enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
 							enemy.playObjectBreakSound(idNature);
 							enemy.resetAtack();
 						}
-						else  {
+						else {
 
 							enemy.useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
 						}

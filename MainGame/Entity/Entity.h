@@ -132,6 +132,7 @@ public:
 	void useTool(sf::Vector3i &pos, world &world, Item &currentItem);
 	void useToolToObject(sf::Vector3i &pos, world &world, Item &currentItem);
 	void breakFindObject(Item &currentItem);
+	void breakNearCollision(world &world);
 
 	void destroyFindObject(bool isEffect, Vector3i pos, world& world);
 	int defineIdNature(Field &field, bool isEffect, sf::Vector3i pos);
