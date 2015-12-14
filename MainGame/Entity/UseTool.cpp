@@ -7,12 +7,36 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 	UnlifeObject *findObject = founds.findObject;
 
-	int idFinded = findObject->typeObject->id;
-	int idEmpty = founds.emptyObject->typeObject->id;
-	bool isObject = idFinded != idEmpty && findObject;
+	Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
+		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
 
-	if (isObject) {
-		useToolToObject(pos, world, currentItem);
+
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	bool find = false;
+	int idObject;
+	Sprite *spriteCheck;
+	for (int i = 0; i < objects.size(); i++) {
+		idObject = objects[i].typeObject->id;
+		spriteCheck = objects[i].spriteObject;
+		if (idObject == idUnlifeObject::destroyBlockEffect) {
+			if (spriteCheck->getGlobalBounds().contains(posAdd)) {
+				// ÊÎÑÒÛËÜ
+				founds.findObject = &objects[i];
+				find = true;
+			}
+		}
+	}
+
+
+	if (find) {
+
+		int idFinded = findObject->typeObject->id;
+		int idEmpty = founds.emptyObject->typeObject->id;
+		bool isObject = idFinded != idEmpty && findObject;
+
+		if (isObject) {
+			useToolToObject(pos, world, currentItem);
+		}
 	}
 }
 
