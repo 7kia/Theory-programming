@@ -28,6 +28,7 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 	float posX = float(CENTER_WORLD.x * SIZE_BLOCK);
 	float posY = float(CENTER_WORLD.y * SIZE_BLOCK);
 	mainPerson.view = new View;
+	mainPerson.listener = new Listener;
 	mainPerson.view->setSize(640, 480);
 	mainPerson.view->setCenter(posX, posY);
 
@@ -91,15 +92,15 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 void MainPerson::updateView(RenderWindow & window)
 {
 	Vector2u sizeWindow = window.getSize();
-	//sizeWindow.x /= 1.5;
-	//sizeWindow.y /= 1.5;
-	view->setSize(Vector2f(sizeWindow));// ИСПРАВЬ
+	sizeWindow.x /= SCALE_VIEW;
+	sizeWindow.y /= SCALE_VIEW;
+	view->setSize(Vector2f(sizeWindow));
 
 	float tempX = getXPos();
-	float tempY = getYPos();//считываем коорд игрока и проверяем их, чтобы убрать края
+	float tempY = getYPos();
 
-	// TODO
-	sf::Listener::setPosition(tempX, tempY, 0);
+
+	listener->setPosition(tempX, tempY, 0);
 
 	float x = getXPos();
 	float y = getYPos();
@@ -108,13 +109,11 @@ void MainPerson::updateView(RenderWindow & window)
 	int rightBorder = SIZE_BLOCK * (WIDTH_MAP - BORDER1) - sizeWindow.x / 2;
 	int topBorder = sizeWindow.y / 2;
 	int lowBorder = SIZE_BLOCK * LONG_MAP - sizeWindow.y / 2;
-	///*
-	if (int(x) < leftBorder) tempX = leftBorder;//убираем из вида левую сторону
-	else if (int(x) > rightBorder) tempX = rightBorder;//убираем из вида левую сторону
-	if (int(y) < topBorder) tempY = topBorder;//верхнюю сторону
-	else if (int(y) > lowBorder) tempY = lowBorder;//нижнюю сторону	
-	//*/
-	
+
+	if (int(x) < leftBorder) tempX = leftBorder;
+	else if (int(x) > rightBorder) tempX = rightBorder;
+	if (int(y) < topBorder) tempY = topBorder;
+	else if (int(y) > lowBorder) tempY = lowBorder;
 
 	view->setCenter(tempX, tempY);
 }
@@ -125,11 +124,11 @@ void MainPerson::initFounds(::Item &item, UnlifeObject& object, ::Enemy& enemy)
 	emptyEnemy = &enemy;
 }
 
-void MainPerson::givenForPersonDamage(Enemy &enemy)
+void Enemy::givenForPersonDamage(MainPerson &person)
 {
-	Item& itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+	Item& itemEnemy = itemFromPanelQuickAccess[idSelectItem];
 	typeDamageItem damageEnemyItem = itemEnemy.typeItem->damageItem;
-	DamageInputAndOutput &enemyDamege = enemy.damage;
+	DamageInputAndOutput &enemyDamege = damage;
 	float cutDamage;
 	float crashDamage;
 	float multiplirer = enemyDamege.damageMultiplirer;
@@ -139,13 +138,13 @@ void MainPerson::givenForPersonDamage(Enemy &enemy)
 	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
 	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
-	cutDamage *= protection.protectionCut;
-	crashDamage *= protection.protectionCrash;
+	cutDamage *= person.protection.protectionCut;
+	crashDamage *= person.protection.protectionCrash;
 
-	damage.inputDamage = int(cutDamage + crashDamage);
-	health.currentHealth -= damage.inputDamage;
+	person.damage.inputDamage = int(cutDamage + crashDamage);
+	person.health.currentHealth -= person.damage.inputDamage;
 
-	damage.inputDamage = 0;// TODO	
+	person.damage.inputDamage = 0;
 }
 
 
@@ -284,17 +283,18 @@ void MainPerson::hurtEnemy(Item &currentItem, const float deltaTime)
 	}
 }
 
-void MainPerson::hurtPerson(Enemy& enemy, world& world, const float deltaTime)
+
+void Enemy::hurtPerson(MainPerson& enemy, world& world, const float deltaTime)
 {
 	givenForPersonDamage(enemy);
 
-	Item &itemEnemy = enemy.itemFromPanelQuickAccess[enemy.idSelectItem];
+	Item &itemEnemy = itemFromPanelQuickAccess[idSelectItem];
 
-	enemy.playAtackSound(itemEnemy);
+	playAtackSound(itemEnemy);
 
 	itemEnemy.currentToughness -= 1;
 	if (itemEnemy.currentToughness < 1) {
-		enemy.redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
+		redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
 	}
 }
 
@@ -367,7 +367,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 				enemy.playAnimationAtack(deltaTime);
 				if (enemy.giveDamage) {
-					hurtPerson(enemy, world, deltaTime);
+					enemy.hurtPerson(*this, world, deltaTime);
 					enemy.resetAtack();
 				}
 			}
@@ -415,24 +415,18 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 		}
 	}
 }
-	
 
-////////////////////////////////////////////////////////////////////
-
-void MainPerson::useItem(world &world,
-												Event &event, Vector2f pos)
+void MainPerson::useItem(world &world, Event &event, Vector2f pos)
 {
-
 	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
-
-
 
 	int x = int(pos.x / SIZE_BLOCK);
 	int y = int(pos.y / SIZE_BLOCK);
-	founds.currentTarget.x = x;
-	founds.currentTarget.y = y;
-
 	Vector3i &posUse = founds.currentTarget;
+
+	posUse.x = x;
+	posUse.y = y;
+
 
 	bool isEnemy = findEnemy != emptyEnemy;
 	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
@@ -479,14 +473,8 @@ void MainPerson::useItem(world &world,
 					currenMode = idEntityMode::atack;
 					giveDamage = false;
 				}
-
-
-				//					createDestroyEffect(world, posUse);&& !isDestroyEffect(posUse, world)
-
 			}
 			break;
-			////////////////////////////////////////////////////////////////////////
-			// Блок и неживой объект
 		case idCategoryItem::block:
 		case idCategoryItem::unlifeObject:
 			if (isInUseField(pos.x, pos.y, false)) {
@@ -495,11 +483,9 @@ void MainPerson::useItem(world &world,
 
 				posUse = { x, y, level };
 
-				useBlock(posUse, world,
-								 currentItem);
+				useBlock(posUse, world, currentItem);
 			}
 			break;
-			////////////////////////////////////////////////////////////////////////
 		case idCategoryItem::food:
 			useAsFood(currentItem, event);
 			break;
@@ -519,7 +505,7 @@ void MainPerson::useItem(world &world,
 				useAsEmptyBukket(currentItem, world, level);
 			}
 			break;
-		case idCategoryItem::bottleEmpty:// ИСПРАВЬ
+		case idCategoryItem::bottleEmpty:
 			if (isInUseField(pos.x, pos.y, true)) {
 				int level;
 				defineLevel(level, event);
@@ -563,29 +549,6 @@ void MainPerson::getCoordinateForView(float x, float y)//функция для считывания 
 	view->setCenter(x, y);//следим за игроком, передавая его координаты. 
 }
 
-/*
-void MainPerson::viewmap(float time)
-{
-	if (Keyboard::isKeyPressed(Keyboard::Right)) {
-		view->move(0.1*time, 0);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Down)) {
-		view->move(0, 0.1*time);//скроллим карту вниз (см урок, когда мы двигали героя - всё тоже самое)
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Left)) {
-		view->move(-0.1*time, 0);//скроллим карту влево (см урок, когда мы двигали героя - всё тоже самое)
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Up)) {
-		view->move(0, -0.1*time);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
-	}
-
-}
-
-*/
-// Возможно пригодится (не ВКЛЮЧЕНА)
-// Возможно пригодится (не ВКЛЮЧЕНА)
 void MainPerson::changeview()
 {
 	if (Keyboard::isKeyPressed(Keyboard::U)) {

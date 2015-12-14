@@ -1,9 +1,10 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include "TypeEnemy.h"
+
+class MainPerson;
 struct TypeEnemy;
 class UnlifeObject;
-
 
 const float minTimeWalk = 4.f;
 const float maxTimeWalk = 12.f;
@@ -49,13 +50,14 @@ public:
 	void searchWay(world &world);
 	bool findLadder(world &world, sf::Vector3i pos);
 	void buildLadder(world &world);
+	void givenForPersonDamage(MainPerson & person);
+	void hurtPerson(MainPerson &enemy, world &world, const float deltaTime);
 
 	void checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts);
 	void redefineDirectionWalk();
 	void checkBlock(Field &field, float distanse);
 	void interactionWithEntity(std::vector<Enemy>* enemys, int id, const float deltaTime);
 
-private:
 
 };
 

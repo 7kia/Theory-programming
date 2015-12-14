@@ -401,6 +401,7 @@ void Enemy::buildLadder(world &world)
 
 }
 
+
 bool Enemy::findLadder(world &world, Vector3i pos)
 {
 
