@@ -5,16 +5,16 @@
 using namespace sf;
 using namespace std;
 
-void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects) {
+void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage) {
 	
-	initTree(typesUnlifeObjects);
-	initStones(typesUnlifeObjects);
-	initEmpty(typesUnlifeObjects);
+	initTree(typesUnlifeObjects, storage);
+	initStones(typesUnlifeObjects, storage);
+	initEmpty(typesUnlifeObjects, storage);
 
-	initEffects(typesUnlifeObjects);
+	initEffects(typesUnlifeObjects, storage);
 }
 
-void initTree(TypeUnlifeObject *typesUnlifeObjects)
+void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 {
 	int id = idUnlifeObject::oakGrow;
 	int idNature = idNatureObject::woodNature;
@@ -27,7 +27,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects)
 	int toughness = 100;
 
 	typesObject->mainSize.init(WIDTH_OAK_STUMP, HEIGHT_OAK_STUMP, PIXEL_X_OAK_STUMP, PIXEL_Y_OAK_STUMP);
-	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_OAK, HEIGHT_OAK, PIXEL_X_OAK, PIXEL_Y_OAK);
 
@@ -49,7 +49,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects)
 	toughness = 50;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_SMALL_OAK, HEIGHT_SMALL_OAK, PIXEL_X_SMALL_OAK, PIXEL_Y_SMALL_OAK);
 
@@ -70,7 +70,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects)
 	toughness = 50;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_APPLE_TREE, HEIGHT_APPLE_TREE, PIXEL_X_GROW_APPLE_TREE, PIXEL_Y_GROW_APPLE_TREE);
 
@@ -91,7 +91,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects)
 	toughness = 50;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_APPLE_TREE, HEIGHT_APPLE_TREE, PIXEL_X_APPLE_TREE, PIXEL_Y_APPLE_TREE);
 
@@ -111,7 +111,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects)
 	toughness = 30;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_SEADLING_OAK, HEIGHT_SEADLING_OAK, PIXEL_X_SEADLING_OAK, PIXEL_Y_SEADLING_OAK);
 
@@ -132,7 +132,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects)
 	toughness = 30;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_SEADLING_APPLE, HEIGHT_SEADLING_APPLE, PIXEL_X_SEADLING_APPLE, PIXEL_Y_SEADLING_APPLE);
 
@@ -144,7 +144,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects)
 	drop.clear();
 }
 
-void initStones(TypeUnlifeObject *typesUnlifeObjects)
+void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 {
 	int id = idUnlifeObject::smallStone;
 	int idNature = idNatureObject::stoneNature;
@@ -155,7 +155,7 @@ void initStones(TypeUnlifeObject *typesUnlifeObjects)
 	int toughness = 2;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
 
@@ -167,11 +167,11 @@ void initStones(TypeUnlifeObject *typesUnlifeObjects)
 	drop.clear();
 }
 
-void initEmpty(TypeUnlifeObject *typesUnlifeObjects)
+void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 {
 	int id = idUnlifeObject::empty;
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
-	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", id, 0);
+	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", storage, id, 0);
 	typesObject->defineToughness(false, 0);
 
 	typesObject->mainSize.init(0, 0, 0, 0);
@@ -180,7 +180,7 @@ void initEmpty(TypeUnlifeObject *typesUnlifeObjects)
 
 }
 
-void initEffects(TypeUnlifeObject* typesUnlifeObjects)
+void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 {
 	int id = idUnlifeObject::skeletDeathEffect;
 	int idNature = idNatureObject::NoneNature;
@@ -191,7 +191,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	int toughness = 1;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_SKELET, HEIGHT_SKELET, 0, HEIGHT_SKELET * 7);
 
@@ -211,7 +211,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	toughness = 0;
 
 	typesObject->mainSize.init(0, 0, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+ typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_WOLF, HEIGHT_WOLF, 0, HEIGHT_WOLF * 7);
 
@@ -231,7 +231,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects)
 	toughness = 50;
 
 	typesObject->mainSize.init(WIDTH_DESTROY_BLOCK_EFFECT, HEIGHT_DESTROY_BLOCK_EFFECT, 0, 0);
-	typesObject->Init(texturePath, name, id, idNature);
+	typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(0, 0, 0, 0);
 
@@ -261,12 +261,12 @@ void TypeUnlifeObject::defineToughness(bool canDestroy, int toughness)
 
 }
 
-void TypeUnlifeObject::Init(String filenameTexture, String typeName, int idType, int numberNature) {
+void TypeUnlifeObject::Init(String filenameTexture, String typeName, dataSound &storage, int idType, int numberNature) {
 	textureObject = new Texture;
 	textureObject->loadFromFile(filenameTexture);
 
 	name = typeName;
 	id = idType;
 	idNature = numberNature;
-
+	soundBase = &storage;
 };

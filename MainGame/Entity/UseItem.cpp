@@ -210,35 +210,29 @@ void Entity::breakItem(Item &currentItem)
 	}
 }
 
-void Entity::playObjectDropSoundObject()
+void UnlifeObject::playObjectDropSoundObject()
 {
-	UnlifeObject &findObject = *founds.findObject;
-	TypeUnlifeObject &typeObject = *findObject.typeObject;
-
-	switch (typeObject.idNature) {
+	switch (typeObject->idNature) {
 	case idNatureObject::woodNature:
-		playSound(treeDropSound, *soundBase, soundEntity, getPosition());
+		playSound(treeDropSound, *typeObject->soundBase, soundObject, getPosition());
 		break;
 	default:
 		break;
 	}
 }
 
-void Entity::playHarvestSoundObject()
+void UnlifeObject::playHarvestSoundObject()
 {
-	UnlifeObject &findObject = *founds.findObject;
-	TypeUnlifeObject &typeObject = *findObject.typeObject;
-
-	switch (typeObject.idNature) {
+	switch (typeObject->idNature) {
 	case idNatureObject::woodNature:
-		playSound(forage1Sound, *soundBase, soundEntity, getPosition());
+		playSound(forage1Sound, *typeObject->soundBase, soundObject, getPosition());
 		break;
 	default:
 		break;
 	}
 }
 
-void Entity::dropObject(Vector2i pos, world &world, bool harvest)
+void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 {
 	//////////////////////////////////////////////////
 	// Выпадение предметов
@@ -246,13 +240,11 @@ void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 	vector<Item> &items = *world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
-	UnlifeObject &findObject = *founds.findObject;
-	TypeUnlifeObject &typeObject = *findObject.typeObject;
-	size_t countItem = typeObject.drop.minCountItems.size();
+	size_t countItem = typeObject->drop.minCountItems.size();
 
-	vector<int> &minAmount = typeObject.drop.minCountItems;
-	vector<int> &maxAmount = typeObject.drop.maxCountItems;
-	vector<int> &idItems = typeObject.drop.dropItems;
+	vector<int> &minAmount = typeObject->drop.minCountItems;
+	vector<int> &maxAmount = typeObject->drop.maxCountItems;
+	vector<int> &idItems = typeObject->drop.dropItems;
 
 	size_t start = 0;
 	size_t finish = countItem;
@@ -268,7 +260,7 @@ void Entity::dropObject(Vector2i pos, world &world, bool harvest)
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
 		for (int j = 0; j < currentAmount; j++) {
 			addItem->setType(typesItems[idItems[i]]);
-			addItem->setPosition(pos.x + 1, pos.y + 1, currentLevelFloor + 1);
+			addItem->setPosition(pos.x + 1, pos.y + 1, pos.z + 1);
 			items.push_back(*addItem);
 
 		}

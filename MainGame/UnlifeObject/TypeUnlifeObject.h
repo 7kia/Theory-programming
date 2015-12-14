@@ -23,7 +23,7 @@ public:
 	int id;
 	int idNature;
 	sf::Texture* textureObject;
-
+	dataSound *soundBase;
 	// —сылки на звуки
 	//Sound *soundsEntity[sizeBuffer];
 
@@ -36,13 +36,13 @@ public:
 	featuresSprite transparentSize;
 	objectDropItems drop;
 
-	void Init(sf::String filenameTexture, sf::String typeName, int idType, int numberNature);
+	void Init(sf::String filenameTexture, sf::String typeName, dataSound &storage, int idType, int numberNature);
 	void defineToughness(bool canDestroy, int toughness);
 };
 
-void initTree(TypeUnlifeObject *typesUnlifeObjects);
-void initStones(TypeUnlifeObject *typesUnlifeObjects);
-void initEmpty(TypeUnlifeObject *typesUnlifeObjects);
-void initEffects(TypeUnlifeObject *typesUnlifeObjects);
+void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
+void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
+void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
+void initEffects(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
 
-void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects);
+void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);

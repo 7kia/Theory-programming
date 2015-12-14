@@ -98,3 +98,8 @@ bool UnlifeObject::isDestroyed()
 {
 	return currentToughness < 1;
 }
+
+sf::Vector2f UnlifeObject::getPosition()
+{
+	return{ getXPos(), getYPos() };
+}

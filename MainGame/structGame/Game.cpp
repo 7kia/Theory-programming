@@ -155,7 +155,7 @@ Game::Game()
 
 	typesObjectsInWorld &types = world.typesObjects;
 
-	initializeTypeUnlifeObjects(types.typesUnlifeObject);
+	initializeTypeUnlifeObjects(types.typesUnlifeObject, world.databaseSound);
 	initializeUnlifeObjects(*world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
 
 	initializeCategorysBreakingObject();

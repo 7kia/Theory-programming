@@ -64,16 +64,14 @@ void Entity::destroyFindObject(bool isEffect, Vector3i pos, world &world)
 	Field &field = world.field;
 	wchar_t	*block = &field.dataMap[level][y][x];
 
-
+	Vector3i posDrop = { x, y, level };
 	if (isEffect) {
-		Vector3i posDropBlock = { x, y, level };
-		dropBlock(world, posDropBlock, currentLevelFloor + 1);
+		dropBlock(world, posDrop, currentLevelFloor + 1);
 
 		*block = field.charBlocks[idBlocks::air];
 	}
 	else {
-		Vector2i posDrop = { x, y };
-		dropObject(posDrop, world, false);
+		founds.findObject->dropObject(posDrop, world, false);
 	}
 
 }

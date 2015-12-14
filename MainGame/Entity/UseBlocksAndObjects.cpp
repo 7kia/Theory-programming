@@ -62,8 +62,8 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 
 	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
 
-	Vector2i posItems = { posOnMap.x - 1, posOnMap.y - 1 };
-	dropObject(posItems, world, true);
+	Vector3i posItems = { posOnMap.x - 1, posOnMap.y - 1, currentLevelFloor + 1 };
+	object.dropObject(posItems, world, true);
 
 	object.setType(nextType);
 	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);

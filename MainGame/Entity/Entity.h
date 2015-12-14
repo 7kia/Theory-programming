@@ -110,9 +110,6 @@ public:
 	void minusAmount(Item& currentItem);
 	void breakItem(Item &currentItem);
 
-	void dropObject(Vector2i pos, world &world, bool harvest);
-	void playObjectDropSoundObject();
-	void playHarvestSoundObject();
 	void run();
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);

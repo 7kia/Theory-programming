@@ -8,6 +8,7 @@
 #include "TypeUnlifeObject.h"
 
 struct world;
+struct Item;
 using namespace sf;
 
 class UnlifeObject
@@ -31,9 +32,13 @@ public:
 
 	bool isDestroyed();
 
+	void dropObject(sf::Vector3i pos, world &world, bool harvest);
+	void playObjectDropSoundObject();
+	void playHarvestSoundObject();
+
 	float getXPos();
 	float getYPos();
-	
+	sf::Vector2f getPosition();	
 private:
 
 };
