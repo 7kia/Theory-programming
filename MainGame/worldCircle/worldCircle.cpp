@@ -114,14 +114,13 @@ void Game::dropAward(vector<Vector2i> &listAward)
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	Item *addItem = new Item;
 
-	for (size_t i = 0; i < listAward.size(); i++) {
+	for (int i = 0; i < listAward.size(); i++) {
 		addItem->setType(typesItems[listAward[i].x]);
 		addItem->setPosition(CENTER_WORLD.x, CENTER_WORLD.y, 2);
 		addItem->mainSprite->setScale(scaleOutItems);
 
 		for (int count = 0; count < listAward[i].y; count++) {
 			world.items->push_back(*addItem);
-
 		}
 
 	}
@@ -147,7 +146,6 @@ void Game::playDayMusic()
 	music.openFromFile(musicPaths[idMusicPaths::DayMusic]);
 	timeDay = day;
 	music.play();
-
 }
 
 void Game::playNightMusic()
@@ -183,7 +181,6 @@ void Game::checkDifficult()
 		countWave = 0;
 		difficult++;
 	}
-
 }
 
 void Game::generateStrongGroups()

@@ -20,12 +20,9 @@ void Game::render()
 
 	mainPerson.updateView(window);
 	Vector2f centerWindow = window.getView().getCenter();
-	//Vector2f sizeWindow = Vector2f(window.getSize());
 
 	Vector2f sizeWindow = { float(DEFAULT_WIDTH_WINDOW), float(DEFAULT_HEIGHT_WINDOW) };
 	FloatRect rectWindow = FloatRect(centerWindow - sizeWindow, sizeWindow + centerWindow);
-
-	//if(rectWindow.left )
 
 	renderMap(rectWindow);
 	renderItems(rectWindow);
@@ -65,23 +62,6 @@ void Game::renderMap(FloatRect const& rectWindow)
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 				field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
-				/*
-								rectWallSprite = field.wallSprite->getGlobalBounds();
-				rectFloorSprite = field.floorSprite->getGlobalBounds();
-				// TODO
-				if(rectWallSprite != NULL_RECT)
-				{
-					if (isExitFromWindow(rectWindow, rectWallSprite)) {
-						window.draw(*field.wallSprite);
-					}	
-				}
-				if (rectFloorSprite != NULL_RECT) {
-					if (isExitFromWindow(rectWindow, rectFloorSprite)) {
-						window.draw(*field.floorSprite);
-					}
-				}
-
-				*/
 				drawInWindow(*field.floorSprite, rectWindow);
 				drawInWindow(*field.wallSprite, rectWindow);
 			}
@@ -94,23 +74,24 @@ void Game::renderMap(FloatRect const& rectWindow)
 void Game::renderItems(FloatRect const& rectWindow)
 {
 	vector<Item> &items = *world.items;
+	int levelItem;
+	int levelPlayer;
 	for (int i = 0; i != items.size(); ++i) {
-		if (items[i].currentLevel >= mainPerson.currentLevelFloor
-				&& items[i].currentLevel <= mainPerson.currentLevelFloor + 2) {
+		levelItem = items[i].currentLevel;
+		levelPlayer = mainPerson.currentLevelFloor;
+		if (levelItem >= levelPlayer
+			&& levelItem <= levelPlayer + 2) {
 
 
-			if (items[i].currentLevel == mainPerson.currentLevelFloor) {
+			if (levelItem == levelPlayer) {
 				items[i].mainSprite->setColor(DOWN_VIEW);
-			} else if (items[i].currentLevel == mainPerson.currentLevelFloor + 1) {
+			} else if (levelItem == levelPlayer + 1) {
 				items[i].mainSprite->setColor(NORMAL_VIEW);
-			} else if (items[i].currentLevel == mainPerson.currentLevelFloor + 2) {
+			} else if (levelItem == levelPlayer + 2) {
 				items[i].mainSprite->setColor(UP_VIEW);
 			}
 
 			drawInWindow(*items[i].mainSprite, rectWindow);
-
-			//window.draw(*items[i].mainSprite);
-			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
 		}
 
 	}
@@ -130,15 +111,18 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 			Enemys[i].renderCurrentItem(window);
 
 			Color currentColor;
-			if (personLevel) currentColor = NORMAL_COLOR;
-			else if (personLevel - 1) currentColor = DOWN_VIEW;
-			else if (personLevel + 1) currentColor = UP_VIEW;
+			if (personLevel) {
+				currentColor = NORMAL_COLOR;
+			}
+			else if (personLevel - 1) {
+				currentColor = DOWN_VIEW;
+			}
+			else if (personLevel + 1) {
+				currentColor = UP_VIEW;
+			}
 			Enemys[i].spriteEntity->setColor(currentColor);
 
 			drawInWindow(*Enemys[i].spriteEntity, rectWindow);
-
-			//window.draw(*Enemys[i].spriteEntity);
-			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
 		}
 
 	}
@@ -148,18 +132,21 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 {
 
-	int currentLevel = mainPerson.currentLevelFloor;
+	int levelPerson = mainPerson.currentLevelFloor;
+	int levelObject;
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
 	bool inView;
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
-		inView = unlifeObjects[i].currentLevel >= currentLevel
-			&& unlifeObjects[i].currentLevel <= currentLevel + 2;
+		levelObject = unlifeObjects[i].currentLevel;
+
+		inView = levelObject >= levelPerson
+				&& levelObject <= levelPerson + 2;
 
 		if (inView) {
-			if (unlifeObjects[i].currentLevel == currentLevel) {
+			if (levelObject == levelPerson) {
 				unlifeObjects[i].spriteObject->setColor(DOWN_VIEW);
 				unlifeObjects[i].transparentSpiteObject->setColor(DOWN_VIEW);
-			} else if (unlifeObjects[i].currentLevel == currentLevel + 2) {
+			} else if (levelObject == levelPerson + 2) {
 				unlifeObjects[i].spriteObject->setColor(UP_VIEW);
 				unlifeObjects[i].transparentSpiteObject->setColor(UP_VIEW);
 			}
@@ -179,12 +166,12 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 
 	Vector2f centerWindow = mainPerson.view->getCenter();
 	Vector2f posImage = centerWindow;
-	size_t amountTypeItems = listAward.size();// + awardForLevel[currentLevel].size();
+	size_t amountTypeItems = listAward.size();
 
 	float shift = float(amountTypeItems / 2);
 	if (amountTypeItems <= 2)
 	{
-			shift -= 0.5f;
+		shift -= 0.5f;
 	}
 	posImage.x -= shift * (SIZE_ITEM + DISTANSE_BETWEEN_AWARD_ITEMS);
 

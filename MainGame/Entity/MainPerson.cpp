@@ -7,8 +7,6 @@
 using namespace sf;
 using namespace std;
 
-////////////////////////////////////////////////////////////////////
-// Объявление персонажа
 void initializeMainPerson(MainPerson &mainPerson, world &world)
 {
 	mainPerson.spriteEntity = new Sprite;
@@ -85,20 +83,15 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 
 }
 
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-// Обновление камеры
 void MainPerson::updateView(RenderWindow & window)
 {
 	Vector2u sizeWindow = window.getSize();
-	sizeWindow.x /= SCALE_VIEW;
-	sizeWindow.y /= SCALE_VIEW;
+	sizeWindow.x /= 1.f;//SCALE_VIEW
+	sizeWindow.y /= 1.f;// TODO
 	view->setSize(Vector2f(sizeWindow));
 
 	float tempX = getXPos();
 	float tempY = getYPos();
-
 
 	listener->setPosition(tempX, tempY, 0);
 
@@ -135,8 +128,6 @@ void Enemy::givenForPersonDamage(MainPerson &person)
 
 	cutDamage = multiplirer * (enemyDamege.cuttingDamage + damageEnemyItem.cuttingDamage);
 	crashDamage = multiplirer * (enemyDamege.crushingDamage + damageEnemyItem.crushingDamage);
-	//float cutDamage = damageMultiplirer * currentItem.cuttingDamage;
-	//float crashDamage = damageMultiplirer * currentItem.crushingDamage;
 
 	cutDamage *= person.protection.protectionCut;
 	crashDamage *= person.protection.protectionCrash;
@@ -145,96 +136,6 @@ void Enemy::givenForPersonDamage(MainPerson &person)
 	person.health.currentHealth -= person.damage.inputDamage;
 
 	person.damage.inputDamage = 0;
-}
-
-
-void Enemy::EnemyDrop(world& world)
-{
-	Field &field = world.field;
-	vector<Item> &items = *world.items;
-	TypeItem *typesItems = world.typesObjects.typesItem;
-
-	Item* addItem = new Item;
-	TypeEnemy& typeEnemy = *type;
-	size_t countItem = typeEnemy.drop.minCountItems.size();
-
-	vector<int> &minAmount = typeEnemy.drop.minCountItems;
-	vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
-
-	throwItem(field, items);
-
-	int currentAmount;
-	for (int i = 0; i < countItem; i++) {
-
-		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
-		for (int j = 0; j < currentAmount; j++) {
-			addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
-			addItem->setPosition(founds.currentTarget.x + 1,
-													 founds.currentTarget.y + 1,
-													 currentLevelFloor + 1);
-			world.items->push_back(*addItem);
-
-		}
-
-	}
-	delete addItem;
-
-}
-
-void Enemy::playSoundDeath(world& world)
-{
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
-	TypeUnlifeObject *typeObjects = world.typesObjects.typesUnlifeObject;
-	UnlifeObject addObject;
-	sizeSprite &sizeSprite = type->featuresSprite.size;
-	Vector3i pos = { int((getXPos() + sizeSprite.width / 2) / SIZE_BLOCK),
-		int((getYPos() + sizeSprite.height / 2) / SIZE_BLOCK),
-									currentLevelFloor + 1 };
-
-	bool findSound = true;
-	switch(type->id)
-	{
-	case idEntity::wolfEnemy:
-		addObject.setType(typeObjects[idUnlifeObject::wolfDeathEffect]);
-		addObject.setPosition(pos.x, pos.y, pos.z);
-		break;
-	case idEntity::skeletEnemy:
-	case idEntity::skeletBuilderEnemy:
-	case idEntity::skeletDiggerEnemy:
-	case idEntity::skeletLumbermillEnemy:
-	case idEntity::skeletMinerEnemy:
-		addObject.setType(typeObjects[idUnlifeObject::skeletDeathEffect]);
-		addObject.setPosition(pos.x, pos.y, pos.z);
-		break;
-	default:
-		findSound = false;
-		break;
-	}
-
-	if(findSound)
-	{
-			objects.push_back(addObject);
-
-			Sound &soundObject = objects[objects.size() - 1].soundObject;
-
-			switch (type->id) {
-			case idEntity::wolfEnemy:
-				playSound(idSoundPaths::wolfDeathSound, *soundBase, soundObject, getPosition());
-				break;
-			case idEntity::skeletEnemy:
-			case idEntity::skeletBuilderEnemy:
-			case idEntity::skeletDiggerEnemy:
-			case idEntity::skeletLumbermillEnemy:
-			case idEntity::skeletMinerEnemy:
-				playSound(idSoundPaths::skeletonDeathSound, *soundBase, soundObject, getPosition());
-				break;
-			default:
-				break;
-			}
-
-	}
-
-
 }
 
 void MainPerson::updateAtack(world &world, const float deltaTime)
@@ -282,7 +183,6 @@ void MainPerson::hurtEnemy(Item &currentItem, const float deltaTime)
 		playAtackSound(currentItem);
 	}
 }
-
 
 void Enemy::hurtPerson(MainPerson& enemy, world& world, const float deltaTime)
 {
@@ -431,20 +331,15 @@ void MainPerson::useItem(world &world, Event &event, Vector2f pos)
 	bool isEnemy = findEnemy != emptyEnemy;
 	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
 	bool isAtack = event.key.code == Mouse::Left;
-	if (isEnemy && isAtack) {
+	if (isEnemy && isAtack && isInUseField(pos.x, pos.y, true)) {
 
-		if (isInUseField(pos.x, pos.y, true)) {
-			if (findEnemy->currentLevelFloor == currentLevelFloor) {
+		if (findEnemy->currentLevelFloor == currentLevelFloor) {
 
-				if (animation.currentTimeFightAnimation == 0.f) {
-					currenMode = idEntityMode::atack;
-				}
-
+			if (animation.currentTimeFightAnimation == 0.f) {
+				currenMode = idEntityMode::atack;
 			}
 
 		}
-
-
 	}
 	else {
 		
@@ -531,43 +426,41 @@ void MainPerson::playSoundChoiseItem()
 // Использую потом (не ВКЛЮЧЕНА)
 void MainPerson::computeAngle(RenderWindow &window)
 {
-	Vector2i pixelPos = Mouse::getPosition(window);//забираем коорд курсора
-	Vector2f pos = window.mapPixelToCoords(pixelPos);//переводим их в игровые (уходим от коорд окна)
-	float dX = pos.x - spriteEntity->getPosition().x - size.width / 2;//вектор , колинеарный прямой, которая пересекает спрайт и курсор
-	float dY = pos.y - spriteEntity->getPosition().y - size.height / 2;//он же, координата y
-	rotation = (atan2(dX, dY)) * 180 / PI - 90;//получаем угол в радианах и переводим его в градусы
+	Vector2i pixelPos = Mouse::getPosition(window);
+	Vector2f pos = window.mapPixelToCoords(pixelPos);
+	float dX = pos.x - spriteEntity->getPosition().x - size.width / 2;
+	float dY = pos.y - spriteEntity->getPosition().y - size.height / 2;
+	rotation = (atan2(dX, dY)) * 180 / PI - 90;
 	if(rotation < 0)
 	{
 		rotation += 360;
 	}
 }
 
-////////////////////////////////////////////////////////////////////
-// View
+
 void MainPerson::getCoordinateForView(float x, float y)//функция для считывания координат игрока
 {
 	view->setCenter(x, y);//следим за игроком, передавая его координаты. 
 }
 
+// TODO
 void MainPerson::changeview()
 {
 	if (Keyboard::isKeyPressed(Keyboard::U)) {
-		view->zoom(1.0100f); //масштабируем, уменьшение
-							 //view.zoom(1.0006f); //тоже самое помедленнее соответственно
+		view->zoom(1.0100f);
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::R)) {
-		//view.setRotation(90);//сразу же задает поворот камере
-		view->rotate(1);//постепенно поворачивает камеру (отрицательное значение - в обратную сторону)
+		view->rotate(1);
 	}
 
 
 	if (Keyboard::isKeyPressed(Keyboard::I)) {
-		view->setSize(640, 480);//устанавливает размер камеры (наш исходный)
+		view->setSize(640, 480);
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::P)) {
-		view->setSize(540, 380);//например другой размер
+		view->setSize(540, 380);
 	}
 
 }

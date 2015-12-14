@@ -585,3 +585,90 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 
 	}
 }
+
+void Enemy::EnemyDrop(world& world)
+{
+	Field &field = world.field;
+	vector<Item> &items = *world.items;
+	TypeItem *typesItems = world.typesObjects.typesItem;
+
+	Item* addItem = new Item;
+	TypeEnemy& typeEnemy = *type;
+	size_t countItem = typeEnemy.drop.minCountItems.size();
+
+	vector<int> &minAmount = typeEnemy.drop.minCountItems;
+	vector<int> &maxAmount = typeEnemy.drop.maxCountItems;
+
+	throwItem(field, items);
+
+	int currentAmount;
+	for (int i = 0; i < countItem; i++) {
+
+		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
+		for (int j = 0; j < currentAmount; j++) {
+			addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
+			addItem->setPosition(founds.currentTarget.x + 1,
+								 founds.currentTarget.y + 1,
+								 currentLevelFloor + 1);
+			world.items->push_back(*addItem);
+
+		}
+
+	}
+	delete addItem;
+
+}
+
+void Enemy::playSoundDeath(world& world)
+{
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	TypeUnlifeObject *typeObjects = world.typesObjects.typesUnlifeObject;
+	UnlifeObject addObject;
+	sizeSprite &sizeSprite = type->featuresSprite.size;
+	Vector3i pos = { int((getXPos() + sizeSprite.width / 2) / SIZE_BLOCK),
+		int((getYPos() + sizeSprite.height / 2) / SIZE_BLOCK),
+		currentLevelFloor + 1 };
+
+	bool findSound = true;
+	switch (type->id) {
+	case idEntity::wolfEnemy:
+		addObject.setType(typeObjects[idUnlifeObject::wolfDeathEffect]);
+		addObject.setPosition(pos.x, pos.y, pos.z);
+		break;
+	case idEntity::skeletEnemy:
+	case idEntity::skeletBuilderEnemy:
+	case idEntity::skeletDiggerEnemy:
+	case idEntity::skeletLumbermillEnemy:
+	case idEntity::skeletMinerEnemy:
+		addObject.setType(typeObjects[idUnlifeObject::skeletDeathEffect]);
+		addObject.setPosition(pos.x, pos.y, pos.z);
+		break;
+	default:
+		findSound = false;
+		break;
+	}
+
+	if (findSound) {
+		objects.push_back(addObject);
+
+		Sound &soundObject = objects[objects.size() - 1].soundObject;
+
+		switch (type->id) {
+		case idEntity::wolfEnemy:
+			playSound(idSoundPaths::wolfDeathSound, *soundBase, soundObject, getPosition());
+			break;
+		case idEntity::skeletEnemy:
+		case idEntity::skeletBuilderEnemy:
+		case idEntity::skeletDiggerEnemy:
+		case idEntity::skeletLumbermillEnemy:
+		case idEntity::skeletMinerEnemy:
+			playSound(idSoundPaths::skeletonDeathSound, *soundBase, soundObject, getPosition());
+			break;
+		default:
+			break;
+		}
+
+	}
+
+
+}

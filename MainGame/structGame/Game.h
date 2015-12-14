@@ -59,6 +59,7 @@ enum StateGame
 {
 	gameState,
 	pauseState,
+	startGameState,
 	menuState,
 	waveEndState,
 	endGameState

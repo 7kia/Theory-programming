@@ -122,7 +122,6 @@ void Game::upgradeObject(UnlifeObject &object)
 
 	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
 
-
 	object.setType(nextType);
 	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
 }
