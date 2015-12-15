@@ -15,14 +15,6 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 	createGUI(gui.thirst, gui.textureGui[barTexture]);
 	createGUI(gui.mainFeatures, gui.textureGui[barTexture]);
 	createGUI(gui.itemFeatures, gui.textureGui[widgetsTexture], gui.textureGui[barTexture]);
-
-	///////////////////////////////////////////////////////////////////
-	// ИСПРАВЬ
-	// НЕРАБОТАЕТ
-	//gui.textGui[idTextGui::infoWindowBlockGui] = &textGame.texts[idText::infoWindowBlock];
-	//gui.textGui[idTextGui::infoWindowFloorGui] = &textGame.texts[idText::infoWindowFloor];
-	//gui.textGui[idTextGui::infoWindowUnlifeObjectGui] = &textGame.texts[idText::infoWindowUnlifeObject];
-	//gui.textGui[idTextGui::infoWindowItemGui] = &textGame.texts[idText::infoWindowItemGui];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,8 +36,7 @@ void barHungry::renderBar(int& current, int& max, Vector2f centerWindow, Vector2
 
 void barHungry::renderHigh(Vector2f& pos, Vector2u sizeWindow, RenderWindow& window)
 {
-	//* scaleGuiForMainPerson.x
-	// * scaleGuiForMainPerson.y
+
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) ;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
 
@@ -57,7 +48,6 @@ void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow&
 {
 	float level = float(current) / max;
 
-	// * scaleGuiForMainPerson.y
 	pos.y += (LEVEL_SHIFT_HUNGRY + MAX_SHIFT_HUNGRY_LEVEL * (1 - level));
 	int currentLevel = int(LEVEL_HUNGY_GUI * level);
 	levelHungry.setTextureRect(IntRect(X_HUNGY_GUI, Y_HUNGY_GUI + HEIGHT_HUNGY_GUI * 2, WIDTH_HUNGY_GUI, currentLevel));
@@ -67,8 +57,6 @@ void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow&
 
 void barHungry::renderLow(Vector2f pos, Vector2f centerWindow, Vector2u sizeWindow, RenderWindow& window)
 {
-	//* scaleGuiForMainPerson.x
-	//* scaleGuiForMainPerson.y
 	pos = centerWindow;
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) ;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) ;
@@ -80,8 +68,6 @@ void barHungry::renderLow(Vector2f pos, Vector2f centerWindow, Vector2u sizeWind
 void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow, sf::RenderWindow& window)
 {
 	Vector2f pos = centerWindow;
-	// * scaleGuiForMainPerson.x
-	//* scaleGuiForMainPerson.x
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI) ;
 
@@ -125,13 +111,10 @@ void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<En
 	featuresWindow.size = sizeWindow;
 	featuresWindow.center = centerWindow;
 	featuresWindow.window = &window;
-	//////////////////////////////////////////////////////////
-	// Окошко с информацией о выбранном предмете
 
 	panels.infoAboutSelect.render(pos, window, textGame);
 	renderTextDeath(mainPerson, centerWindow, window, textGame);
-	//////////////////////////////////////////////////////////
-	// Панель быстрого доступа
+
 	pos = { centerWindow.x , centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2};// ИСПРАВЬ
 	panels.panelQuickAccess.renderPanel(pos, window);
 	panels.panelQuickAccess.renderSelect(mainPerson, featuresWindow);

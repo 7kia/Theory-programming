@@ -281,27 +281,6 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 					enemy.playAnimationAtack(deltaTime);
 					if (enemy.giveDamage) {
-						/*
-						Vector3i &posUse = enemy.founds.currentTarget;
-						Field &field = world.field;
-						wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
-						int idNature;
-						idNature = field.idsNature[field.findIdBlock(*block)];
-
-
-
-
-						if (idNature > idNatureObject::Unbreaking && !enemy.isDestroyEffect(posUse, world)) {
-							enemy.createDestroyEffect(world, posUse);
-							enemy.founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
-							enemy.playObjectBreakSound(idNature);
-							enemy.resetAtack();
-						}
-						else {
-
-							enemy.useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
-						}
-					*/
 						enemy.breakNearCollision(world);
 
 					}

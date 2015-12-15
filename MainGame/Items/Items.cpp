@@ -29,8 +29,7 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 
 	Item* addItem = new Item;
 
-	// Пустой предмет
-	emptyItem.setType(typesItem[idItem::emptyItem]);// ИСПРАВЬ
+	emptyItem.setType(typesItem[idItem::emptyItem]);
 
 	for (int i = idItem::airItem + 1; i < AMOUNT_TYPES_ITEM; i++) {
 		for (int countItem = 1; countItem <= 4; countItem++)
@@ -38,7 +37,6 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 				addItem->setType(typesItem[i]);
 		addItem->setPosition(CENTER_WORLD.x + i / 2 + 2, CENTER_WORLD.y + i % 3 + 2, 2);
 		items.push_back(*addItem);
-		// ДОБАВЛЕНИЕ ПРЕДМЕТА	
 		}
 
 	}
@@ -86,13 +84,12 @@ void Item::setType(TypeItem &type)
 {
 	typeItem = &type;
 
-	
-
 	amount = 1;
 
 	mainSprite = new Sprite;
 	mainSprite->setTexture(*type.textureItem);
 
+	// TODO
 	int pixelXPos = type.sizeMain.pixPos.x;
 	int pixelYPos = type.sizeMain.pixPos.y;
 	int width = type.sizeMain.size.width;
@@ -101,7 +98,7 @@ void Item::setType(TypeItem &type)
 	mainSprite->scale(scaleOutItems);// Вне инвентаря предмет будет меньше
 	mainSprite->setOrigin(float(width / 2), float(height / 2));
 
-	///*
+
 	spriteForUse = new Sprite;
 
 	pixelXPos = type.sizeAlternative.pixPos.x;
@@ -111,7 +108,7 @@ void Item::setType(TypeItem &type)
 	spriteForUse->setTexture(*type.textureItem);
 	spriteForUse->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
 	spriteForUse->setOrigin(float(width / 2), float(height / 2));
-	//*/
+
 	
 
 	maxToughness = type.features.toughness;
@@ -125,7 +122,4 @@ void Item::setPosition(int xPos, int yPos, int Level)
 
 	currentLevel = Level;
 	mainSprite->setPosition(numberX, numberY);
-	// TODO
-	//spriteForUse->setPosition(numberX, numberY - typeItem->sizeAlternative.heightForUse / 2 + typeItem->sizeMainSprite.height / 2);
-	//directionWalk = NONE_DIRECRION;
 }

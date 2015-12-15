@@ -39,7 +39,13 @@ string toStringCharacter(int firstNumber, int secondNumber) {
 
 size_t computeMiddleString(Text &text)
 {
-	return text.getString().getSize() * text.getCharacterSize() / 4;// TODO
+	size_t sizeString = text.getString().getSize();
+	unsigned int shift = 0;
+	if(sizeString % 2)
+	{
+		shift = text.getCharacterSize() / 2;
+	}
+	return (sizeString * text.getCharacterSize() / 4) + shift;// TODO
 }
 
 size_t computeSizeString(Text &text)

@@ -7,6 +7,8 @@ const int SIZE_SMALL_TEXT = 14;
 
 const sf::String TEXT_AWARD = "Award";
 const sf::String TEXT_HELP_AWARD = "Items will drop in center map.";
+const sf::String TEXT_NUMBER_WAVE_START = "You survived ";
+const sf::String TEXT_NUMBER_WAVE_END = " wave(s)";
 const sf::String TEXT_VICTORY = "Victory";
 const sf::String TEXT_UNDER_VICTORY = "You end game.";
 
@@ -31,6 +33,7 @@ typedef enum {
 
 	panelText,
 	panelHelpText,
+	panelWaveText,
 	panelTitleText,
 	amountTexts
 } idText;

@@ -44,7 +44,7 @@ public:
 
 	void randomWalk(const float deltaTime);
 
-	void takeDamage(DamageInputAndOutput damage, Item& currentItem);
+	void takeDamage(DamageInputAndOutput damageEnemy, Item& currentItem);
 
 	void choiceDirections(Vector2f movemoment);
 	void defineDirectionLook(Vector2f movemoment);

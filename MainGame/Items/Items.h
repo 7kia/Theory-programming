@@ -31,11 +31,8 @@ struct Item
 	void setType(TypeItem &type);
 	void setPosition(int x, int y, int Level);
 
-	// Вспомагательные функции
 	float getXPos();
 	float getYPos();
-private:
-
 };
 
 void initializeItems(std::vector<Item> &items, TypeItem *typesItem, Item &emptyItem);

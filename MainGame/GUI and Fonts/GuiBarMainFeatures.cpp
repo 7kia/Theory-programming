@@ -23,14 +23,17 @@ void barMainFeatures::render(int &current, int& max, Sprite &sprite, Vector2f sc
 
 	position.x += X_SHIFT_BARS * scale.x;
 	position.y += Y_SHIFT_BARS * scale.y;
+
 	int currentLevel = int(WIDTH_LEVEL_BAR_GUI * level);
 	int pixelXpos = featuresSprite.pixPos.x;
 	int pixelYpos = featuresSprite.pixPos.y;
 	int height = featuresSprite.size.height;
 	sprite.setTextureRect(IntRect(pixelXpos, pixelYpos, currentLevel, height));
+
 	sprite.setPosition(position);
 	sprite.setScale(scale);
 	window.draw(sprite);
+
 	sprite.setScale(normalSize);
 }
 
@@ -41,18 +44,11 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 
 	currentText->setString(toStringCharacter(current, max));
 
-	// TODO
 	float middleString = float(computeMiddleString(*currentText));
 	position = { position.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, position.y - Y_SHIFT_BARS / 2 };
-	//position.x += middleString;// *scale.x;
-	// * scale.y
-	//position.y += (HEIGHT_BARS_GUI / 2);
-
 	currentText->setPosition(position);
 
-	//currentText->setScale(scale);
 	window.draw(*currentText);
-	//currentText->setScale(normalSize);
 }
 
 void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, int shift,
@@ -63,7 +59,6 @@ void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, in
 	pos = enemy.spriteEntity->getPosition();
 	pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
 	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * shift;
-
 
 	currentText->setString(toStringCharacter(current, max));
 
@@ -89,8 +84,7 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 
 		currentText->setString(stringDamage);
 
-
-		pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
+		pos.x -= computeMiddleString(*currentText);
 		currentText->setPosition(pos);
 		window.draw(*currentText);
 	}
@@ -103,7 +97,7 @@ void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, 
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 	Vector2f pos;
-	pos.x = centerWindow.x - sizeWindow.x / 2;//* scaleGuiForEnemy.y
+	pos.x = centerWindow.x - sizeWindow.x / 2;
 	pos.y = centerWindow.y + sizeWindow.y / 2 - float(HEIGHT_BARS_GUI)  * shift;
 
 	renderBar(current, max, sprite, NORMAL_SCALE,
@@ -131,5 +125,3 @@ void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int s
 	}
 
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////

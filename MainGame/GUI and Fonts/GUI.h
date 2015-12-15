@@ -2,7 +2,7 @@
 #include "CreateGui.h"
 
 struct GUI
-{// добавление gui
+{
 
 	sf::Texture textureGui[amoundIdGuiTexture];
 

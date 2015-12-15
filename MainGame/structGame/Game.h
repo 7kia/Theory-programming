@@ -81,7 +81,7 @@ struct Game
 	MainPerson mainPerson;
 
 	bool updateDifficult = false;
-	int difficult = 0;
+	int difficult = 1;
 	int countWave = 0;
 
 	int countDay = 0;
@@ -147,6 +147,7 @@ struct Game
 	void setPositionAwardText();
 	void setPositionTitleAward(sf::Vector2f const& centerWindow, sf::Vector2f &posText);
 	void setPositionHelpTextAward(sf::Vector2f const& centerWindow, sf::Vector2f &posText);
+	void setPositionWaveText(sf::Vector2f &posText);
 
 	void setPositionEndGameText();
 	void drawAwardItems(std::vector<sf::Vector2i> &listAward);

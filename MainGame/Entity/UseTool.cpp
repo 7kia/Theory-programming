@@ -39,10 +39,11 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 
 		if (findObject->isDestroyed()) {
 			vector<int> &deleteUnlifeObjects = *world.deleteUnlifeObjects;
-			if (!isInListObjects(deleteUnlifeObjects, founds.findObjectFromList)) {
+			int idFinded = founds.findObjectFromList;
+			if (!isInListObjects(deleteUnlifeObjects, idFinded) && idFinded > -1) {
 
 				destroyFindObject(isDestroyEffect, pos, world);
-				deleteUnlifeObjects.push_back(founds.findObjectFromList);
+				deleteUnlifeObjects.push_back(idFinded);
 
 				breakItem(currentItem);
 			}

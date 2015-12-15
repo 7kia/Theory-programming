@@ -157,7 +157,7 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	size_t amountTypeItems = listAward.size();
 
 	float shift = float(amountTypeItems / 2);
-	if (amountTypeItems <= 2)
+	if (amountTypeItems % 2 == 0)
 	{
 		shift -= 0.5f;
 	}
@@ -229,6 +229,34 @@ void Game::setPositionHelpTextAward(sf::Vector2f const & centerWindow, sf::Vecto
 
 	float middleText = float(computeMiddleString(*currentText));
 	posText.y += SHIFT_Y_AWARD_HELP_TEXT + sizeText;
+	posText.x -= middleText;
+
+	currentText->setPosition(posText);
+
+	if (updateDifficult) {
+		posText.x += middleText;
+		setPositionWaveText(posText);
+	}
+}
+
+
+void Game::setPositionWaveText(sf::Vector2f& posText)
+{
+	Text *currentText = &textGame.texts[idText::panelTitleText];
+	int sizeText = currentText->getCharacterSize();
+
+	currentText = &textGame.texts[idText::panelHelpText];
+
+	string numberWave;
+	intToString(difficult, numberWave);
+	String inputString = TEXT_NUMBER_WAVE_START;
+	inputString += String(numberWave);
+	inputString += TEXT_NUMBER_WAVE_END;
+
+	currentText->setString(inputString);
+
+	float middleText = float(computeMiddleString(*currentText));
+	posText.y += sizeText;
 	posText.x -= middleText;
 
 	currentText->setPosition(posText);

@@ -48,13 +48,15 @@ void Game::dropAward(vector<Vector2i> &listAward)
 	vector<Item> &items = *world.items;
 	Item *addItem = new Item;
 
+	///////////////////////////////////////
+	// TODO BUG
 	for (size_t i = 0; i < listAward.size(); i++) {
 
-		addItem->setType(typesItems[listAward[i].x]);
-		addItem->setPosition(CENTER_WORLD.x, CENTER_WORLD.y, 2);
-		addItem->mainSprite->setScale(scaleOutItems);
 
 		for (size_t count = 0; count < listAward[i].y; count++) {
+			addItem->setType(typesItems[listAward[i].x]);
+			addItem->setPosition(CENTER_WORLD.x, CENTER_WORLD.y, 2);
+			addItem->mainSprite->setScale(scaleOutItems);
 			items.push_back(*addItem);
 		}
 

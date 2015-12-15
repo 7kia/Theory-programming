@@ -253,7 +253,8 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 	{
 		start = 1;
 	}
-
+	///////////////////////////////////////
+	// TODO BUG
 	Item* addItem = new Item;
 	int currentAmount;
 	for (size_t i = start; i < finish; i++) {
@@ -268,7 +269,7 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 
 	}
 	delete addItem;
-	
+	///////////////////////////////////////
 	if(harvest)
 	{
 		playHarvestSoundObject();	
@@ -316,7 +317,8 @@ void Entity::actionMain(world &world, Vector2f pos)
 			spriteEntity->setPosition(posCurrent.x, posCurrent.y);
 			currentLevelFloor += 1;
 
-		} else if (isInListObjects(*listDestroy.harvestObjects, founds.findObject->typeObject->id))
+		} 
+		else if (isInListObjects(*listDestroy.harvestObjects, founds.findObject->typeObject->id))
 		{
 			upgradeObject(*founds.findObject, world);
 		}
