@@ -169,11 +169,11 @@ struct foundObjects {
 };
 
 struct currentCollision {
-	int x;
-	int y;
-	int level;
+	int x = RESET_COLLISION_VALUE;
+	int y = RESET_COLLISION_VALUE;
+	int level = RESET_COLLISION_VALUE;
 	wchar_t block;
-	int idObject;
+	int idObject = RESET_COLLISION_VALUE;
 
 	void initPos(int xPos, int yPos, int zPos);
 	void clear();

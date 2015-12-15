@@ -6,12 +6,6 @@ using namespace std;
 void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount)
 {
 	Enemy* addEnemy = new Enemy();
-
-	emptyObjects &emptyObjects = world.emptyObjects;
-
-	Item &emptyItem = emptyObjects.emptyItem;
-	UnlifeObject &emptyObject = emptyObjects.emptyObject;
-
 	Vector3i pos;
 	pos.z = 1;
 

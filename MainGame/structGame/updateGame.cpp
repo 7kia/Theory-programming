@@ -101,7 +101,7 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 				}
 				else {
 					float partToughness = (PERCENT_INCREASE_TOUGHNESS_BLOCK / 100.f);
-					currentToughness += partToughness * maxToughnessObject;
+					currentToughness += int(partToughness * maxToughnessObject);
 				}
 
 			}

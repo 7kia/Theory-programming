@@ -12,13 +12,12 @@ const float maxTimeWalk = 12.f;
 class Enemy : public Entity
 {
 public:
-	// Для направления взгляда
+	// TODO
 	float rotation;
 
-	// Для взаимодействия с миром
 	idEntityMode currenMode;
 	Item *items;
-	Item *emptyItem;// ИСПРАВЬ
+	Item *emptyItem;
 	int idSelectItem;
 
 	TypeEnemy *type;

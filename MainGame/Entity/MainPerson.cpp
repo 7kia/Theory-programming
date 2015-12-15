@@ -86,8 +86,8 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 void MainPerson::updateView(RenderWindow & window)
 {
 	Vector2u sizeWindow = window.getSize();
-	sizeWindow.x /= 1.f;//SCALE_VIEW
-	sizeWindow.y /= 1.f;// TODO
+	//sizeWindow.x /= 1.f;//SCALE_VIEW
+	//sizeWindow.y /= 1.f;// TODO
 	view->setSize(Vector2f(sizeWindow));
 
 	float tempX = getXPos();

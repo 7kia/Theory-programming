@@ -97,7 +97,8 @@ public:
 
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
-																			//Вспомагательные функции
+	bool isExitFromBorder(float x, float y);
+	//Вспомагательные функции
 	float getXPos();
 	float getYPos();
 	sf::Vector2f getPosition();

@@ -31,9 +31,9 @@ void currentCollision::initPos(int xPos, int yPos, int zPos)
 
 void currentCollision::clear()
 {
-	initPos(0, 0, 0);
-	block = 0;
-	idObject = 0;
+	initPos(RESET_COLLISION_VALUE , RESET_COLLISION_VALUE , RESET_COLLISION_VALUE);
+	block = RESET_COLLISION_VALUE;;
+	idObject = RESET_COLLISION_VALUE;
 }
 
 
@@ -281,7 +281,7 @@ void Entity::resetAtack()
 void Entity::playAnimationWalk(const float deltaTime)
 {
 	animation.timeAnimation += deltaTime * MULTIPLY_STEP_ANIMATION;
-	resetTimeAnimation(animation.timeAnimation, RESET_WALK_ANIMATION);
+	resetTimeAnimation(animation.timeAnimation, float(RESET_WALK_ANIMATION));
 
 	int id = idSoundPaths::stepGrass1Sound;
 	playSoundAfterTime(animation.timeAnimation, id);
@@ -442,13 +442,14 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	float dx(movement.x);
 	float dy(movement.y);
 
-	float x = getXPos();
-	float y = getYPos();
+	Vector2f origin = spriteEntity->getOrigin();
+	float x = getXPos();// -origin.x / 2;
+	float y = getYPos();// -origin.y / 2;
 
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
 
-	if (isExitFromBorder(x, y)) {
+	if (!isExitFromBorder(x, y)) {
 	
 
 		bool isSlowingBlock = false;
@@ -480,25 +481,29 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		/////////////////////////////////////////////
 		// Проверяем пол
 
-		for (int i = int(y / SIZE_BLOCK); i < int((y + size.height) / SIZE_BLOCK); i++) {
-			for (int j = int(x / SIZE_BLOCK); j < int((x + size.width) / SIZE_BLOCK); j++) {
+		// TODO
+		//for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
+			//for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
+		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
 
 
 				// Замедляющие блоки
-				if (isInListBlocks(map[currentLevelFloor][i][j], *listDestroy.slowingBlocks)) {// ИСПРАВЬ
+				if (isInListBlocks(map[currentLevelFloor][i][j] , *listDestroy.slowingBlocks)) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					stamina.needMinusStamina = false;
 					break;
-				} else if (step.stepCurrent == step.stepFirst / slowingStep && !isSlowingBlock) {
+				}
+				else if (step.stepCurrent == step.stepFirst / slowingStep && !isSlowingBlock) {
 					step.stepCurrent = step.stepFirst;
 				}
 
 				// Является непроходимым
-				if (isInListBlocks(map[currentLevelFloor][i][j], *listDestroy.notPassableFloor)) {
+				if (isInListBlocks(map[currentLevelFloor][i][j] , *listDestroy.notPassableFloor)) {
 
 					wasCollision = true;
 
-					collision.initPos(j, i, currentLevelFloor);
+					collision.initPos(j , i , currentLevelFloor);
 					collision.block = map[currentLevelFloor][i][j];
 
 					break;
@@ -508,14 +513,14 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		}
 
 		/////////////////////////////////////////////
-	} else {
+	}
+	else {
 		wasCollision = true;
 	}
 
 	if(wasCollision == false)
 	{
 		if (directions.directionWalk >= Direction::UP_LEFT) {
-			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
 			x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
 			y +=DIAGONAL_SCALE_SPEED * dy * deltaTime;
 		} else {
@@ -524,10 +529,8 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		}
 		collision.clear();
 	}
-	else
-	{
+	else {
 		if (directions.directionWalk >= Direction::UP_LEFT) {
-			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
 			x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
 			y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
 		}
@@ -537,14 +540,14 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		}
 		directions.directionWalk = NONE_DIRECTION;
 
+		if (map[currentLevelFloor][collision.y][collision.x] == field.charBlocks[idBlocks::air]) {
+			currentLevelFloor -= 1;
+			x = float(collision.x * SIZE_BLOCK);
+			y = float(collision.y * SIZE_BLOCK);
+		}
 	}
 
-	if(map[currentLevelFloor][collision.y][collision.x] == field.charBlocks[idBlocks::air])
-	{
-		currentLevelFloor -= 1;
-		x = float(collision.x * SIZE_BLOCK);
-		y = float(collision.y * SIZE_BLOCK);
-	}
+	
 
 	spriteEntity->setPosition(x, y);
 	movement = { 0.f, 0.f };
@@ -553,15 +556,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
-		float dx(movement.x);
-		float dy(movement.y);
-
-		float x;
-		float y;
-		x = getXPos();
-		y = getYPos();
 		wasCollision = false;
-
 
 		Sprite *spriteObject;
 		FloatRect objectBound;
@@ -589,20 +584,15 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 				founds.findObject = &objects[i];
 				founds.findObjectFromList = i;
 
-				// КОСТЫЛЬ
-				TypeUnlifeObject *typeObject = objects[i].typeObject;//typeObject->id != idUnlifeObject::destroyBlockEffect
-				if (true) {
-					Vector2f posObject = spriteObject->getPosition();
+				//////////////////////////////////////////////////////////
+				// TODO
+				Vector2f posObject = spriteObject->getPosition();
 
-					int heightMain = typeObject->mainSize.size.height;
-					int height = typeObject->transparentSize.size.height;
+				int xPos = int((posObject.x + SIZE_BLOCK / 2) / SIZE_BLOCK);
+				int yPos = int((posObject.y + SIZE_BLOCK / 2) / SIZE_BLOCK);
 
-					int xPos = int((posObject.x + SIZE_BLOCK / 2) / SIZE_BLOCK);
-					int yPos = int((posObject.y + SIZE_BLOCK / 2) / SIZE_BLOCK);
-
-					founds.currentTarget = { xPos, yPos, objects[i].currentLevel };
-
-				}
+				founds.currentTarget = { xPos, yPos, objects[i].currentLevel };
+				//////////////////////////////////////////////////////////
 
 				directions.directionWalk = NONE_DIRECTION;
 				break;
@@ -628,9 +618,6 @@ bool Entity::isEmptySlot()
 	return false;
 }
 
-
-//////////////////////////////////////////////////////
-// Поиск неживого объекта
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
 							int &findObjectFromList, int &current, int currentLevel)
 {
@@ -738,6 +725,17 @@ bool Entity::isExitFromBorder(int x, int y)
 	}
 	return true;
 }
+
+bool Entity::isExitFromBorder(float x , float y)
+{
+
+	if ((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0)
+		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
+		return false;
+	}
+	return true;
+}
+
 ////////////////////////////////////////////////////////////////////
 void Entity::throwItem(Field &field, vector<Item> &items)
 {
