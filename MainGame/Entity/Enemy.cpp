@@ -42,15 +42,21 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 
 void initializeEntitys(world &world)// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ 
 {
-	srand(time(nullptr)); // àâòîìàòè÷åñêàÿ ñëó÷àéíîñòü
+	world.Enemys = new vector<Enemy>;
+
+	srand(time(nullptr));
 
 	int *config = world.enemyWaveVariables;
 	config[TIME_UPDATE_DIFFICULT] = config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]
-																	* config[TIME_GENERATE_WAVE_ENEMYS];
-	//////////////////////////////////////////////////////////////
+									* config[TIME_GENERATE_WAVE_ENEMYS];	
+	createEnemys(world);
+	createEmptyEnemy(world);
+}
+
+void createEnemys(world& world)
+{
 	Enemy* addEnemy = new Enemy();
 
-	
 	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
@@ -59,23 +65,21 @@ void initializeEntitys(world &world)// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ
 	amount.push_back(4);
 
 	createOnlyEnemy(world, types, amount);
-	//////////////////////////////////////////////////////////////
+
+	delete addEnemy;
+}
+
+void createEmptyEnemy(world& world)
+{
+	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 	TypeEnemy* typeEnemy = &typesEnemy[idEntity::emptyEnemy];
 
 	emptyObjects &emptyObjects = world.emptyObjects;
-	Item &emptyItem = emptyObjects.emptyItem;
-	UnlifeObject &emptyObject = emptyObjects.emptyObject;
 	Enemy &emptyEnemy = emptyObjects.emptyEnemy;
 
-	emptyEnemy.EnemyInit(*typeEnemy, world, -1, -1, -1);//TODO
-
-	delete addEnemy;
-
+	emptyEnemy.EnemyInit(*typeEnemy, world, -1, -1, -1);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Ñóùíîñòè
 void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 											int xPos, int yPos, int level)
 {
@@ -98,7 +102,6 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 
 	currenMode = idEntityMode::walk;
 
-	// Ñêîðîñòü õîäüáû
 	step.init(SPEED_ENTITY);
 
 	// Òåêñòóðà
@@ -130,7 +133,12 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 	directions.directionWalk = Direction(randomDirection);
 	////////////////////////////////////////////////////////////////////////
 
-	// Ïîêàçàòåëè
+	initFeatures();
+	initProtection();
+}
+
+void Enemy::initFeatures()
+{
 	health.maxHealth = type->features.maxHealth;
 	health.currentHealth = health.maxHealth;
 
@@ -142,17 +150,22 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 
 	thirst.currentThirst = thirst.maxThirst;
 	hungry.currentHungry = hungry.maxHungry;
-
-	protection.init(type->protection.protectionCut,
-									type->protection.protectionCrash,
-									type->protection.protectionUnlife);
-	protection.deathDay = type->protection.deathDay;
-
-	float timeAtack = 1.f;
-	animation.init(type->damage.timeOutputDamage, timeAtack);
-	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, timeAtack, 1.f);
 }
 
+void Enemy::initProtection()
+{
+	protection.init(type->protection.protectionCut,
+					type->protection.protectionCrash,
+					type->protection.protectionUnlife);
+
+	protection.deathDay = type->protection.deathDay;
+}
+
+void Enemy::initDamage()
+{
+	animation.init(type->damage.timeOutputDamage, TIME_ATACK);
+	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, TIME_ATACK, 1.f);
+}
 
 Enemy::~Enemy()
 {
@@ -305,18 +318,6 @@ void Enemy::choiceBlock(world &world)
 		currenMode = idEntityMode::atack;
 		giveDamage = false;
 	}
-	//Vector3i pos = {  };
-	//useTool(pos, world, currentItem);
-
-	//bool isObject = founds.findObject != founds.emptyObject;
-	//if (isObject) {
-
-	// Building
-	//field.dataMap[currentLevelFloor][y][x] = currentItem.typeItem->idAdd.idBlockForUse;
-	
-
-	//}
-
 }
 
 void Enemy::resetFightAnimation()

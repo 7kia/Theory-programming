@@ -3,22 +3,6 @@
 using namespace sf;
 using namespace std;
 
-void world::deleteObjects()
-{
-	int i = 0;
-	int id;
-	while (i < deleteUnlifeObjects->size())
-	{
-		id = (*deleteUnlifeObjects)[i];
-		if(!unlifeObjects->empty())
-		{
-			unlifeObjects->erase(unlifeObjects->begin() + id);
-		}
-		i++;
-	}
-	deleteUnlifeObjects->clear();
-}
-
 void Game::updateWorldTimeCircles()
 {
 	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
@@ -32,19 +16,18 @@ void Game::updateWorldTimeCircles()
 	}
 }
 
-void Game::generateGroups()
+void world::deleteObjects()
 {
-	bool &waveEnemysCreated = world.waveEnemysCreated;
-	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
-	int *config = world.enemyWaveVariables;
-
-	bool nowNight = world.timeDay == night;
-	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
-
-	if (nowNight && needGenerateWave && !waveEnemysCreated) {
-		createGroups(currentWorldTime);
+	int i = 0;
+	int id;
+	while (i < deleteUnlifeObjects->size()) {
+		id = (*deleteUnlifeObjects)[i];
+		if (!unlifeObjects->empty()) {
+			unlifeObjects->erase(unlifeObjects->begin() + id);
+		}
+		i++;
 	}
-
+	deleteUnlifeObjects->clear();
 }
 
 void Game::updateTimeDay(float &time)
@@ -99,35 +82,6 @@ void Game::destroyUnlife()
 	}
 }
 
-void Game::giveAward()
-{
-	if (updateDifficult) {
-		dropAward(awardForLevel[difficult]);
-	}
-	drawAwardPanel();
-	dropAward(*awardForWave);
-}
-
-
-void Game::dropAward(vector<Vector2i> &listAward)
-{
-	TypeItem *typesItems = world.typesObjects.typesItem;
-	Item *addItem = new Item;
-
-	for (int i = 0; i < listAward.size(); i++) {
-		addItem->setType(typesItems[listAward[i].x]);
-		addItem->setPosition(CENTER_WORLD.x, CENTER_WORLD.y, 2);
-		addItem->mainSprite->setScale(scaleOutItems);
-
-		for (int count = 0; count < listAward[i].y; count++) {
-			world.items->push_back(*addItem);
-		}
-
-	}
-
-	delete addItem;
-}
-
 void Game::switchMusic()
 {
 	TimeDay &timeDay = world.timeDay;
@@ -157,43 +111,3 @@ void Game::playNightMusic()
 	music.play();
 }
 
-void Game::createGroups(float time)
-{
-	countWave++;
-	world.waveEnemysCreated = true;
-	Vector3i pos = { 3, 10, 0 };
-
-	///*
-	pos = { 5, 5, 2 };	
-	createSmallGroupSkelets(world, pos);
-
-
-	checkDifficult();
-	generateStrongGroups();
-}
-
-void Game::checkDifficult()
-{
-	int *config = world.enemyWaveVariables;
-
-	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
-	if (updateDifficult) {
-		countWave = 0;
-		difficult++;
-	}
-}
-
-void Game::generateStrongGroups()
-{
-	Vector3i pos;
-
-	if (difficult > 1) {
-		pos = { 10, 10, 1 };
-		createMiddleGroupSkelets(world, pos);
-	}
-	if (difficult > 2) {
-		pos = { 20, 20, 1 };
-		createBigGroupSkelets(world, pos);
-	}
-
-}

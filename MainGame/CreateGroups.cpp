@@ -192,3 +192,57 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 
 	createGroup(world, types, amount, 7, pos);
 }
+
+void Game::generateGroups()
+{
+	bool &waveEnemysCreated = world.waveEnemysCreated;
+	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+	int *config = world.enemyWaveVariables;
+
+	bool nowNight = world.timeDay == night;
+	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
+
+	if (nowNight && needGenerateWave && !waveEnemysCreated) {
+		createGroups(currentWorldTime);
+	}
+
+}
+
+void Game::createGroups(float time)
+{
+	countWave++;
+	world.waveEnemysCreated = true;
+
+	Vector3i pos;
+
+	pos = { 5, 5, 2 };
+	createSmallGroupSkelets(world, pos);
+
+	checkDifficult();
+	generateStrongGroups();
+}
+
+void Game::checkDifficult()
+{
+	int *config = world.enemyWaveVariables;
+
+	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
+	if (updateDifficult) {
+		countWave = 0;
+		difficult++;
+	}
+}
+
+void Game::generateStrongGroups()
+{
+	Vector3i pos;
+
+	if (difficult > 1) {
+		pos = { 10, 10, 1 };
+		createMiddleGroupSkelets(world, pos);
+	}
+	if (difficult > 2) {
+		pos = { 20, 20, 1 };
+		createBigGroupSkelets(world, pos);
+	}
+}

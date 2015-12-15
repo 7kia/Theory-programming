@@ -169,8 +169,6 @@ Game::Game()
 	loadConfig("Configs\\EnemeWaves.conf", world.enemyWaveVariables);
 	difficult = world.enemyWaveVariables[CURRENT_DIFFICULT];
 
-	world.Enemys = new vector<Enemy>;
-
 	initializeTypeEnemy(types);
 	initializeEntitys(world);
 
@@ -182,8 +180,6 @@ Game::Game()
 
 	initializeGUI(gui, textGame);
 
-	initializeClock(clock);
-
 	playDayMusic();
 }
 
@@ -193,16 +189,11 @@ void Game::loadConfig(char *nameConfig, int *variables)
 	FILE *pConfigFile;
 	errno_t eMapFile = fopen_s(&pConfigFile, nameConfig, "r");
 
-	const int amountHelpSymblos = 4;
-
-	// Если файл открыт
-	if (pConfigFile) {
+	if (eMapFile == 0) {
 		
 		bool passString = false;
-		bool searchSymbolEqually = false;
 		bool searchSymbolSpace = false;
 		bool recordValue = false;
-		bool searchName = false;
 		char currentSymbol;
 		string value = "";
 
@@ -245,9 +236,6 @@ void Game::loadConfig(char *nameConfig, int *variables)
 					}
 				}
 			}
-
-				//fgetws(buff, amountHelpSymblos, pMapFile);//Пропускаем остальную часть строки
-
 		}
 		
 	}
@@ -256,7 +244,6 @@ void Game::loadConfig(char *nameConfig, int *variables)
 	}
 }
 
-///*
 void Game::initializeCategorysBreakingObject() 
 {
 	listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
@@ -340,37 +327,6 @@ void Game::initializeHotKeys()
 	}
 }
 
-void Game::createListAward()
-{
-	awardForLevel = new vector<Vector2i>[NUMBER_LEVELS];
-	awardForWave = new vector<Vector2i>;
-
-	awardForWave->push_back({ idItem::healthPotionItem , 1 });
-	awardForWave->push_back({ idItem::mushroomItem , 4 });
-
-	awardForLevel[0].push_back({ idItem::stoneAxeItem , 1 });
-	awardForLevel[0].push_back({ idItem::roastMeatWolfItem , 1 });
-	awardForLevel[0].push_back({ idItem::glassbukketWithWater , 4 });
-	awardForLevel[0].push_back({ idItem::seadlingOakItem , 4 });
-	awardForLevel[0].push_back({ idItem::seadlingApple , 1 });
-
-	awardForLevel[1].push_back({ idItem::stonePickaxItem , 1 });
-	awardForLevel[1].push_back({ idItem::woodBukketWithWaterItem , 16 });
-	awardForLevel[1].push_back({ idItem::glassBottleItem , 4 });
-	awardForLevel[1].push_back({ idItem::planksBlockItem , 40 });
-
-	awardForLevel[2].push_back({ idItem::ironSwordItem , 1 });
-	awardForLevel[2].push_back({ idItem::ironAxeItem , 1 });
-	awardForLevel[2].push_back({ idItem::ironClubItem , 1 });
-	awardForLevel[2].push_back({ idItem::stoneItem , 40 });
-
-	awardForLevel[3].push_back({ idItem::silverSwordItem , 1 });
-	awardForLevel[3].push_back({ idItem::stoneBrickItem , 40 });
-
-}
-
-//*/
-
 void destroyGame(Game & game)
 {
 	// TODO
@@ -380,9 +336,4 @@ void destroyGame(Game & game)
 	delete game.world.listDestroy;
 
 	delete &game;
-}
-
-void initializeClock(Clock &clock)// ИСПРАВЬ
-{
-
 }

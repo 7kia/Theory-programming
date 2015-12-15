@@ -162,4 +162,3 @@ void renderEntitys(Game &game);
 void renderUnlifeObjects(Game &game);
 
 void destroyGame(Game & game);
-void initializeClock(Clock &clock);

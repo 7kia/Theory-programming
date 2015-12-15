@@ -31,6 +31,10 @@ public:
 	int findEnemyFromList;
 	///////////////////////////////////////////////////////
 	void EnemyInit(TypeEnemy &typesEnemy, world &world, int xPos, int yPos, int level);
+	void initFeatures();
+	void initProtection();
+	void initDamage();
+
 	void EnemyDrop(world &world);
 	void playSoundDeath(world &world);
 	~Enemy();

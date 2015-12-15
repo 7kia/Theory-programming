@@ -14,6 +14,8 @@ const float TIME_ATTENTION_SHOW_DAMAGE = 1.5f;
 const sf::Color NORMAL_COLOR(255, 255, 255, 255);
 const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
 
+const float TIME_ATACK = 1.f;
+
 class Entity
 {
 public:

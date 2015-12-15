@@ -115,3 +115,5 @@ void createMiddleGroupSkelets(world &world, Vector3i pos);
 void createBigGroupSkelets(world &world, Vector3i pos);
 
 void initializeEntitys(world &world);
+void createEnemys(world &world);
+void createEmptyEnemy(world &world);
