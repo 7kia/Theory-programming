@@ -3,17 +3,6 @@
 using namespace sf;
 using namespace std;
 
-
-void Game::showFPS(const Time timeSinceLastUpdate)
-{
-	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
-
-	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
-		world.lastSecond += 1.f;
-		printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());
-	}
-}
-
 void Game::render()
 {
 	window.clear();
@@ -162,7 +151,6 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 {
 	int currentLevel = difficult;
 	TypeItem *typesItems = world.typesObjects.typesItem;
-	Item *drawItem = new Item;
 
 	Vector2f centerWindow = mainPerson.view->getCenter();
 	Vector2f posImage = centerWindow;
@@ -178,6 +166,8 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	// TODO
 	Text *currentText = &textGame.texts[idText::panelText];
 	Vector2f posText = centerWindow;
+
+	Item *drawItem = new Item;
 
 	for (size_t i = 0; i < listAward.size(); i++) {
 		string amountItems;
@@ -207,8 +197,17 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 void Game::setPositionAwardText()
 {
 	Vector2f centerWindow = mainPerson.view->getCenter();
-	Text *currentText = &textGame.texts[idText::panelTitleText];
 	Vector2f posText = centerWindow;
+
+	setPositionTitleAward(centerWindow, posText);
+	setPositionHelpTextAward(centerWindow, posText);
+}
+
+
+void Game::setPositionTitleAward(Vector2f const& centerWindow, Vector2f &posText)
+{
+	posText = centerWindow;
+	Text *currentText = &textGame.texts[idText::panelTitleText];
 
 	currentText->setString(TEXT_AWARD);
 	int sizeText = currentText->getCharacterSize();
@@ -217,19 +216,22 @@ void Game::setPositionAwardText()
 	posText.x -= middleText;
 
 	currentText->setPosition(posText);
-	///*
-		////////////////////////////////////////
-	currentText = &textGame.texts[idText::panelHelpText];
+}
+
+void Game::setPositionHelpTextAward(sf::Vector2f const & centerWindow, sf::Vector2f & posText)
+{
+	Text *currentText = &textGame.texts[idText::panelTitleText];
+	int sizeText = currentText->getCharacterSize();
+
 	posText.x = centerWindow.x;
+	currentText = &textGame.texts[idText::panelHelpText];
 	currentText->setString(TEXT_HELP_AWARD);
-	middleText = float(computeMiddleString(*currentText));
+
+	float middleText = float(computeMiddleString(*currentText));
 	posText.y += SHIFT_Y_AWARD_HELP_TEXT + sizeText;
 	posText.x -= middleText;
 
 	currentText->setPosition(posText);
-
-	//*/
-
 }
 
 void Game::setPositionEndGameText()
@@ -246,9 +248,12 @@ void Game::setPositionEndGameText()
 
 	currentText->setPosition(posText);
 
+
 	currentText = &textGame.texts[idText::panelHelpText];
 	posText.x = centerWindow.x;
+
 	currentText->setString(TEXT_UNDER_VICTORY);
+
 	middleText = float(computeMiddleString(*currentText));
 	posText.y += SHIFT_Y_AWARD_HELP_TEXT + sizeText;
 	posText.x -= middleText;
@@ -328,8 +333,7 @@ bool isExitFromWindow(FloatRect const& rectWindow, FloatRect &rectObject)
 	bool checkRight = rectObject.left < rectWindow.left + rectWindow.width;
 	bool checkTop = rectObject.top + rectObject.height < rectWindow.top;
 	bool checkLow = rectObject.top < rectWindow.top + rectWindow.height;
-	//rectWindow.intersects(rectObject)
-	//
+
 	if ((checkLeft || checkRight) && (checkTop || checkLow))
 	{
 		return true;
@@ -344,5 +348,15 @@ void Game::drawInWindow(sf::Sprite &sprite, sf::FloatRect const& rectWindow)
 		if (isExitFromWindow(rectWindow, rectSprite)) {
 			window.draw(sprite);
 		}
+	}
+}
+
+void Game::showFPS(const Time timeSinceLastUpdate)
+{
+	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+
+	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
+		world.lastSecond += 1.f;
+		printf("FPS: %f\n", 1.f / timeSinceLastUpdate.asSeconds());
 	}
 }

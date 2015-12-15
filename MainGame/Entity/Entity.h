@@ -16,6 +16,12 @@ const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
 
 const float TIME_ATACK = 1.f;
 
+const float MULTIPLY_STEP_ANIMATION = 5;
+const int NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION = 6;
+const int RESET_WALK_ANIMATION = 4;
+const int RESET_ATACK_ANIMATION = 3;
+const int SHIFT_ANIMATION_ATACK = 4;
+
 class Entity
 {
 public:

@@ -296,18 +296,16 @@ void Enemy::defineDirectionLook(Vector2f movemoment)
 
 void Enemy::choiceBlock(world &world)
 {
-	//TypeItem *typesItem = world.typesObjects.typesItem;
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 
 	int x = collision.x;
 	int y = collision.y;
-	int level = collision.level;//currentLevelFloor + 1;
+	int level = collision.level;
 
 	int xShift = 0;
 	int yShift = 0;
 	choiceDirectionLook(xShift, yShift);
 
-	founds.currentTarget = { x, y, level };
 
 	/////////////////////////////////////////////
 	Field &field = world.field;
@@ -318,21 +316,14 @@ void Enemy::choiceBlock(world &world)
 	if (idNature <= idNatureObject::Unbreaking) {
 		idNature = founds.findObject->typeObject->idNature;
 	}
+	else
+	{
+		founds.currentTarget = { x, y, level };
+	}
 	if (idNature != idNatureObject::Unbreaking) {
 		currenMode = idEntityMode::atack;
 		giveDamage = false;
 	}
-	/*	else if (founds.findObjectFromList > -1) {
-		UnlifeObject &findObject = *founds.findObject;
-		idNature = findObject.typeObject->idNature;
-		if (idNature > idNatureObject::Unbreaking) {
-
-		}
-	}
-
-	*/
-
-
 }
 
 void Enemy::resetFightAnimation()
@@ -429,8 +420,8 @@ bool Enemy::findLadder(world &world, Vector3i pos)
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 	wchar_t ladder = field.charBlocks[idBlocks::woodLadder];
 	for (int i = -1; i <= 1; i++) {
-		for (int j = -1; j <= 1; j++) {// TODO
-			if (map[level][y + j][x + i] == ladder) {//(x + float(i) / 2) * SIZE_BLOCK,   (y + float(j) / 2) * SIZE_BLOCK
+		for (int j = -1; j <= 1; j++) {
+			if (map[level][y + j][x + i] == ladder) {
 				Vector2f posLadder = { float(x + i) * SIZE_BLOCK, float(y + j) * SIZE_BLOCK };
 				actionMain(world, posLadder);
 				return true;
@@ -584,7 +575,7 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 
 
 					if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor)) {
-						dx = dy = 0;
+						// TODO
 						wasCollision = true;
 
 						findEnemy = &objects[i];

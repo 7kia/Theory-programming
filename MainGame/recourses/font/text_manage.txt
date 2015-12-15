@@ -1,0 +1,14 @@
+
+W - move up
+A - move left
+S - move down
+D - move right
+
+E - up ladder, grow(for apple tree)
+C - down ladder
+Q - throw item
+L_Shift - run
+
+Left button mouse - atack or build wall
+Right button mouse - eating or drinking
+(if choice food or drink)

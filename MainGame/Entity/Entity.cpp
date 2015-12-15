@@ -284,17 +284,13 @@ void Entity::resetAtack()
 
 void Entity::playAnimationWalk(const float deltaTime)
 {
-	float pauseStep = 5, resetAnimation = 4;
-
-	//playSound(animation.timeAnimation, databaseSound.startSounds[idSoundEntity::stepGrass], idSoundEntity::stepGrass);
-
-	animation.timeAnimation += deltaTime * pauseStep;
-	resetTimeAnimation(animation.timeAnimation, resetAnimation);
+	animation.timeAnimation += deltaTime * MULTIPLY_STEP_ANIMATION;
+	resetTimeAnimation(animation.timeAnimation, RESET_WALK_ANIMATION);
 
 	int id = idSoundPaths::stepGrass1Sound;
 	playSoundAfterTime(animation.timeAnimation, id);
 
-	int shiftWidth = directions.directionLook / 6;// TODO
+	int shiftWidth = directions.directionLook / NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION;// TODO
 
 	int currentWidth = size.width;
 	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
@@ -303,30 +299,32 @@ void Entity::playAnimationWalk(const float deltaTime)
 		currentWidth *= -1;
 	}
 
-	spriteEntity->setTextureRect(IntRect(xPos, size.height * int(animation.timeAnimation), currentWidth, size.height));
+	int currentHeight = size.height * int(animation.timeAnimation);
+	spriteEntity->setTextureRect(IntRect(xPos, currentHeight, currentWidth, size.height));
 }
 
 void Entity::playAnimationAtack(const float deltaTime)
 {
-	float pauseStep = 5, resetAnimation = 3;
-	int shiftAnimation = 4;
+	float &timeAnimation = animation.currentTimeFightAnimation;
+	int width = size.width;
+	int height = size.height;
+
+	timeAnimation += deltaTime;
+	resetTimeAnimation(timeAnimation, animation.timeFightAnimation);
 
 
-	animation.currentTimeFightAnimation += deltaTime;
-	resetTimeAnimation(animation.currentTimeFightAnimation, animation.timeFightAnimation);
+	int shiftWidth = directions.directionLook / NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION;// TODO
 
+	int currentWidth = width;
 
-	int shiftWidth = directions.directionLook / 6;// TODO
-
-	int currentWidth = size.width;
 	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
 
 	if (shiftWidth) {
 		currentWidth *= -1;
 	}
 
-	spriteEntity->setTextureRect(IntRect(xPos, size.height * (int(animation.currentTimeFightAnimation * resetAnimation) + shiftAnimation),
-															 currentWidth, size.height));
+	int currentHeight = height * (int(timeAnimation * RESET_ATACK_ANIMATION) + SHIFT_ANIMATION_ATACK);
+	spriteEntity->setTextureRect(IntRect(xPos, currentHeight, currentWidth, height));
 }
 
 void Entity::playSoundAfterTime(float time, const int idSound)
@@ -929,10 +927,11 @@ void Entity::renderCurrentItem(sf::RenderWindow& window)
 		bool condition = directions.directionLook < DOWN_LEFT;
 		bool condition2 = directions.directionLook != UP_LEFT;
 		int shiftAngle = shiftAngleUseItem * (condition && condition2) + !condition * 4;
-		// TODO
+
 		int shiftX;
 		int shiftY;
 
+		// TODO ANIMATION
 		bool prickBlow = rand() % 2 == 1;
 		choceShiftUseItem(shiftX, shiftY, prickBlow);
 

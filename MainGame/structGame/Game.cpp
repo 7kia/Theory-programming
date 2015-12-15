@@ -86,10 +86,6 @@ void Game::informationAboutSelect(float x, float y)
 		Sprite *mainSprite = items[i].mainSprite;
 		FloatRect itemBound = mainSprite->getGlobalBounds();
 
-		// TODO
-		//Sprite *useSpiteObject = items[i].spriteForUse;// ÈÑÏÐÀÂÜ
-		//FloatRect itemUseBound = useSpiteObject->getGlobalBounds();
-		//|| itemUseBound.contains(x, y)
 		if (itemBound.contains(x, y)) {
 			if (level >= mainPerson.currentLevelFloor
 					&& level <= mainPerson.currentLevelFloor + 2) {

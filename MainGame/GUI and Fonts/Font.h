@@ -10,6 +10,10 @@ const sf::String TEXT_HELP_AWARD = "Items will drop in center map.";
 const sf::String TEXT_VICTORY = "Victory";
 const sf::String TEXT_UNDER_VICTORY = "You end game.";
 
+// TODO
+// Для окошка с подсказками по управлению
+const sf::String TEXT_MANAGEMENT = "Management";
+
 const int SHIFT_Y_AWARD_TITLE_TEXT = 20;
 const int SHIFT_Y_AWARD_HELP_TEXT = 40;
 

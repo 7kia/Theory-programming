@@ -86,10 +86,6 @@ struct Game
 	world world;
 	std::vector<Vector2i> *awardForLevel;
 	std::vector<Vector2i> *awardForWave;
-	////////////////////////////////////
-	// Ходьба по карте(для противников
-	float minTimeWalk = 4.f;
-	float maxTimeWalk = 12.f;// TODO
 
 	sf::Clock clock;
 
@@ -101,8 +97,6 @@ struct Game
 	void loadConfig(char *nameConfig, int *variables);
 	void initializeCategorysBreakingObject();
 	void initializeHotKeys();
-
-	void createListAward();
 	void informationAboutSelect(float x, float y);
 
 	// processEvents.cpp
@@ -121,34 +115,40 @@ struct Game
 	void updateUnlifeObjects(const float& deltaTime);
 	void upgradeObject(UnlifeObject& object);
 
-	// worldCircle.cpp
 	void checkDifficult();
 	void generateStrongGroups();
 	void createGroups(float time);
 	void generateGroups();
 
+	// GiveAward.cpp
+	void createListAward();
+	void giveAward();
 	void drawAwardPanel();
-	void drawEndGamepanel();
-	void setPositionAwardText();
-	void setPositionEndGameText();
-	void drawAwardItems(std::vector<sf::Vector2i> &listAward);
 	void dropAward(std::vector<sf::Vector2i> &listAward);
 
+	// worldCircle.cpp
+	void updateWorldTimeCircles();
 	void updateTimeDay(float &time);
 	void setNight();
 	void setDay();
 	void destroyUnlife();
-	void giveAward();
+	void switchMusic();
 	void playDayMusic();
 	void playNightMusic();
-	void switchMusic();
-	void updateWorldTimeCircles();
-
 	// renderGame.cpp
 	void render();
 	void drawInWindow(sf::Sprite &sprite, sf::FloatRect const& rectWindow);
 	void renderEntitys(sf::FloatRect const& rectWindow);
 	void renderUnlifeObjects(sf::FloatRect const& rectWindow);
+
+	void drawEndGamepanel();
+	void setPositionAwardText();
+	void setPositionTitleAward(sf::Vector2f const& centerWindow, sf::Vector2f &posText);
+	void setPositionHelpTextAward(sf::Vector2f const& centerWindow, sf::Vector2f &posText);
+
+	void setPositionEndGameText();
+	void drawAwardItems(std::vector<sf::Vector2i> &listAward);
+
 	void renderItems(sf::FloatRect const& rectWindow);
 	void renderMap(sf::FloatRect const& rectWindow);
 	void renderGui();
