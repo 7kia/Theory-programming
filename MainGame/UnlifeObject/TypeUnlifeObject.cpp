@@ -170,8 +170,10 @@ void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 {
 	int id = idUnlifeObject::empty;
+	int idNature = idNatureObject::NoneNature;
+
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
-	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", storage, id, 0);
+	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", storage, id, idNature);
 	typesObject->defineToughness(false, 0);
 
 	typesObject->mainSize.init(0, 0, 0, 0);

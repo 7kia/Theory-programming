@@ -147,6 +147,7 @@ Game::Game()
 
 	initializeField(world.field);
 
+	playMusic = false;
 	::sounds = &world.databaseSound;
 
 	typesObjectsInWorld &types = world.typesObjects;
@@ -176,7 +177,10 @@ Game::Game()
 
 	initializeGUI(gui, textGame);
 
-	playDayMusic();
+	if(playMusic)
+	{
+		playDayMusic();
+	}
 }
 
 void Game::loadConfig(char *nameConfig, int *variables)

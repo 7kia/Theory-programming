@@ -236,7 +236,7 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 {
 	//////////////////////////////////////////////////
 	// Выпадение предметов
-	Item* addItem = new Item;
+
 	vector<Item> &items = *world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
@@ -254,6 +254,7 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 		start = 1;
 	}
 
+	Item* addItem = new Item;
 	int currentAmount;
 	for (size_t i = start; i < finish; i++) {
 

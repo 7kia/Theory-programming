@@ -7,48 +7,12 @@ void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
 	UnlifeObject &findObject = *founds.findObject;
 
-	int shift = 0;
-	
-	Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
-		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
+	int idFinded = founds.findObject->typeObject->id;
+	int idEmpty = founds.emptyObject->typeObject->id;
+	bool isObject = idFinded != idEmpty && &findObject;
 
-
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
-	bool find = false;
-	int idObject;
-	Sprite *spriteCheck;
-	for (int i = 0; i < objects.size(); i++) {
-		idObject = objects[i].typeObject->id;
-		spriteCheck = objects[i].spriteObject;
-		//if (idObject == idUnlifeObject::destroyBlockEffect) {
-		if (idObject == idUnlifeObject::destroyBlockEffect) {
-			shift = 1;
-		}
-		else {
-			shift = 0;
-		}
-		posAdd = { float(pos.x + shift) * SIZE_BLOCK - SIZE_BLOCK / 2,
-			float(pos.y + shift) * SIZE_BLOCK - SIZE_BLOCK / 2 };
-
-			if (spriteCheck->getGlobalBounds().contains(posAdd)) {
-				// йняршкэ
-				founds.findObject = &objects[i];
-				find = true;
-				break;
-			}
-		//}
-	}
-
-
-	if (find) {
-
-		int idFinded = founds.findObject->typeObject->id;
-		int idEmpty = founds.emptyObject->typeObject->id;
-		bool isObject = idFinded != idEmpty && &findObject;
-
-		if (isObject) {
-			useToolToObject(pos, world, currentItem);
-		}
+	if (isObject) {
+		useToolToObject(pos, world, currentItem);
 	}
 }
 
@@ -65,7 +29,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
 
 
-	if (canBreakTheItem && isDestroyEffect) {
+	if (canBreakTheItem) {
 
 
 		breakFindObject(currentItem);
@@ -74,8 +38,12 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 
 
 		if (findObject->isDestroyed()) {
-			if (!isInListObjects(*world.deleteUnlifeObjects, founds.findObjectFromList)) {
+			vector<int> &deleteUnlifeObjects = *world.deleteUnlifeObjects;
+			if (!isInListObjects(deleteUnlifeObjects, founds.findObjectFromList)) {
+
 				destroyFindObject(isDestroyEffect, pos, world);
+				deleteUnlifeObjects.push_back(founds.findObjectFromList);
+
 				breakItem(currentItem);
 			}
 		}
@@ -96,29 +64,45 @@ void Entity::breakFindObject(Item &currentItem)
 
 void Entity::breakNearCollision(world &world)
 {
-	Vector3i &posUse = founds.currentTarget;
-	Field &field = world.field;
-	wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
-	//int idNature;
-	//idNature = field.idsNature[field.findIdBlock(*block)];
-
-
-	bool isEffect = founds.findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
 
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 	vector<int> *listBreaking = currentItem.typeItem->destroy;
-	int idNature = defineIdNature(world.field, isEffect, posUse);
-	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
+	Field &field = world.field;
 
-	if (canBreakTheItem && !isDestroyEffect(posUse, world)) {
-		createDestroyEffect(world, posUse);
-		//founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
-		playObjectBreakSound(idNature);
-		resetAtack();
+	Vector3i &posUse = founds.currentTarget;
+	wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
+
+	int idNature;
+	idNature = field.idsNature[field.findIdBlock(*block)];
+
+	bool isObject = isUnlifeObject(posUse, world);
+
+	if (idNature <= idNatureObject::Unbreaking) {
+		if(isObject)
+		{
+				idNature = founds.findObject->typeObject->idNature;
+		}
+		else
+		{
+			idNature = idNatureObject::NoneNature;
+		}
 	}
-	else {
-		useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
+
+	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
+	if (canBreakTheItem) {
+
+		if (!isObject && *block != field.charBlocks[idBlocks::air]) {
+			createDestroyEffect(world, posUse);
+			playObjectBreakSound(idNature);
+			resetAtack();
+		}
+		else if(isObject){
+			useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
+		}
+
 	}
+
+	
 }
 
 void Entity::destroyFindObject(bool isEffect, Vector3i pos, world &world)
@@ -138,6 +122,7 @@ void Entity::destroyFindObject(bool isEffect, Vector3i pos, world &world)
 	}
 	else {
 		founds.findObject->dropObject(posDrop, world, false);
+		
 	}
 
 }
@@ -179,6 +164,30 @@ bool Entity::isDestroyEffect(sf::Vector3i & pos, world & world)
 				return true;
 			}
 		}
+	}
+
+	return false;
+}
+
+bool Entity::isUnlifeObject(sf::Vector3i & pos, world & world)
+{
+	vector<UnlifeObject> &objects = *world.unlifeObjects;
+
+	Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
+		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
+
+	int idObject;
+	Sprite *spriteCheck;
+	for (int i = 0; i < objects.size(); i++) {
+		idObject = objects[i].typeObject->id;
+		spriteCheck = objects[i].spriteObject;
+		//if (idObject == idUnlifeObject::destroyBlockEffect) {
+			if (spriteCheck->getGlobalBounds().contains(posAdd)) {
+				// йняршкэ
+				founds.findObject = &objects[i];
+				return true;
+			}
+		//}
 	}
 
 	return false;

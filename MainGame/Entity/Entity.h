@@ -89,7 +89,7 @@ public:
 	void playObjectDropSound(sf::Vector2f pos);
 	// Взаимодейтсвие с миром
 	bool isDestroyEffect(sf::Vector3i &pos, world &world);
-
+	bool isUnlifeObject(sf::Vector3i& pos, world& world);
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const float deltaTime);
 	bool isInUseField(float x, float y, bool under);

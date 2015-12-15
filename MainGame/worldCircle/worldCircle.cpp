@@ -56,14 +56,19 @@ void Game::updateTimeDay(float &time)
 void Game::setNight()
 {
 	world.worldTime.restart();
-	switchMusic();
+	if(playMusic)
+	{
+		switchMusic();
+	}
 	world.timeDay = night;
 }
 
 void Game::setDay()
 {
 	world.worldTime.restart();
-	switchMusic();
+	if (playMusic) {
+		switchMusic();
+	}
 	world.timeDay = day;
 }
 

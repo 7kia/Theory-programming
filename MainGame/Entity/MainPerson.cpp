@@ -80,7 +80,7 @@ void initializeMainPerson(MainPerson &mainPerson, world &world)
 
 	mainPerson.damage.damageMultiplirer = 1;
 
-
+	mainPerson.giveDamage = false;
 }
 
 void MainPerson::updateView(RenderWindow & window)
@@ -272,6 +272,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				}
 			}
 			else {
+				
 				////////////////////////////////////
 				// TODO
 				Vector2i posBlock = { enemy.founds.currentTarget.x, enemy.founds.currentTarget.y };
@@ -280,6 +281,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 					enemy.playAnimationAtack(deltaTime);
 					if (enemy.giveDamage) {
+						/*
 						Vector3i &posUse = enemy.founds.currentTarget;
 						Field &field = world.field;
 						wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
@@ -299,7 +301,8 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 
 							enemy.useTool(posUse, world, enemy.itemFromPanelQuickAccess[enemy.idSelectItem]);
 						}
-					
+					*/
+						enemy.breakNearCollision(world);
 
 					}
 				}
@@ -311,6 +314,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 					enemy.resetAtack();
 				}
 				////////////////////////////////////
+				
 			}
 		}
 	}
@@ -364,7 +368,7 @@ void MainPerson::useItem(world &world, Event &event, Vector2f pos)
 				{
 					idNature = founds.findObject->typeObject->idNature;
 				}
-				if (idNature != idNatureObject::Unbreaking ) {
+				if (idNature != idNatureObject::Unbreaking && isInListObjects(*currentItem.typeItem->destroy, idNature)) {
 					currenMode = idEntityMode::atack;
 					giveDamage = false;
 				}

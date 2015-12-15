@@ -71,6 +71,8 @@ struct Game
 
 	GUI gui;
 	TextGame textGame;
+
+	bool playMusic;
 	Music music;
 	StateGame stateGame = StateGame::gameState;
 
