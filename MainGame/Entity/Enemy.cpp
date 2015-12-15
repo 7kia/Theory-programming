@@ -3,9 +3,9 @@
 
 using namespace std;
 
-void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount)
+void createOnlyEntity(world &world, std::vector<TypeEntity*> &types, std::vector<int> amount)
 {
-	Enemy* addEnemy = new Enemy();
+	Entity* addEntity = new Entity();
 
 	emptyObjects &emptyObjects = world.emptyObjects;
 
@@ -15,20 +15,20 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 	Vector3i pos;
 	pos.z = 1;
 
-	int &countEnemy = world.countEntity;
+	int &countEntity = world.countEntity;
 
 	for (int countTypes = 0; countTypes < types.size(); countTypes++) {
 		for (int amountAdd = 0; amountAdd < amount[countTypes]; amountAdd++) {
-			countEnemy++;
-			if (countEnemy > AMOUNT_ENTITY) {
+			countEntity++;
+			if (countEntity > AMOUNT_ENTITY) {
 				break;
 			}
 
 			pos.x = 5;
 			pos.y = 11;
 
-			addEnemy->EnemyInit(*types[countTypes], world, pos.x, pos.y, pos.z);
-			world.Enemys->push_back(*addEnemy);
+			addEntity->EntityInit(*types[countTypes], world, pos.x, pos.y, pos.z);
+			world.Entitys->push_back(*addEntity);
 			isPlaceForCreate(world, pos);
 
 		}
@@ -37,7 +37,7 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 	types.clear();
 	amount.clear();
 
-	delete addEnemy;
+	delete addEntity;
 }
 
 void initializeEntitys(world &world)// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ 
@@ -48,6 +48,7 @@ void initializeEntitys(world &world)// ÄÎÁÀÂËÅÍÈÅ ÑÓÙÍÎÑÒÈ
 
 	int *config = world.enemyWaveVariables;
 	config[TIME_UPDATE_DIFFICULT] = config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]
+<<<<<<< HEAD
 									* config[TIME_GENERATE_WAVE_ENEMYS];	
 	createEnemys(world);
 	createEmptyEnemy(world);
@@ -59,11 +60,24 @@ void createEnemys(world& world)
 
 	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 	std::vector<TypeEnemy*> types;
+=======
+																	* config[TIME_GENERATE_WAVE_ENEMYS];
+	//////////////////////////////////////////////////////////////
+	Entity* addEntity = new Entity();
+
+	
+	TypeEntity *typesEntity = world.typesObjects.typesEntity;
+	std::vector<TypeEntity*> types;
+>>>>>>> master
 	std::vector<int> amount;
 
-	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
+	types.push_back(&typesEntity[idEntity::wolfEntity]);
+	types.push_back(&typesEntity[idEntity::mainPersonEntity]);
+
+	amount.push_back(4);
 	amount.push_back(4);
 
+<<<<<<< HEAD
 	createOnlyEnemy(world, types, amount);
 
 	delete addEnemy;
@@ -81,18 +95,43 @@ void createEmptyEnemy(world& world)
 }
 
 void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
+=======
+	createOnlyEntity(world, types, amount);
+	//////////////////////////////////////////////////////////////
+	TypeEntity* typeEntity = &typesEntity[idEntity::emptyEntity];
+
+	emptyObjects &emptyObjects = world.emptyObjects;
+	Item &emptyItem = emptyObjects.emptyItem;
+	UnlifeObject &emptyObject = emptyObjects.emptyObject;
+	Entity &emptyEntity = emptyObjects.emptyEntity;
+
+	emptyEntity.EntityInit(*typeEntity, world, -1, -1, -1);//TODO
+
+	delete addEntity;
+
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Ñóùíîñòè
+void Entity::EntityInit(TypeEntity &typesEntity, world &world,
+>>>>>>> master
 											int xPos, int yPos, int level)
 {
 	spriteEntity = new Sprite;
 
-	type = &typesEnemy;
+	type = &typesEntity;
 
 	soundBase = &world.databaseSound;
-
-	itemFromPanelQuickAccess = new Item;
+	
+	itemFromPanelQuickAccess = new Item[type->amountSlots];
 	itemFromPanelQuickAccess->setType(type->typeItem);
 	idSelectItem = 0;
 	itemFromPanelQuickAccess[idSelectItem].amount = type->typeItem.maxAmount;
+	for (int i = 1; i < type->amountSlots; i++)
+	{
+		itemFromPanelQuickAccess[i] = world.emptyObjects.emptyItem;
+	}
 
 	size.width = type->featuresSprite.size.width;
 	size.height = type->featuresSprite.size.height;
@@ -110,7 +149,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 
 
 	emptyObjects &emptyObjects = world.emptyObjects;
-	founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject);
+	founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject, &emptyObjects.emptyEntity);
 
 	// Ïîçèöèÿ è íàïðàâëåíèå
 	currentLevelFloor = level;
@@ -168,11 +207,11 @@ void Enemy::initDamage()
 	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, TIME_ATACK, 1.f);
 }
 
-Enemy::~Enemy()
+Entity::~Entity()
 {
 }
 
-void Enemy::randomWalk(const float deltaTime) {
+void Entity::randomWalk(const float deltaTime) {
 
 	if (currenMode == idEntityMode::walk) {
 		if (step.currentTime < step.timeWalk && directions.directionWalk != Direction::NONE_DIRECTION) {
@@ -195,7 +234,7 @@ void Enemy::randomWalk(const float deltaTime) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
+void Entity::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 {
 	bool isDestroy = currentItem.typeItem->features.isDestroy;
 	if (isDestroy) {
@@ -235,7 +274,7 @@ void Enemy::takeDamage(DamageInputAndOutput damage, Item &currentItem)
 
 }
 
-void Enemy::choiceDirections(Vector2f movemoment)
+void Entity::choiceDirections(Vector2f movemoment)
 {
 	//TODO
 	float zero = SIZE_BLOCK / 3;
@@ -264,7 +303,7 @@ void Enemy::choiceDirections(Vector2f movemoment)
 	}
 }
 
-void Enemy::defineDirectionLook(Vector2f movemoment)
+void Entity::defineDirectionLook(Vector2f movemoment)
 {
 	//TODO
 	float zero = SIZE_BLOCK / 3;
@@ -294,7 +333,7 @@ void Enemy::defineDirectionLook(Vector2f movemoment)
 }
 
 
-void Enemy::choiceBlock(world &world)
+void Entity::choiceBlock(world &world)
 {
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -326,25 +365,25 @@ void Enemy::choiceBlock(world &world)
 	}
 }
 
-void Enemy::resetFightAnimation()
+void Entity::resetFightAnimation()
 {
 	animation.currentTimeFightAnimation = 0.f;
 }
 
-void Enemy::searchWay(world &world)
+void Entity::searchWay(world &world)
 {
-	Item &itemEnemy = itemFromPanelQuickAccess[idSelectItem];
+	Item &itemEntity = itemFromPanelQuickAccess[idSelectItem];
 
-	Vector3i posEnemy = { int(getXPos() / SIZE_BLOCK),
+	Vector3i posEntity = { int(getXPos() / SIZE_BLOCK),
 		int(getXPos() / SIZE_BLOCK),
 		collision.level };
 
-	if (findLadder(world, posEnemy)) {
+	if (findLadder(world, posEntity)) {
 
-		String nameCurrentItem = itemEnemy.typeItem->features.name;
+		String nameCurrentItem = itemEntity.typeItem->features.name;
 		String nameEmptyItem = founds.emptyItem->typeItem->features.name;
 
-		bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
+		bool isLadder = itemEntity.typeItem->features.category == idCategoryItem::block;
 		bool isNotEmpty = nameCurrentItem != nameEmptyItem;
 
 		if (isNotEmpty && isLadder) {
@@ -354,10 +393,10 @@ void Enemy::searchWay(world &world)
 	}
 }
 
-void Enemy::checkLevelHealth(Vector2f &movemoment)
+void Entity::checkLevelHealth(Vector2f &movemoment)
 {
-	entityHealth &healthEnemy = health;
-	bool isLowHealth = healthEnemy.currentHealth < (healthEnemy.maxHealth / 4);
+	entityHealth &healthEntity = health;
+	bool isLowHealth = healthEntity.currentHealth < (healthEntity.maxHealth / 4);
 	if (isLowHealth) {
 		entityStandPanic(movemoment);
 	}
@@ -366,7 +405,7 @@ void Enemy::checkLevelHealth(Vector2f &movemoment)
 	}
 }
 
-void Enemy::entityStandPanic(Vector2f &movemoment)
+void Entity::entityStandPanic(Vector2f &movemoment)
 {
 	bool canPanic = type->converse.canPanic;
 	currenMode = idEntityMode::panic;
@@ -381,7 +420,7 @@ void Enemy::entityStandPanic(Vector2f &movemoment)
 	}
 }
 
-void Enemy::buildLadder(world &world)
+void Entity::buildLadder(world &world)
 {
 
 	int x = int(getXPos() / SIZE_BLOCK);
@@ -408,8 +447,12 @@ void Enemy::buildLadder(world &world)
 
 }
 
+<<<<<<< HEAD
 
 bool Enemy::findLadder(world &world, Vector3i pos)
+=======
+bool Entity::findLadder(world &world, Vector3i pos)
+>>>>>>> master
 {
 
 	int x = int(getXPos() / SIZE_BLOCK);
@@ -431,7 +474,7 @@ bool Enemy::findLadder(world &world, Vector3i pos)
 	return false;
 }
 
-void Enemy::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts)
+void Entity::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts)
 {
 	int level = currentLevelFloor + 1;
 	int x = posStart.x;
@@ -470,7 +513,7 @@ void Enemy::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posS
 	}
 }
 
-void Enemy::redefineDirectionWalk()
+void Entity::redefineDirectionWalk()
 {
 	step.currentTime = 0;
 	step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
@@ -479,7 +522,7 @@ void Enemy::redefineDirectionWalk()
 	directions.directionWalk = Direction(randomDirection);
 }
 
-void Enemy::checkBlock(Field& field, float distanse)
+void Entity::checkBlock(Field& field, float distanse)
 {
 	int x = 0;
 	int y = 0;
@@ -544,7 +587,7 @@ void Enemy::checkBlock(Field& field, float distanse)
 	checkInDirectionWalk(field, distanse, startPosition, shifts);
 }
 
-void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
+void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
 	if (wasCollision == false) {
 		float &dx(movement.x);
@@ -564,10 +607,10 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 			entityBound = spriteEntity->getGlobalBounds();
 
 
-			vector<Enemy> &objects = *enemys;
+			vector<Entity> &objects = *enemys;
 			for (int i = 0; i != objects.size(); ++i) {
 
-				if (id != i && findEnemyFromList != -1) {
+				if (id != i && founds.findEntityFromList != -1) {
 					levelUnlifeObject = objects[i].currentLevelFloor;
 
 					spriteObject = objects[i].spriteEntity;
@@ -578,8 +621,8 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 						// TODO
 						wasCollision = true;
 
-						findEnemy = &objects[i];
-						findEnemyFromList = i;
+						founds.findEntity = &objects[i];
+						founds.findEntityFromList = i;
 						directions.directionWalk = NONE_DIRECTION;
 						break;
 					}

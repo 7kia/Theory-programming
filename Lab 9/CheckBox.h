@@ -23,6 +23,10 @@ namespace featureCheckBox {
 	const sf::Vector2f SIZE_CROSS = { 5.f, 20.f };
 	const sf::Color CROSS_COLOR(200, 0, 0, 255);
 	const float CROSS_ANGLE = 45.f;
+
+	const float SCALE_CROSS_X = 0.2f;
+	const float SCALE_CROSS_Y = 0.8f;
+
 }
 
 
@@ -43,11 +47,11 @@ struct checkBox {
 	};
 
 	sf::RectangleShape box;
-	void BoxInitialize(sf::Vector2f const& position);
+	void BoxInitialize(sf::Vector2f const& position, sf::Vector2f const& sizeBox);
 
 	Cross cross;
 
-	checkBox(sf::Vector2f const& position);
+	checkBox(sf::Vector2f const& position, sf::Vector2f const& sizeBox);
 	bool DoesHit(sf::Vector2f const& point) const;
 
 	void Draw(sf::RenderWindow &window);

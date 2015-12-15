@@ -3,7 +3,7 @@
 // PATHs
 
 typedef enum {
-	mainPerson,
+	mainPersonPath,
 	wolf,
 	skelet,
 

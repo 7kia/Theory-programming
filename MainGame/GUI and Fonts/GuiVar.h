@@ -83,12 +83,12 @@ const int X_LEVEL_MANA_GUI = WIDTH_BARS_GUI + WIDTH_LEVEL_BAR_GUI;// добавление 
 const int Y_LEVEL_MANA_GUI = 0;
 
 const sf::Vector2f NORMAL_SCALE = { 1.f, 1.f };
-const sf::Vector2f scaleGuiForEnemy = { 0.5f, 0.5f };
+const sf::Vector2f scaleGuiForEntity = { 0.5f, 0.5f };
 const sf::Vector2f scaleGuiForMainPerson = { 0.5f, 0.5f };
-const sf::Vector2f normalSizeGuiForEnemy = { 1.f, 1.f };
+const sf::Vector2f normalSizeGuiForEntity = { 1.f, 1.f };
 
 // Отображение нанесйнного урона
-const int shiftEnemyDamage = 5;
+const int shiftEntityDamage = 5;
 
 // Окошко над панелью быстрого доступа
 const int WIDTH_ITEM_OVER_PANEL_INFO = 600;

@@ -12,11 +12,20 @@ Program::Program()
 														TITLE_PROGRAM, Style::Default, settings);
 
 	Vector2f pos = CENTER_WINDOW;
-	chechBox1 = new checkBox(pos);
+	Vector2f size = { 20.f, 20.f };
+	chechBox1 = new checkBox(pos, size);
 
-	pos.y += featureCheckBox::SIZE_CHECKBOX.y * 2;
-	lineEdit1 = new lineEdit(pos, assets);
+	pos.y += size.y * 2;
+	lineEdit1 = new lineEdit(pos, featureLineEdit::SIZE_LINE_EDIT, assets);
 
+	chechBox1->handler = [&](bool cheked) {
+		if (cheked) {
+			window.setTitle(featureWindow::TITLE_PROGRAM);
+		}
+		else {
+			window.setTitle(featureWindow::TWO_TITLE_PROGRAM);
+		}
+	};
 }
 
 Program::~Program()

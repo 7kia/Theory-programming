@@ -11,6 +11,8 @@ void Game::informationAboutSelect(float x, float y)
 
 	Field &field = world.field;
 
+	foundObjects &founds = mainPerson->founds;
+
 	int xPosBlock = int(x / SIZE_BLOCK);
 	int yPosBlock = int(y / SIZE_BLOCK);
 
@@ -21,16 +23,16 @@ void Game::informationAboutSelect(float x, float y)
 	infoFloor.setString("Floor : not select");
 	for (int l = 0; l < HEIGHT_MAP; l++) {
 		// Рисуем только текущий уровень
-		if (l >= mainPerson.currentLevelFloor - 1
-				&& l <= mainPerson.currentLevelFloor + 2) {
+		if (l >= mainPerson->currentLevelFloor - 1
+				&& l <= mainPerson->currentLevelFloor + 2) {
 			for (int i = 0; i < LONG_MAP; i++) {
 				for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 
 
 					if ((xPosBlock == j) && (yPosBlock == i)) {
-						if (l == mainPerson.currentLevelFloor) {
+						if (l == mainPerson->currentLevelFloor) {
 							infoFloor.setString("Floor : " + field.findCharBlocks(field.dataMap[l][i][j]));
-						} else if (l == mainPerson.currentLevelFloor + 1) {
+						} else if (l == mainPerson->currentLevelFloor + 1) {
 							infoBlock.setString("Block : " + field.findCharBlocks(field.dataMap[l][i][j]));
 						}
 					}
@@ -45,9 +47,9 @@ void Game::informationAboutSelect(float x, float y)
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
 	emptyObjects &emptyObjects = world.emptyObjects;
-	mainPerson.founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject);
-	mainPerson.findEnemy = mainPerson.emptyEnemy;
-	mainPerson.founds.findObjectFromList = -1;
+	founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject, &emptyObjects.emptyEntity);
+	founds.findEntity = founds.emptyEntity;
+	founds.findObjectFromList = -1;
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
 
@@ -60,13 +62,13 @@ void Game::informationAboutSelect(float x, float y)
 		FloatRect objectAltBound = transparentSpiteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y) || objectAltBound.contains(x, y)) {
-			if (level >= mainPerson.currentLevelFloor
-					&& level <= mainPerson.currentLevelFloor + 1) {
+			if (level >= mainPerson->currentLevelFloor
+					&& level <= mainPerson->currentLevelFloor + 1) {
 				String name = unlifeObjects[i].typeObject->name;
 				if (name != "") {
 
-					mainPerson.founds.findObjectFromList = i;
-					mainPerson.founds.findObject = &unlifeObjects[i];
+					founds.findObjectFromList = i;
+					founds.findObject = &unlifeObjects[i];
 					infoUnlifeObject.setString("UnlifeObject : " + name);
 				}
 			}
@@ -77,7 +79,7 @@ void Game::informationAboutSelect(float x, float y)
 	vector<Item> &items = *world.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
-	mainPerson.founds.findItemFromList = -1;
+	founds.findItemFromList = -1;
 	infoItem.setString("Item : not select");
 	for (int i = 0; i != items.size(); ++i) {
 
@@ -87,12 +89,12 @@ void Game::informationAboutSelect(float x, float y)
 		FloatRect itemBound = mainSprite->getGlobalBounds();
 
 		if (itemBound.contains(x, y)) {
-			if (level >= mainPerson.currentLevelFloor
-					&& level <= mainPerson.currentLevelFloor + 2) {
+			if (level >= mainPerson->currentLevelFloor
+					&& level <= mainPerson->currentLevelFloor + 2) {
 				String name = items[i].typeItem->features.name;
 				if (name != "") {
-					mainPerson.founds.findItemFromList = i;
-					mainPerson.founds.findItem = &items[i];
+					founds.findItemFromList = i;
+					founds.findItem = &items[i];
 					infoItem.setString("Item : " + name);
 				}
 			}
@@ -100,28 +102,28 @@ void Game::informationAboutSelect(float x, float y)
 
 	}
 
-	vector<Enemy>& Enemys = *world.Enemys;
-	Text& infoEnemys = textGame.texts[idText::infoEntity];
+	vector<Entity>& Entitys = *world.Entitys;
+	Text& infoEntitys = textGame.texts[idText::infoEntity];
 
-	mainPerson.findEnemy = &emptyObjects.emptyEnemy;
-	mainPerson.findEnemyFromList = -1;
-	infoEnemys.setString("Entity : not select");
-	for (int i = 0; i != Enemys.size(); ++i) {
+	founds.findEntity = &emptyObjects.emptyEntity;
+	founds.findEntityFromList = -1;
+	infoEntitys.setString("Entity : not select");
+	for (int i = 0; i != Entitys.size(); ++i) {
 
-		int level = Enemys[i].currentLevelFloor;
+		int level = Entitys[i].currentLevelFloor;
 
-		Sprite *spriteObject = Enemys[i].spriteEntity;
+		Sprite *spriteObject = Entitys[i].spriteEntity;
 		FloatRect objectBound = spriteObject->getGlobalBounds();
 
 		if (objectBound.contains(x, y)) {
-			if (level >= mainPerson.currentLevelFloor - 1
-					&& level <= mainPerson.currentLevelFloor + 1) {
-				String name = Enemys[i].type->name;
+			if (level >= mainPerson->currentLevelFloor - 1
+					&& level <= mainPerson->currentLevelFloor + 1) {
+				String name = Entitys[i].type->name;
 				if (name != "") {
 
-					mainPerson.findEnemyFromList = i;
-					mainPerson.findEnemy = &Enemys[i];
-					infoEnemys.setString("Entity : " + name);
+					founds.findEntityFromList = i;
+					founds.findEntity = &Entitys[i];
+					infoEntitys.setString("Entity : " + name);
 				}
 			}
 		}
@@ -163,12 +165,19 @@ Game::Game()
 
 	// TODO
 	loadConfig("Configs\\EnemeWaves.conf", world.enemyWaveVariables);
+<<<<<<< HEAD
 	difficult = world.enemyWaveVariables[CURRENT_DIFFICULT];
+=======
 
-	initializeTypeEnemy(types);
+	world.Entitys = new vector<Entity>;
+>>>>>>> master
+
+	initializeTypeEntity(types);
 	initializeEntitys(world);
 
-	initializeMainPerson(mainPerson, world);
+	view = new View;
+	mainPerson = new Entity;
+	initializeMainPerson(*mainPerson, world, *view);
 	initializeHotKeys();
 
 	createTextsAndFonts(textGame);
@@ -326,10 +335,11 @@ void Game::initializeHotKeys()
 void destroyGame(Game & game)
 {
 	// TODO
+	delete game.mainPerson;
+
 	delete game.world.items;
 	delete game.world.unlifeObjects;
-	delete game.world.Enemys;
+	delete game.world.Entitys;
 	delete game.world.listDestroy;
 
-	delete &game;
 }

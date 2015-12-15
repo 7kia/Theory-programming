@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+<<<<<<< HEAD
 #include "TypeEnemy.h"
 
 class MainPerson;
@@ -22,8 +23,13 @@ public:
 	int idSelectItem;
 
 	TypeEnemy *type;
+=======
+>>>>>>> master
 
+/*
+#include "TypeEntity.h"
 
+<<<<<<< HEAD
 	///////////////////////////////////////////////////////
 	// Для уничтожения врагов
 	Enemy *findEnemy;
@@ -56,20 +62,26 @@ public:
 	void buildLadder(world &world);
 	void givenForPersonDamage(MainPerson & person);
 	void hurtPerson(MainPerson &enemy, world &world, const float deltaTime);
+=======
 
-	void checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts);
-	void redefineDirectionWalk();
-	void checkBlock(Field &field, float distanse);
-	void interactionWithEntity(std::vector<Enemy>* enemys, int id, const float deltaTime);
+struct TypeEntity;
+class UnlifeObject;
+>>>>>>> master
 
 
-};
+<<<<<<< HEAD
+=======
+const float minTimeWalk = 4.f;
+const float maxTimeWalk = 12.f;
+>>>>>>> master
 
-struct foundsByEnemy
+
+struct foundsByEntity
 {
 	foundObjects foundsObjects;
-	Enemy *findEnemy;
-	Enemy *emptyEnemy;
-	int findEnemyFromList;
-	void init(Item &item, UnlifeObject &object, Enemy &enemy);
+	Entity *findEntity;
+	Entity *emptyEntity;
+	void init(Item &item, UnlifeObject &object, Entity &enemy);
 };
+
+*/

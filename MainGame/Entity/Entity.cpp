@@ -14,12 +14,14 @@ void entityProtection::init(float cut, float crash, float unlife)
 	protectionUnlife = unlife;
 }
 
-void foundObjects::init(Item *item, UnlifeObject *object)
+void foundObjects::init(Item *item, UnlifeObject *object, Entity *enemy)
 {
 	emptyItem = item;
 	emptyObject = object;
+	emptyEntity = enemy;
 	findItem = emptyItem;
 	findObject = emptyObject;
+	findEntity = emptyEntity;
 }
 
 void currentCollision::initPos(int xPos, int yPos, int zPos)
@@ -452,8 +454,8 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime)
 {
 
-	float dx(movement.x);
-	float dy(movement.y);
+	float &dx(movement.x);
+	float &dy(movement.y);
 
 	float x = getXPos();
 	float y = getYPos();
@@ -487,7 +489,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 				// Проверяем по списку проходимых блоков
 				if (isInListBlocks(map[currentLevelFloor + 1][i][j], *listDestroy.passableBlocks) == false) {
 					wasCollision = true;
-
 					collision.initPos(j, i, currentLevelFloor + 1);
 					collision.block = map[currentLevelFloor + 1][i][j];
 
@@ -519,7 +520,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 				if (isInListBlocks(map[currentLevelFloor][i][j], *listDestroy.notPassableFloor)) {
 
 					wasCollision = true;
-
 					collision.initPos(j, i, currentLevelFloor);
 					collision.block = map[currentLevelFloor][i][j];
 
@@ -531,36 +531,27 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 		/////////////////////////////////////////////
 	} else {
+<<<<<<< HEAD
 		wasCollision = true;
-	}
-
-	if(wasCollision == false)
-	{
-		if (directions.directionWalk >= Direction::UP_LEFT) {
-			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-			x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
-			y +=DIAGONAL_SCALE_SPEED * dy * deltaTime;
-		} else {
-			x += dx * deltaTime;
-			y += dy * deltaTime;
-		}
-		collision.clear();
-	}
-	else
-	{
-		if (directions.directionWalk >= Direction::UP_LEFT) {
-			// Чтобы скорость по диагонали была равной скорости по вертикали и горизонтали
-			x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
-			y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
-		}
-		else {
-			x -= dx * deltaTime;
-			y -= dy * deltaTime;
-		}
+=======
+		
+		wasCollision = true;
+		dx = dy = 0;
 		directions.directionWalk = NONE_DIRECTION;
+>>>>>>> master
+	}
+
+
+	if (wasCollision) {
+		if (map[currentLevelFloor][collision.y][collision.x] == field.charBlocks[idBlocks::air]) {
+			currentLevelFloor -= 1;
+			x = float(collision.x * SIZE_BLOCK);
+			y = float(collision.y * SIZE_BLOCK);
+		}
 
 	}
 
+<<<<<<< HEAD
 	if(map[currentLevelFloor][collision.y][collision.x] == field.charBlocks[idBlocks::air])
 	{
 		currentLevelFloor -= 1;
@@ -570,13 +561,22 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 	spriteEntity->setPosition(x, y);
 	movement = { 0.f, 0.f };
+=======
+	//spriteEntity->setPosition(x, y);
+>>>>>>> master
 }
 
 
 void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
 {
+<<<<<<< HEAD
 		float dx(movement.x);
 		float dy(movement.y);
+=======
+	if (wasCollision == false) {
+		float &dx(movement.x);
+		float &dy(movement.y);
+>>>>>>> master
 
 		float x;
 		float y;
@@ -607,7 +607,11 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
 				wasCollision = true;
 
+<<<<<<< HEAD
 				//founds.init(pos)
+=======
+
+>>>>>>> master
 				founds.findObject = &objects[i];
 				founds.findObjectFromList = i;
 
@@ -628,13 +632,44 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 
 				directions.directionWalk = NONE_DIRECTION;
 				break;
-			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
+			}
+			else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
 				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
-			} else {
+			}
+			else {
 				transparentSpiteObject->setColor(NORMAL_COLOR);
 			}
 
 		}
+<<<<<<< HEAD
+=======
+
+	}
+
+	if (wasCollision == false) {
+
+		if (directions.directionWalk >= Direction::UP_LEFT) {
+			movement.x = DIAGONAL_SCALE_SPEED * movement.x * deltaTime;
+			movement.y = DIAGONAL_SCALE_SPEED * movement.y * deltaTime;
+		}
+		else
+		{
+			movement.x *= deltaTime;
+			movement.y *= deltaTime;
+		}
+		collision.clear();
+
+	}
+	else
+	{
+		movement.x *= -deltaTime;
+		movement.y *= -deltaTime;
+	}
+		
+	spriteEntity->move(movement);
+	movement = { 0.f, 0.f };
+	
+>>>>>>> master
 }
 
 

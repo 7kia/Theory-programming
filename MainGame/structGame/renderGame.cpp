@@ -7,7 +7,7 @@ void Game::render()
 {
 	window.clear();
 
-	mainPerson.updateView(window);
+	mainPerson->updateView(window, *view);
 	Vector2f centerWindow = window.getView().getCenter();
 
 	Vector2f sizeWindow = { float(DEFAULT_WIDTH_WINDOW), float(DEFAULT_HEIGHT_WINDOW) };
@@ -17,13 +17,13 @@ void Game::render()
 	renderItems(rectWindow);
 
 
-	mainPerson.renderCurrentItem(window);
-	window.draw(*mainPerson.spriteEntity);
+	mainPerson->renderCurrentItem(window);
+	window.draw(*mainPerson->spriteEntity);
 
 	renderEntitys(rectWindow);
 	renderUnlifeObjects(rectWindow);
 
-	gui.setPositionGui(window, mainPerson, *world.Enemys, textGame);
+	gui.setPositionGui(window, *mainPerson, *view, *world.Entitys, textGame);
 
 	renderGui();
 
@@ -34,7 +34,7 @@ void Game::renderMap(FloatRect const& rectWindow)
 {
 	Field &field = world.field;
 
-	int l = mainPerson.currentLevelFloor;
+	int l = mainPerson->currentLevelFloor;
 	int lowBorder = l - 1;
 	if (lowBorder < 0)
 		lowBorder = 0;
@@ -49,7 +49,7 @@ void Game::renderMap(FloatRect const& rectWindow)
 
 		for (int i = 0; i < LONG_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
-				field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
+				field.setTypeSprite(mainPerson->currentLevelFloor, l, i, j);
 
 				drawInWindow(*field.floorSprite, rectWindow);
 				drawInWindow(*field.wallSprite, rectWindow);
@@ -66,6 +66,7 @@ void Game::renderItems(FloatRect const& rectWindow)
 	int levelItem;
 	int levelPlayer;
 	for (int i = 0; i != items.size(); ++i) {
+<<<<<<< HEAD
 		levelItem = items[i].currentLevel;
 		levelPlayer = mainPerson.currentLevelFloor;
 		if (levelItem >= levelPlayer
@@ -77,6 +78,17 @@ void Game::renderItems(FloatRect const& rectWindow)
 			} else if (levelItem == levelPlayer + 1) {
 				items[i].mainSprite->setColor(NORMAL_VIEW);
 			} else if (levelItem == levelPlayer + 2) {
+=======
+		if (items[i].currentLevel >= mainPerson->currentLevelFloor
+				&& items[i].currentLevel <= mainPerson->currentLevelFloor + 2) {
+
+
+			if (items[i].currentLevel == mainPerson->currentLevelFloor) {
+				items[i].mainSprite->setColor(DOWN_VIEW);
+			} else if (items[i].currentLevel == mainPerson->currentLevelFloor + 1) {
+				items[i].mainSprite->setColor(NORMAL_VIEW);
+			} else if (items[i].currentLevel == mainPerson->currentLevelFloor + 2) {
+>>>>>>> master
 				items[i].mainSprite->setColor(UP_VIEW);
 			}
 
@@ -88,18 +100,19 @@ void Game::renderItems(FloatRect const& rectWindow)
 
 void Game::renderEntitys(FloatRect const& rectWindow)
 {
-	vector<Enemy>& Enemys = *world.Enemys;
+	vector<Entity>& Entitys = *world.Entitys;
 
 	int enemyLevel;
-	const int personLevel = mainPerson.currentLevelFloor;
-	for (int i = 0; i < Enemys.size(); ++i) {
-		enemyLevel = Enemys[i].currentLevelFloor;
+	const int personLevel = mainPerson->currentLevelFloor;
+	for (int i = 0; i < Entitys.size(); ++i) {
+		enemyLevel = Entitys[i].currentLevelFloor;
 		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
 
 			
-			Enemys[i].renderCurrentItem(window);
+			Entitys[i].renderCurrentItem(window);
 
 			Color currentColor;
+<<<<<<< HEAD
 			if (personLevel) {
 				currentColor = NORMAL_COLOR;
 			}
@@ -112,6 +125,17 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 			Enemys[i].spriteEntity->setColor(currentColor);
 
 			drawInWindow(*Enemys[i].spriteEntity, rectWindow);
+=======
+			if (personLevel) currentColor = NORMAL_COLOR;
+			else if (personLevel - 1) currentColor = DOWN_VIEW;
+			else if (personLevel + 1) currentColor = UP_VIEW;
+			Entitys[i].spriteEntity->setColor(currentColor);
+
+			drawInWindow(*Entitys[i].spriteEntity, rectWindow);
+
+			//window.draw(*Entitys[i].spriteEntity);
+			//window.draw(*game.items->item[i].spriteForUse);// ÈÑÏÐÀÂÜ
+>>>>>>> master
 		}
 
 	}
@@ -121,8 +145,12 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 {
 
+<<<<<<< HEAD
 	int levelPerson = mainPerson.currentLevelFloor;
 	int levelObject;
+=======
+	int currentLevel = mainPerson->currentLevelFloor;
+>>>>>>> master
 	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
 	bool inView;
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
@@ -152,7 +180,7 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	int currentLevel = difficult;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f centerWindow = view->getCenter();
 	Vector2f posImage = centerWindow;
 	size_t amountTypeItems = listAward.size();
 
@@ -196,7 +224,12 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 
 void Game::setPositionAwardText()
 {
+<<<<<<< HEAD
 	Vector2f centerWindow = mainPerson.view->getCenter();
+=======
+	Vector2f centerWindow = view->getCenter();
+	Text *currentText = &textGame.texts[idText::panelTitleText];
+>>>>>>> master
 	Vector2f posText = centerWindow;
 
 	setPositionTitleAward(centerWindow, posText);
@@ -236,7 +269,7 @@ void Game::setPositionHelpTextAward(sf::Vector2f const & centerWindow, sf::Vecto
 
 void Game::setPositionEndGameText()
 {
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f centerWindow = view->getCenter();
 	Text *currentText = &textGame.texts[idText::panelTitleText];
 	Vector2f posText = centerWindow;
 
@@ -292,7 +325,7 @@ void Game::renderGui()
 {
 	if (stateGame == pauseState
 			|| stateGame == endGameState) {
-		Vector2f centerWindow = mainPerson.view->getCenter();
+		Vector2f centerWindow = view->getCenter();
 		panels &panels = gui.panels;
 
 		panel &panel = panels.awardPanel;

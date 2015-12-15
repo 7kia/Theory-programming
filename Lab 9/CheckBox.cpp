@@ -3,15 +3,15 @@
 using namespace sf;
 using namespace featureCheckBox;
 
-checkBox::checkBox(Vector2f const& position)
+checkBox::checkBox(Vector2f const& position, sf::Vector2f const& sizeBox)
 {
-	BoxInitialize(position);
-	cross.Initialize(position, SIZE_CHECKBOX);
+	BoxInitialize(position, sizeBox);
+	cross.Initialize(position, sizeBox);
 }
 
-void checkBox::BoxInitialize(sf::Vector2f const& position)
+void checkBox::BoxInitialize(sf::Vector2f const& position, sf::Vector2f const& sizeBox)
 {
-	box.setSize(SIZE_CHECKBOX);
+	box.setSize(sizeBox);
 	box.setFillColor(BACK_COLOR_NOT_CHANGED);
 
 	box.setOutlineThickness(THIKNESS);
@@ -21,6 +21,10 @@ void checkBox::BoxInitialize(sf::Vector2f const& position)
 
 void Cross::Initialize(Vector2f const& position, Vector2f const& sizeBox)
 {
+	Vector2f SIZE_CROSS = sizeBox;
+	SIZE_CROSS.x *= SCALE_CROSS_X;
+	SIZE_CROSS.y *= SCALE_CROSS_Y;
+
 	firstShape.setSize(SIZE_CROSS);
 	firstShape.setFillColor(CROSS_COLOR);
 	firstShape.setRotation(CROSS_ANGLE);

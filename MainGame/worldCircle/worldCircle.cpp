@@ -18,6 +18,7 @@ void Game::updateWorldTimeCircles()
 
 void world::deleteObjects()
 {
+<<<<<<< HEAD
 	int i = 0;
 	int id;
 	while (i < deleteUnlifeObjects->size()) {
@@ -26,6 +27,17 @@ void world::deleteObjects()
 			unlifeObjects->erase(unlifeObjects->begin() + id);
 		}
 		i++;
+=======
+	bool &waveEntitysCreated = world.waveEntitysCreated;
+	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+	int *config = world.enemyWaveVariables;
+
+	bool nowNight = world.timeDay == night;
+	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
+
+	if (nowNight && needGenerateWave && !waveEntitysCreated) {
+		createGroups(currentWorldTime);
+>>>>>>> master
 	}
 	deleteUnlifeObjects->clear();
 }
@@ -49,7 +61,7 @@ void Game::updateTimeDay(float &time)
 		{
 			drawEndGamepanel();
 		}
-		world.waveEnemysCreated = false;
+		world.waveEntitysCreated = false;
 	}
 }
 
@@ -69,12 +81,12 @@ void Game::setDay()
 
 void Game::destroyUnlife()
 {
-	std::vector<Enemy>& Enemys = *world.Enemys;
+	std::vector<Entity>& Entitys = *world.Entitys;
 	int i = 0;
-	while (i < Enemys.size()) {
-		if (Enemys[i].protection.deathDay) {
-			Enemys[i].playSoundDeath(world);
-			Enemys.erase(Enemys.begin() + i);
+	while (i < Entitys.size()) {
+		if (Entitys[i].protection.deathDay) {
+			Entitys[i].playSoundDeath(world);
+			Entitys.erase(Entitys.begin() + i);
 			world.countEntity--;
 			continue;
 		}
@@ -111,3 +123,47 @@ void Game::playNightMusic()
 	music.play();
 }
 
+<<<<<<< HEAD
+=======
+void Game::createGroups(float time)
+{
+	countWave++;
+	world.waveEntitysCreated = true;
+	Vector3i pos = { 3, 10, 0 };
+
+	///*
+	pos = { 5, 5, 2 };	
+	createSmallGroupSkelets(world, pos);
+
+
+	checkDifficult();
+	generateStrongGroups();
+}
+
+void Game::checkDifficult()
+{
+	int *config = world.enemyWaveVariables;
+
+	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
+	if (updateDifficult) {
+		countWave = 0;
+		difficult++;
+	}
+
+}
+
+void Game::generateStrongGroups()
+{
+	Vector3i pos;
+
+	if (difficult > 1) {
+		pos = { 10, 10, 1 };
+		createMiddleGroupSkelets(world, pos);
+	}
+	if (difficult > 2) {
+		pos = { 20, 20, 1 };
+		createBigGroupSkelets(world, pos);
+	}
+
+}
+>>>>>>> master
