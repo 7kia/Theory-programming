@@ -55,14 +55,14 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 	//currentText->setScale(normalSize);
 }
 
-void barMainFeatures::renderTextEntity(Entity &enemy, int & current, int & max, int shift,
+void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, int shift,
 																			RenderWindow & window, TextGame & textGame)
 {
 	Text *currentText = &textGame.texts[idText::levelBar];
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
-	pos.y -= Y_SHIFT_BARS * scaleGuiForEntity.y;
-	pos.y -= enemy.size.height / 2 + scaleGuiForEntity.y * HEIGHT_BARS_GUI * shift;
+	pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * shift;
 
 
 	currentText->setString(toStringCharacter(current, max));
@@ -73,13 +73,13 @@ void barMainFeatures::renderTextEntity(Entity &enemy, int & current, int & max, 
 	window.draw(*currentText);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barMainFeatures::renderDamageForEntity(Entity &enemy, TextGame &textGame, RenderWindow &window, int shift)
+void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, RenderWindow &window, int shift)
 {
 	Text *currentText = &textGame.texts[idText::inputDamage];
 
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
-	pos.y -= enemy.size.height / 2 + scaleGuiForEntity.y * HEIGHT_BARS_GUI * (3 + shift) + shiftEntityDamage;
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shift) + shiftEnemyDamage;
 
 	// Если нанесли урон то отображаем
 	int damage = enemy.damage.inputDamage;
@@ -96,14 +96,14 @@ void barMainFeatures::renderDamageForEntity(Entity &enemy, TextGame &textGame, R
 	}
 }
 
-void barMainFeatures::renderBarMainPerson(Entity &mainPerson, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
+void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																					featuresWindow features, TextGame &textGame)
 {
 	RenderWindow &window = *features.window;
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 	Vector2f pos;
-	pos.x = centerWindow.x - sizeWindow.x / 2;//* scaleGuiForEntity.y
+	pos.x = centerWindow.x - sizeWindow.x / 2;//* scaleGuiForEnemy.y
 	pos.y = centerWindow.y + sizeWindow.y / 2 - float(HEIGHT_BARS_GUI)  * shift;
 
 	renderBar(current, max, sprite, NORMAL_SCALE,
@@ -111,22 +111,22 @@ void barMainFeatures::renderBarMainPerson(Entity &mainPerson, int &current, int 
 
 }
 
-void barMainFeatures::renderBarEntity(Entity &enemy, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
+void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																		 TextGame &textGame, RenderWindow &window)
 {
 	int shiftBar = enemy.mana.maxMana > 0;
 	Vector2f pos = enemy.spriteEntity->getPosition();
-	pos.x -= scaleGuiForEntity.x * WIDTH_BARS_GUI / 2;
-	pos.y -= enemy.size.height / 2 + scaleGuiForEntity.y * HEIGHT_BARS_GUI * (shift + shiftBar);
+	pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
 
 
-	renderDamageForEntity(enemy, textGame, window, shiftBar);
+	renderDamageForEnemy(enemy, textGame, window, shiftBar);
 
 	if (max) {
-		render(current, max, sprite, scaleGuiForEntity,
+		render(current, max, sprite, scaleGuiForEnemy,
 					 sizes, pos, window);
 
-		renderTextEntity(enemy, current, max, shift,
+		renderTextEnemy(enemy, current, max, shift,
 										window, textGame);
 	}
 

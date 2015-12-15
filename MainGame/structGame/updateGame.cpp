@@ -8,7 +8,7 @@ void Game::update(const float &deltaTime)
 {
 	processEvents(deltaTime);
 
-	if (mainPerson->isDeath == false
+	if (mainPerson.isDeath == false
 			&& stateGame != pauseState
 			&& stateGame != endGameState) {
 		updatePlayer(deltaTime);
@@ -20,39 +20,27 @@ void Game::update(const float &deltaTime)
 
 void Game::updatePlayer(const float &deltaTime)
 {
-<<<<<<< HEAD
 	mainPerson.update(deltaTime);
 	if(mainPerson.currenMode == idEntityMode::atack || mainPerson.giveDamage)
-=======
-	mainPerson->update(deltaTime);
-	if(mainPerson->currenMode == idEntityMode::atack)
->>>>>>> master
 	{
-		mainPerson->updateAtack(world, deltaTime);
+		mainPerson.updateAtack(world, deltaTime);
 	}
-<<<<<<< HEAD
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
 	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
 	mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
-=======
-	mainPerson->interactionWithMap(world.field, *world.listDestroy, deltaTime);
-	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
-	mainPerson->getCoordinateForView(mainPerson->getPosition(), *view);
->>>>>>> master
 
-	mainPerson->updateView(window, *view);
-	window.setView(*view);
+	mainPerson.updateView(window);
+	window.setView(*mainPerson.view);
 
-	//printf("Angle %f \n", mainPerson->rotation);
+	//printf("Angle %f \n", mainPerson.rotation);
 }
 
 
 void Game::updateEntity(const float deltaTime)
 {
-	vector<Entity>& Entitys = *world.Entitys;
+	vector<Enemy>& Enemys = *world.Enemys;
 	Field &field = world.field;
-<<<<<<< HEAD
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
@@ -63,16 +51,6 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].currenMode = Enemys[i].currenMode;
 		mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
-=======
-	for (int i = 0; i < Entitys.size(); ++i) {
-		Entitys[i].update(deltaTime);
-		Entitys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
-		Entitys[i].interactionWithEntity(world.Entitys, i, deltaTime);
-		Entitys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
-
-		mainPerson->attractionEntity(Entitys[i], world, deltaTime);
-		Entitys[i].randomWalk(deltaTime);
->>>>>>> master
 	}
 }
 

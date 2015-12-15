@@ -15,14 +15,14 @@ struct barMainFeatures
 	void renderText(int &current, int& max, sf::Vector2f scale,
 									sf::Vector2f &position, sf::RenderWindow &window, TextGame &textGame);
 
-	void renderTextEntity(Entity & enemy, int & current, int & max, int shift,
+	void renderTextEnemy(Enemy & enemy, int & current, int & max, int shift,
 											 sf::RenderWindow & window, TextGame & textGame);
 
-	void renderDamageForEntity(Entity & enemy, TextGame & textGame, sf::RenderWindow & window, int shift);
+	void renderDamageForEnemy(Enemy & enemy, TextGame & textGame, sf::RenderWindow & window, int shift);
 
-	void renderBarMainPerson(Entity &mainPerson, int & current, int & max, int shift, sf::Sprite &sprite, featuresSprite & sizes,
+	void renderBarMainPerson(MainPerson &mainPerson, int & current, int & max, int shift, sf::Sprite &sprite, featuresSprite & sizes,
 													 featuresWindow features, TextGame & textGame);
-	void renderBarEntity(Entity & enemy, int & current, int & max, int shift, sf::Sprite &sprite,
+	void renderBarEnemy(Enemy & enemy, int & current, int & max, int shift, sf::Sprite &sprite,
 											featuresSprite & sizes, TextGame & textGame, RenderWindow & window);
 };
 

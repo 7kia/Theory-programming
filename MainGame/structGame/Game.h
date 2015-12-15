@@ -76,9 +76,7 @@ struct Game
 
 	Keyboard::Key keys[hotKeys::amountKeys];
 
-	sf::View *view;
-
-	Entity *mainPerson;
+	MainPerson mainPerson;
 
 	bool updateDifficult = false;
 	int difficult = 0;

@@ -15,15 +15,14 @@ const float RADIUSE_VIEW = 300.f;
 
 enum idEntity
 {
-	mainPersonEntity,
-	wolfEntity,
-	skeletEntity,
-	skeletMinerEntity,
-	skeletLumbermillEntity,
-	skeletDiggerEntity,
-	skeletBuilderEntity,
-	emptyEntity,
-	amountEntity
+	wolfEnemy,
+	skeletEnemy,
+	skeletMinerEnemy,
+	skeletLumbermillEnemy,
+	skeletDiggerEnemy,
+	skeletBuilderEnemy,
+	emptyEnemy,
+	amountEnemy
 };
 
 enum idEntityMode
@@ -32,7 +31,7 @@ enum idEntityMode
 	fight,
 	atack,
 	panic,
-	amountEntityMode
+	amountEnemyMode
 };
 
 
@@ -156,26 +155,17 @@ struct entityProtection {
 	void init(float cut, float crash, float unlife);
 };
 
-struct Entity;
 struct foundObjects {
-	sf::Vector2i currentTarget;
-
 	UnlifeObject *findObject;
-	UnlifeObject* emptyObject;
 	int findObjectFromList;
+	UnlifeObject* emptyObject;
 
-<<<<<<< HEAD
 	sf::Vector3i currentTarget;
-=======
-	Entity *findEntity;
-	Entity *emptyEntity;
-	int findEntityFromList;
->>>>>>> master
 
 	Item *findItem;
 	Item *emptyItem;
 	int findItemFromList;
-	void init(Item *item, UnlifeObject *object, Entity *enemy);
+	void init(Item *item, UnlifeObject *object);
 };
 
 struct currentCollision {

@@ -2,7 +2,7 @@
 
 using namespace std;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void itemFeatures::renderNameItem(Entity &mainPerson, Vector2f& position, featuresWindow features,
+void itemFeatures::renderNameItem(MainPerson& mainPerson, Vector2f& position, featuresWindow features,
 																	TextGame &textGame)
 {
 	RenderWindow &window = *features.window;
@@ -38,12 +38,12 @@ void itemFeatures::renderIconWithScale(Sprite &sprite, sf::Vector2f position, sf
 void itemFeatures::renderBar(Sprite &sprite, sf::Vector2f position, sf::RenderWindow& window)
 {
 	sprite.setPosition(position);
-	sprite.setScale(scaleGuiForEntity);
+	sprite.setScale(scaleGuiForEnemy);
 	window.draw(sprite);
-	sprite.setScale(normalSizeGuiForEntity);
+	sprite.setScale(normalSizeGuiForEnemy);
 }
 
-void itemFeatures::renderFeatures(Entity &mainPerson, featuresWindow features,
+void itemFeatures::renderFeatures(MainPerson& mainPerson, featuresWindow features,
 																	TextGame &textGame, barMainFeatures &bars)
 {
 	RenderWindow &window = *features.window;
@@ -86,8 +86,8 @@ void itemFeatures::renderFeatures(Entity &mainPerson, featuresWindow features,
 
 		float levelToughness = float(currentItem.currentToughness) / currentItem.maxToughness;
 
-		pos.x += X_SHIFT_BARS * scaleGuiForEntity.x;
-		pos.y += Y_SHIFT_BARS * scaleGuiForEntity.y;
+		pos.x += X_SHIFT_BARS * scaleGuiForEnemy.x;
+		pos.y += Y_SHIFT_BARS * scaleGuiForEnemy.y;
 		int currentToughness = int(WIDTH_LEVEL_BAR_GUI * levelToughness);
 		bars.levelStamina.setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, currentToughness, HEIGHT_LEVEL_BAR_GUI));
 

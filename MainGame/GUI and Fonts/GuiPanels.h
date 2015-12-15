@@ -15,9 +15,9 @@ struct panelQuickAccess
 	sf::Sprite spritePanel;
 	sf::Sprite spriteSelect;
 	void renderPanel(sf::Vector2f position, sf::RenderWindow& window);
-	void renderSelect(::Entity &mainPerson, featuresWindow features);
+	void renderSelect(::MainPerson& mainPerson, featuresWindow features);
 	void renderAmountItem(int amount, sf::Vector2f pos, TextGame &textGame, featuresWindow features);
-	void renderItems(::Entity &mainPerson, featuresWindow features,
+	void renderItems(::MainPerson& mainPerson, featuresWindow features,
 									 TextGame &textGame, barMainFeatures &bars, itemFeatures &itemFeatures);
 };
 

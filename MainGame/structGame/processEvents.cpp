@@ -7,7 +7,7 @@ void Game::processEvents(const float deltaTime)
 	Event event;
 	while (window.pollEvent(event)) {
 
-		if (mainPerson->isDeath == false) {
+		if (mainPerson.isDeath == false) {
 			Vector2i mousePos = Mouse::getPosition(window);
 			Vector2f pos = window.mapPixelToCoords(mousePos);
 
@@ -17,11 +17,7 @@ void Game::processEvents(const float deltaTime)
 			processOtherAction(event, pos);
 			processPanelQuickAccess();
 
-			mainPerson->computeAngle(window);// ÈÑÏÐÀÂÜ
-		}
-
-		if (event.type == Event::Closed) {
-			window.close();
+			mainPerson.computeAngle(window);// ÈÑÏÐÀÂÜ
 		}
 
 	}
@@ -31,24 +27,24 @@ void Game::processEvents(const float deltaTime)
 void Game::processArrows()
 {
 	if (Keyboard::isKeyPressed(keys[Up]) && Keyboard::isKeyPressed(keys[Left])) {
-		mainPerson->directions.directionWalk = Direction::UP_LEFT;
+		mainPerson.directions.directionWalk = Direction::UP_LEFT;
 	} else if (Keyboard::isKeyPressed(keys[Up]) && Keyboard::isKeyPressed(keys[Right])) {
-		mainPerson->directions.directionWalk = Direction::UP_RIGHT;
+		mainPerson.directions.directionWalk = Direction::UP_RIGHT;
 	} else if (Keyboard::isKeyPressed(keys[Down]) && Keyboard::isKeyPressed(keys[Left])) {
-		mainPerson->directions.directionWalk = Direction::DOWN_LEFT;
+		mainPerson.directions.directionWalk = Direction::DOWN_LEFT;
 	} else if (Keyboard::isKeyPressed(keys[Down]) && Keyboard::isKeyPressed(keys[Right])) {
-		mainPerson->directions.directionWalk = Direction::DOWN_RIGHT;
+		mainPerson.directions.directionWalk = Direction::DOWN_RIGHT;
 	}
 	else if (Keyboard::isKeyPressed(keys[Up])) {
-		mainPerson->directions.directionWalk = UP;
+		mainPerson.directions.directionWalk = UP;
 	} else if (Keyboard::isKeyPressed(keys[Down])) {
-		mainPerson->directions.directionWalk = DOWN;
+		mainPerson.directions.directionWalk = DOWN;
 	} else if (Keyboard::isKeyPressed(keys[Left])) {
-		mainPerson->directions.directionWalk = LEFT;
+		mainPerson.directions.directionWalk = LEFT;
 	} else if (Keyboard::isKeyPressed(keys[Right])) {
-		mainPerson->directions.directionWalk = RIGHT;
+		mainPerson.directions.directionWalk = RIGHT;
 	} else {
-		mainPerson->directions.directionWalk = NONE_DIRECTION;
+		mainPerson.directions.directionWalk = NONE_DIRECTION;
 	}
 }
 
@@ -80,23 +76,23 @@ void Game::processInterface()
 void Game::processPersonAction(Vector2f pos)
 {
 	if (Keyboard::isKeyPressed(keys[actionAlternate])) {
-		if (mainPerson->isInUseField(pos.x, pos.y, true)) {
-			mainPerson->actionAlternate(world, pos);// ÈÑÏÐÀÂÜ
+		if (mainPerson.isInUseField(pos.x, pos.y, true)) {
+			mainPerson.actionAlternate(world, pos);// ÈÑÏÐÀÂÜ
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[throwItem])) {
-		mainPerson->throwItem(world.field, *world.items);
+		mainPerson.throwItem(world.field, *world.items);
 	}
 	else if (Keyboard::isKeyPressed(keys[actionMain])) {
-		if (mainPerson->isInUseField(pos.x, pos.y, true)) {
-			mainPerson->actionMain(world, pos);// ÈÑÏÐÀÂÜ
+		if (mainPerson.isInUseField(pos.x, pos.y, true)) {
+			mainPerson.actionMain(world, pos);// ÈÑÏÐÀÂÜ
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[takeItem])) {
-		mainPerson->takeItem(world, pos);
+		mainPerson.takeItem(world, pos);
 	}
 	else if (Keyboard::isKeyPressed(keys[run])) {
-		mainPerson->run();
+		mainPerson.run();
 	}
 }
 
@@ -109,14 +105,10 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 		processPersonAction(pos);
 		break;
 	case Event::MouseButtonPressed:
-<<<<<<< HEAD
 		if(mainPerson.currenMode != idEntityMode::atack)
 		{
 			mainPerson.useItem(world, event, pos);
 		}
-=======
-		mainPerson->useItem(world, event, pos);
->>>>>>> master
 		break;
 	case Event::Closed:
 		window.close();
@@ -133,21 +125,21 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Num0)) {
 
-			if (mainPerson->idSelectItem != 9) {
-				mainPerson->playSoundChoiseItem();
+			if (mainPerson.idSelectItem != 9) {
+				mainPerson.playSoundChoiseItem();
 			}
-			mainPerson->idSelectItem = 9;
+			mainPerson.idSelectItem = 9;
 
 		}
 		else {
-			for (int i = 0; i < mainPerson->amountSlots - 1; i++) {
+			for (int i = 0; i < mainPerson.amountSlots - 1; i++) {
 				if (Keyboard::isKeyPressed(Keyboard::Key(Keyboard::Num1 + i))) {
 
-					if(mainPerson->idSelectItem != i)
+					if(mainPerson.idSelectItem != i)
 					{
-						mainPerson->playSoundChoiseItem();
+						mainPerson.playSoundChoiseItem();
 					}
-					mainPerson->idSelectItem = i;
+					mainPerson.idSelectItem = i;
 
 				}
 			}

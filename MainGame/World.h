@@ -1,5 +1,5 @@
 #pragma once
-#include "../Entity/Entity.h"
+#include "../Entity/Enemy.h"
 
 /*
 const int TIME_GENERATE_WAVE_ENEMYS = 2;
@@ -24,7 +24,7 @@ const int AMOUNT_SKELET_BUILDER_IN_BIG_GROUP = 4;
 */
 
 
-enum idEntityWaveVariable
+enum idEnemyWaveVariable
 {
 	CURRENT_DIFFICULT,
 	TIME_DAY,
@@ -49,13 +49,13 @@ enum idEntityWaveVariable
 	AMOUNT_SKELET_MINER_IN_BIG_GROUP,
 	AMOUNT_SKELET_BUILDER_IN_BIG_GROUP,
 
-	amountIdsEntityWaveVariable
+	amountIdsEnemyWaveVariable
 };
 
 struct typesObjectsInWorld
 {
 	TypeItem typesItem[AMOUNT_TYPES_ITEM];
-	TypeEntity typesEntity[amountEntity];
+	TypeEnemy typesEnemy[amountEnemy];
 	TypeUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
 
 };
@@ -64,7 +64,7 @@ struct emptyObjects
 {
 	Item emptyItem;
 	UnlifeObject emptyObject;
-	Entity emptyEntity;
+	Enemy emptyEnemy;
 };
 
 enum TimeDay {
@@ -76,7 +76,6 @@ struct world
 {
 	std::vector<Item>* items;
 	std::vector<UnlifeObject>* unlifeObjects;
-<<<<<<< HEAD
 	std::vector<Enemy>* Enemys;
 
 	std::vector<int>* deleteItems;
@@ -84,9 +83,6 @@ struct world
 	std::vector<int>* deleteEnemys;
 
 
-=======
-	std::vector<Entity>* Entitys;
->>>>>>> master
 	typesObjectsInWorld typesObjects;
 	listDestroyObjectsAndBlocks *listDestroy;
 	Field field;
@@ -95,10 +91,10 @@ struct world
 	dataSound databaseSound;
 
 
-	int enemyWaveVariables[idEntityWaveVariable::amountIdsEntityWaveVariable];
+	int enemyWaveVariables[idEnemyWaveVariable::amountIdsEnemyWaveVariable];
 
 	sf::Clock worldTime;
-	bool waveEntitysCreated = false;
+	bool waveEnemysCreated = false;
 	float lastSecond = 0;
 
 	int countUnlifeObject = 0;
@@ -109,10 +105,10 @@ struct world
 	void deleteObjects();
 };
 
-void createOnlyEntity(world &world, std::vector<TypeEntity*> &types, std::vector<int> amount);
+void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount);
 
 bool isPlaceForCreate(world world, sf::Vector3i &pos);
-void createGroup(world &world, std::vector<TypeEntity*> &types, std::vector<int> amount, int square, sf::Vector3i pos);
+void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos);
 
 void createSmallGroupSkelets(world &world, Vector3i pos);
 void createMiddleGroupSkelets(world &world, Vector3i pos);

@@ -57,16 +57,19 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 	resetAtack();
 
 	UnlifeObject *findObject = founds.findObject;
-			vector<int> *listBreaking = currentItem.typeItem->destroy;
+	vector<int> *listBreaking = currentItem.typeItem->destroy;
 
 	bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
-	bool canBreakTheItem = isInListObjects(*listBreaking, findObject->typeObject->idNature);
-	if (canBreakTheItem || isDestroyEffect) {
+
+	int idNature = defineIdNature(world.field, isDestroyEffect, pos);
+	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
+
+
+	if (canBreakTheItem && isDestroyEffect) {
 
 
 		breakFindObject(currentItem);
 
-		int idNature = defineIdNature(world.field, isDestroyEffect, pos);
 		playObjectBreakSound(idNature);
 
 
@@ -96,20 +99,24 @@ void Entity::breakNearCollision(world &world)
 	Vector3i &posUse = founds.currentTarget;
 	Field &field = world.field;
 	wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
-	int idNature;
-	idNature = field.idsNature[field.findIdBlock(*block)];
+	//int idNature;
+	//idNature = field.idsNature[field.findIdBlock(*block)];
 
 
+	bool isEffect = founds.findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
 
+	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
+	vector<int> *listBreaking = currentItem.typeItem->destroy;
+	int idNature = defineIdNature(world.field, isEffect, posUse);
+	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
 
-	if (idNature > idNatureObject::Unbreaking && !isDestroyEffect(posUse, world)) {
+	if (canBreakTheItem && !isDestroyEffect(posUse, world)) {
 		createDestroyEffect(world, posUse);
-		founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
+		//founds.findObject = &(*world.unlifeObjects)[world.unlifeObjects->size() - 1];
 		playObjectBreakSound(idNature);
 		resetAtack();
 	}
 	else {
-
 		useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
 	}
 }

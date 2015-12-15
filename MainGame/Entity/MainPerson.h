@@ -7,24 +7,18 @@ class MainPerson : public Entity
 {
 public:
 	sf::Texture *textureEntity;
-	void updateView(sf::RenderWindow & window, sf::View &view);
 
-<<<<<<< HEAD
 	sf::View *view;
 	sf::Listener *listener;
 	void updateView(sf::RenderWindow & window);
 
 	int amountSlots;
-=======
-	void givenForPersonDamage(Entity & enemy);
-	void updateAtack(world &world, const float deltaTime);
-	void hurtPerson(Entity &enemy, world &world, const float deltaTime);
-	void attractionEntity(Entity &enemy, world &world, const float deltaTime);
->>>>>>> master
 
-	void getCoordinateForView(sf::Vector2f pos, View &view);
+	Enemy *findEnemy;
+	Enemy *emptyEnemy;
+	int findEnemyFromList;
+	void initFounds(Item& item, UnlifeObject& object, Enemy& enemy);
 
-<<<<<<< HEAD
 	void killFindEnemy(world &world);
 	void hurtEnemy(Item &currentItem, const float deltaTime);
 	void updateAtack(world &world, const float deltaTime);
@@ -36,8 +30,6 @@ public:
 	void changeview();
 
 	float rotation;
-=======
->>>>>>> master
 	void computeAngle(sf::RenderWindow &window);
 
 
@@ -49,5 +41,5 @@ private:
 
 };
 
-void initializeMainPerson(Entity &mainPerson, world &world, sf::View &view);
+void initializeMainPerson(MainPerson &mainPerson, world &world);
 
