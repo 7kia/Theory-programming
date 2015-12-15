@@ -361,7 +361,8 @@ void Enemy::checkLevelHealth(Vector2f &movemoment)
 {
 	entityHealth &healthEnemy = health;
 	bool isLowHealth = healthEnemy.currentHealth < (healthEnemy.maxHealth / 4);
-	if (isLowHealth) {
+	bool canPanic = type->converse.canPanic;
+	if (isLowHealth && canPanic) {
 		entityStandPanic(movemoment);
 	}
 	else {

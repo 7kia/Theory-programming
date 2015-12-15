@@ -276,7 +276,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				////////////////////////////////////
 				// TODO
 				Vector2i posBlock = { enemy.founds.currentTarget.x, enemy.founds.currentTarget.y };
-				if (posBlock != ZERO_VECTOR_2I)
+				if (posBlock != RESET_VECTOR_2I)
 				{
 					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 					enemy.playAnimationAtack(deltaTime);

@@ -126,7 +126,7 @@ void entityStamina::update(const float deltaTime, Direction directionWalk, Step 
 	if (currentStamina < 1) {
 		currentStamina = 0;
 		needMinusStamina = false;
-		step.stepCurrent = step.stepFirst;// Персонаж не может бегать
+		step.stepCurrent = step.stepFirst;
 	} else if (currentStamina > maxStamina) {
 		currentStamina = maxStamina;
 	}
@@ -197,8 +197,6 @@ void entityThirst::update(const float deltaTime, bool &needMinusHealth)
 	}
 }
 
-////////////////////////////////////////////////////////////////////
-// Передвижение. Его анимация и озвучка
 void Entity::update(const float deltaTime)
 {
 
@@ -211,7 +209,6 @@ void Entity::update(const float deltaTime)
 	hungry.update(deltaTime, health.needMinusHealth);
 	thirst.update(deltaTime, health.needMinusHealth);
 
-	///////////////////////////////////////
 	if (currenMode == idEntityMode::walk
 			|| currenMode == idEntityMode::panic) {
 		switch (directions.directionWalk) {
@@ -265,7 +262,6 @@ void Entity::update(const float deltaTime)
 
 	}
 
-	//animation.currentTimeFightAnimation > 0
 	if (currenMode == idEntityMode::atack) {
 		animation.updateFight(deltaTime, giveDamage, currenMode);
 
@@ -293,7 +289,7 @@ void Entity::playAnimationWalk(const float deltaTime)
 	int shiftWidth = directions.directionLook / NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION;// TODO
 
 	int currentWidth = size.width;
-	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
+	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);
 
 	if (shiftWidth) {
 		currentWidth *= -1;
@@ -318,7 +314,7 @@ void Entity::playAnimationAtack(const float deltaTime)
 
 	int currentWidth = width;
 
-	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);//
+	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);
 
 	if (shiftWidth) {
 		currentWidth *= -1;
@@ -385,12 +381,6 @@ void Entity::playObjectDropSound(sf::Vector2f pos)
 	playSound(idSound, *soundBase, soundEntity, pos);
 }
 
-
-
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-// Вспомагательные функции
 float Entity::getXPos()
 {
 	return spriteEntity->getPosition().x;
@@ -446,10 +436,6 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 	}
 }
 
-////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////
-// Взаимодейтсвие с миром
 void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime)
 {
 
@@ -459,21 +445,15 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	float x = getXPos();
 	float y = getYPos();
 
-	//wchar_t *charBlocks = field.charBlocks;
 		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
 
-	// Проверка на выход за карту
-	if (((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0))
-			&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
+	if (isExitFromBorder(x, y)) {
 	
 
 		bool isSlowingBlock = false;
-		/////////////////////////////////////////////
-		// Проверяем окружающие объекты
 		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
 			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
-				// Замедляющие блоки
 				if (isInListBlocks(map[currentLevelFloor + 1][i][j], *listDestroy.slowingBlocks)) {// ИСПРАВЬ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					isSlowingBlock = true;
@@ -483,9 +463,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 					step.stepCurrent = step.stepFirst;
 				}
 
-
-
-				// Проверяем по списку проходимых блоков
 				if (isInListBlocks(map[currentLevelFloor + 1][i][j], *listDestroy.passableBlocks) == false) {
 					wasCollision = true;
 
@@ -789,18 +766,19 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 
 void Entity::run()
 {
-	if (step.stepCurrent > step.stepFirst) {
-		step.stepCurrent = step.stepFirst;
+	float &stepCurrent = step.stepCurrent;
+	float &stepFirst = step.stepFirst;
+
+	if (stepCurrent > stepFirst) {
+		stepCurrent = stepFirst;
 		stamina.needMinusStamina = false;
 	}
 	else {
-		step.stepCurrent = step.stepFirst * 3;
+		stepCurrent = stepFirst * 3;
 		stamina.needMinusStamina = true;
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// Разрушаемый блок или нет
 bool Entity::isInListBlocks(wchar_t block, vector<wchar_t> &listObjects) {
 	if (&listObjects != nullptr) {
 
@@ -852,7 +830,7 @@ bool Entity::isInListObjects(vector<int> &listObjects, int id) {
 
 	return false;
 }
-////////////////////////////////////////////////////////////////////////////////////
+
 
 void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
 {

@@ -90,6 +90,7 @@ public:
 	// Взаимодейтсвие с миром
 	bool isDestroyEffect(sf::Vector3i &pos, world &world);
 	bool isUnlifeObject(sf::Vector3i& pos, world& world);
+
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> *unlifeObjects, const float deltaTime);
 	bool isInUseField(float x, float y, bool under);
@@ -146,8 +147,6 @@ public:
 	int defineIdNature(Field &field, bool isEffect, sf::Vector3i pos);
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	void upgradeObject(UnlifeObject& object, world& world);
-	//private:
-
 };
 
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,

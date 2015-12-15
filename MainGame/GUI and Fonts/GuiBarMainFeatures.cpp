@@ -74,7 +74,7 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
-	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (3 + shift) + shiftEnemyDamage;
+	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shift) + shiftEnemyDamage;
 
 	// Если нанесли урон то отображаем
 	int damage = enemy.damage.inputDamage;

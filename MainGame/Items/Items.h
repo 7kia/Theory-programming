@@ -20,8 +20,6 @@ struct Item
 
 	int currentLevel;
 
-
-
 	// TODO
 	float timeAnimation;
 	void update(const float deltaTime, dataSound &databaseSound);
