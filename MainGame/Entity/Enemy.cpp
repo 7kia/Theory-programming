@@ -135,6 +135,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 
 	initFeatures();
 	initProtection();
+	initDamage();
 }
 
 void Enemy::initFeatures()
@@ -314,10 +315,24 @@ void Enemy::choiceBlock(world &world)
 	int idNature;
 	idNature = field.idsNature[field.findIdBlock(*block)];
 
+	if (idNature <= idNatureObject::Unbreaking) {
+		idNature = founds.findObject->typeObject->idNature;
+	}
 	if (idNature != idNatureObject::Unbreaking) {
 		currenMode = idEntityMode::atack;
 		giveDamage = false;
 	}
+	/*	else if (founds.findObjectFromList > -1) {
+		UnlifeObject &findObject = *founds.findObject;
+		idNature = findObject.typeObject->idNature;
+		if (idNature > idNatureObject::Unbreaking) {
+
+		}
+	}
+
+	*/
+
+
 }
 
 void Enemy::resetFightAnimation()

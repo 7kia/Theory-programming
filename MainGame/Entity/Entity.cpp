@@ -278,6 +278,7 @@ void Entity::resetAtack()
 {
 	animation.currentTimeFightAnimation = 0.f;
 	currenMode = idEntityMode::walk;
+	directions.directionWalk = NONE_DIRECTION;
 	giveDamage = false;
 }
 
@@ -503,8 +504,8 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		/////////////////////////////////////////////
 		// Проверяем пол
 
-		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
+		for (int i = int(y / SIZE_BLOCK); i < int((y + size.height) / SIZE_BLOCK); i++) {
+			for (int j = int(x / SIZE_BLOCK); j < int((x + size.width) / SIZE_BLOCK); j++) {
 
 
 				// Замедляющие блоки

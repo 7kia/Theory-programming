@@ -103,10 +103,10 @@ void MainPerson::updateView(RenderWindow & window)
 	int topBorder = sizeWindow.y / 2;
 	int lowBorder = SIZE_BLOCK * LONG_MAP - sizeWindow.y / 2;
 
-	if (int(x) < leftBorder) tempX = leftBorder;
-	else if (int(x) > rightBorder) tempX = rightBorder;
-	if (int(y) < topBorder) tempY = topBorder;
-	else if (int(y) > lowBorder) tempY = lowBorder;
+	if (int(x) < leftBorder) tempX = float(leftBorder);
+	else if (int(x) > rightBorder) tempX = float(rightBorder);
+	if (int(y) < topBorder) tempY = float(topBorder);
+	else if (int(y) > lowBorder) tempY = float(lowBorder);
 
 	view->setCenter(tempX, tempY);
 }
