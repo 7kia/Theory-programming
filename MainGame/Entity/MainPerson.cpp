@@ -117,7 +117,7 @@ void MainPerson::initFounds(::Item &item, UnlifeObject& object, ::Enemy& enemy)
 	emptyEnemy = &enemy;
 }
 
-void Enemy::givenForPersonDamage(MainPerson &person)
+void Entity::givenForPersonDamage(MainPerson &person)
 {
 	Item& itemEnemy = itemFromPanelQuickAccess[idSelectItem];
 	typeDamageItem damageEnemyItem = itemEnemy.typeItem->damageItem;
@@ -184,7 +184,7 @@ void MainPerson::hurtEnemy(Item &currentItem, const float deltaTime)
 	}
 }
 
-void Enemy::hurtPerson(MainPerson& enemy, world& world, const float deltaTime)
+void Entity::hurtPerson(MainPerson& enemy, world& world, const float deltaTime)
 {
 	givenForPersonDamage(enemy);
 
@@ -231,7 +231,7 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 			if (isFight) {
 
 				enemy.choiceDirections(movemoment);
-				step.currentTime = 0;
+				//step.currentTime = 0;
 
 				if (enemy.wasCollision) {
 

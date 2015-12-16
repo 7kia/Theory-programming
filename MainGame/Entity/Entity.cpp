@@ -210,6 +210,7 @@ void Entity::update(const float deltaTime)
 	thirst.update(deltaTime, health.needMinusHealth);
 
 	if (currenMode == idEntityMode::walk
+			|| currenMode == idEntityMode::fight
 			|| currenMode == idEntityMode::panic) {
 		switch (directions.directionWalk) {
 		case UP_LEFT:

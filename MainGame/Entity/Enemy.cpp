@@ -74,7 +74,7 @@ void createEmptyEnemy(world& world)
 	emptyEnemy.EnemyInit(*typeEnemy, world, -1, -1, -1);
 }
 
-void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
+void Entity::EnemyInit(TypeEnemy &typesEnemy, world &world,
 											int xPos, int yPos, int level)
 {
 	spriteEntity = new Sprite;
@@ -132,7 +132,7 @@ void Enemy::EnemyInit(TypeEnemy &typesEnemy, world &world,
 	initDamage();
 }
 
-void Enemy::initFeatures()
+void Entity::initFeatures()
 {
 	health.maxHealth = type->features.maxHealth;
 	health.currentHealth = health.maxHealth;
@@ -147,7 +147,7 @@ void Enemy::initFeatures()
 	hungry.currentHungry = hungry.maxHungry;
 }
 
-void Enemy::initProtection()
+void Entity::initProtection()
 {
 	protection.init(type->protection.protectionCut,
 					type->protection.protectionCrash,
@@ -156,17 +156,17 @@ void Enemy::initProtection()
 	protection.deathDay = type->protection.deathDay;
 }
 
-void Enemy::initDamage()
+void Entity::initDamage()
 {
 	animation.init(type->damage.timeOutputDamage, TIME_ATACK);
 	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, TIME_ATACK, 1.f);
 }
 
-Enemy::~Enemy()
+Entity::~Entity()
 {
 }
 
-void Enemy::randomWalk(const float deltaTime) {
+void Entity::randomWalk(const float deltaTime) {
 
 	if (currenMode == idEntityMode::walk) {
 		if (step.currentTime < step.timeWalk && directions.directionWalk != Direction::NONE_DIRECTION) {
@@ -189,7 +189,7 @@ void Enemy::randomWalk(const float deltaTime) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Enemy::takeDamage(DamageInputAndOutput damageEnemy, Item &currentItem)
+void Entity::takeDamage(DamageInputAndOutput damageEnemy, Item &currentItem)
 {
 	bool isDestroy = currentItem.typeItem->features.isDestroy;
 	if (isDestroy) {
@@ -232,7 +232,7 @@ void Enemy::takeDamage(DamageInputAndOutput damageEnemy, Item &currentItem)
 
 }
 
-void Enemy::choiceDirections(Vector2f movemoment)
+void Entity::choiceDirections(Vector2f movemoment)
 {
 	//TODO
 	float zero = SIZE_BLOCK / 3;
@@ -261,7 +261,7 @@ void Enemy::choiceDirections(Vector2f movemoment)
 	}
 }
 
-void Enemy::defineDirectionLook(Vector2f movemoment)
+void Entity::defineDirectionLook(Vector2f movemoment)
 {
 	//TODO
 	float zero = SIZE_BLOCK / 3;
@@ -291,7 +291,7 @@ void Enemy::defineDirectionLook(Vector2f movemoment)
 }
 
 
-void Enemy::choiceBlock(world &world)
+void Entity::choiceBlock(world &world)
 {
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -323,12 +323,12 @@ void Enemy::choiceBlock(world &world)
 	}
 }
 
-void Enemy::resetFightAnimation()
+void Entity::resetFightAnimation()
 {
 	animation.currentTimeFightAnimation = 0.f;
 }
 
-void Enemy::searchWay(world &world)
+void Entity::searchWay(world &world)
 {
 	Item &itemEnemy = itemFromPanelQuickAccess[idSelectItem];
 
@@ -351,7 +351,7 @@ void Enemy::searchWay(world &world)
 	}
 }
 
-void Enemy::checkLevelHealth(Vector2f &movemoment)
+void Entity::checkLevelHealth(Vector2f &movemoment)
 {
 	entityHealth &healthEnemy = health;
 	bool isLowHealth = healthEnemy.currentHealth < (healthEnemy.maxHealth / 4);
@@ -364,7 +364,7 @@ void Enemy::checkLevelHealth(Vector2f &movemoment)
 	}
 }
 
-void Enemy::entityStandPanic(Vector2f &movemoment)
+void Entity::entityStandPanic(Vector2f &movemoment)
 {
 	bool canPanic = type->converse.canPanic;
 	currenMode = idEntityMode::panic;
@@ -379,7 +379,7 @@ void Enemy::entityStandPanic(Vector2f &movemoment)
 	}
 }
 
-void Enemy::buildLadder(world &world)
+void Entity::buildLadder(world &world)
 {
 
 	int x = int(getXPos() / SIZE_BLOCK);
@@ -407,7 +407,7 @@ void Enemy::buildLadder(world &world)
 }
 
 
-bool Enemy::findLadder(world &world, Vector3i pos)
+bool Entity::findLadder(world &world, Vector3i pos)
 {
 
 	int x = int(getXPos() / SIZE_BLOCK);
@@ -429,7 +429,7 @@ bool Enemy::findLadder(world &world, Vector3i pos)
 	return false;
 }
 
-void Enemy::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts)
+void Entity::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posStart, sf::Vector2i shifts)
 {
 	int level = currentLevelFloor + 1;
 	int x = posStart.x;
@@ -468,7 +468,7 @@ void Enemy::checkInDirectionWalk(Field &field, float distanse, sf::Vector2i posS
 	}
 }
 
-void Enemy::redefineDirectionWalk()
+void Entity::redefineDirectionWalk()
 {
 	step.currentTime = 0;
 	step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
@@ -477,7 +477,7 @@ void Enemy::redefineDirectionWalk()
 	directions.directionWalk = Direction(randomDirection);
 }
 
-void Enemy::checkBlock(Field& field, float distanse)
+void Entity::checkBlock(Field& field, float distanse)
 {
 	int x = 0;
 	int y = 0;
@@ -542,7 +542,7 @@ void Enemy::checkBlock(Field& field, float distanse)
 	checkInDirectionWalk(field, distanse, startPosition, shifts);
 }
 
-void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
+void Entity::interactionWithEntity(vector<Enemy> *enemys, int id, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
 	if (wasCollision == false) {
 		float &dx(movement.x);
@@ -591,7 +591,7 @@ void Enemy::interactionWithEntity(vector<Enemy> *enemys, int id, const float del
 	}
 }
 
-void Enemy::EnemyDrop(world& world)
+void Entity::EnemyDrop(world& world)
 {
 	Field &field = world.field;
 	vector<Item> &items = *world.items;
@@ -624,7 +624,7 @@ void Enemy::EnemyDrop(world& world)
 
 }
 
-void Enemy::playSoundDeath(world& world)
+void Entity::playSoundDeath(world& world)
 {
 	vector<UnlifeObject> &objects = *world.unlifeObjects;
 	TypeUnlifeObject *typeObjects = world.typesObjects.typesUnlifeObject;

@@ -6,6 +6,10 @@
 struct world;
 struct destroyObjectsAndBlocks;
 struct Field;
+
+struct MainPerson;
+struct Enemy;
+struct TypeEnemy;
 const int AMOUNT_ENTITY = 30;
 const int AMOUNT_ACTIVE_SLOTS = 10;
 
@@ -148,6 +152,57 @@ public:
 	int defineIdNature(Field &field, bool isEffect, sf::Vector3i pos);
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	void upgradeObject(UnlifeObject& object, world& world);
+	//////////////////////////////////////////////////////////////////////////////
+	//{                          Enemy                                         }//
+
+
+	// TODO
+	float rotation;
+
+	Item *emptyItem;
+
+	TypeEnemy *type;
+
+
+	///////////////////////////////////////////////////////
+	// Для уничтожения врагов
+	Enemy *findEnemy;
+	Enemy *emptyEnemy;
+	int findEnemyFromList;
+	///////////////////////////////////////////////////////
+	void EnemyInit(TypeEnemy &typesEnemy , world &world , int xPos , int yPos , int level);
+	void initFeatures();
+	void initProtection();
+	void initDamage();
+
+	void EnemyDrop(world &world);
+	void playSoundDeath(world &world);
+	~Entity();
+
+	void checkLevelHealth(Vector2f& movemoment);
+	void entityStandPanic(sf::Vector2f &movemoment);
+
+	void randomWalk(const float deltaTime);
+
+	void takeDamage(DamageInputAndOutput damageEnemy , Item& currentItem);
+
+	void choiceDirections(Vector2f movemoment);
+	void defineDirectionLook(Vector2f movemoment);
+	void choiceBlock(world &world);
+
+	void resetFightAnimation();
+	void searchWay(world &world);
+	bool findLadder(world &world , sf::Vector3i pos);
+	void buildLadder(world &world);
+	void givenForPersonDamage(MainPerson & person);
+	void hurtPerson(MainPerson &enemy , world &world , const float deltaTime);
+
+	void checkInDirectionWalk(Field &field , float distanse , sf::Vector2i posStart , sf::Vector2i shifts);
+	void redefineDirectionWalk();
+	void checkBlock(Field &field , float distanse);
+	void interactionWithEntity(std::vector<Enemy>* enemys , int id , const float deltaTime);
+	//{                          Enemy                                         }//
+	//////////////////////////////////////////////////////////////////////////////
 };
 
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
