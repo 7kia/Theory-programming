@@ -121,7 +121,7 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	idCreated.init(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
 
-	addType.maxAmount = 4;
+	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain, idCreated, damage);
 

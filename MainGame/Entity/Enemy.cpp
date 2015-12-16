@@ -336,7 +336,7 @@ void Enemy::searchWay(world &world)
 		int(getXPos() / SIZE_BLOCK),
 		collision.level };
 
-	if (findLadder(world, posEnemy)) {
+	if (!findLadder(world, posEnemy)) {
 
 		String nameCurrentItem = itemEnemy.typeItem->features.name;
 		String nameEmptyItem = founds.emptyItem->typeItem->features.name;
