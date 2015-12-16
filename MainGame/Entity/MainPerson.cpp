@@ -264,8 +264,8 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 			bool isNearFight = distanse <= SIZE_BLOCK;
 			if (isNearFight) {
 				// TODO
-				enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
-				enemy.playAnimationAtack(deltaTime);
+				//enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
+				//enemy.playAnimationAtack(deltaTime);
 				if (enemy.giveDamage) {
 					enemy.hurtPerson(*this, world, deltaTime);
 					enemy.resetAtack();
@@ -278,8 +278,9 @@ void MainPerson::attractionEnemy(Enemy &enemy, world &world, const float deltaTi
 				Vector2i posBlock = { enemy.founds.currentTarget.x, enemy.founds.currentTarget.y };
 				if (posBlock != RESET_VECTOR_2I)
 				{
-					enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
-					enemy.playAnimationAtack(deltaTime);
+					//enemy.currenMode = idEntityMode::atack;
+					//enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
+					//enemy.playAnimationAtack(deltaTime);
 					if (enemy.giveDamage) {
 						enemy.breakNearCollision(world);
 

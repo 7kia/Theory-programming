@@ -309,7 +309,10 @@ void Entity::playAnimationAtack(const float deltaTime)
 
 	timeAnimation += deltaTime;
 	resetTimeAnimation(timeAnimation, animation.timeFightAnimation);
-
+	if(timeAnimation == 0.f)
+	{
+		giveDamage = true;
+	}
 
 	int shiftWidth = directions.directionLook / NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION;// TODO
 
