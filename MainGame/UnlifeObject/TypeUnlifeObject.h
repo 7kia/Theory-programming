@@ -24,8 +24,6 @@ public:
 	int idNature;
 	sf::Texture* textureObject;
 	dataSound *soundBase;
-	// —сылки на звуки
-	//Sound *soundsEntity[sizeBuffer];
 
 	bool isDestroy;
 	int toughnessObject;

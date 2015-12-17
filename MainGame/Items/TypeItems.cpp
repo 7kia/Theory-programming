@@ -785,9 +785,9 @@ void destroyObjectsAndBlocks::init(std::vector<sf::String> *namesObjects, std::v
 	blocks = charBlocks;
 }
 
-void TypeItem::initListDestroy(std::vector<int>* idsNature)
+void TypeItem::initListDestroy(std::vector<int> &idsNature)
 {
-	destroy = idsNature;
+	destroy = &idsNature;
 }
 
 ////////////////////////////////////////////////////////////////////

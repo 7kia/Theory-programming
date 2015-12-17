@@ -41,7 +41,7 @@ void Game::informationAboutSelect(float x, float y)
 		}
 	}
 
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
+	vector<UnlifeObject> &unlifeObjects = world.unlifeObjects;
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
 	emptyObjects &emptyObjects = world.emptyObjects;
@@ -74,7 +74,7 @@ void Game::informationAboutSelect(float x, float y)
 
 	}
 
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	Text& infoItem = textGame.texts[idText::infoWindowItem];
 
 	mainPerson.founds.findItemFromList = -1;
@@ -100,7 +100,7 @@ void Game::informationAboutSelect(float x, float y)
 
 	}
 
-	vector<Enemy>& Enemys = *world.Enemys;
+	vector<Enemy>& Enemys = world.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
 	mainPerson.findEnemy = &emptyObjects.emptyEnemy;
@@ -132,16 +132,6 @@ void Game::informationAboutSelect(float x, float y)
 
 Game::Game()
 {
-	
-	world.unlifeObjects = new vector<UnlifeObject>;
-	world.items = new vector<Item>;
-	world.listDestroy = new listDestroyObjectsAndBlocks;
-
-	world.deleteUnlifeObjects = new vector<int>;
-	world.deleteItems = new vector<int>;
-	world.deleteEnemys = new vector<int>;;
-
-
 	window.create(VideoMode(widthMainWindow, heightMainWindow), TITLE_PROGRAM);
 
 
@@ -153,12 +143,12 @@ Game::Game()
 	typesObjectsInWorld &types = world.typesObjects;
 
 	initializeTypeUnlifeObjects(types.typesUnlifeObject, world.databaseSound);
-	initializeUnlifeObjects(*world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
+	initializeUnlifeObjects(world.unlifeObjects, types.typesUnlifeObject, world.emptyObjects.emptyObject);
 
-	initializeCategorysBreakingObject();
+	world.initializeCategorysBreakingObject();
 
-	initializeTypesItem(types.typesItem, *world.listDestroy);
-	initializeItems(*world.items, types.typesItem, world.emptyObjects.emptyItem);
+	initializeTypesItem(types.typesItem, world.listDestroy);
+	initializeItems(world.items, types.typesItem, world.emptyObjects.emptyItem);
 
 	createListAward();
 
@@ -244,77 +234,47 @@ void Game::loadConfig(char *nameConfig, int *variables)
 	}
 }
 
-void Game::initializeCategorysBreakingObject() 
+void world::initializeCategorysBreakingObject() 
 {
-	listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
-	typesObjectsInWorld &types = world.typesObjects;
-	TypeUnlifeObject* typesUnlifeObject = types.typesUnlifeObject;
-	wchar_t* charBlocks = world.field.charBlocks;
+	TypeUnlifeObject *typesUnlifeObject = typesObjects.typesUnlifeObject;
+	wchar_t* charBlocks = field.charBlocks;
 
 	//////////////////////////////////////
 	// Блоки уничтожаемые лопатой
-	listDestroy.backhoe = new vector<int>;
-	vector<int> *listIds = listDestroy.backhoe;
-
-	listIds->push_back(idNatureObject::groundNature);
-	listIds->push_back(idNatureObject::sandNature);
+	listDestroy.backhoe.push_back(idNatureObject::groundNature);
+	listDestroy.backhoe.push_back(idNatureObject::sandNature);
 	//////////////////////////////////////
 	// Блоки уничтожаемые топором
-	listDestroy.axe = new vector<int>;
-	listIds = listDestroy.axe;
-
-	listIds->push_back(idNatureObject::woodNature);
+	listDestroy.axe.push_back(idNatureObject::woodNature);
 	//////////////////////////////////////
 	// Блоки уничтожаемые киркой
-	listDestroy.pickax = new vector<int>;
-	listIds = listDestroy.pickax;
-
-	listIds->push_back(idNatureObject::stoneNature);
+	listDestroy.pickax.push_back(idNatureObject::stoneNature);
 	//////////////////////////////////////
 	// Блоки уничтожаемые каменным ножом
-	listDestroy.stoneKnife = new vector<int>;
-	listIds = listDestroy.stoneKnife;
+	listDestroy.stoneKnife.push_back(idNatureObject::stoneNature);
+	listDestroy.stoneKnife.push_back(idNatureObject::woodNature);
+	listDestroy.stoneKnife.push_back(idNatureObject::groundNature);
+	listDestroy.stoneKnife.push_back(idNatureObject::sandNature);
 
-	listIds->push_back(idNatureObject::stoneNature);
-	listIds->push_back(idNatureObject::woodNature);
-	listIds->push_back(idNatureObject::groundNature);
-	listIds->push_back(idNatureObject::sandNature);
-
-	listDestroy.none = new vector<int>;
-	listIds = listDestroy.none;
-	listIds->push_back(idNatureObject::NoneNature);
+	listDestroy.none.push_back(idNatureObject::NoneNature);
 	/////////////////////////////////////////////////////////////////////////
 	// Проходимые блоки
-	listDestroy.passableBlocks = new vector<wchar_t>;
-	vector<wchar_t> *listBlocks = listDestroy.passableBlocks;
 
-	listBlocks->push_back(charBlocks[idBlocks::air]);
-	listBlocks->push_back(charBlocks[idBlocks::water]);
-	listBlocks->push_back(charBlocks[idBlocks::woodLadder]);
+	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::air]);
+	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::water]);
+	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::woodLadder]);
 
 	/////////////////////////////////////////////////////////////////////////
 	// Проходим по полу
-	listDestroy.notPassableFloor = new vector<wchar_t>;
-	listBlocks = listDestroy.notPassableFloor;
-
-	listBlocks->push_back(charBlocks[idBlocks::air]);
+	listDestroy.notPassableFloor.push_back(charBlocks[idBlocks::air]);
 	/////////////////////////////////////////////////////////////////////////
 	// Замедляющие блоки
-	listDestroy.slowingBlocks = new vector<wchar_t>;
-	listBlocks = listDestroy.slowingBlocks;
-
-	listBlocks->push_back(charBlocks[idBlocks::water]);
+	listDestroy.slowingBlocks.push_back(charBlocks[idBlocks::water]);
 	/////////////////////////////////////////////////////////////////////////
 	// Лестницы
-	listDestroy.ladder = new vector<wchar_t>;
-	listBlocks = listDestroy.ladder;
-
-	listBlocks->push_back(charBlocks[idBlocks::woodLadder]);
+	listDestroy.ladder.push_back(charBlocks[idBlocks::woodLadder]);
 	/////////////////////////////////////////////////////////////////////////
-	listDestroy.harvestObjects = new vector<int>;
-	vector<int> *listObjects = listDestroy.harvestObjects;
-
-	listObjects->push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].id);
+	listDestroy.harvestObjects.push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].id);
 	/////////////////////////////////////////////////////////////////////////
 
 }
@@ -331,10 +291,6 @@ void Game::initializeHotKeys()
 void destroyGame(Game & game)
 {
 	// TODO
-	delete game.world.items;
-	delete game.world.unlifeObjects;
-	delete game.world.Enemys;
-	delete game.world.listDestroy;
 
 	delete &game;
 }

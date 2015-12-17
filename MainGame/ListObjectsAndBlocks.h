@@ -13,19 +13,19 @@ const int AMOUNT_HARVEST_OBJECTS = 1;
 
 struct listDestroyObjectsAndBlocks//Game.cpp
 {
-	std::vector<int> *harvestObjects;
-	std::vector<int> *none;
+	std::vector<int> harvestObjects;
+	std::vector<int> none;
 
-	std::vector<wchar_t> *passableBlocks;
-	std::vector<wchar_t> *notPassableFloor;
-	std::vector<wchar_t> *slowingBlocks;
+	std::vector<wchar_t> passableBlocks;
+	std::vector<wchar_t> notPassableFloor;
+	std::vector<wchar_t> slowingBlocks;
 
-	std::vector<wchar_t> *ladder;
+	std::vector<wchar_t> ladder;
 
-	std::vector<int> *stoneKnife;
-	std::vector<int> *axe;
-	std::vector<int> *backhoe;
-	std::vector<int> *pickax;
+	std::vector<int> stoneKnife;
+	std::vector<int> axe;
+	std::vector<int> backhoe;
+	std::vector<int> pickax;
 
 
 };

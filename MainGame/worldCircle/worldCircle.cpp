@@ -20,14 +20,14 @@ void world::deleteObjects()
 {
 	int i = 0;
 	int id;
-	while (i < deleteUnlifeObjects->size()) {
-		id = (*deleteUnlifeObjects)[i];
-		if (!unlifeObjects->empty()) {
-			unlifeObjects->erase(unlifeObjects->begin() + id);
+	while (i < deleteUnlifeObjects.size()) {
+		id = deleteUnlifeObjects[i];
+		if (!unlifeObjects.empty()) {
+			unlifeObjects.erase(unlifeObjects.begin() + id);
 		}
 		i++;
 	}
-	deleteUnlifeObjects->clear();
+	deleteUnlifeObjects.clear();
 }
 
 void Game::updateTimeDay(float &time)
@@ -74,7 +74,7 @@ void Game::setDay()
 
 void Game::destroyUnlife()
 {
-	std::vector<Enemy>& Enemys = *world.Enemys;
+	std::vector<Enemy>& Enemys = world.Enemys;
 	int i = 0;
 	while (i < Enemys.size()) {
 		if (Enemys[i].protection.deathDay) {

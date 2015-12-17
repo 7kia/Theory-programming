@@ -459,7 +459,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		bool isSlowingBlock = false;
 		for (int i = y / SIZE_BLOCK; i < (y + size.height) / SIZE_BLOCK; i++) {
 			for (int j = x / SIZE_BLOCK; j < (x + size.width) / SIZE_BLOCK; j++) {
-				if (isInListBlocks(map[currentLevelFloor + 1][i][j], *listDestroy.slowingBlocks)) {// ÈÑÏÐÀÂÜ
+				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.slowingBlocks)) {// ÈÑÏÐÀÂÜ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					isSlowingBlock = true;
 					stamina.needMinusStamina = false;
@@ -468,7 +468,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 					step.stepCurrent = step.stepFirst;
 				}
 
-				if (isInListBlocks(map[currentLevelFloor + 1][i][j], *listDestroy.passableBlocks) == false) {
+				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.passableBlocks) == false) {
 					wasCollision = true;
 
 					collision.initPos(j, i, currentLevelFloor + 1);
@@ -493,7 +493,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 
 				// Çàìåäëÿþùèå áëîêè
-				if (isInListBlocks(map[currentLevelFloor][i][j] , *listDestroy.slowingBlocks)) {// ÈÑÏÐÀÂÜ
+				if (isInListBlocks(map[currentLevelFloor][i][j] , listDestroy.slowingBlocks)) {// ÈÑÏÐÀÂÜ
 					step.stepCurrent = step.stepFirst / slowingStep;
 					stamina.needMinusStamina = false;
 					break;
@@ -503,7 +503,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 				}
 
 				// ßâëÿåòñÿ íåïðîõîäèìûì
-				if (isInListBlocks(map[currentLevelFloor][i][j] , *listDestroy.notPassableFloor)) {
+				if (isInListBlocks(map[currentLevelFloor][i][j] , listDestroy.notPassableFloor)) {
 
 					wasCollision = true;
 
@@ -558,7 +558,7 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 }
 
 
-void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
+void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
 		wasCollision = false;
 
@@ -570,7 +570,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> *unlifeObjects, co
 		FloatRect objectAltBound;
 		FloatRect entityBound;
 
-		vector<UnlifeObject> &objects = *unlifeObjects;
+		vector<UnlifeObject> &objects = unlifeObjects;
 		for (int i = 0; i < objects.size(); i++) {
 			levelUnlifeObject = objects[i].currentLevel;
 

@@ -38,7 +38,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 
 
 		if (findObject->isDestroyed()) {
-			vector<int> &deleteUnlifeObjects = *world.deleteUnlifeObjects;
+			vector<int> &deleteUnlifeObjects = world.deleteUnlifeObjects;
 			int idFinded = founds.findObjectFromList;
 			if (!isInListObjects(deleteUnlifeObjects, idFinded) && idFinded > -1) {
 
@@ -148,7 +148,7 @@ int Entity::defineIdNature(Field & field, bool isEffect, Vector3i pos)
 
 bool Entity::isDestroyEffect(sf::Vector3i & pos, world & world)
 {
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	vector<UnlifeObject> &objects = world.unlifeObjects;
 
 	Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
 		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
@@ -172,7 +172,7 @@ bool Entity::isDestroyEffect(sf::Vector3i & pos, world & world)
 
 bool Entity::isUnlifeObject(sf::Vector3i & pos, world & world)
 {
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	vector<UnlifeObject> &objects = world.unlifeObjects;
 
 	Vector2f posAdd = { float(pos.x + 1) * SIZE_BLOCK - SIZE_BLOCK / 2,
 		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };

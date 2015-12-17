@@ -44,7 +44,7 @@ void Entity::createRedefineItem(world &world, Item &currentItem, int shift)
 						 int(posItem.y + 1),
 						 currentLevelFloor + 1);
 
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	items.push_back(*addItem);
 
 	delete addItem;
@@ -52,10 +52,10 @@ void Entity::createRedefineItem(world &world, Item &currentItem, int shift)
 
 void Entity::takeRedefineItem(world & world)
 {
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	Vector2f posPerson = { getXPos() , getYPos() };
 
-	founds.findItemFromList = int(world.items->size() - 1);
+	founds.findItemFromList = int(world.items.size() - 1);
 	founds.findItem = &items[founds.findItemFromList];
 
 	takeItem(world, posPerson);
@@ -63,7 +63,7 @@ void Entity::takeRedefineItem(world & world)
 
 void Entity::takeItem(world &world, Vector2f pos)
 {
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	String nameFindItem = founds.findItem->typeItem->features.name;
 	String nameEmptyItem = founds.emptyItem->typeItem->features.name;
 
@@ -237,7 +237,7 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 	//////////////////////////////////////////////////
 	// Выпадение предметов
 
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
 	size_t countItem = typeObject->drop.minCountItems.size();
@@ -295,7 +295,7 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	int toughness = field.toughness[idBlock];
 	addObject.currentToughness = toughness - currecntItem.typeItem->damageItem.crushingDamage;
 
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	vector<UnlifeObject> &objects = world.unlifeObjects;
 	objects.push_back(addObject);
 	founds.findObject = &objects[objects.size() - 1];
 }
@@ -308,8 +308,8 @@ void Entity::actionMain(world &world, Vector2f pos)
 		int y = int(pos.y / SIZE_BLOCK);
 
 		Field &field = world.field;
-		listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
-		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], *listDestroy.ladder)) {
+		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
+		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], listDestroy.ladder)) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 			Vector2f posCurrent = { float(x * SIZE_BLOCK + posOrigin.x), float(y * SIZE_BLOCK + posOrigin.y) };
@@ -318,7 +318,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 			currentLevelFloor += 1;
 
 		} 
-		else if (isInListObjects(*listDestroy.harvestObjects, founds.findObject->typeObject->id))
+		else if (isInListObjects(listDestroy.harvestObjects, founds.findObject->typeObject->id))
 		{
 			upgradeObject(*founds.findObject, world);
 		}
@@ -334,8 +334,8 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 		int y = int(pos.y / SIZE_BLOCK);
 
 		Field &field = world.field;
-		listDestroyObjectsAndBlocks &listDestroy = *world.listDestroy;
-		if (isInListBlocks(field.dataMap[currentLevelFloor][y][x], *listDestroy.ladder)) {
+		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
+		if (isInListBlocks(field.dataMap[currentLevelFloor][y][x], listDestroy.ladder)) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 

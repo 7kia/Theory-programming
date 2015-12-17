@@ -53,7 +53,7 @@ public:
 	featuresItem features;
 
 	std::vector<int> *destroy;
-	void initListDestroy(std::vector<int> *idsNature);
+	void initListDestroy(std::vector<int> &idsNature);
 
 
 	featuresSprite sizeMain;

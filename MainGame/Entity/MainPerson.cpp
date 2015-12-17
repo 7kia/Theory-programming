@@ -162,7 +162,7 @@ void MainPerson::killFindEnemy(world& world)
 {
 	findEnemy->EnemyDrop(world);
 	findEnemy->playSoundDeath(world);
-	world.Enemys->erase(world.Enemys->begin() + findEnemyFromList);
+	world.Enemys.erase(world.Enemys.begin() + findEnemyFromList);
 	world.countEntity--;
 
 	resetAtack();

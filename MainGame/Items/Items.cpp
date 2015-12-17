@@ -6,7 +6,7 @@ using namespace std;
 
 void dropBlock(world &world, Vector3i &pos, int level)
 {
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	Field &field = world.field;
 

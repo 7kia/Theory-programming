@@ -10,7 +10,7 @@ void Entity::useBlock(Vector3i pos, world &world,
 	TypeUnlifeObject *typesUnlifeObjects = world.typesObjects.typesUnlifeObject;
 
 	Field &field = world.field;
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
+	vector<UnlifeObject> &unlifeObjects = world.unlifeObjects;
 
 	bool useForAnyLevel = pos.z > -1;
 	if (useForAnyLevel) {

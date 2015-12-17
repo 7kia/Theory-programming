@@ -81,7 +81,7 @@ void Game::processPersonAction(Vector2f pos)
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[throwItem])) {
-		mainPerson.throwItem(world.field, *world.items);
+		mainPerson.throwItem(world.field, world.items);
 	}
 	else if (Keyboard::isKeyPressed(keys[actionMain])) {
 		if (mainPerson.isInUseField(pos.x, pos.y, true)) {

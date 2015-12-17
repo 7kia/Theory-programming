@@ -51,17 +51,18 @@ enum TimeDay {
 
 struct world
 {
-	std::vector<Item>* items;
-	std::vector<UnlifeObject>* unlifeObjects;
-	std::vector<Enemy>* Enemys;
+	std::vector<Item> items;
+	std::vector<UnlifeObject> unlifeObjects;
+	std::vector<Enemy> Enemys;
 
-	std::vector<int>* deleteItems;
-	std::vector<int>* deleteUnlifeObjects;
-	std::vector<int>* deleteEnemys;
+	std::vector<int> deleteItems;
+	std::vector<int> deleteUnlifeObjects;
+	std::vector<int> deleteEnemys;
 
+	void initializeCategorysBreakingObject();
 
 	typesObjectsInWorld typesObjects;
-	listDestroyObjectsAndBlocks *listDestroy;
+	listDestroyObjectsAndBlocks listDestroy;
 	Field field;
 
 	TimeDay timeDay = day;

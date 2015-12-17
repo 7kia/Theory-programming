@@ -23,7 +23,7 @@ void Game::render()
 	renderEntitys(rectWindow);
 	renderUnlifeObjects(rectWindow);
 
-	gui.setPositionGui(window, mainPerson, *world.Enemys, textGame);
+	gui.setPositionGui(window, mainPerson, world.Enemys, textGame);
 
 	renderGui();
 
@@ -62,7 +62,7 @@ void Game::renderMap(FloatRect const& rectWindow)
 
 void Game::renderItems(FloatRect const& rectWindow)
 {
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	int levelItem;
 	int levelPlayer;
 	for (int i = 0; i != items.size(); ++i) {
@@ -88,7 +88,7 @@ void Game::renderItems(FloatRect const& rectWindow)
 
 void Game::renderEntitys(FloatRect const& rectWindow)
 {
-	vector<Enemy>& Enemys = *world.Enemys;
+	vector<Enemy>& Enemys = world.Enemys;
 
 	int enemyLevel;
 	const int personLevel = mainPerson.currentLevelFloor;
@@ -123,7 +123,7 @@ void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 
 	int levelPerson = mainPerson.currentLevelFloor;
 	int levelObject;
-	vector<UnlifeObject> &unlifeObjects = *world.unlifeObjects;
+	vector<UnlifeObject> &unlifeObjects = world.unlifeObjects;
 	bool inView;
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
 		levelObject = unlifeObjects[i].currentLevel;
@@ -336,8 +336,8 @@ void Game::renderGui()
 			if (updateDifficult) {
 				vector<Vector2i> award;
 
-				for (size_t i = 0; i < awardForWave->size(); i++) {
-					award.push_back((*awardForWave)[i]);
+				for (size_t i = 0; i < awardForWave.size(); i++) {
+					award.push_back((awardForWave)[i]);
 				}
 				for (size_t i = 0; i < awardForLevel[difficult].size(); i++) {
 					award.push_back(awardForLevel[difficult][i]);
@@ -348,7 +348,7 @@ void Game::renderGui()
 			}// TODO
 			else if(stateGame != endGameState)
 			{
-				drawAwardItems(*awardForWave);
+				drawAwardItems(awardForWave);
 			}
 		}
 

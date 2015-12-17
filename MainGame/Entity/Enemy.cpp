@@ -22,7 +22,7 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 			pos.y = 11;
 
 			addEnemy->EnemyInit(*types[countTypes], world, pos.x, pos.y, pos.z);
-			world.Enemys->push_back(*addEnemy);
+			world.Enemys.push_back(*addEnemy);
 			isPlaceForCreate(world, pos);
 
 		}
@@ -36,8 +36,6 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 
 void initializeEntitys(world &world)// днаюбкемхе ясымнярх 
 {
-	world.Enemys = new vector<Enemy>;
-
 	srand(time(nullptr));
 
 	int *config = world.enemyWaveVariables;
@@ -594,7 +592,7 @@ void Entity::interactionWithEntity(vector<Enemy> *enemys, int id, const float de
 void Entity::EnemyDrop(world& world)
 {
 	Field &field = world.field;
-	vector<Item> &items = *world.items;
+	vector<Item> &items = world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
 	Item* addItem = new Item;
@@ -615,7 +613,7 @@ void Entity::EnemyDrop(world& world)
 			addItem->setPosition(founds.currentTarget.x + 1,
 								 founds.currentTarget.y + 1,
 								 currentLevelFloor + 1);
-			world.items->push_back(*addItem);
+			world.items.push_back(*addItem);
 
 		}
 
@@ -626,7 +624,7 @@ void Entity::EnemyDrop(world& world)
 
 void Entity::playSoundDeath(world& world)
 {
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	vector<UnlifeObject> &objects = world.unlifeObjects;
 	TypeUnlifeObject *typeObjects = world.typesObjects.typesUnlifeObject;
 	UnlifeObject addObject;
 	sizeSprite &sizeSprite = type->featuresSprite.size;

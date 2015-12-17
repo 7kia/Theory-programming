@@ -86,8 +86,8 @@ struct Game
 
 	int countDay = 0;
 	world world;
-	std::vector<Vector2i> *awardForLevel;
-	std::vector<Vector2i> *awardForWave;
+	std::vector<Vector2i> awardForLevel[NUMBER_LEVELS];
+	std::vector<Vector2i> awardForWave;
 
 	sf::Clock clock;
 
@@ -97,7 +97,6 @@ struct Game
 
 	Game();
 	void loadConfig(char *nameConfig, int *variables);
-	void initializeCategorysBreakingObject();
 	void initializeHotKeys();
 	void informationAboutSelect(float x, float y);
 

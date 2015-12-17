@@ -41,7 +41,7 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 			yTemp = yPos;
 			addEntity->EnemyInit(*types[countTypes], world, xTemp, yTemp, levelFloor);
 
-			world.Enemys->push_back(*addEntity);
+			world.Enemys.push_back(*addEntity);
 			posEntity = { xTemp, yTemp, pos.z };
 			isPlaceForCreate(world, posEntity);
 
@@ -71,7 +71,7 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 bool isPlaceForCreate(world world, Vector3i &pos)
 {
 	// TODO
-	vector<Enemy> &enemys = *world.Enemys;
+	vector<Enemy> &enemys = world.Enemys;
 	Enemy &currentEntity = enemys[enemys.size() - 1];
 
 	bool isPlace;
@@ -81,7 +81,7 @@ bool isPlaceForCreate(world world, Vector3i &pos)
 	Vector3i startPosition = pos;
 
 	do {
-		currentEntity.interactionWithMap(world.field, *world.listDestroy, 0);
+		currentEntity.interactionWithMap(world.field, world.listDestroy, 0);
 		currentEntity.interactionWitnUnlifeObject(world.unlifeObjects, 0);
 		currentEntity.interactionWithEntity(&enemys, int(enemys.size() - 1), 0.1f);
 

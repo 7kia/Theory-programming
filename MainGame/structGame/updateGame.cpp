@@ -27,7 +27,7 @@ void Game::updatePlayer(const float &deltaTime)
 	}
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
-	mainPerson.interactionWithMap(world.field, *world.listDestroy, deltaTime);
+	mainPerson.interactionWithMap(world.field, world.listDestroy, deltaTime);
 	mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
 
 	mainPerson.updateView(window);
@@ -39,14 +39,14 @@ void Game::updatePlayer(const float &deltaTime)
 
 void Game::updateEntity(const float deltaTime)
 {
-	vector<Enemy>& Enemys = *world.Enemys;
+	vector<Enemy>& Enemys = world.Enemys;
 	Field &field = world.field;
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
-		Enemys[i].interactionWithEntity(world.Enemys, i, deltaTime);
-		Enemys[i].interactionWithMap(field, *world.listDestroy, deltaTime);
+		Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
+		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
 		Enemys[i].currenMode = Enemys[i].currenMode;
 		mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
@@ -57,7 +57,7 @@ void Game::updateEntity(const float deltaTime)
 
 void Game::updateUnlifeObjects(const float &deltaTime)
 {
-	vector<UnlifeObject> &objects = *world.unlifeObjects;
+	vector<UnlifeObject> &objects = world.unlifeObjects;
 	size_t i = 0;
 
 	while(i < objects.size()) {
@@ -96,7 +96,6 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 
 				if (currentToughness < 1) {
 					objects.erase(objects.begin() + i);
-					i = 0;
 					continue;
 				}
 				else {
