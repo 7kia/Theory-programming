@@ -7,18 +7,21 @@ void Game::processEvents(const float deltaTime)
 	Event event;
 	while (window.pollEvent(event)) {
 
+		Entity &mainPerson = world.Enemys[0];
+		Vector2i mousePos = Mouse::getPosition(window);
+		Vector2f pos = window.mapPixelToCoords(mousePos);
+
 		if (mainPerson.isDeath == false) {
-			Vector2i mousePos = Mouse::getPosition(window);
-			Vector2f pos = window.mapPixelToCoords(mousePos);
 
 			informationAboutSelect(pos.x, pos.y);
 
 			processArrows();
-			processOtherAction(event, pos);
 			processPanelQuickAccess();
 
 			mainPerson.computeAngle(window);// ÈÑÏÐÀÂÜ
 		}
+		processOtherAction(event, pos);
+
 
 	}
 
@@ -26,6 +29,8 @@ void Game::processEvents(const float deltaTime)
 
 void Game::processArrows()
 {
+	Entity &mainPerson = world.Enemys[0];
+
 	if (Keyboard::isKeyPressed(keys[Up]) && Keyboard::isKeyPressed(keys[Left])) {
 		mainPerson.directions.directionWalk = Direction::UP_LEFT;
 	} else if (Keyboard::isKeyPressed(keys[Up]) && Keyboard::isKeyPressed(keys[Right])) {
@@ -75,6 +80,8 @@ void Game::processInterface()
 
 void Game::processPersonAction(Vector2f pos)
 {
+	Entity &mainPerson = world.Enemys[0];
+
 	if (Keyboard::isKeyPressed(keys[actionAlternate])) {
 		if (mainPerson.isInUseField(pos.x, pos.y, true)) {
 			mainPerson.actionAlternate(world, pos);// ÈÑÏÐÀÂÜ
@@ -98,31 +105,36 @@ void Game::processPersonAction(Vector2f pos)
 
 void Game::processOtherAction(Event &event, Vector2f pos)
 {
+	Entity &mainPerson = world.Enemys[0];
 
-	switch (event.type) {
-	case Event::KeyPressed:
-		processInterface();
-		processPersonAction(pos);
-		break;
-	case Event::MouseButtonPressed:
-		if(mainPerson.currenMode != idEntityMode::atack)
-		{
-			mainPerson.useItem(world, event, pos);
+	if (!mainPerson.isDeath) {
+		switch (event.type) {
+		case Event::KeyPressed:
+			processInterface();
+			processPersonAction(pos);
+			break;
+		case Event::MouseButtonPressed:
+			if (mainPerson.currenMode != idEntityMode::atack) {
+				mainPerson.useItem(world , event , pos);
+			}
+			break;
+		case Event::Resized:
+			resizeWindow();
+			break;
+		default:
+			break;
 		}
-		break;
-	case Event::Closed:
+	}
+
+	if (event.type == Event::Closed) {
 		window.close();
-		break;
-	case Event::Resized:
-		resizeWindow();
-		break;
-	default:
-		break;
 	}
 }
 
 	void Game::processPanelQuickAccess()
 	{
+		Entity &mainPerson = world.Enemys[0];
+
 		if (Keyboard::isKeyPressed(Keyboard::Num0)) {
 
 			if (mainPerson.idSelectItem != 9) {
@@ -132,7 +144,7 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 
 		}
 		else {
-			for (int i = 0; i < mainPerson.amountSlots - 1; i++) {
+			for (int i = 0; i < mainPerson.type->amountSlots - 1; i++) {
 				if (Keyboard::isKeyPressed(Keyboard::Key(Keyboard::Num1 + i))) {
 
 					if(mainPerson.idSelectItem != i)

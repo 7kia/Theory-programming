@@ -8,7 +8,7 @@ void createOnlyEnemy(world &world , std::vector<TypeEnemy*> &types , std::vector
 {
 	Entity* addEnemy = new Entity();
 	Vector3i pos;
-	pos.z = 1;
+	pos.z = 2;
 
 	int &countEnemy = world.countEntity;
 
@@ -19,12 +19,12 @@ void createOnlyEnemy(world &world , std::vector<TypeEnemy*> &types , std::vector
 				break;
 			}
 
-			pos.x = 5;
-			pos.y = 11;
+			pos.x = CENTER_WORLD.x;
+			pos.y = CENTER_WORLD.y;
 
 			addEnemy->EnemyInit(*types[countTypes] , world , pos.x , pos.y , pos.z);
 			world.Enemys.push_back(*addEnemy);
-			isPlaceForCreate(world , pos);
+			//isPlaceForCreate(world , pos);
 
 		}
 	}
@@ -42,7 +42,7 @@ void initializeEntitys(world &world)// ДОБАВЛЕНИЕ СУЩНОСТИ
 	int *config = world.enemyWaveVariables;
 	config[TIME_UPDATE_DIFFICULT] = config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]
 		* config[TIME_GENERATE_WAVE_ENEMYS];
-	//createEnemys(world);
+	createEnemys(world);
 	createEmptyEnemy(world);
 }
 
@@ -54,8 +54,11 @@ void createEnemys(world& world)
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
 
-	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
-	amount.push_back(4);
+	types.push_back(&typesEnemy[idEntity::playerEntity]);
+	amount.push_back(1);
+
+	//types.push_back(&typesEnemy[idEntity::wolfEnemy]);
+	//amount.push_back(4);
 
 	createOnlyEnemy(world , types , amount);
 
@@ -82,10 +85,14 @@ void Entity::EnemyInit(TypeEnemy &typesEnemy, world &world,
 
 	soundBase = &world.databaseSound;
 
-	itemFromPanelQuickAccess = new Item;
-	itemFromPanelQuickAccess->setType(type->typeItem);
+	itemFromPanelQuickAccess = new Item[type->amountSlots];
 	idSelectItem = 0;
+	itemFromPanelQuickAccess[idSelectItem].setType(type->typeItem);
 	itemFromPanelQuickAccess[idSelectItem].amount = type->typeItem.maxAmount;
+	for (int i = 1; i < type->amountSlots; i++)
+	{
+		itemFromPanelQuickAccess[i].setType(*world.emptyObjects.emptyItem.typeItem);
+	}
 
 	size.width = type->featuresSprite.size.width;
 	size.height = type->featuresSprite.size.height;
@@ -100,10 +107,6 @@ void Entity::EnemyInit(TypeEnemy &typesEnemy, world &world,
 	// Текстура
 	spriteEntity->setTexture(*type->textureEntity);
 	spriteEntity->setTextureRect(IntRect(0, 0, size.width, size.height));
-
-
-	emptyObjects &emptyObjects = world.emptyObjects;
-	founds.init(&emptyObjects.emptyItem, &emptyObjects.emptyObject);
 
 	// Позиция и направление
 	currentLevelFloor = level;
@@ -126,9 +129,20 @@ void Entity::EnemyInit(TypeEnemy &typesEnemy, world &world,
 	directions.directionWalk = Direction(randomDirection);
 	////////////////////////////////////////////////////////////////////////
 
+	emptyObjects &emptyObjects = world.emptyObjects;
+	founds.init(world.emptyObjects);
+
 	initFeatures();
 	initProtection();
 	initDamage();
+}
+
+void foundObjects::init(emptyObjects & emptyObjects)
+{
+	emptyItem = &emptyObjects.emptyItem;
+	emptyEnemy = &emptyObjects.emptyEnemy;
+	emptyObject = &emptyObjects.emptyObject;
+
 }
 
 void Entity::initFeatures()
@@ -564,7 +578,7 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 			vector<Entity> &objects = *enemys;
 			for (int i = 0; i != objects.size(); ++i) {
 
-				if (id != i && findEnemyFromList != -1) {
+				if (id != i && founds.findEnemyFromList != -1) {
 					levelUnlifeObject = objects[i].currentLevelFloor;
 
 					spriteObject = objects[i].spriteEntity;
@@ -575,8 +589,8 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 						// TODO
 						wasCollision = true;
 
-						findEnemy = &objects[i];
-						findEnemyFromList = i;
+						founds.findEnemy = &objects[i];
+						founds.findEnemyFromList = i;
 						directions.directionWalk = NONE_DIRECTION;
 						break;
 					}

@@ -23,6 +23,11 @@ const int DEFAULT_HEIGHT_WINDOW = 500;
 
 /////////////////////////////
 // TODO
+const int WIDTH_PLAYER = 32;
+const int HEIGHT_PLAYER = 32;
+const int AMOUNT_PLAYER_SLOTS = 10;
+
+
 const int WIDTH_WOLF = 81;
 const int HEIGHT_WOLF = 81;
 const int AMOUNT_WOLF_SLOTS = 8;

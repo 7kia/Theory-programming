@@ -17,9 +17,10 @@ struct enemyFeatures
 };
 
 
-struct converseEnemy
+struct conversePlayer
 {
 	bool isEnemy;
+	bool isPlayer;
 	bool canPanic;
 	bool avoidEnemy;
 	void init(bool enemy, bool panic, bool avoid);
@@ -42,7 +43,7 @@ struct TypeEnemy
 	sf::SoundBuffer *soundsEntity[sizeBuffer];
 
 	viewEnemy view;
-	converseEnemy converse;
+	conversePlayer converse;
 
 	TypeItem typeItem;
 	int amountSlots;//TODO

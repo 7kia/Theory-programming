@@ -3,9 +3,9 @@
 using namespace sf;
 using namespace std;
 
-void initializeViewer(View &view , Listener &listener)
+void world::initializePlayer(View &view , Listener &listener)
 {
-	
+	mainPerson = &Enemys[0];
 	// TODO
 	float posX = float(CENTER_WORLD.x * SIZE_BLOCK);
 	float posY = float(CENTER_WORLD.y * SIZE_BLOCK);
@@ -46,11 +46,6 @@ void Entity::updateView(View &view , Listener &listener , RenderWindow &window)
 	view.setCenter(tempX, tempY);
 }
 
-void Entity::initFounds(::Item &item, UnlifeObject& object, ::Entity& enemy)
-{
-	founds.init(&item, &object);
-	emptyEnemy = &enemy;
-}
 
 void Entity::givenForPersonDamage(Entity &person)
 {
@@ -76,10 +71,10 @@ void Entity::givenForPersonDamage(Entity &person)
 void Entity::updateAtack(world &world, const float deltaTime)
 {
 
-	bool isEnemy = findEnemyFromList > -1;
+	bool isEnemy = founds.findEnemyFromList > -1;
 	if (giveDamage && isEnemy) {
 
-		if (findEnemy->isDeath) {
+		if (founds.findEnemy->isDeath) {
 			killFindEnemy(world);
 		}
 		else {
@@ -95,9 +90,9 @@ void Entity::updateAtack(world &world, const float deltaTime)
 
 void Entity::killFindEnemy(world& world)
 {
-	findEnemy->EnemyDrop(world);
-	findEnemy->playSoundDeath(world);
-	world.Enemys.erase(world.Enemys.begin() + findEnemyFromList);
+	founds.findEnemy->EnemyDrop(world);
+	founds.findEnemy->playSoundDeath(world);
+	world.Enemys.erase(world.Enemys.begin() + founds.findEnemyFromList);
 	world.countEntity--;
 
 	resetAtack();
@@ -108,13 +103,13 @@ void Entity::hurtEnemy(Item &currentItem, const float deltaTime)
 	currenMode = idEntityMode::atack;
 
 	Vector2f posPerson = { getXPos(), getYPos() };
-	Vector2f posEnemy = { findEnemy->getXPos(), findEnemy->getYPos() };
+	Vector2f posEnemy = { founds.findEnemy->getXPos(), founds.findEnemy->getYPos() };
 	float distanse = distansePoints(posPerson, posEnemy);
 
 	animation.updateFight(deltaTime, giveDamage, currenMode);
 	if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
 		resetAtack();
-		findEnemy->takeDamage(damage, currentItem);
+		founds.findEnemy->takeDamage(damage, currentItem);
 		playAtackSound(currentItem);
 	}
 }
@@ -246,13 +241,12 @@ void Entity::useItem(world &world, Event &event, Vector2f pos)
 	posUse.x = x;
 	posUse.y = y;
 
-
-	bool isEnemy = findEnemy != emptyEnemy;
-	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
+	bool isEnemy = founds.findEnemy != founds.emptyEnemy;
+//	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
 	bool isAtack = event.key.code == Mouse::Left;
 	if (isEnemy && isAtack && isInUseField(pos.x, pos.y, true)) {
 
-		if (findEnemy->currentLevelFloor == currentLevelFloor) {
+		if (founds.findEnemy->currentLevelFloor == currentLevelFloor) {
 
 			if (animation.currentTimeFightAnimation == 0.f) {
 				currenMode = idEntityMode::atack;

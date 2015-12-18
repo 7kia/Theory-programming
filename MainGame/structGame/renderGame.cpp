@@ -7,7 +7,11 @@ void Game::render()
 {
 	window.clear();
 
-	mainPerson.updateView(window);
+	Entity &mainPerson = world.Enemys[0];
+	View &view = world.view;
+	Listener &listener = world.listener;
+
+	mainPerson.updateView(view, listener, window);
 	Vector2f centerWindow = window.getView().getCenter();
 
 	Vector2f sizeWindow = { float(DEFAULT_WIDTH_WINDOW), float(DEFAULT_HEIGHT_WINDOW) };
@@ -34,6 +38,7 @@ void Game::renderMap(FloatRect const& rectWindow)
 {
 	Field &field = world.field;
 
+	Entity &mainPerson = world.Enemys[0];
 	int l = mainPerson.currentLevelFloor;
 	int lowBorder = l - 1;
 	if (lowBorder < 0)
@@ -67,6 +72,8 @@ void Game::renderItems(FloatRect const& rectWindow)
 	int levelPlayer;
 	for (int i = 0; i != items.size(); ++i) {
 		levelItem = items[i].currentLevel;
+
+		Entity &mainPerson = world.Enemys[0];
 		levelPlayer = mainPerson.currentLevelFloor;
 		if (levelItem >= levelPlayer
 			&& levelItem <= levelPlayer + 2) {
@@ -91,8 +98,10 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 	vector<Entity>& Enemys = world.Enemys;
 
 	int enemyLevel;
+
+	Entity &mainPerson = world.Enemys[0];
 	const int personLevel = mainPerson.currentLevelFloor;
-	for (int i = 0; i < Enemys.size(); ++i) {
+	for (int i = 1; i < Enemys.size(); ++i) {
 		enemyLevel = Enemys[i].currentLevelFloor;
 		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
 
@@ -120,7 +129,7 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 
 void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 {
-
+	Entity &mainPerson = world.Enemys[0];
 	int levelPerson = mainPerson.currentLevelFloor;
 	int levelObject;
 	vector<UnlifeObject> &unlifeObjects = world.unlifeObjects;
@@ -152,7 +161,10 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	int currentLevel = difficult;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Entity *mainPerson = world.mainPerson;
+	View &view = world.view;
+
+	Vector2f centerWindow = view.getCenter();
 	Vector2f posImage = centerWindow;
 	size_t amountTypeItems = listAward.size();
 
@@ -196,7 +208,10 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 
 void Game::setPositionAwardText()
 {
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Entity *mainPerson = world.mainPerson;
+	View &view = world.view;
+
+	Vector2f centerWindow = view.getCenter();
 	Vector2f posText = centerWindow;
 
 	setPositionTitleAward(centerWindow, posText);
@@ -264,7 +279,9 @@ void Game::setPositionWaveText(sf::Vector2f& posText)
 
 void Game::setPositionEndGameText()
 {
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	View &view = world.view;
+
+	Vector2f centerWindow = view.getCenter();
 	Text *currentText = &textGame.texts[idText::panelTitleText];
 	Vector2f posText = centerWindow;
 
@@ -320,7 +337,10 @@ void Game::renderGui()
 {
 	if (stateGame == pauseState
 			|| stateGame == endGameState) {
-		Vector2f centerWindow = mainPerson.view->getCenter();
+
+		View &view = world.view;
+
+		Vector2f centerWindow = view.getCenter();
 		panels &panels = gui.panels;
 
 		panel &panel = panels.awardPanel;

@@ -8,30 +8,51 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 
 	////////////////////////////////////////////////////////////////
 	// Волк
-	int id = idEntity::wolfEnemy;
+	int id = idEntity::playerEntity;
 	TypeEnemy* typeEnemy = &typesEnemy[id];
 
-	String texturePath = texturePaths[idTexturePaths::wolfPath];
-	String name = "Wolf";
+	String texturePath = texturePaths[idTexturePaths::mainPersonPath];
+	String name = "MainPerson";
 
 	objectDropItems drop;
-	drop.addItem(1, 4, idItem::rawMeatWolfItem);
+	drop.addItem(0, 0, idItem::dirtItem);
 
-	typeEnemy->featuresSprite.init(WIDTH_WOLF, HEIGHT_WOLF, 0, 0);
+	typeEnemy->featuresSprite.init(WIDTH_PLAYER, HEIGHT_PLAYER, 0, 0);
 	typeEnemy->protection.init(1.5f, 1.f, 0.f);
 	typeEnemy->protection.deathDay = false;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(100, 25, 0, 20, 20);
-	typeEnemy->damage.init(5, 0, 1.f, 1.f);
+	typeEnemy->features.init(100, 100, 0, 20, 20);
+	typeEnemy->damage.init(1, 0, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * 2, false);
 	typeEnemy->converse.init(true, true, false);
-	typeEnemy->initCurrentItem(typesItem, idItem::emptyItem);
-	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_WOLF_SLOTS);
+	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
+	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_PLAYER_SLOTS);
 
 	drop.clear();
 	////////////////////////////////////////////////////////////////
-	// Волк
+	id = idEntity::wolfEnemy;
+	typeEnemy = &typesEnemy[id];
+
+	texturePath = texturePaths[idTexturePaths::wolfPath];
+	name = "Wolf";
+
+	drop.addItem(1 , 4 , idItem::rawMeatWolfItem);
+
+	typeEnemy->featuresSprite.init(WIDTH_WOLF , HEIGHT_WOLF , 0 , 0);
+	typeEnemy->protection.init(1.5f , 1.f , 0.f);
+	typeEnemy->protection.deathDay = false;
+	typeEnemy->step.init(SPEED_ENTITY);
+	typeEnemy->features.init(100 , 25 , 0 , 20 , 20);
+	typeEnemy->damage.init(5 , 0 , 1.f , 1.f);
+	typeEnemy->drop.init(drop);
+	typeEnemy->view.init(RADIUSE_VIEW * 2 , false);
+	typeEnemy->converse.init(true , true , false);
+	typeEnemy->initCurrentItem(typesItem , idItem::emptyItem);
+	typeEnemy->InitOtherFeatures(id , texturePath , name , AMOUNT_WOLF_SLOTS);
+
+	drop.clear();
+	////////////////////////////////////////////////////////////////
 	id = idEntity::skeletEnemy;
 	typeEnemy = &typesEnemy[id];
 
@@ -169,7 +190,7 @@ void enemyFeatures::init(int health, int stamina, int mana, int thirst, int hung
 	maxHungry = hungry;
 }
 
-void converseEnemy::init(bool enemy, bool panic, bool avoid)
+void conversePlayer::init(bool enemy, bool panic, bool avoid)
 {
 	isEnemy = enemy;
 	canPanic = panic;

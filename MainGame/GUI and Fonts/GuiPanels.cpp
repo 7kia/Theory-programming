@@ -78,7 +78,7 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
 
 	int startPosition = widthPanelQuickAccess / 2;
-	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
+	for (int i = 0; i < mainPerson.type->amountSlots; i++) {
 
 		nameCurrentItem = mainPerson.itemFromPanelQuickAccess[i].typeItem->features.name;
 		if (nameCurrentItem != nameEmptyItem) {

@@ -60,7 +60,7 @@ struct world
 	std::vector<int> deleteEnemys;
 
 	void initializeCategorysBreakingObject();
-
+	void initializePlayer(View& view, Listener& listener);
 	typesObjectsInWorld typesObjects;
 	listDestroyObjectsAndBlocks listDestroy;
 	Field field;
@@ -70,7 +70,7 @@ struct world
 
 	View view;
 	Listener listener;
-	Entity mainPerson;
+	Entity *mainPerson;
 
 	int enemyWaveVariables[idEnemyWaveVariable::amountIdsEnemyWaveVariable];
 

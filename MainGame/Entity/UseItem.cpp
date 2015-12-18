@@ -71,11 +71,9 @@ void Entity::takeItem(world &world, Vector2f pos)
 	if (nameFindItem != nameEmptyItem) {
 		if (isInUseField(pos.x, pos.y, true)) {
 			
-			if (isEmptySlot()) {
-
-				searchItem(items, pos);
-				playSound(idSoundPaths::luggage1Sound, *soundBase, soundEntity, getPosition());
-
+			if (isEmptySlot() && founds.findItemFromList > RESET_COLLISION_VALUE) {
+				searchItem(items , pos);
+				playSound(idSoundPaths::luggage1Sound , *soundBase , soundEntity , getPosition());
 			}
 		}
 	}

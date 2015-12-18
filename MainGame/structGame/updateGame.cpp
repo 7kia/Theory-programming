@@ -8,6 +8,7 @@ void Game::update(const float &deltaTime)
 {
 	processEvents(deltaTime);
 
+	Entity &mainPerson = world.Enemys[0];
 	if (mainPerson.isDeath == false
 			&& stateGame != pauseState
 			&& stateGame != endGameState) {
@@ -20,7 +21,7 @@ void Game::update(const float &deltaTime)
 
 void Game::updatePlayer(const float &deltaTime)
 {
-	Entity &mainPerson = world.mainPerson;
+	Entity &mainPerson = world.Enemys[0];
 	mainPerson.update(deltaTime);
 	if(mainPerson.currenMode == idEntityMode::atack || mainPerson.giveDamage)
 	{
@@ -42,7 +43,7 @@ void Game::updateEntity(const float deltaTime)
 {
 	vector<Entity>& Enemys = world.Enemys;
 	Field &field = world.field;
-	for (int i = 0; i < Enemys.size(); ++i) {
+	for (int i = 1; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
@@ -50,7 +51,7 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
 		Enemys[i].currenMode = Enemys[i].currenMode;
-		world.mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
+		Enemys[0].attractionEnemy(Enemys[i], world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
 }

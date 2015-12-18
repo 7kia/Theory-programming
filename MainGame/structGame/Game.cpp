@@ -32,7 +32,7 @@ Game::Game()
 	initializeTypeEnemy(types.typesEnemy, types.typesItem);
 	initializeEntitys(world);
 
-	initializeViewer(world.view, world.listener);
+	world.initializePlayer(world.view, world.listener);
 	initializeHotKeys();
 
 	createTextsAndFonts(textGame);
@@ -48,7 +48,7 @@ Game::Game()
 
 void Game::informationAboutSelect(float x , float y)
 {
-	Entity &mainPerson = world.mainPerson;
+	Entity &mainPerson = world.Enemys[0];
 	Field &field = world.field;
 
 	int xPosBlock = int(x / SIZE_BLOCK);
@@ -86,8 +86,9 @@ void Game::informationAboutSelect(float x , float y)
 	Text& infoUnlifeObject = textGame.texts[idText::infoWindowUnlifeObject];
 
 	emptyObjects &emptyObjects = world.emptyObjects;
-	mainPerson.founds.init(&emptyObjects.emptyItem , &emptyObjects.emptyObject);
-	mainPerson.findEnemy = mainPerson.emptyEnemy;
+	mainPerson.founds.init(emptyObjects);
+
+	mainPerson.founds.findEnemy = mainPerson.founds.emptyEnemy;
 	mainPerson.founds.findObjectFromList = -1;
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
@@ -144,8 +145,8 @@ void Game::informationAboutSelect(float x , float y)
 	vector<Entity>& Enemys = world.Enemys;
 	Text& infoEnemys = textGame.texts[idText::infoEntity];
 
-	mainPerson.findEnemy = &emptyObjects.emptyEnemy;
-	mainPerson.findEnemyFromList = -1;
+	mainPerson.founds.findEnemy = &emptyObjects.emptyEnemy;
+	mainPerson.founds.findEnemyFromList = -1;
 	infoEnemys.setString("Entity : not select");
 	for (int i = 0; i != Enemys.size(); ++i) {
 
@@ -160,8 +161,8 @@ void Game::informationAboutSelect(float x , float y)
 				String name = Enemys[i].type->name;
 				if (name != "") {
 
-					mainPerson.findEnemyFromList = i;
-					mainPerson.findEnemy = &Enemys[i];
+					mainPerson.founds.findEnemyFromList = i;
+					mainPerson.founds.findEnemy = &Enemys[i];
 					infoEnemys.setString("Entity : " + name);
 				}
 			}
@@ -290,5 +291,5 @@ void destroyGame(Game & game)
 {
 	// TODO
 
-	delete &game;
+//	delete &game;
 }

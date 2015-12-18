@@ -146,7 +146,7 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 	bool isInView;
 	for (int i = 0; i != enemy.size(); ++i) {
 
-		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isFindedEnemy = i == mainPerson.founds.findEnemyFromList;
 		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
 						&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
@@ -180,7 +180,7 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 
 	for (int i = 0; i != enemy.size(); ++i) {
 
-		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isFindedEnemy = i == mainPerson.founds.findEnemyFromList;
 		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
 			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
@@ -215,7 +215,7 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 
 	for (int i = 0; i != enemy.size(); ++i) {
 
-		isFindedEnemy = i == mainPerson.findEnemyFromList;
+		isFindedEnemy = i == mainPerson.founds.findEnemyFromList;
 		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
 			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 

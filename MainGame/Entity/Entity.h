@@ -4,7 +4,7 @@
 
 const float SCALE_VIEW = 1.5f;
 
-void initializeViewer(sf::View &view , sf::Listener &listener);
+//void initializePlayer(sf::View &view , sf::Listener &listener);
 
 struct Entity
 {
@@ -142,13 +142,6 @@ struct Entity
 
 	TypeEnemy *type;
 
-
-	///////////////////////////////////////////////////////
-	// Для уничтожения врагов
-	Entity *findEnemy;
-	Entity *emptyEnemy;
-	int findEnemyFromList;
-	///////////////////////////////////////////////////////
 	void EnemyInit(TypeEnemy &typesEnemy , world &world , int xPos , int yPos , int level);
 	void initFeatures();
 	void initProtection();

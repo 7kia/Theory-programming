@@ -21,7 +21,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
 
-	String texturePath = texturePaths[idTexturePaths::Trees];
+	String texturePath = texturePaths[idTexturePaths::TreesPath];
 	String name = "Oak";
 	bool canDestroy = true;
 	int toughness = 100;
@@ -43,7 +43,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	id = idUnlifeObject::oakSmall;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::Trees];
+	texturePath = texturePaths[idTexturePaths::TreesPath];
 	name = "Small oak";
 	canDestroy = true;
 	toughness = 50;
@@ -64,7 +64,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	id = idUnlifeObject::appleGrowTree;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::Trees];
+	texturePath = texturePaths[idTexturePaths::TreesPath];
 	name = "Apple tree with apple's";
 	canDestroy = true;
 	toughness = 50;
@@ -85,7 +85,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	id = idUnlifeObject::appleTree;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::Trees];
+	texturePath = texturePaths[idTexturePaths::TreesPath];
 	name = "Apple tree";
 	canDestroy = true;
 	toughness = 50;
@@ -105,7 +105,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	id = idUnlifeObject::oakSeadling;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::Trees];
+	texturePath = texturePaths[idTexturePaths::TreesPath];
 	name = "Seadling oak";
 	canDestroy = true;
 	toughness = 30;
@@ -126,7 +126,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	id = idUnlifeObject::appleSeadling;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::Trees];
+	texturePath = texturePaths[idTexturePaths::TreesPath];
 	name = "Apple seadling";
 	canDestroy = true;
 	toughness = 30;
@@ -149,7 +149,7 @@ void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	int id = idUnlifeObject::smallStone;
 	int idNature = idNatureObject::stoneNature;
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
-	String texturePath = texturePaths[idTexturePaths::items];
+	String texturePath = texturePaths[idTexturePaths::itemsPath];
 	String name = "Small stone";
 	bool canDestroy = true;
 	int toughness = 2;
@@ -173,7 +173,7 @@ void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	int idNature = idNatureObject::NoneNature;
 
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
-	typesObject->Init(texturePaths[idTexturePaths::items], "Empty", storage, id, idNature);
+	typesObject->Init(texturePaths[idTexturePaths::itemsPath], "Empty", storage, id, idNature);
 	typesObject->defineToughness(false, 0);
 
 	typesObject->mainSize.init(0, 0, 0, 0);
@@ -187,7 +187,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 	int id = idUnlifeObject::skeletDeathEffect;
 	int idNature = idNatureObject::NoneNature;
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
-	String texturePath = texturePaths[idTexturePaths::skelet];
+	String texturePath = texturePaths[idTexturePaths::skeletPath];
 	String name = "Skelet Death";
 	bool canDestroy = false;
 	int toughness = 1;
@@ -207,7 +207,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 	id = idUnlifeObject::wolfDeathEffect;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::wolf];
+	texturePath = texturePaths[idTexturePaths::wolfPath];
 	name = "Wolf death";
 	canDestroy = false;
 	toughness = 0;
@@ -227,7 +227,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 	id = idUnlifeObject::destroyBlockEffect;
 	typesObject = &typesUnlifeObjects[id];
 
-	texturePath = texturePaths[idTexturePaths::destroyBlock];
+	texturePath = texturePaths[idTexturePaths::destroyBlockPath];
 	name = "Destroy block";
 	canDestroy = true;
 	toughness = 50;

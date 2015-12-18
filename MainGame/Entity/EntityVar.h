@@ -4,6 +4,7 @@
 #include "../UnlifeObject/UnlifeObject.h"
 //#include "../Map/Map.h"
 
+struct emptyObjects;
 const int AMOUNT_ENEMY_ITEM = 8;
 
 const float MULTIPLIER_OF_DAMAGE = 1.f;
@@ -33,6 +34,7 @@ const float maxTimeWalk = 12.f;
 
 enum idEntity
 {
+	playerEntity,
 	wolfEnemy,
 	skeletEnemy,
 	skeletMinerEnemy,
@@ -173,6 +175,7 @@ struct entityProtection {
 	void init(float cut, float crash, float unlife);
 };
 
+struct Entity;
 struct foundObjects {
 	UnlifeObject *findObject;
 	int findObjectFromList;
@@ -181,9 +184,13 @@ struct foundObjects {
 	sf::Vector3i currentTarget;
 
 	Item *findItem;
-	Item *emptyItem;
 	int findItemFromList;
-	void init(Item *item, UnlifeObject *object);
+	Item *emptyItem;
+
+	Entity *findEnemy;
+	Entity *emptyEnemy;
+	int findEnemyFromList;
+	void init(emptyObjects &emptyObjects);
 };
 
 struct currentCollision {
