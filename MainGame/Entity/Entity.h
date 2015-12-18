@@ -196,6 +196,7 @@ struct Entity
 
 	void playSoundChoiseItem();
 
+	Item& getCurrentItem();
 };
 
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,

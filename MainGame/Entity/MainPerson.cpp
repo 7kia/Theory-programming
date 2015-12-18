@@ -72,7 +72,8 @@ void Entity::updateAtack(world &world, const float deltaTime)
 {
 
 	bool isEnemy = founds.findEnemyFromList > -1;
-	if (giveDamage && isEnemy) {
+	bool notMyself = founds.findEnemy != this;
+	if (giveDamage && isEnemy && notMyself) {
 
 		if (founds.findEnemy->isDeath) {
 			killFindEnemy(world);
@@ -121,6 +122,7 @@ void Entity::hurtPerson(Entity& enemy, world& world, const float deltaTime)
 	Item &itemEnemy = itemFromPanelQuickAccess[idSelectItem];
 
 	playAtackSound(itemEnemy);
+
 
 	itemEnemy.currentToughness -= 1;
 	if (itemEnemy.currentToughness < 1) {
@@ -184,7 +186,11 @@ void Entity::attractionEnemy(Entity &enemy, world &world, const float deltaTime)
 
 				}
 
-
+				if(enemy.currenMode == atack 
+					 || enemy.currenMode == fight)
+				{
+					founds.findEnemy = this;
+				}
 			}
 
 
@@ -196,8 +202,11 @@ void Entity::attractionEnemy(Entity &enemy, world &world, const float deltaTime)
 				// TODO
 				//enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
 				//enemy.playAnimationAtack(deltaTime);
+
+
 				if (enemy.giveDamage) {
-					enemy.hurtPerson(*this, world, deltaTime);
+					//enemy.hurtPerson(*this, world, deltaTime);
+					enemy.founds.findEnemy->takeDamage(enemy.damage , enemy.getCurrentItem());
 					enemy.resetAtack();
 				}
 			}
@@ -333,6 +342,11 @@ void Entity::playSoundChoiseItem()
 {
 	int id = idSoundPaths::itemChoiseIdSound;
 	::playSound(id, *soundBase, soundEntity, getPosition());
+}
+
+Item & Entity::getCurrentItem()
+{
+	return itemFromPanelQuickAccess[idSelectItem];
 }
 
 ////////////////////////////////////////////////////////////////////

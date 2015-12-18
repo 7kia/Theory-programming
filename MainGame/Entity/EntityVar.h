@@ -32,6 +32,8 @@ const int SHIFT_ANIMATION_ATACK = 4;
 const float minTimeWalk = 4.f;
 const float maxTimeWalk = 12.f;
 
+const int ID_PLAYER_IN_LIST = 0;
+
 enum idEntity
 {
 	playerEntity,
