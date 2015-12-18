@@ -1,11 +1,12 @@
-#include "../World.h"
-#include "EntityVar.h"
+//#include "../World.h"
+//#include "../CreateGroups.h"
+#include  "Enemy.h"
 
 using namespace std;
 
-void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount)
+void createOnlyEnemy(world &world , std::vector<TypeEnemy*> &types , std::vector<int> amount)
 {
-	Enemy* addEnemy = new Enemy();
+	Entity* addEnemy = new Entity();
 	Vector3i pos;
 	pos.z = 1;
 
@@ -21,9 +22,9 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 			pos.x = 5;
 			pos.y = 11;
 
-			addEnemy->EnemyInit(*types[countTypes], world, pos.x, pos.y, pos.z);
+			addEnemy->EnemyInit(*types[countTypes] , world , pos.x , pos.y , pos.z);
 			world.Enemys.push_back(*addEnemy);
-			isPlaceForCreate(world, pos);
+			isPlaceForCreate(world , pos);
 
 		}
 	}
@@ -40,14 +41,14 @@ void initializeEntitys(world &world)// ƒŒ¡¿¬À≈Õ»≈ —”ŸÕŒ—“»
 
 	int *config = world.enemyWaveVariables;
 	config[TIME_UPDATE_DIFFICULT] = config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]
-									* config[TIME_GENERATE_WAVE_ENEMYS];	
+		* config[TIME_GENERATE_WAVE_ENEMYS];
 	//createEnemys(world);
 	createEmptyEnemy(world);
 }
 
 void createEnemys(world& world)
 {
-	Enemy* addEnemy = new Enemy();
+	Entity* addEnemy = new Entity();
 
 	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 	std::vector<TypeEnemy*> types;
@@ -56,7 +57,7 @@ void createEnemys(world& world)
 	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
 	amount.push_back(4);
 
-	createOnlyEnemy(world, types, amount);
+	createOnlyEnemy(world , types , amount);
 
 	delete addEnemy;
 }
@@ -67,9 +68,9 @@ void createEmptyEnemy(world& world)
 	TypeEnemy* typeEnemy = &typesEnemy[idEntity::emptyEnemy];
 
 	emptyObjects &emptyObjects = world.emptyObjects;
-	Enemy &emptyEnemy = emptyObjects.emptyEnemy;
+	Entity &emptyEnemy = emptyObjects.emptyEnemy;
 
-	emptyEnemy.EnemyInit(*typeEnemy, world, -1, -1, -1);
+	emptyEnemy.EnemyInit(*typeEnemy , world , -1 , -1 , -1);
 }
 
 void Entity::EnemyInit(TypeEnemy &typesEnemy, world &world,
@@ -540,7 +541,7 @@ void Entity::checkBlock(Field& field, float distanse)
 	checkInDirectionWalk(field, distanse, startPosition, shifts);
 }
 
-void Entity::interactionWithEntity(vector<Enemy> *enemys, int id, const float deltaTime)// »—œ–¿¬‹ for enity and mainPerson
+void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float deltaTime)// »—œ–¿¬‹ for enity and mainPerson
 {
 	if (wasCollision == false) {
 		float &dx(movement.x);
@@ -560,7 +561,7 @@ void Entity::interactionWithEntity(vector<Enemy> *enemys, int id, const float de
 			entityBound = spriteEntity->getGlobalBounds();
 
 
-			vector<Enemy> &objects = *enemys;
+			vector<Entity> &objects = *enemys;
 			for (int i = 0; i != objects.size(); ++i) {
 
 				if (id != i && findEnemyFromList != -1) {

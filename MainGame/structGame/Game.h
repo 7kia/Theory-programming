@@ -1,8 +1,12 @@
 #pragma once
-#include "../Entity/MainPerson.h"
-
-#include "../GUI and Fonts/Font.h"
+//#include "../World.h"
+//#include "../Entity/Entity.h"
+//#include "../Entity/MainPerson.h"
+//#include "../GUI and Fonts/Font.h"
+//#include "../World.h"
 #include "../GUI and Fonts/GUI.h"
+
+
 
 const sf::String TITLE_PROGRAM = "MainGame v1.9.3";
 
@@ -65,6 +69,7 @@ enum StateGame
 	endGameState
 };
 
+struct world;
 struct Game
 {
 	sf::RenderWindow window;
@@ -77,8 +82,6 @@ struct Game
 	StateGame stateGame = StateGame::gameState;
 
 	Keyboard::Key keys[hotKeys::amountKeys];
-
-	MainPerson mainPerson;
 
 	bool updateDifficult = false;
 	int difficult = 1;
@@ -119,7 +122,7 @@ struct Game
 	void checkDifficult();
 	void generateStrongGroups();
 	void createGroups(float time);
-	void generateGroups();
+	void  generateGroups();
 
 	// GiveAward.cpp
 	void createListAward();

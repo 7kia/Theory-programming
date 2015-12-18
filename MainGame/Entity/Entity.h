@@ -1,34 +1,13 @@
-#include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
+#include <list>
+#include "TypeEnemy.h"
 
-#include "EntityVar.h"
 
-struct world;
-struct destroyObjectsAndBlocks;
-struct Field;
+const float SCALE_VIEW = 1.5f;
 
-struct MainPerson;
-struct Enemy;
-struct TypeEnemy;
-const int AMOUNT_ENTITY = 30;
-const int AMOUNT_ACTIVE_SLOTS = 10;
+void initializeViewer(sf::View &view , sf::Listener &listener);
 
-const float TIME_ATTENTION_SHOW_DAMAGE = 1.5f;
-
-const sf::Color NORMAL_COLOR(255, 255, 255, 255);
-const sf::Color TRANSPARENT_COLOR(255, 255, 255, 127);
-
-const float TIME_ATACK = 1.f;
-
-const float MULTIPLY_STEP_ANIMATION = 5;
-const int NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION = 6;
-const int RESET_WALK_ANIMATION = 4;
-const int RESET_ATACK_ANIMATION = 3;
-const int SHIFT_ANIMATION_ATACK = 4;
-
-class Entity
+struct Entity
 {
-public:
 	sf::Sprite *spriteEntity;
 	sizeSprite size;
 	entityAnimation animation;
@@ -153,7 +132,7 @@ public:
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	void upgradeObject(UnlifeObject& object, world& world);
 	//////////////////////////////////////////////////////////////////////////////
-	//{                          Enemy                                         }//
+	//{                          Entity                                         }//
 
 
 	// TODO
@@ -166,8 +145,8 @@ public:
 
 	///////////////////////////////////////////////////////
 	// Для уничтожения врагов
-	Enemy *findEnemy;
-	Enemy *emptyEnemy;
+	Entity *findEnemy;
+	Entity *emptyEnemy;
 	int findEnemyFromList;
 	///////////////////////////////////////////////////////
 	void EnemyInit(TypeEnemy &typesEnemy , world &world , int xPos , int yPos , int level);
@@ -194,15 +173,36 @@ public:
 	void searchWay(world &world);
 	bool findLadder(world &world , sf::Vector3i pos);
 	void buildLadder(world &world);
-	void givenForPersonDamage(MainPerson & person);
-	void hurtPerson(MainPerson &enemy , world &world , const float deltaTime);
+	void givenForPersonDamage(Entity & person);
+	void hurtPerson(Entity &enemy , world &world , const float deltaTime);
 
 	void checkInDirectionWalk(Field &field , float distanse , sf::Vector2i posStart , sf::Vector2i shifts);
 	void redefineDirectionWalk();
 	void checkBlock(Field &field , float distanse);
-	void interactionWithEntity(std::vector<Enemy>* enemys , int id , const float deltaTime);
-	//{                          Enemy                                         }//
+	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
+	//{                          Entity                                         }//
 	//////////////////////////////////////////////////////////////////////////////
+	void updateView(sf::View &view , sf::Listener &listener , sf::RenderWindow &window);
+
+	void initFounds(Item& item , UnlifeObject& object , Entity& enemy);
+
+	void killFindEnemy(world &world);
+	void hurtEnemy(Item &currentItem , const float deltaTime);
+	void updateAtack(world &world , const float deltaTime);
+
+	void attractionEnemy(Entity &enemy , world &world , const float deltaTime);
+
+	void getCoordinateForView(sf::Vector2f position, sf::View &view);
+	void viewmap(float time);
+
+
+	void computeAngle(sf::RenderWindow &window);
+
+
+	void useItem(world &world , Event &event , Vector2f pos);
+
+	void playSoundChoiseItem();
+
 };
 
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,

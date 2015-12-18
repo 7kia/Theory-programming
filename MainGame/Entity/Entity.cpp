@@ -1,6 +1,3 @@
-
-#include <list>
-
 #include "Entity.h"
 
 using namespace sf;
@@ -621,6 +618,8 @@ bool Entity::isEmptySlot()
 	}
 	return false;
 }
+
+
 
 bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
 							int &findObjectFromList, int &current, int currentLevel)

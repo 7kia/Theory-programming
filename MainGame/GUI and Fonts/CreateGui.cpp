@@ -9,7 +9,7 @@ void createGUITexture(Texture &texture, sf::String fileName)
 
 void createGUI(infoAboutSelect &gui)
 {
-	gui.Texture.loadFromFile(texturePaths[idTexturePaths::infoSelectBlock]);
+	gui.Texture.loadFromFile(texturePaths[idTexturePaths::infoSelectBlockPath]);
 	gui.sprite.setTexture(gui.Texture);
 	gui.sprite.setTextureRect(IntRect(0, 0, widthInfo, heightInfo));
 }

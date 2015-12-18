@@ -2,7 +2,7 @@
 #include "../ListObjectsAndBlocks.h"
 #include "../Items//Items.h"
 #include "../UnlifeObject/UnlifeObject.h"
-#include "../Map//Map.h"
+//#include "../Map/Map.h"
 
 const int AMOUNT_ENEMY_ITEM = 8;
 
@@ -12,6 +12,24 @@ const float TIME_GIVEN_DAMAGE = 1.f;
 const float SPEED_ENTITY = 150.f;
 const float RADIUSE_VIEW = 300.f;
 
+const int AMOUNT_ENTITY = 30;
+const int AMOUNT_ACTIVE_SLOTS = 10;
+
+const float TIME_ATTENTION_SHOW_DAMAGE = 1.5f;
+
+const sf::Color NORMAL_COLOR(255 , 255 , 255 , 255);
+const sf::Color TRANSPARENT_COLOR(255 , 255 , 255 , 127);
+
+const float TIME_ATACK = 1.f;
+
+const float MULTIPLY_STEP_ANIMATION = 5;
+const int NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION = 6;
+const int RESET_WALK_ANIMATION = 4;
+const int RESET_ATACK_ANIMATION = 3;
+const int SHIFT_ANIMATION_ATACK = 4;
+
+const float minTimeWalk = 4.f;
+const float maxTimeWalk = 12.f;
 
 enum idEntity
 {

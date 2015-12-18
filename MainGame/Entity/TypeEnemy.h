@@ -1,8 +1,8 @@
 #pragma once
 #include "../GlobalVar.h"
-
-#include "Entity.h"
-
+#include "../Items/Items.h"
+#include "../Map/Map.h"
+#include "EntityVar.h"
 
 struct typesObjectsInWorld;
 struct enemyFeatures
@@ -58,4 +58,4 @@ struct TypeEnemy
 	void InitOtherFeatures(int idType, sf::String texturePath, sf::String nameEnemy, int amountEnemySlots);
 };
 
-void initializeTypeEnemy(typesObjectsInWorld &types);
+void initializeTypeEnemy(TypeEnemy *typesEnemy, TypeItem *typesItem);

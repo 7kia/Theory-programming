@@ -51,7 +51,7 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 	window.draw(*currentText);
 }
 
-void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, int shift,
+void barMainFeatures::renderTextEnemy(Entity &enemy, int & current, int & max, int shift,
 																			RenderWindow & window, TextGame & textGame)
 {
 	Text *currentText = &textGame.texts[idText::levelBar];
@@ -68,7 +68,7 @@ void barMainFeatures::renderTextEnemy(Enemy &enemy, int & current, int & max, in
 	window.draw(*currentText);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, RenderWindow &window, int shift)
+void barMainFeatures::renderDamageForEnemy(Entity &enemy, TextGame &textGame, RenderWindow &window, int shift)
 {
 	Text *currentText = &textGame.texts[idText::inputDamage];
 
@@ -90,7 +90,7 @@ void barMainFeatures::renderDamageForEnemy(Enemy &enemy, TextGame &textGame, Ren
 	}
 }
 
-void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
+void barMainFeatures::renderBarMainPerson(Entity &mainPerson, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																					featuresWindow features, TextGame &textGame)
 {
 	RenderWindow &window = *features.window;
@@ -105,7 +105,7 @@ void barMainFeatures::renderBarMainPerson(MainPerson &mainPerson, int &current, 
 
 }
 
-void barMainFeatures::renderBarEnemy(Enemy &enemy, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
+void barMainFeatures::renderBarEnemy(Entity &enemy, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																		 TextGame &textGame, RenderWindow &window)
 {
 	int shiftBar = enemy.mana.maxMana > 0;

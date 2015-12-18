@@ -34,7 +34,7 @@ void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	int numberItem = idItem::stoneItem;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	featuresAddItem.init("Stone block", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
@@ -86,7 +86,7 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typeDamageItem damage;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	int numberItem = idItem::planksBlockItem;
 
@@ -160,7 +160,7 @@ void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typeDamageItem damage;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	int numberItem = idItem::seadlingOakItem;
 
@@ -214,7 +214,7 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typeDamageItem damage;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	int numberItem = idItem::dirtItem;
 
@@ -288,7 +288,7 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typeDamageItem damage;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	int numberItem = idItem::stoneKnifeItem;
 
@@ -402,7 +402,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typeDamageItem damage;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	int numberItem = idItem::ironBackHoerItem;
 
@@ -522,7 +522,7 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typeDamageItem damage;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	int numberItem = idItem::mushroomItem;
 
@@ -620,7 +620,7 @@ void initEmptyItem(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	int numberItem = idItem::emptyItem;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	featuresAddItem.init("Empty", numberItem, idCategoryItem::other, false);
 	featuresAddItem.defineToughness(false, 1);
@@ -652,7 +652,7 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typeDamageItem damage;
 
 	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::items];
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
 	int numberItem = idItem::woodBukketItem;
 

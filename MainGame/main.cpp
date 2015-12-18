@@ -13,7 +13,7 @@ void startGame()
 	Game *game = new Game();
 
 	RenderWindow &window = game->window;
-	MainPerson &mainPerson = game->mainPerson;
+	Entity &mainPerson = game->world.mainPerson;
 
 	Time timeSinceLastUpdate = Time::Zero;
 

@@ -31,12 +31,12 @@ void initializeField(Field & field)
 
 	field.floorSprite = new Sprite;
 	field.floorTexture = new Texture;
-	field.floorTexture->loadFromFile(texturePaths[idTexturePaths::mapFloor]);
+	field.floorTexture->loadFromFile(texturePaths[idTexturePaths::mapFloorPath]);
 	field.floorSprite->setTexture(*field.floorTexture);
 
 	field.wallSprite = new Sprite;
 	field.wallTexture = new Texture;
-	field.wallTexture->loadFromFile(texturePaths[idTexturePaths::mapWall]);
+	field.wallTexture->loadFromFile(texturePaths[idTexturePaths::mapWallPath]);
 	field.wallSprite->setTexture(*field.wallTexture);
 }
 

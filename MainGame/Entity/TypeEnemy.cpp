@@ -1,20 +1,17 @@
 #include "TypeEnemy.h"
-#include "../Recourses.h"
-#include "../World.h"
+
 using namespace sf;
 using namespace std;
 
-void initializeTypeEnemy(typesObjectsInWorld &types)
+void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 {
 
-	TypeEnemy *typesEnemy = types.typesEnemy;
-	TypeItem *typesItem = types.typesItem;
 	////////////////////////////////////////////////////////////////
 	// Волк
 	int id = idEntity::wolfEnemy;
 	TypeEnemy* typeEnemy = &typesEnemy[id];
 
-	String texturePath = texturePaths[idTexturePaths::wolf];
+	String texturePath = texturePaths[idTexturePaths::wolfPath];
 	String name = "Wolf";
 
 	objectDropItems drop;
@@ -38,7 +35,7 @@ void initializeTypeEnemy(typesObjectsInWorld &types)
 	id = idEntity::skeletEnemy;
 	typeEnemy = &typesEnemy[id];
 
-	texturePath = texturePaths[idTexturePaths::skelet];
+	texturePath = texturePaths[idTexturePaths::skeletPath];
 	name = "Skelet";
 
 	drop.addItem( 1, 2, idItem::dirtItem );

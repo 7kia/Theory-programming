@@ -27,7 +27,7 @@ void panelQuickAccess::renderPanel(Vector2f position, RenderWindow& window)
 	window.draw(spritePanel);
 }
 
-void panelQuickAccess::renderSelect(MainPerson& mainPerson, featuresWindow features)
+void panelQuickAccess::renderSelect(Entity& mainPerson, featuresWindow features)
 {
 	RenderWindow &window = *features.window;
 	Vector2f centerWindow = features.center;
@@ -67,7 +67,7 @@ void panels::renderItemPanel(sf::Vector2f position, RenderWindow& window)
 	window.draw(itemInfoOverPanel.sprite);
 }
 
-void panelQuickAccess::renderItems(MainPerson& mainPerson, featuresWindow features,
+void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 																	 TextGame &textGame, barMainFeatures &bars, itemFeatures &itemFeatures)
 {
 	RenderWindow &window = *features.window;

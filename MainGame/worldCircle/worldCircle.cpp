@@ -74,7 +74,7 @@ void Game::setDay()
 
 void Game::destroyUnlife()
 {
-	std::vector<Enemy>& Enemys = world.Enemys;
+	std::vector<Entity>& Enemys = world.Enemys;
 	int i = 0;
 	while (i < Enemys.size()) {
 		if (Enemys[i].protection.deathDay) {

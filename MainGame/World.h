@@ -1,5 +1,5 @@
 #pragma once
-#include "../Entity/Enemy.h"
+#include "Entity/Entity.h"
 
 enum idEnemyWaveVariable
 {
@@ -41,7 +41,7 @@ struct emptyObjects
 {
 	Item emptyItem;
 	UnlifeObject emptyObject;
-	Enemy emptyEnemy;
+	Entity emptyEnemy;
 };
 
 enum TimeDay {
@@ -53,7 +53,7 @@ struct world
 {
 	std::vector<Item> items;
 	std::vector<UnlifeObject> unlifeObjects;
-	std::vector<Enemy> Enemys;
+	std::vector<Entity> Enemys;
 
 	std::vector<int> deleteItems;
 	std::vector<int> deleteUnlifeObjects;
@@ -68,6 +68,9 @@ struct world
 	TimeDay timeDay = day;
 	dataSound databaseSound;
 
+	View view;
+	Listener listener;
+	Entity mainPerson;
 
 	int enemyWaveVariables[idEnemyWaveVariable::amountIdsEnemyWaveVariable];
 
@@ -88,9 +91,9 @@ void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<i
 bool isPlaceForCreate(world world, sf::Vector3i &pos);
 void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos);
 
-void createSmallGroupSkelets(world &world, Vector3i pos);
-void createMiddleGroupSkelets(world &world, Vector3i pos);
-void createBigGroupSkelets(world &world, Vector3i pos);
+void createSmallGroupSkelets(world &world, sf::Vector3i pos);
+void createMiddleGroupSkelets(world &world, sf::Vector3i pos);
+void createBigGroupSkelets(world &world, sf::Vector3i pos);
 
 void initializeEntitys(world &world);
 void createEnemys(world &world);

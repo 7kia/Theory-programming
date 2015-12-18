@@ -5,12 +5,12 @@ using namespace std;
 
 void initializeGUI(GUI &gui, TextGame &textGame)
 {
-	createGUITexture(gui.textureGui[widgetsTexture], texturePaths[idTexturePaths::widgets]);
-	createGUITexture(gui.textureGui[awardTexture], texturePaths[idTexturePaths::awardGui]);
-	createGUITexture(gui.textureGui[menuTexture], texturePaths[idTexturePaths::menuGui]);
+	createGUITexture(gui.textureGui[widgetsTexture], texturePaths[idTexturePaths::widgetsPath]);
+	createGUITexture(gui.textureGui[awardTexture], texturePaths[idTexturePaths::awardGuiPath]);
+	createGUITexture(gui.textureGui[menuTexture], texturePaths[idTexturePaths::menuGuiPath]);
 	createPanels(gui.panels, gui.textureGui);
 
-	createGUITexture(gui.textureGui[barTexture], texturePaths[idTexturePaths::bars]);
+	createGUITexture(gui.textureGui[barTexture], texturePaths[idTexturePaths::barsPath]);
 	createGUI(gui.hungry, gui.textureGui[barTexture]);
 	createGUI(gui.thirst, gui.textureGui[barTexture]);
 	createGUI(gui.mainFeatures, gui.textureGui[barTexture]);
@@ -90,7 +90,7 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void GUI::renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::RenderWindow& window, TextGame& textGame)
+void GUI::renderTextDeath(Entity &mainPerson, sf::Vector2f position, sf::RenderWindow& window, TextGame& textGame)
 {
 	Text *currentText = &textGame.texts[idText::mainPersonIsDeath];
 	currentText->setPosition(position);
@@ -100,10 +100,10 @@ void GUI::renderTextDeath(MainPerson &mainPerson, sf::Vector2f position, sf::Ren
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void GUI::setPositionGui(RenderWindow &window, MainPerson &mainPerson, vector<Enemy>& enemy, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity>& enemy, TextGame &textGame)
 {
 
-	Vector2f centerWindow = mainPerson.view->getCenter();
+	Vector2f centerWindow = window.getView().getCenter();
 	Vector2u sizeWindow = window.getSize();
 	featuresWindow featuresWindow;
 	Vector2f pos = { centerWindow.x + sizeWindow.x / 2 - widthInfo , centerWindow.y + sizeWindow.y / 2 - heightInfo};

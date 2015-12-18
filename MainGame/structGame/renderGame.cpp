@@ -88,7 +88,7 @@ void Game::renderItems(FloatRect const& rectWindow)
 
 void Game::renderEntitys(FloatRect const& rectWindow)
 {
-	vector<Enemy>& Enemys = world.Enemys;
+	vector<Entity>& Enemys = world.Enemys;
 
 	int enemyLevel;
 	const int personLevel = mainPerson.currentLevelFloor;

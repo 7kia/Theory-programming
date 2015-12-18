@@ -1,10 +1,11 @@
 #include "CreateGroups.h"
 
+//#include "structGame/Game.h"
 using namespace std;
 
 void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos)
 {
-	Enemy* addEntity = new Enemy();
+	Entity* addEntity = new Entity();
 
 	emptyObjects &emptyObjects = world.emptyObjects;
 
@@ -71,8 +72,8 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 bool isPlaceForCreate(world world, Vector3i &pos)
 {
 	// TODO
-	vector<Enemy> &enemys = world.Enemys;
-	Enemy &currentEntity = enemys[enemys.size() - 1];
+	vector<Entity> &enemys = world.Enemys;
+	Entity &currentEntity = enemys[enemys.size() - 1];
 
 	bool isPlace;
 	bool moveX = false;
@@ -191,58 +192,4 @@ void createBigGroupSkelets(world &world, Vector3i pos)
 	amount.push_back(config[AMOUNT_SKELET_BUILDER_IN_BIG_GROUP]);
 
 	createGroup(world, types, amount, 7, pos);
-}
-
-void Game::generateGroups()
-{
-	bool &waveEnemysCreated = world.waveEnemysCreated;
-	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
-	int *config = world.enemyWaveVariables;
-
-	bool nowNight = world.timeDay == night;
-	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
-
-	if (nowNight && needGenerateWave && !waveEnemysCreated) {
-		createGroups(currentWorldTime);
-	}
-
-}
-
-void Game::createGroups(float time)
-{
-	countWave++;
-	world.waveEnemysCreated = true;
-
-	Vector3i pos;
-
-	pos = { 5, 5, 2 };
-	createSmallGroupSkelets(world, pos);
-
-	checkDifficult();
-	generateStrongGroups();
-}
-
-void Game::checkDifficult()
-{
-	int *config = world.enemyWaveVariables;
-
-	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
-	if (updateDifficult) {
-		countWave = 0;
-		difficult++;
-	}
-}
-
-void Game::generateStrongGroups()
-{
-	Vector3i pos;
-
-	if (difficult > 1) {
-		pos = { 10, 10, 1 };
-		createMiddleGroupSkelets(world, pos);
-	}
-	if (difficult > 2) {
-		pos = { 20, 20, 1 };
-		createBigGroupSkelets(world, pos);
-	}
 }

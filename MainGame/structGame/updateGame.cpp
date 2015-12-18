@@ -20,6 +20,7 @@ void Game::update(const float &deltaTime)
 
 void Game::updatePlayer(const float &deltaTime)
 {
+	Entity &mainPerson = world.mainPerson;
 	mainPerson.update(deltaTime);
 	if(mainPerson.currenMode == idEntityMode::atack || mainPerson.giveDamage)
 	{
@@ -28,10 +29,10 @@ void Game::updatePlayer(const float &deltaTime)
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
 	mainPerson.interactionWithMap(world.field, world.listDestroy, deltaTime);
-	mainPerson.getCoordinateForView(mainPerson.getXPos(), mainPerson.getYPos());
+	mainPerson.getCoordinateForView(mainPerson.getPosition(), world.view);
 
-	mainPerson.updateView(window);
-	window.setView(*mainPerson.view);
+	mainPerson.updateView(world.view, world.listener, window);
+	window.setView(world.view);
 
 	//printf("Angle %f \n", mainPerson.rotation);
 }
@@ -39,7 +40,7 @@ void Game::updatePlayer(const float &deltaTime)
 
 void Game::updateEntity(const float deltaTime)
 {
-	vector<Enemy>& Enemys = world.Enemys;
+	vector<Entity>& Enemys = world.Enemys;
 	Field &field = world.field;
 	for (int i = 0; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime);
@@ -49,7 +50,7 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
 		Enemys[i].currenMode = Enemys[i].currenMode;
-		mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
+		world.mainPerson.attractionEnemy(Enemys[i], world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
 }
@@ -124,3 +125,59 @@ void Game::upgradeObject(UnlifeObject &object)
 	object.setType(nextType);
 	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
 }
+
+
+void Game::generateGroups()
+{
+	bool &waveEnemysCreated = world.waveEnemysCreated;
+	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
+	int *config = world.enemyWaveVariables;
+
+	bool nowNight = world.timeDay == night;
+	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
+
+	if (nowNight && needGenerateWave && !waveEnemysCreated) {
+		createGroups(currentWorldTime);
+	}
+
+}
+
+void Game::createGroups(float time)
+{
+	countWave++;
+	world.waveEnemysCreated = true;
+
+	Vector3i pos;
+
+	pos = { 5, 5, 2 };
+	createSmallGroupSkelets(world , pos);
+
+	checkDifficult();
+	generateStrongGroups();
+}
+
+void Game::checkDifficult()
+{
+	int *config = world.enemyWaveVariables;
+
+	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
+	if (updateDifficult) {
+		countWave = 0;
+		difficult++;
+	}
+}
+
+void Game::generateStrongGroups()
+{
+	Vector3i pos;
+
+	if (difficult > 1) {
+		pos = { 10, 10, 1 };
+		createMiddleGroupSkelets(world , pos);
+	}
+	if (difficult > 2) {
+		pos = { 20, 20, 1 };
+		createBigGroupSkelets(world , pos);
+	}
+}
+

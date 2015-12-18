@@ -3,25 +3,25 @@
 // PATHs
 
 typedef enum {
-	mainPerson,
-	wolf,
-	skelet,
+	mainPersonPath,
+	wolfPath ,
+	skeletPath ,
 
-	mapFloor,
-	mapWall,
+	mapFloorPath ,
+	mapWallPath ,
 
-	Trees,
-	destroyBlock,
+	TreesPath ,
+	destroyBlockPath ,
 
-	infoSelectBlock,
-	widgets,
-	bars,
-	inventory,
+	infoSelectBlockPath ,
+	widgetsPath ,
+	barsPath ,
+	inventoryPath ,
 
-	items,
+	itemsPath ,
 
-	awardGui,
-	menuGui,
+	awardGuiPath ,
+	menuGuiPath ,
 	amountTexturePaths
 } idTexturePaths;
 
