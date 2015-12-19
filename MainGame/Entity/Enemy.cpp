@@ -619,7 +619,8 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 
 			}
 		
-			//if (wasCollision) {
+			/*
+						//if (wasCollision) {
 				if (directions.directionWalk >= Direction::UP_LEFT) {
 					posEntity.x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
 					posEntity.y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
@@ -628,8 +629,10 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 					posEntity.x -= dx * deltaTime;
 					posEntity.y -= dy * deltaTime;
 				}
-				spriteEntity->setPosition(posEntity);
+				//spriteEntity->setPosition(posEntity);
 			//}
+
+			*/
 
 	}
 }

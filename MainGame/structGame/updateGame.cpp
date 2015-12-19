@@ -28,7 +28,7 @@ void Game::updatePlayer(const float &deltaTime)
 		mainPerson.updateAtack(world, deltaTime);
 	}
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
-	mainPerson.interactionWithEntity(&world.Enemys , 0 , deltaTime);
+	//mainPerson.interactionWithEntity(&world.Enemys , 0 , deltaTime);
 
 	mainPerson.interactionWithMap(world.field, world.listDestroy, deltaTime);
 	mainPerson.getCoordinateForView(mainPerson.getPosition(), world.view);

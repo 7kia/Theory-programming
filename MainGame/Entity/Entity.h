@@ -75,6 +75,9 @@ struct Entity
 	bool isUnlifeObject(sf::Vector3i& pos, world& world);
 
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
+	void gravitateToGround(Field &field);
+	void 
+
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, const float deltaTime);
 	bool isInUseField(float x, float y, bool under);
 
