@@ -316,9 +316,16 @@ void Entity::actionMain(world &world, Vector2f pos)
 			currentLevelFloor += 1;
 
 		} 
-		else if (isInListObjects(listDestroy.harvestObjects, founds.findObject->typeObject->id))
+		else
+		{
+			if(founds.findObject != founds.emptyObject)
+			{
+							if (isInListObjects(listDestroy.harvestObjects, founds.findObject->typeObject->id))
 		{
 			upgradeObject(*founds.findObject, world);
+		}
+
+			}
 		}
 
 	}

@@ -183,7 +183,7 @@ struct Entity
 	void hurtEnemy(Item &currentItem , const float deltaTime);
 	void updateAtack(world &world , const float deltaTime);
 
-	void attractionEnemy(Entity &enemy , world &world , const float deltaTime);
+	void searchEnemy(Entity &enemy , world &world , const float deltaTime);
 
 	void getCoordinateForView(sf::Vector2f position, sf::View &view);
 	void viewmap(float time);

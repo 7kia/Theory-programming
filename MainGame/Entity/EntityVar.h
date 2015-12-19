@@ -193,12 +193,14 @@ struct foundObjects {
 	Entity *emptyEnemy;
 	int findEnemyFromList;
 	void init(emptyObjects &emptyObjects);
+
 };
 
 struct currentCollision {
-	int x = RESET_COLLISION_VALUE;
-	int y = RESET_COLLISION_VALUE;
-	int level = RESET_COLLISION_VALUE;
+	sf::Vector3i posBlock = RESET_VECTOR_3I;
+	sf::Vector2f posObject = RESET_VECTOR_2F;
+	int levelObject = RESET_COLLISION_VALUE;
+
 	wchar_t block;
 	int idObject = RESET_COLLISION_VALUE;
 

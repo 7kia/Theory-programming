@@ -308,9 +308,9 @@ void Entity::choiceBlock(world &world)
 {
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 
-	int x = collision.x;
-	int y = collision.y;
-	int level = collision.level;
+	int x = collision.posBlock.x;
+	int y = collision.posBlock.y;
+	int level = collision.posBlock.z;
 
 	int xShift = 0;
 	int yShift = 0;
@@ -324,7 +324,17 @@ void Entity::choiceBlock(world &world)
 	idNature = field.idsNature[field.findIdBlock(*block)];
 
 	if (idNature <= idNatureObject::Unbreaking) {
-		idNature = founds.findObject->typeObject->idNature;
+		vector<UnlifeObject> &objects = world.unlifeObjects;
+		UnlifeObject &findObject = world.emptyObjects.emptyObject;
+
+		for (int i = 0; i < objects.size(); i++)
+		{
+			if(objects[i].getPosition() == collision.posObject)
+			{
+				findObject = objects[i];
+			}
+		}
+		idNature = findObject.typeObject->idNature;
 	}
 	else
 	{
@@ -347,7 +357,7 @@ void Entity::searchWay(world &world)
 
 	Vector3i posEnemy = { int(getXPos() / SIZE_BLOCK),
 		int(getXPos() / SIZE_BLOCK),
-		collision.level };
+		currentLevelFloor + 1 };
 
 	if (!findLadder(world, posEnemy)) {
 
@@ -557,7 +567,7 @@ void Entity::checkBlock(Field& field, float distanse)
 
 void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
-	if (wasCollision == false) {
+	if (!wasCollision) {
 		float &dx(movement.x);
 		float &dy(movement.y);
 
@@ -571,14 +581,24 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 			FloatRect objectBound;
 
 			int levelUnlifeObject;
-			FloatRect entityBound;
-			entityBound = spriteEntity->getGlobalBounds();
+			Vector2f posEntity = getPosition();
+
+			if (directions.directionWalk >= Direction::UP_LEFT) {
+				posEntity.x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
+				posEntity.y += DIAGONAL_SCALE_SPEED * dy * deltaTime;
+			}
+			else {
+				posEntity.x += dx * deltaTime;
+				posEntity.y += dy * deltaTime;
+			}
+			spriteEntity->setPosition(posEntity);
+			FloatRect entityBound = spriteEntity->getGlobalBounds();
 
 
 			vector<Entity> &objects = *enemys;
 			for (int i = 0; i != objects.size(); ++i) {
 
-				if (id != i && founds.findEnemyFromList != -1) {
+				if (id != i) {// && founds.findEnemyFromList != -1
 					levelUnlifeObject = objects[i].currentLevelFloor;
 
 					spriteObject = objects[i].spriteEntity;
@@ -590,7 +610,7 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 						wasCollision = true;
 
 						founds.findEnemy = &objects[i];
-						founds.findEnemyFromList = i;
+						//founds.findEnemyFromList = i;
 						directions.directionWalk = NONE_DIRECTION;
 						break;
 					}
@@ -599,7 +619,17 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 
 			}
 		
-
+			//if (wasCollision) {
+				if (directions.directionWalk >= Direction::UP_LEFT) {
+					posEntity.x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
+					posEntity.y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
+				}
+				else {
+					posEntity.x -= dx * deltaTime;
+					posEntity.y -= dy * deltaTime;
+				}
+				spriteEntity->setPosition(posEntity);
+			//}
 
 	}
 }

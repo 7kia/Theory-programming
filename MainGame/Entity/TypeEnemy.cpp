@@ -18,7 +18,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	drop.addItem(0, 0, idItem::dirtItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_PLAYER, HEIGHT_PLAYER, 0, 0);
-	typeEnemy->protection.init(1.5f, 1.f, 0.f);
+	typeEnemy->protection.init(0.0015f, 1.f, 0.f);
 	typeEnemy->protection.deathDay = false;
 	typeEnemy->step.init(SPEED_ENTITY);
 	typeEnemy->features.init(100, 100, 0, 20, 20);

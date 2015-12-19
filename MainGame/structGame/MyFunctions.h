@@ -3,6 +3,10 @@
 
 const int RESET_COLLISION_VALUE = -1;
 const sf::Vector2i RESET_VECTOR_2I = { RESET_COLLISION_VALUE, RESET_COLLISION_VALUE };
+const sf::Vector3i RESET_VECTOR_3I = { RESET_COLLISION_VALUE, RESET_COLLISION_VALUE, RESET_COLLISION_VALUE };
+
+const sf::Vector2f RESET_VECTOR_2F = { float(RESET_COLLISION_VALUE), float(RESET_COLLISION_VALUE) };
+
 const sf::Vector2i ZERO_VECTOR_2I = { 0, 0 };
 
 float distansePoints(sf::Vector2f firstPoint, sf::Vector2f secondPoint);

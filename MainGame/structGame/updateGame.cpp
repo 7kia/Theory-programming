@@ -28,6 +28,7 @@ void Game::updatePlayer(const float &deltaTime)
 		mainPerson.updateAtack(world, deltaTime);
 	}
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
+	mainPerson.interactionWithEntity(&world.Enemys , 0 , deltaTime);
 
 	mainPerson.interactionWithMap(world.field, world.listDestroy, deltaTime);
 	mainPerson.getCoordinateForView(mainPerson.getPosition(), world.view);
@@ -42,6 +43,8 @@ void Game::updatePlayer(const float &deltaTime)
 void Game::updateEntity(const float deltaTime)
 {
 	vector<Entity>& Enemys = world.Enemys;
+	Entity &mainPerson = world.Enemys[0];
+
 	Field &field = world.field;
 	for (int i = 1; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime);
@@ -51,7 +54,7 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
 		Enemys[i].currenMode = Enemys[i].currenMode;
-		Enemys[0].attractionEnemy(Enemys[i], world, deltaTime);
+		Enemys[i].searchEnemy(mainPerson , world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
 }

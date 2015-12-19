@@ -130,49 +130,48 @@ void Entity::hurtPerson(Entity& enemy, world& world, const float deltaTime)
 	}
 }
 
-void Entity::attractionEnemy(Entity &enemy, world &world, const float deltaTime)
+void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 {
-	float radiuseView = enemy.type->view.radiuseView;
-	bool feelEnemy = enemy.type->view.feelEnemy;
+	float radiuseView = type->view.radiuseView;
+	bool feelEnemy = type->view.feelEnemy;
 
 	bool onLevelEnemy = currentLevelFloor == enemy.currentLevelFloor;
 	bool onLevel = onLevelEnemy || feelEnemy;
-	bool noAtack = enemy.currenMode != idEntityMode::atack;
-	Vector2f personPoint = { getXPos(), getYPos() };
-	Vector2f enemyPoint;
-	float distanse;
+	bool noAtack = currenMode != idEntityMode::atack;
+	Vector2f enemyPoint = enemy.getPosition();
+	Vector2f searcherPoint = getPosition();
 
-	enemyPoint = enemy.spriteEntity->getPosition();
-	distanse = distansePoints(personPoint, enemyPoint);
+	float distanse;
+	distanse = distansePoints(searcherPoint , enemyPoint);
 
 	if (distanse <= radiuseView && onLevel) {
 		Vector2f movemoment;
 		if (noAtack) {
-			enemy.currenMode = idEntityMode::fight;
+			currenMode = idEntityMode::fight;
 
-			movemoment = vectorDirection(enemyPoint, personPoint);
-			enemy.checkLevelHealth(movemoment);
-			enemy.defineDirectionLook(movemoment);
+			movemoment = vectorDirection(searcherPoint , enemyPoint);
+
+			checkLevelHealth(movemoment);
+			defineDirectionLook(movemoment);
 
 			// TODO
+			if (feelEnemy == false) {
+				checkBlock(world.field , distanse);
+			}
 
-			if (feelEnemy == false)
-				enemy.checkBlock(world.field, distanse);
-
-			bool isFight = enemy.currenMode == idEntityMode::fight;
+			bool isFight = currenMode == idEntityMode::fight;
 			if (isFight) {
 
-				enemy.choiceDirections(movemoment);
-				//step.currentTime = 0;
+				choiceDirections(movemoment);
 
-				if (enemy.wasCollision) {
+				if (wasCollision) {
 
-					enemy.directions.directionWalk = NONE_DIRECTION;
+					//enemy.directions.directionWalk = NONE_DIRECTION;
 					if (!onLevelEnemy && feelEnemy) {
-						enemy.searchWay(world);
+						searchWay(world);
 					}
 					else if (feelEnemy) {
-						enemy.choiceBlock(world);
+						choiceBlock(world);
 					}
 
 				}
@@ -180,17 +179,18 @@ void Entity::attractionEnemy(Entity &enemy, world &world, const float deltaTime)
 
 					bool isNearFight = distanse <= SIZE_BLOCK;
 					if (isNearFight) {
-						enemy.currenMode = idEntityMode::atack;
-						enemy.directions.directionWalk = NONE_DIRECTION;
+						currenMode = idEntityMode::atack;
+						directions.directionWalk = NONE_DIRECTION;
 					}
 
 				}
 
-				if(enemy.currenMode == atack 
-					 || enemy.currenMode == fight)
+				if(currenMode == atack 
+					 || currenMode == fight)
 				{
-					founds.findEnemy = this;
+					founds.findEnemy = &enemy;//Player
 				}
+
 			}
 
 
@@ -199,38 +199,46 @@ void Entity::attractionEnemy(Entity &enemy, world &world, const float deltaTime)
 		{
 			bool isNearFight = distanse <= SIZE_BLOCK;
 			if (isNearFight) {
-				// TODO
-				//enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
-				//enemy.playAnimationAtack(deltaTime);
-
-
-				if (enemy.giveDamage) {
-					//enemy.hurtPerson(*this, world, deltaTime);
-					enemy.founds.findEnemy->takeDamage(enemy.damage , enemy.getCurrentItem());
-					enemy.resetAtack();
+				if (giveDamage) {
+					founds.findEnemy->takeDamage(damage , getCurrentItem());
+					resetAtack();
 				}
 			}
 			else {
 				
 				////////////////////////////////////
 				// TODO
-				Vector2i posBlock = { enemy.founds.currentTarget.x, enemy.founds.currentTarget.y };
-				if (posBlock != RESET_VECTOR_2I)
-				{
-					//enemy.currenMode = idEntityMode::atack;
-					//enemy.animation.updateFight(deltaTime, enemy.giveDamage, enemy.currenMode);
-					//enemy.playAnimationAtack(deltaTime);
-					if (enemy.giveDamage) {
-						enemy.breakNearCollision(world);
+				Vector2i posBlock = { collision.posBlock.x, collision.posBlock.y };
+				Vector2f posObject = { collision.posObject.x, collision.posObject.y };
+				int levelObject = collision.levelObject;
 
+				bool isCollision = posBlock != RESET_VECTOR_2I || posObject != RESET_VECTOR_2F;
+				if (giveDamage) {
+					bool isObjectForBreaking = false;
+					if(posObject != RESET_VECTOR_2F)
+					{
+						founds.currentTarget = { int(posObject.x / SIZE_BLOCK),
+												int(posObject.y / SIZE_BLOCK),
+												levelObject };
+						isObjectForBreaking = true;
+
+					}
+					else if(posBlock != RESET_VECTOR_2I)
+					{
+						founds.currentTarget = collision.posBlock;
+						isObjectForBreaking = true;
+					}
+
+					if (isObjectForBreaking) {
+						breakNearCollision(world);
 					}
 				}
 				else {
 					/////////
 					// TODO
-					enemy.currenMode = idEntityMode::walk;
+					//enemy.currenMode = idEntityMode::walk;
 					/////////
-					enemy.resetAtack();
+					//resetAtack();
 				}
 				////////////////////////////////////
 				
