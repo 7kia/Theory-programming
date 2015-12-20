@@ -75,8 +75,8 @@ struct Entity
 	bool isUnlifeObject(sf::Vector3i& pos, world& world);
 
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
+	void shiftTowardWalk(sf::Vector2f& pos);
 	void gravitateToGround(Field &field);
-	void 
 
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, const float deltaTime);
 	bool isInUseField(float x, float y, bool under);
@@ -93,7 +93,7 @@ struct Entity
 	//////////////////////////////////////////////////////////////////////////////////////////vv
 	// ITEMS
 	// Использование предметов
-	bool isInListBlocks(wchar_t block, std::vector<wchar_t> &listObjects);
+	bool isInListBlocks(std::vector<wchar_t> &listObjects, wchar_t block);
 	bool isInListIds(int id, std::vector<wchar_t>& listIds);
 	bool isInListObjects(std::vector<int> &listTypes, int id);
 

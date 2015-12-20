@@ -422,6 +422,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 							 sizeMain, idCreated, damage);
 
 	typesItem[numberItem] = addType;
+	typesItem[numberItem] = typesItem[numberItem];
 	/////////////////////////////////////////////////////////
 	// Кирки
 	// Каменная кирка

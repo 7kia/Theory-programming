@@ -335,6 +335,7 @@ void Entity::choiceBlock(world &world)
 			}
 		}
 		idNature = findObject.typeObject->idNature;
+		//founds.currentTarget = 
 	}
 	else
 	{
@@ -568,8 +569,8 @@ void Entity::checkBlock(Field& field, float distanse)
 void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
 	if (!wasCollision) {
-		float &dx(movement.x);
-		float &dy(movement.y);
+		float &dx = movement.x;
+		float &dy = movement.y;
 
 		float x;
 		float y;

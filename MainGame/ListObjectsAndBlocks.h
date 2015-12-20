@@ -18,7 +18,6 @@ struct listDestroyObjectsAndBlocks//Game.cpp
 
 	std::vector<wchar_t> passableBlocks;
 	std::vector<wchar_t> notPassableFloor;
-	std::vector<wchar_t> slowingBlocks;
 
 	std::vector<wchar_t> ladder;
 

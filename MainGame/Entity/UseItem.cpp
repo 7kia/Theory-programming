@@ -295,6 +295,8 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 
 	vector<UnlifeObject> &objects = world.unlifeObjects;
 	objects.push_back(addObject);
+
+	founds.currentTarget = { pos.x + 1, pos.y + 1, pos.z };
 	founds.findObject = &objects[objects.size() - 1];
 }
 
@@ -307,7 +309,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 
 		Field &field = world.field;
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
-		if (isInListBlocks(field.dataMap[currentLevelFloor + 1][y][x], listDestroy.ladder)) {
+		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x])) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 			Vector2f posCurrent = { float(x * SIZE_BLOCK + posOrigin.x), float(y * SIZE_BLOCK + posOrigin.y) };
@@ -340,7 +342,7 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 
 		Field &field = world.field;
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
-		if (isInListBlocks(field.dataMap[currentLevelFloor][y][x], listDestroy.ladder)) {
+		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x])) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 

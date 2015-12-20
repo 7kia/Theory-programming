@@ -166,6 +166,14 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 
 				if (wasCollision) {
 
+					if (collision.posObject != RESET_VECTOR_2F) {
+						founds.currentTarget = { int(collision.posObject.x / SIZE_BLOCK),
+							int(collision.posObject.y / SIZE_BLOCK),
+							collision.levelObject };
+					}
+					else if (collision.posBlock != RESET_VECTOR_3I) {
+						founds.currentTarget = collision.posBlock;
+					}
 					//enemy.directions.directionWalk = NONE_DIRECTION;
 					if (!onLevelEnemy && feelEnemy) {
 						searchWay(world);
@@ -181,6 +189,7 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 					if (isNearFight) {
 						currenMode = idEntityMode::atack;
 						directions.directionWalk = NONE_DIRECTION;
+						founds.currentTarget = RESET_VECTOR_3I;
 					}
 
 				}
@@ -205,45 +214,29 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 				}
 			}
 			else {
-				
+
 				////////////////////////////////////
 				// TODO
 				Vector2i posBlock = { collision.posBlock.x, collision.posBlock.y };
 				Vector2f posObject = { collision.posObject.x, collision.posObject.y };
-				int levelObject = collision.levelObject;
+				//int levelObject = collision.levelObject;
 
-				bool isCollision = posBlock != RESET_VECTOR_2I || posObject != RESET_VECTOR_2F;
+
 				if (giveDamage) {
-					bool isObjectForBreaking = false;
-					if(posObject != RESET_VECTOR_2F)
-					{
-						founds.currentTarget = { int(posObject.x / SIZE_BLOCK),
-												int(posObject.y / SIZE_BLOCK),
-												levelObject };
-						isObjectForBreaking = true;
+					if (founds.currentTarget != RESET_VECTOR_3I) {//founds.currentTarget != RESET_VECTOR_3I
 
-					}
-					else if(posBlock != RESET_VECTOR_2I)
-					{
-						founds.currentTarget = collision.posBlock;
-						isObjectForBreaking = true;
-					}
-
-					if (isObjectForBreaking) {
 						breakNearCollision(world);
+						resetAtack();
 					}
 				}
-				else {
-					/////////
-					// TODO
-					//enemy.currenMode = idEntityMode::walk;
-					/////////
-					//resetAtack();
-				}
-				////////////////////////////////////
+
 				
 			}
 		}
+	}
+	else
+	{
+		founds.currentTarget = RESET_VECTOR_3I;
 	}
 }
 

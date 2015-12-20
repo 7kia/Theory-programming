@@ -47,6 +47,8 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 
 				breakItem(currentItem);
 			}
+
+			founds.currentTarget = RESET_VECTOR_3I;
 		}
 
 

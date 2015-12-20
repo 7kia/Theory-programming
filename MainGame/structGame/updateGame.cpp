@@ -50,10 +50,10 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].update(deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
-		Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
+		//Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
-		Enemys[i].currenMode = Enemys[i].currenMode;
+		//Enemys[i].currenMode = Enemys[i].currenMode;
 		Enemys[i].searchEnemy(mainPerson , world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}

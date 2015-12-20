@@ -148,7 +148,7 @@ void Game::informationAboutSelect(float x , float y)
 	mainPerson.founds.findEnemy = &emptyObjects.emptyEnemy;
 	mainPerson.founds.findEnemyFromList = -1;
 	infoEnemys.setString("Entity : not select");
-	for (int i = 0; i != Enemys.size(); ++i) {
+	for (int i = 1; i != Enemys.size(); ++i) {
 
 		int level = Enemys[i].currentLevelFloor;
 
@@ -266,9 +266,6 @@ void world::initializeCategorysBreakingObject()
 	/////////////////////////////////////////////////////////////////////////
 	// Проходим по полу
 	listDestroy.notPassableFloor.push_back(charBlocks[idBlocks::air]);
-	/////////////////////////////////////////////////////////////////////////
-	// Замедляющие блоки
-	listDestroy.slowingBlocks.push_back(charBlocks[idBlocks::water]);
 	/////////////////////////////////////////////////////////////////////////
 	// Лестницы
 	listDestroy.ladder.push_back(charBlocks[idBlocks::woodLadder]);

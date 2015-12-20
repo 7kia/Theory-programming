@@ -249,6 +249,15 @@ void Entity::update(const float deltaTime)
 			break;
 		}
 
+		if (directions.directionWalk >= Direction::UP_LEFT) {
+			movement.x *= DIAGONAL_SCALE_SPEED * deltaTime;
+			movement.y *= DIAGONAL_SCALE_SPEED * deltaTime;
+		}
+		else {
+			movement.x *= deltaTime;
+			movement.y *= deltaTime;
+		}
+
 		if (directions.directionWalk) {
 			playAnimationWalk(deltaTime);
 		}
@@ -436,55 +445,49 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 {
 	if(!wasCollision)
 	{
-			float dx(movement.x);
-	float dy(movement.y);
-
-	Vector2f origin = spriteEntity->getOrigin();
 	Vector2f posEntity = getPosition();
+	posEntity = posEntity + movement;
 
-	currentLevelFloor = currentLevelFloor;
+	float xPos = posEntity.x / SIZE_BLOCK;
+	float yPos = posEntity.y / SIZE_BLOCK;
 
-	if (directions.directionWalk >= Direction::UP_LEFT) {
-		posEntity.x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
-		posEntity.y += DIAGONAL_SCALE_SPEED * dy * deltaTime;
-	}
-	else
-	{
-		posEntity.x +=  dx * deltaTime;
-		posEntity.y +=  dy * deltaTime;
-	}
+	int residueX = (xPos - int(xPos)) > 0.f;
+	int residueY = (yPos - int(yPos)) > 0.f;
+
+	//int x = int(xPos) + residueX;
+	//int y = int(yPos) + residueY;
+	float x = posEntity.x;
+	float y = posEntity.y;
+
+	Vector2f posRectBlock = { float((x) * SIZE_BLOCK),
+														float((y ) * SIZE_BLOCK) };
+	FloatRect rectangleBlock;
+	rectangleBlock = FloatRect(posRectBlock , SIZES_BLOCK);
 
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
 
 	if (!isExitFromBorder(posEntity.x, posEntity.y)) {
 	
-		int x = int((posEntity.x) / SIZE_BLOCK);
-		int y = int((posEntity.y ) / SIZE_BLOCK);
-		int xFar = int((posEntity.x + size.width / 2) / SIZE_BLOCK);
-		int yFar = int((posEntity.y + size.height / 2) / SIZE_BLOCK);
+		///*
+				int xFar = int((posEntity.x + size.width ) / SIZE_BLOCK);
+		int yFar = int((posEntity.y + size.height ) / SIZE_BLOCK);
+		/////////////////////////////////////////////
+		// Ñòåíû
+		//for (int i = y; i < yFar; i++) {
+			//for (int j = x; j < xFar; j++) {
+		for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
 
-		bool isSlowingBlock = false;
-		//for (int i = posEntity.y / SIZE_BLOCK; i < (posEntity.y + size.height / 2) / SIZE_BLOCK; i++) {
-			//for (int j = posEntity.x / SIZE_BLOCK; j < (posEntity.x + size.width / 2) / SIZE_BLOCK; j++) {
-
-		for (int i = y; i < yFar; i++) {
-			for (int j = x; j < xFar; j++) {
-				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.slowingBlocks)) {// ÈÑÏÐÀÂÜ
-					step.stepCurrent = step.stepFirst / slowingStep;
-					isSlowingBlock = true;
-					stamina.needMinusStamina = false;
-				} else if (step.stepCurrent == step.stepFirst / slowingStep) {
-					step.stepCurrent = step.stepFirst;
-				}
-
-				if (isInListBlocks(map[currentLevelFloor + 1][i][j], listDestroy.passableBlocks) == false) {
+				if (!isInListBlocks(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j])) {
 					wasCollision = true;
 
 					collision.initPos(j, i, currentLevelFloor + 1);
 					collision.block = map[currentLevelFloor + 1][i][j];
 
-					directions.directionWalk = NONE_DIRECTION;
+					// ÊÎÑÒÛËü
+					founds.currentTarget = collision.posBlock;
+
 				}
 
 				if (wasCollision) {
@@ -493,32 +496,22 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 			}
 		}
 		/////////////////////////////////////////////
+		// Ïîë
+		//for (int i = y; i < yFar; i++) {
+			//for (int j = x; j < xFar; j++) {
+		for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
+			for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
 
-		// TODO
-		//for (int i = posEntity.y / SIZE_BLOCK; i < (posEntity.y + size.height / 2) / SIZE_BLOCK; i++) {
-			//for (int j = posEntity.x / SIZE_BLOCK; j < (posEntity.x + size.width / 2) / SIZE_BLOCK; j++) {
-		for (int i = y; i < yFar; i++) {
-			for (int j = x; j < xFar; j++) {
-
-
-				// Çàìåäëÿþùèå áëîêè
-				if (isInListBlocks(map[currentLevelFloor][i][j] , listDestroy.slowingBlocks)) {// ÈÑÏÐÀÂÜ
-					step.stepCurrent = step.stepFirst / slowingStep;
-					stamina.needMinusStamina = false;
-				}
-				else if (step.stepCurrent == step.stepFirst / slowingStep && !isSlowingBlock) {
-					step.stepCurrent = step.stepFirst;
-				}
-
-				// ßâëÿåòñÿ íåïðîõîäèìûì
-				if (isInListBlocks(map[currentLevelFloor][i][j] , listDestroy.notPassableFloor)) {
+				if (isInListBlocks(listDestroy.notPassableFloor, map[currentLevelFloor][i][j])) {
 
 					wasCollision = true;
 
 					collision.initPos(j , i , currentLevelFloor);
 					collision.block = map[currentLevelFloor][i][j];
 
-					break;
+					// ÊÎÑÒÛËü
+					founds.currentTarget = collision.posBlock;
+
 				}
 
 				if(wasCollision)
@@ -529,7 +522,35 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 			}
 		}
 
-		/////////////////////////////////////////////
+		//*/
+
+		/*
+				FloatRect entityBound;
+		entityBound = spriteEntity->getGlobalBounds();
+
+		//if (entityBound.intersects(rectangleBlock)) {
+
+			wchar_t blockWall = map[currentLevelFloor + 1][y][x];
+			wchar_t blockFloor = map[currentLevelFloor][y][x];
+			int level = currentLevelFloor;
+
+			if(!isInListBlocks(listDestroy.passableBlocks, blockWall))
+			{
+				level++;
+				wasCollision = true;
+			}
+			else if(isInListBlocks(listDestroy.notPassableFloor , blockFloor))
+			{
+				wasCollision = true;
+			}
+
+			if (wasCollision) {
+				collision.posBlock = { x, y, level };
+			}
+
+		//}
+		*/
+
 	}
 	else {
 		wasCollision = true;
@@ -540,24 +561,11 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 	if(!wasCollision)
 	{
-		collision.clear();
-
-		float dx(movement.x);
-		float dy(movement.y);
-
-		Vector2f origin = spriteEntity->getOrigin();
-		Vector2f posEntity = getPosition();
-
-		if (directions.directionWalk >= Direction::UP_LEFT) {
-			posEntity.x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
-			posEntity.y += DIAGONAL_SCALE_SPEED * dy * deltaTime;
-		}
-		else {
-			posEntity.x += dx * deltaTime;
-			posEntity.y += dy * deltaTime;
-		}
-
-		spriteEntity->setPosition(posEntity);
+		spriteEntity->move(movement);
+	}
+	else 
+	{
+		directions.directionWalk = NONE_DIRECTION;
 	}
 
 
@@ -565,7 +573,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 	movement = { 0.f, 0.f };
 }
-
 
 void Entity::gravitateToGround(Field &field)
 {
@@ -579,71 +586,62 @@ void Entity::gravitateToGround(Field &field)
 	}
 }
 
-void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects, const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
+void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
-	float dx(movement.x);
-	float dy(movement.y);
 
-		wasCollision = false;
+	wasCollision = false;
 
-		collision.clear();
+	collision.clear();
 
-		Sprite *spriteObject;
-		FloatRect objectBound;
+	Sprite *spriteObject;
+	FloatRect objectBound;
 
-		int levelUnlifeObject;
-		Sprite *transparentSpiteObject;
-		FloatRect objectAltBound;
+	int levelUnlifeObject;
+	Sprite *transparentSpiteObject;
+	FloatRect objectAltBound;
 
-		Vector2f origin = spriteEntity->getOrigin();
-		Vector2f startPos = getPosition();
-		Vector2f posEntity = startPos;
-		if (directions.directionWalk >= Direction::UP_LEFT) {
-			posEntity.x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
-			posEntity.y += DIAGONAL_SCALE_SPEED * dy * deltaTime;
+	spriteEntity->move(movement);
+	FloatRect entityBound = spriteEntity->getGlobalBounds();
+	spriteEntity->move(-movement);
+
+
+	for (int i = 0; i < unlifeObjects.size(); i++) {
+		levelUnlifeObject = unlifeObjects[i].currentLevel;
+
+		spriteObject = unlifeObjects[i].spriteObject;
+		objectBound = spriteObject->getGlobalBounds();
+
+		transparentSpiteObject = unlifeObjects[i].transparentSpiteObject;
+		objectAltBound = transparentSpiteObject->getGlobalBounds();
+
+		if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
+			wasCollision = true;
+
+			collision.posObject = unlifeObjects[i].getPosition();
+			collision.levelObject = unlifeObjects[i].currentLevel;
+
+
+
+
+			// ÊÎÑÒÛËü
+			founds.currentTarget = { int(collision.posObject.x / SIZE_BLOCK),
+				int(collision.posObject.y / SIZE_BLOCK),
+				collision.levelObject };
+
+
+			directions.directionWalk = NONE_DIRECTION;
+			break;
 		}
-		else {
-			posEntity.x += dx * deltaTime;
-			posEntity.y += dy * deltaTime;
-		}
-		spriteEntity->setPosition(posEntity);
-		FloatRect entityBound = spriteEntity->getGlobalBounds();
-		spriteEntity->setPosition(startPos);
-
-
-		vector<UnlifeObject> &objects = unlifeObjects;
-		for (int i = 0; i < objects.size(); i++) {
-			levelUnlifeObject = objects[i].currentLevel;
-
-			spriteObject = objects[i].spriteObject;
-			objectBound = spriteObject->getGlobalBounds();
-
-			transparentSpiteObject = objects[i].transparentSpiteObject;
-			objectAltBound = transparentSpiteObject->getGlobalBounds();
-
-			if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-				wasCollision = true;
-				//////////////////////////////////////////////////////////
-				// TODO
-				//Vector2f posObject = spriteObject->getPosition();
-
-				//int xPos = int((posObject.x + SIZE_BLOCK / 2) / SIZE_BLOCK);
-				//int yPos = int((posObject.y + SIZE_BLOCK / 2) / SIZE_BLOCK);
-
-				collision.posObject = objects[i].getPosition();
-				collision.levelObject = objects[i].currentLevel;
-				//////////////////////////////////////////////////////////
-
-				directions.directionWalk = NONE_DIRECTION;
-				break;
-			} else if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
+		else if (type->id == idEntity::playerEntity) {
+			if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
 				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
-			} else {
+			}
+			else {
 				transparentSpiteObject->setColor(NORMAL_COLOR);
 			}
-
 		}
 
+	}
 
 }
 
@@ -821,7 +819,7 @@ void Entity::run()
 	}
 }
 
-bool Entity::isInListBlocks(wchar_t block, vector<wchar_t> &listObjects) {
+bool Entity::isInListBlocks(vector<wchar_t> &listObjects , wchar_t block) {
 	if (&listObjects != nullptr) {
 
 		size_t size = listObjects.size();
