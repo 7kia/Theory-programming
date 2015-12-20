@@ -165,8 +165,8 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 				choiceDirections(movemoment);
 
 				if (wasCollision) {
-
-					if (collision.posObject != RESET_VECTOR_2F) {
+					/*
+										if (collision.posObject != RESET_VECTOR_2F) {
 						founds.currentTarget = { int(collision.posObject.x / SIZE_BLOCK),
 							int(collision.posObject.y / SIZE_BLOCK),
 							collision.levelObject };
@@ -174,7 +174,8 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 					else if (collision.posBlock != RESET_VECTOR_3I) {
 						founds.currentTarget = collision.posBlock;
 					}
-					//enemy.directions.directionWalk = NONE_DIRECTION;
+
+					*/
 					if (!onLevelEnemy && feelEnemy) {
 						searchWay(world);
 					}
@@ -217,19 +218,42 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 
 				////////////////////////////////////
 				// TODO
-				Vector2i posBlock = { collision.posBlock.x, collision.posBlock.y };
-				Vector2f posObject = { collision.posObject.x, collision.posObject.y };
-				//int levelObject = collision.levelObject;
-
-
 				if (giveDamage) {
-					if (founds.currentTarget != RESET_VECTOR_3I) {//founds.currentTarget != RESET_VECTOR_3I
+
+
+					//if (founds.currentTarget != RESET_VECTOR_3I) {
+						Field &field = world.field;
+						int x = int(getXPos() / SIZE_BLOCK);
+						int y = int(getYPos() / SIZE_BLOCK);
+						for (int i = -1; i < 2; i++) {
+							for (int j = -1; j < 2; j++) {
+								if (field.dataMap[currentLevelFloor + 1][y + i][x + j] != field.charBlocks[idBlocks::air]) {
+									founds.currentTarget = { x + j, y + i, currentLevelFloor + 1 };
+									break;
+								}
+							}
+
+						}
+
+					//}
+					/*
+					if (collision.posObject != RESET_VECTOR_2F) {
+						founds.currentTarget = { int(collision.posObject.x / SIZE_BLOCK),
+							int(collision.posObject.y / SIZE_BLOCK),
+							collision.levelObject };
+					}
+					else if (collision.posBlock != RESET_VECTOR_3I) {
+						founds.currentTarget = collision.posBlock;
+					}
+					//*////
+					if (founds.currentTarget != RESET_VECTOR_3I) {
 
 						breakNearCollision(world);
-						resetAtack();
+						founds.currentTarget = founds.currentTarget;
+						//resetAtack();
 					}
 				}
-
+				////////////////////////////////////
 				
 			}
 		}

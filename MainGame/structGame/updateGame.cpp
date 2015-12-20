@@ -28,7 +28,7 @@ void Game::updatePlayer(const float &deltaTime)
 		mainPerson.updateAtack(world, deltaTime);
 	}
 	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
-	//mainPerson.interactionWithEntity(&world.Enemys , 0 , deltaTime);
+	mainPerson.interactionWithEntity(&world.Enemys , 0 , deltaTime);
 
 	mainPerson.interactionWithMap(world.field, world.listDestroy, deltaTime);
 	mainPerson.getCoordinateForView(mainPerson.getPosition(), world.view);
@@ -50,7 +50,7 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].update(deltaTime);
 		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
-		//Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
+		Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
 		//Enemys[i].currenMode = Enemys[i].currenMode;

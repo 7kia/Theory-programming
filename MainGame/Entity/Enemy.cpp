@@ -582,18 +582,10 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 			FloatRect objectBound;
 
 			int levelUnlifeObject;
-			Vector2f posEntity = getPosition();
 
-			if (directions.directionWalk >= Direction::UP_LEFT) {
-				posEntity.x += DIAGONAL_SCALE_SPEED * dx * deltaTime;
-				posEntity.y += DIAGONAL_SCALE_SPEED * dy * deltaTime;
-			}
-			else {
-				posEntity.x += dx * deltaTime;
-				posEntity.y += dy * deltaTime;
-			}
-			spriteEntity->setPosition(posEntity);
+			spriteEntity->move(movement);
 			FloatRect entityBound = spriteEntity->getGlobalBounds();
+			spriteEntity->move(-movement);
 
 
 			vector<Entity> &objects = *enemys;

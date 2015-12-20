@@ -448,14 +448,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	Vector2f posEntity = getPosition();
 	posEntity = posEntity + movement;
 
-	float xPos = posEntity.x / SIZE_BLOCK;
-	float yPos = posEntity.y / SIZE_BLOCK;
-
-	int residueX = (xPos - int(xPos)) > 0.f;
-	int residueY = (yPos - int(yPos)) > 0.f;
-
-	//int x = int(xPos) + residueX;
-	//int y = int(yPos) + residueY;
 	float x = posEntity.x;
 	float y = posEntity.y;
 
@@ -470,14 +462,17 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 	if (!isExitFromBorder(posEntity.x, posEntity.y)) {
 	
 		///*
-				int xFar = int((posEntity.x + size.width ) / SIZE_BLOCK);
-		int yFar = int((posEntity.y + size.height ) / SIZE_BLOCK);
+		int xPos = int(x / SIZE_BLOCK);
+		int yPos = int(y / SIZE_BLOCK);
+
+		float xFar = (x + size.width / 2) / SIZE_BLOCK;
+		float yFar = (y + size.height / 2) / SIZE_BLOCK;
 		/////////////////////////////////////////////
 		// —ÚÂÌ˚
-		//for (int i = y; i < yFar; i++) {
-			//for (int j = x; j < xFar; j++) {
-		for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
+		for (int i = yPos; float(i) < yFar; i++) {
+			for (int j = xPos; float(j) < xFar; j++) {
+		//for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
+			//for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
 
 				if (!isInListBlocks(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j])) {
 					wasCollision = true;
@@ -497,10 +492,10 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 		}
 		/////////////////////////////////////////////
 		// œÓÎ
-		//for (int i = y; i < yFar; i++) {
-			//for (int j = x; j < xFar; j++) {
-		for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
-			for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
+		for (int i = yPos; float(i) < yFar; i++) {
+			for (int j = xPos; float(j) < xFar; j++) {
+				//for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
+			//for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
 
 				if (isInListBlocks(listDestroy.notPassableFloor, map[currentLevelFloor][i][j])) {
 
@@ -508,9 +503,6 @@ void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listD
 
 					collision.initPos(j , i , currentLevelFloor);
 					collision.block = map[currentLevelFloor][i][j];
-
-					//  Œ—“€À¸
-					founds.currentTarget = collision.posBlock;
 
 				}
 
@@ -619,15 +611,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , c
 
 			collision.posObject = unlifeObjects[i].getPosition();
 			collision.levelObject = unlifeObjects[i].currentLevel;
-
-
-
-
-			//  Œ—“€À¸
-			founds.currentTarget = { int(collision.posObject.x / SIZE_BLOCK),
-				int(collision.posObject.y / SIZE_BLOCK),
-				collision.levelObject };
-
 
 			directions.directionWalk = NONE_DIRECTION;
 			break;

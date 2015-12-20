@@ -22,7 +22,11 @@ void startGame()
 		timeSinceLastUpdate += game->clock.restart();
 		while (timeSinceLastUpdate.asSeconds() > TIME_PER_FRAME) {
 			timeSinceLastUpdate -= seconds(TIME_PER_FRAME);
-			game->update(TIME_PER_FRAME);
+			if(game->stateGame != pauseState)
+			{
+							game->update(TIME_PER_FRAME);
+
+			}
 		}
 
 		game->render();	
