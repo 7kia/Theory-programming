@@ -165,17 +165,7 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 				choiceDirections(movemoment);
 
 				if (wasCollision) {
-					/*
-										if (collision.posObject != RESET_VECTOR_2F) {
-						founds.currentTarget = { int(collision.posObject.x / SIZE_BLOCK),
-							int(collision.posObject.y / SIZE_BLOCK),
-							collision.levelObject };
-					}
-					else if (collision.posBlock != RESET_VECTOR_3I) {
-						founds.currentTarget = collision.posBlock;
-					}
 
-					*/
 					if (!onLevelEnemy && feelEnemy) {
 						searchWay(world);
 					}
@@ -220,8 +210,6 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 				// TODO
 				if (giveDamage) {
 
-
-					//if (founds.currentTarget != RESET_VECTOR_3I) {
 						Field &field = world.field;
 						int x = int(getXPos() / SIZE_BLOCK);
 						int y = int(getYPos() / SIZE_BLOCK);
@@ -235,22 +223,8 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 
 						}
 
-					//}
-					/*
-					if (collision.posObject != RESET_VECTOR_2F) {
-						founds.currentTarget = { int(collision.posObject.x / SIZE_BLOCK),
-							int(collision.posObject.y / SIZE_BLOCK),
-							collision.levelObject };
-					}
-					else if (collision.posBlock != RESET_VECTOR_3I) {
-						founds.currentTarget = collision.posBlock;
-					}
-					//*////
 					if (founds.currentTarget != RESET_VECTOR_3I) {
-
 						breakNearCollision(world);
-						founds.currentTarget = founds.currentTarget;
-						//resetAtack();
 					}
 				}
 				////////////////////////////////////

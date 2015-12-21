@@ -121,14 +121,14 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 		case Event::Resized:
 			resizeWindow();
 			break;
+		case Event::Closed:
+			window.close();
+			break;
 		default:
 			break;
 		}
 	}
 
-	if (event.type == Event::Closed) {
-		window.close();
-	}
 }
 
 	void Game::processPanelQuickAccess()

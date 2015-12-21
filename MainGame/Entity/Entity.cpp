@@ -443,110 +443,58 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 
 void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime)
 {
-	if(!wasCollision)
-	{
-	Vector2f posEntity = getPosition();
-	posEntity = posEntity + movement;
+	if (!wasCollision) {
+		Vector2f posEntity = getPosition();
+		posEntity = posEntity + movement;
 
-	float x = posEntity.x;
-	float y = posEntity.y;
+		float x = posEntity.x;
+		float y = posEntity.y;
 
-	Vector2f posRectBlock = { float((x) * SIZE_BLOCK),
-														float((y ) * SIZE_BLOCK) };
-	FloatRect rectangleBlock;
-	rectangleBlock = FloatRect(posRectBlock , SIZES_BLOCK);
+		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
-	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+		if (!isExitFromBorder(posEntity.x , posEntity.y)) {
+			int xPos = int(x / SIZE_BLOCK);
+			int yPos = int(y / SIZE_BLOCK);
 
+			float xFar = (x + size.width / 2) / SIZE_BLOCK;
+			float yFar = (y + size.height / 2) / SIZE_BLOCK;
+			/////////////////////////////////////////////
+			// Стены
+			for (int i = yPos; float(i) < yFar; i++) {
+				for (int j = xPos; float(j) < xFar; j++) {
 
-	if (!isExitFromBorder(posEntity.x, posEntity.y)) {
-	
-		///*
-		int xPos = int(x / SIZE_BLOCK);
-		int yPos = int(y / SIZE_BLOCK);
+					if (!isInListBlocks(listDestroy.passableBlocks , map[currentLevelFloor + 1][i][j])) {
+						wasCollision = true;
 
-		float xFar = (x + size.width / 2) / SIZE_BLOCK;
-		float yFar = (y + size.height / 2) / SIZE_BLOCK;
-		/////////////////////////////////////////////
-		// Стены
-		for (int i = yPos; float(i) < yFar; i++) {
-			for (int j = xPos; float(j) < xFar; j++) {
-		//for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
-			//for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
+						collision.initPos(j , i , currentLevelFloor + 1);
+						collision.block = map[currentLevelFloor + 1][i][j];
+					}
 
-				if (!isInListBlocks(listDestroy.passableBlocks, map[currentLevelFloor + 1][i][j])) {
-					wasCollision = true;
-
-					collision.initPos(j, i, currentLevelFloor + 1);
-					collision.block = map[currentLevelFloor + 1][i][j];
-
-					// КОСТЫЛь
-					founds.currentTarget = collision.posBlock;
-
+					if (wasCollision) {
+						break;
+					}
 				}
+			}
+			/////////////////////////////////////////////
+			// Пол
+			for (int i = yPos; float(i) < yFar; i++) {
+				for (int j = xPos; float(j) < xFar; j++) {
+					if (isInListBlocks(listDestroy.notPassableFloor , map[currentLevelFloor][i][j])) {
+						wasCollision = true;
 
-				if (wasCollision) {
-					break;
+						collision.initPos(j , i , currentLevelFloor);
+						collision.block = map[currentLevelFloor][i][j];
+					}
+
+					if (wasCollision) {
+						break;
+					}
 				}
 			}
 		}
-		/////////////////////////////////////////////
-		// Пол
-		for (int i = yPos; float(i) < yFar; i++) {
-			for (int j = xPos; float(j) < xFar; j++) {
-				//for (int i = y / SIZE_BLOCK; i < (y + size.height / 2) / SIZE_BLOCK; i++) {
-			//for (int j = x / SIZE_BLOCK; j < (x + size.width / 2) / SIZE_BLOCK; j++) {
-
-				if (isInListBlocks(listDestroy.notPassableFloor, map[currentLevelFloor][i][j])) {
-
-					wasCollision = true;
-
-					collision.initPos(j , i , currentLevelFloor);
-					collision.block = map[currentLevelFloor][i][j];
-
-				}
-
-				if(wasCollision)
-				{
-					break;
-				}
-
-			}
+		else {
+			wasCollision = true;
 		}
-
-		//*/
-
-		/*
-				FloatRect entityBound;
-		entityBound = spriteEntity->getGlobalBounds();
-
-		//if (entityBound.intersects(rectangleBlock)) {
-
-			wchar_t blockWall = map[currentLevelFloor + 1][y][x];
-			wchar_t blockFloor = map[currentLevelFloor][y][x];
-			int level = currentLevelFloor;
-
-			if(!isInListBlocks(listDestroy.passableBlocks, blockWall))
-			{
-				level++;
-				wasCollision = true;
-			}
-			else if(isInListBlocks(listDestroy.notPassableFloor , blockFloor))
-			{
-				wasCollision = true;
-			}
-
-			if (wasCollision) {
-				collision.posBlock = { x, y, level };
-			}
-
-		//}
-		*/
-
-	}
-	else {
-		wasCollision = true;
-	}
 
 	}
 

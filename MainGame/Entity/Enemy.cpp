@@ -175,9 +175,6 @@ void Entity::initDamage()
 	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, TIME_ATACK, 1.f);
 }
 
-Entity::~Entity()
-{
-}
 
 void Entity::randomWalk(const float deltaTime) {
 
@@ -591,7 +588,7 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 			vector<Entity> &objects = *enemys;
 			for (int i = 0; i != objects.size(); ++i) {
 
-				if (id != i) {// && founds.findEnemyFromList != -1
+				if (id != i) {
 					levelUnlifeObject = objects[i].currentLevelFloor;
 
 					spriteObject = objects[i].spriteEntity;
@@ -599,11 +596,9 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 
 
 					if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor)) {
-						// TODO
 						wasCollision = true;
 
 						founds.findEnemy = &objects[i];
-						//founds.findEnemyFromList = i;
 						directions.directionWalk = NONE_DIRECTION;
 						break;
 					}
@@ -611,22 +606,6 @@ void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float d
 				}
 
 			}
-		
-			/*
-						//if (wasCollision) {
-				if (directions.directionWalk >= Direction::UP_LEFT) {
-					posEntity.x -= DIAGONAL_SCALE_SPEED * dx * deltaTime;
-					posEntity.y -= DIAGONAL_SCALE_SPEED * dy * deltaTime;
-				}
-				else {
-					posEntity.x -= dx * deltaTime;
-					posEntity.y -= dy * deltaTime;
-				}
-				//spriteEntity->setPosition(posEntity);
-			//}
-
-			*/
-
 	}
 }
 
@@ -699,14 +678,14 @@ void Entity::playSoundDeath(world& world)
 
 		switch (type->id) {
 		case idEntity::wolfEnemy:
-			playSound(idSoundPaths::wolfDeathSound, *soundBase, soundObject, getPosition());
+			::playSound(idSoundPaths::wolfDeathSound, *soundBase, soundObject, getPosition());
 			break;
 		case idEntity::skeletEnemy:
 		case idEntity::skeletBuilderEnemy:
 		case idEntity::skeletDiggerEnemy:
 		case idEntity::skeletLumbermillEnemy:
 		case idEntity::skeletMinerEnemy:
-			playSound(idSoundPaths::skeletonDeathSound, *soundBase, soundObject, getPosition());
+			::playSound(idSoundPaths::skeletonDeathSound, *soundBase, soundObject, getPosition());
 			break;
 		default:
 			break;

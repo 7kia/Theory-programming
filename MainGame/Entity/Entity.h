@@ -75,7 +75,6 @@ struct Entity
 	bool isUnlifeObject(sf::Vector3i& pos, world& world);
 
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
-	void shiftTowardWalk(sf::Vector2f& pos);
 	void gravitateToGround(Field &field);
 
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, const float deltaTime);
@@ -132,6 +131,7 @@ struct Entity
 
 	void destroyFindObject(bool isEffect, Vector3i pos, world& world);
 	int defineIdNature(Field &field, bool isEffect, sf::Vector3i pos);
+	int defineIdNature(world &world , sf::Vector3i pos);
 	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
 	void upgradeObject(UnlifeObject& object, world& world);
 	//////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,6 @@ struct Entity
 
 	void EnemyDrop(world &world);
 	void playSoundDeath(world &world);
-	~Entity();
 
 	void checkLevelHealth(Vector2f& movemoment);
 	void entityStandPanic(sf::Vector2f &movemoment);
@@ -180,8 +179,6 @@ struct Entity
 	//////////////////////////////////////////////////////////////////////////////
 	void updateView(sf::View &view , sf::Listener &listener , sf::RenderWindow &window);
 
-	void initFounds(Item& item , UnlifeObject& object , Entity& enemy);
-
 	void killFindEnemy(world &world);
 	void hurtEnemy(Item &currentItem , const float deltaTime);
 	void updateAtack(world &world , const float deltaTime);
@@ -189,8 +186,6 @@ struct Entity
 	void searchEnemy(Entity &enemy , world &world , const float deltaTime);
 
 	void getCoordinateForView(sf::Vector2f position, sf::View &view);
-	void viewmap(float time);
-
 
 	void computeAngle(sf::RenderWindow &window);
 

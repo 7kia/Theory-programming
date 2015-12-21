@@ -53,7 +53,6 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
-		//Enemys[i].currenMode = Enemys[i].currenMode;
 		Enemys[i].searchEnemy(mainPerson , world, deltaTime);
 		Enemys[i].randomWalk(deltaTime);
 	}
@@ -79,15 +78,12 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 				}
 			}
 		}
-		/////////////////////////////////
-		// Обновление  звуковых эффектов
 		else if(idTypeObject != destroyBlockEffect){
 			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();
 			if (stateSound == sf::SoundSource::Status::Stopped) {
 				objects.erase(objects.begin() + i);
 			}
 		}
-		/////////////////////////////////
 		else {
 			int &currentToughness = objects[i].currentToughness;
 			int &maxToughnessObject = objects[i].typeObject->toughnessObject;
