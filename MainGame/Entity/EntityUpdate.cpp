@@ -241,3 +241,21 @@ void Entity::resetAtack()
 	directions.directionWalk = NONE_DIRECTION;
 	giveDamage = false;
 }
+
+void Entity::computeAngle(RenderWindow &window)
+{
+	Vector2i pixelPos = Mouse::getPosition(window);
+	Vector2f pos = window.mapPixelToCoords(pixelPos);
+	sizeSprite &size = type->featuresSprite.size;
+	float dX = pos.x - spriteEntity->getPosition().x - size.width / 2;
+	float dY = pos.y - spriteEntity->getPosition().y - size.height / 2;
+	rotation = (atan2(dX , dY)) * 180 / PI - 180;
+	if (rotation < 0) {
+		rotation += 360;
+	}
+}
+
+void Entity::getCoordinateForView(Vector2f position , View &view)
+{
+	view.setCenter(position);
+}

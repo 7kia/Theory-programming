@@ -6,6 +6,8 @@
 #include "../Sounds/Sound.h"
 #include "../structGame/CommonStructs.h"
 #include "UnlifeObjectVar.h"
+#include "../ListObjectsAndBlocks.h"
+
 
 struct TypeUnlifeObject;
 

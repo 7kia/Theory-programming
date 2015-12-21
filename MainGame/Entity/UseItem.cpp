@@ -3,6 +3,105 @@
 using namespace sf;
 using namespace std;
 
+
+void Entity::useItem(world &world , Event &event , Vector2f pos)
+{
+	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+
+	int x = int(pos.x / SIZE_BLOCK);
+	int y = int(pos.y / SIZE_BLOCK);
+	Vector3i &posUse = founds.currentTarget;
+
+	posUse.x = x;
+	posUse.y = y;
+
+	bool isEnemy = founds.findEnemy != founds.emptyEnemy;
+	//	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
+	bool isAtack = event.key.code == Mouse::Left;
+	if (isEnemy && isAtack && isInUseField(pos.x , pos.y , true)) {
+
+		if (founds.findEnemy->currentLevelFloor == currentLevelFloor) {
+
+			if (animation.currentTimeFightAnimation == 0.f) {
+				currenMode = idEntityMode::atack;
+			}
+
+		}
+	}
+	else {
+
+		int category = currentItem.typeItem->features.category;
+		switch (category) {
+		case idCategoryItem::backhoe:
+		case idCategoryItem::pickax:
+		case idCategoryItem::axe:
+			if (isInUseField(pos.x , pos.y , true)) {
+				int level;
+				defineLevel(level , event);
+
+
+				posUse = { x, y, level };
+
+				Field &field = world.field;
+				wchar_t	*block = &field.dataMap[level][y][x];
+				int idNature;
+				idNature = field.idsNature[field.findIdBlock(*block)];
+
+				if (idNature <= idNatureObject::Unbreaking) {
+					idNature = founds.findObject->typeObject->idNature;
+				}
+				if (idNature != idNatureObject::Unbreaking && isInListObjects(*currentItem.typeItem->destroy , idNature)) {
+					currenMode = idEntityMode::atack;
+					giveDamage = false;
+				}
+			}
+			break;
+		case idCategoryItem::block:
+		case idCategoryItem::unlifeObject:
+			if (isInUseField(pos.x , pos.y , false)) {
+				int level;
+				defineLevel(level , event);
+
+				posUse = { x, y, level };
+
+				useBlock(posUse , world , currentItem);
+			}
+			break;
+		case idCategoryItem::food:
+			useAsFood(currentItem , event);
+			break;
+		case idCategoryItem::bukketWithWater:
+			useAsBukketWithWater(currentItem , world , event);
+			break;
+		case idCategoryItem::bottleWithWater:
+			useAsBottleWithWater(currentItem , world , event);
+			break;
+		case idCategoryItem::healthPotion:
+			useAsHealthPotion(currentItem , world , event);
+			break;
+		case idCategoryItem::bukketEmpty:// ÈÑÏÐÀÂÜ
+			if (isInUseField(pos.x , pos.y , true)) {
+				int level;
+				defineLevel(level , event);
+				useAsEmptyBukket(currentItem , world , level);
+			}
+			break;
+		case idCategoryItem::bottleEmpty:
+			if (isInUseField(pos.x , pos.y , true)) {
+				int level;
+				defineLevel(level , event);
+				useAsEmptyBottle(currentItem , world , level);
+			}
+			break;
+		case idCategoryItem::other:
+			break;
+		default:
+			break;
+		}
+	}
+
+}
+
 void Entity::defineLevel(int &number, Event event)
 {
 	if (event.key.code == Mouse::Left) {
@@ -249,13 +348,14 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 		start = 1;
 	}
 	///////////////////////////////////////
-	// TODO BUG
+	// TODO BUG :
 	Item* addItem = new Item;
 	int currentAmount;
 	for (size_t i = start; i < finish; i++) {
-
+		// Generate only one item 
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
 		for (int j = 0; j < currentAmount; j++) {
+			// Work normal
 			addItem->setType(typesItems[idItems[i]]);
 			addItem->setPosition(pos.x + 1, pos.y + 1, pos.z + 1);
 			items.push_back(*addItem);

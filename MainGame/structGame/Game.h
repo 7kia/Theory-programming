@@ -1,12 +1,5 @@
 #pragma once
-//#include "../World.h"
-//#include "../Entity/Entity.h"
-//#include "../Entity/MainPerson.h"
-//#include "../GUI and Fonts/Font.h"
-//#include "../World.h"
 #include "../GUI and Fonts/GUI.h"
-
-
 
 const sf::String TITLE_PROGRAM = "MainGame v1.9.3";
 

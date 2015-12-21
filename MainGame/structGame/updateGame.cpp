@@ -54,7 +54,9 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
-		Enemys[i].searchEnemy(mainPerson , world, deltaTime);
+		if (Enemys[i].type->converse.isAgressiveForPlayer) {
+			Enemys[i].searchEnemy(mainPerson , world , deltaTime);
+		}
 		Enemys[i].randomWalk(deltaTime);
 	}
 }
@@ -78,6 +80,7 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 					upgradeObject(objects[i]);
 				}
 			}
+
 		}
 		else if(idTypeObject != destroyBlockEffect){
 			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();

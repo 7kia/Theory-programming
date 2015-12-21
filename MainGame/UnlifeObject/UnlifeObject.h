@@ -11,9 +11,8 @@ struct world;
 struct Item;
 using namespace sf;
 
-class UnlifeObject
+struct UnlifeObject
 {
-public:
 	sf::Sprite *spriteObject;
 	sf::Sprite *transparentSpiteObject;
 
@@ -39,9 +38,7 @@ public:
 	float getXPos();
 	float getYPos();
 	sf::Vector2f getPosition();	
-private:
 
 };
 
 void initializeUnlifeObjects(std::vector<UnlifeObject> &unlifeObjects, TypeUnlifeObject *typesUnlifeObjects, UnlifeObject &emptyObject);
-void updateUnlifeObjects(world &world, float deltaTime);

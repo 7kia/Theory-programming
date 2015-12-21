@@ -448,3 +448,4 @@ void Entity::choceShiftUseItem(int& shiftX , int& shiftY , bool prickBlow)
 
 	}
 }
+

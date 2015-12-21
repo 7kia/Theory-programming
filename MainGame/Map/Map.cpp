@@ -1,5 +1,4 @@
 #include "Map.h"
-#include "../Recourses.h"
 
 using namespace sf;
 using namespace std;

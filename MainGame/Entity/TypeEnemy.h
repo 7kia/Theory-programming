@@ -19,11 +19,10 @@ struct enemyFeatures
 
 struct conversePlayer
 {
-	bool isEnemy;
+	bool isAgressiveForPlayer;
 	bool isPlayer;
 	bool canPanic;
-	bool avoidEnemy;
-	void init(bool enemy, bool panic, bool avoid);
+	void init(bool enemy, bool panic);
 };
 
 struct viewEnemy

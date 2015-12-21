@@ -1,4 +1,4 @@
-#include  "worldCircle.h"
+#include "../structGame/Game.h"
 
 using namespace sf;
 using namespace std;

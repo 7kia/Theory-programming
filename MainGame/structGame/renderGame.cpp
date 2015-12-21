@@ -171,7 +171,6 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	}
 	posImage.x -= shift * (SIZE_ITEM + DISTANSE_BETWEEN_AWARD_ITEMS);
 
-	// TODO
 	Text *currentText = &textGame.texts[idText::panelText];
 	Vector2f posText = centerWindow;
 
@@ -358,7 +357,7 @@ void Game::renderGui()
 
 				drawAwardItems(award);
 
-			}// TODO
+			}// TODO : condition for panel death
 			else if(stateGame != endGameState)
 			{
 				drawAwardItems(awardForWave);

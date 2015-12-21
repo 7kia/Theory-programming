@@ -25,7 +25,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->damage.init(1, 0, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * 2, false , DEFAULT_RADIUSE_USE);
-	typeEnemy->converse.init(true, true, false);
+	typeEnemy->converse.init(true, true);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_PLAYER_SLOTS);
 
@@ -47,7 +47,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->damage.init(5 , 0 , 1.f , 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * 2 , false , DEFAULT_RADIUSE_USE);
-	typeEnemy->converse.init(true , true , false);
+	typeEnemy->converse.init(true , true);
 	typeEnemy->initCurrentItem(typesItem , idItem::emptyItem);
 	typeEnemy->InitOtherFeatures(id , texturePath , name , AMOUNT_WOLF_SLOTS);
 
@@ -69,7 +69,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true , DEFAULT_RADIUSE_USE);
-	typeEnemy->converse.init(true, false, false);
+	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
@@ -91,7 +91,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true , DEFAULT_RADIUSE_USE);
-	typeEnemy->converse.init(true, false, false);
+	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::ironBackHoerItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
@@ -113,7 +113,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true , DEFAULT_RADIUSE_USE);
-	typeEnemy->converse.init(true, false, false);
+	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stonePickaxItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
@@ -135,7 +135,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true, DEFAULT_RADIUSE_USE);
-	typeEnemy->converse.init(true, false, false);
+	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneAxeItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
@@ -156,7 +156,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW, true, DEFAULT_RADIUSE_USE);
-	typeEnemy->converse.init(true, false, false);
+	typeEnemy->converse.init(true , false);
 	typeEnemy->initCurrentItem(typesItem, idItem::woodLadderItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
 
@@ -190,11 +190,10 @@ void enemyFeatures::init(int health, int stamina, int mana, int thirst, int hung
 	maxHungry = hungry;
 }
 
-void conversePlayer::init(bool enemy, bool panic, bool avoid)
+void conversePlayer::init(bool enemy, bool panic)
 {
-	isEnemy = enemy;
+	isAgressiveForPlayer = enemy;
 	canPanic = panic;
-	avoidEnemy = avoid;
 }
 
 void TypeEnemy::initCurrentItem(TypeItem *typesItem, int id)

@@ -2,6 +2,7 @@
 
 #include "BlocksVar.h"
 #include "../UnlifeObject/UnlifeObject.h"
+#include "../Recourses.h"
 
 const sf::Color UP_VIEW(255, 255, 255, 150);
 const sf::Color NORMAL_VIEW(255, 255, 255, 255);

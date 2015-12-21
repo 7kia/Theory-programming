@@ -177,8 +177,6 @@ struct Entity
 	void searchWay(world &world);
 	bool findLadder(world &world , sf::Vector3i pos);
 	void buildLadder(world &world);
-	void givenForPersonDamage(Entity & person);
-	void hurtPerson(Entity &enemy , world &world , const float deltaTime);
 
 	void checkInDirectionWalk(Field &field , float distanse , sf::Vector2i posStart , sf::Vector2i shifts);
 	void redefineDirectionWalk();
@@ -192,7 +190,7 @@ struct Entity
 	void updateAtack(world &world , const float deltaTime);
 
 	void searchEnemy(Entity &enemy , world &world , const float deltaTime);
-
+	void searchNearCollision(world &world);
 	void getCoordinateForView(sf::Vector2f position, sf::View &view);
 
 	void computeAngle(sf::RenderWindow &window);

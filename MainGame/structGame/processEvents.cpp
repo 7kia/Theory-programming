@@ -1,4 +1,4 @@
-#include "processEvents.h"
+#include "Game.h"
 
 using namespace hotKeys;
 
@@ -21,7 +21,6 @@ void Game::processEvents(const float deltaTime)
 			mainPerson.computeAngle(window);
 		}
 		processOtherAction(event, pos);
-
 
 	}
 

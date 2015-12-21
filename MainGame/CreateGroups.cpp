@@ -1,6 +1,5 @@
-#include "CreateGroups.h"
+#include "World.h"
 
-//#include "structGame/Game.h"
 using namespace std;
 
 void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos)
