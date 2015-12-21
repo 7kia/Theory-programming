@@ -18,7 +18,7 @@ void Game::processEvents(const float deltaTime)
 			processArrows();
 			processPanelQuickAccess();
 
-			mainPerson.computeAngle(window);// ÈÑÏÐÀÂÜ
+			mainPerson.computeAngle(window);
 		}
 		processOtherAction(event, pos);
 
@@ -64,7 +64,6 @@ void Game::processInterface()
 			stateGame = gameState;
 			music.play();
 
-
 			panels &panels = gui.panels;
 			panel &panel = panels.awardPanel;
 			Sprite &sprite = panel.sprite;
@@ -84,7 +83,7 @@ void Game::processPersonAction(Vector2f pos)
 
 	if (Keyboard::isKeyPressed(keys[actionAlternate])) {
 		if (mainPerson.isInUseField(pos.x, pos.y, true)) {
-			mainPerson.actionAlternate(world, pos);// ÈÑÏÐÀÂÜ
+			mainPerson.actionAlternate(world, pos);
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[throwItem])) {
@@ -92,7 +91,7 @@ void Game::processPersonAction(Vector2f pos)
 	}
 	else if (Keyboard::isKeyPressed(keys[actionMain])) {
 		if (mainPerson.isInUseField(pos.x, pos.y, true)) {
-			mainPerson.actionMain(world, pos);// ÈÑÏÐÀÂÜ
+			mainPerson.actionMain(world, pos);
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[takeItem])) {
@@ -118,46 +117,50 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 				mainPerson.useItem(world , event , pos);
 			}
 			break;
-		case Event::Resized:
-			resizeWindow();
-			break;
-		case Event::Closed:
-			window.close();
-			break;
 		default:
 			break;
 		}
 	}
 
+	switch (event.type) {
+	case Event::Resized:
+		resizeWindow();
+		break;
+	case Event::Closed:
+		window.close();
+		break;
+	default:
+		break;
+	}
 }
 
-	void Game::processPanelQuickAccess()
-	{
-		Entity &mainPerson = world.Enemys[0];
+void Game::processPanelQuickAccess()
+{
+	Entity &mainPerson = world.Enemys[0];
 
-		if (Keyboard::isKeyPressed(Keyboard::Num0)) {
+	if (Keyboard::isKeyPressed(Keyboard::Num0)) {
 
-			if (mainPerson.idSelectItem != 9) {
-				mainPerson.playSoundChoiseItem();
-			}
-			mainPerson.idSelectItem = 9;
-
+		if (mainPerson.idSelectItem != 9) {
+			mainPerson.playSoundChoiseItem();
 		}
-		else {
-			for (int i = 0; i < mainPerson.type->amountSlots - 1; i++) {
-				if (Keyboard::isKeyPressed(Keyboard::Key(Keyboard::Num1 + i))) {
+		mainPerson.idSelectItem = 9;
 
-					if(mainPerson.idSelectItem != i)
-					{
-						mainPerson.playSoundChoiseItem();
-					}
-					mainPerson.idSelectItem = i;
-
-				}
-			}
-
-		}
 	}
+	else {
+		for (int i = 0; i < mainPerson.type->amountSlots - 1; i++) {
+			if (Keyboard::isKeyPressed(Keyboard::Key(Keyboard::Num1 + i))) {
+
+				if (mainPerson.idSelectItem != i) {
+					mainPerson.playSoundChoiseItem();
+				}
+				mainPerson.idSelectItem = i;
+
+			}
+		}
+
+	}
+
+}
 
 void Game::resizeWindow()
 {

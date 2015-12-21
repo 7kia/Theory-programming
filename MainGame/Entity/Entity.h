@@ -59,6 +59,7 @@ struct Entity
 
 	// Передвижение. Его анимация и озвучка
 	void update(const float deltaTime);
+	void updateDirectionLook();
 	void resetAtack();
 	void playAnimationWalk(const float deltaTime);
 	void playAnimationAtack(const float deltaTime);
@@ -139,7 +140,7 @@ struct Entity
 
 
 	// TODO
-	float rotation;
+	float rotation = -1.f;
 
 	Item *emptyItem;
 

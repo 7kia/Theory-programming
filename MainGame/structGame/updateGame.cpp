@@ -22,6 +22,7 @@ void Game::update(const float &deltaTime)
 void Game::updatePlayer(const float &deltaTime)
 {
 	Entity &mainPerson = world.Enemys[0];
+
 	mainPerson.update(deltaTime);
 	if(mainPerson.currenMode == idEntityMode::atack || mainPerson.giveDamage)
 	{

@@ -258,9 +258,11 @@ void Entity::update(const float deltaTime)
 			movement.y *= deltaTime;
 		}
 
-		if (directions.directionWalk) {
+		//if (directions.directionWalk) {
+			updateDirectionLook();
+
 			playAnimationWalk(deltaTime);
-		}
+		//}
 
 	}
 
@@ -270,6 +272,45 @@ void Entity::update(const float deltaTime)
 		playAnimationAtack(deltaTime);
 
 	}
+}
+
+void Entity::updateDirectionLook()
+{
+	if(rotation >= (NUMBER_DEGREES + SHIFT_CIRCLE_LOOK)
+		 || rotation <= (EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK))
+	{
+		directions.directionLook = UP;
+	}
+	else if (rotation >= (1 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
+					 && rotation <= (2 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK))
+	{
+		directions.directionLook = UP_LEFT;
+	}
+	else if (rotation >= (2 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
+					 && rotation <= (3 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
+		directions.directionLook = LEFT;
+	}
+	else if (rotation >= (3 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
+					 && rotation <= (4 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
+		directions.directionLook = DOWN_LEFT;
+	}
+	else if (rotation >= (4 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
+					 && rotation <= (5 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
+		directions.directionLook = DOWN;
+	}
+	else if (rotation >= (5 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
+					 && rotation <= (6 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
+		directions.directionLook = DOWN_RIGHT;
+	}
+	else if (rotation >= (6 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
+					 && rotation <= (7 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
+		directions.directionLook = RIGHT;
+	}
+	else if (rotation >= (7 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
+					 && rotation <= (8 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
+		directions.directionLook = UP_RIGHT;
+	}
+
 }
 
 void Entity::resetAtack()
@@ -282,12 +323,14 @@ void Entity::resetAtack()
 
 void Entity::playAnimationWalk(const float deltaTime)
 {
-	animation.timeAnimation += deltaTime * MULTIPLY_STEP_ANIMATION;
-	resetTimeAnimation(animation.timeAnimation, float(RESET_WALK_ANIMATION));
+	if (directions.directionWalk) {
+		directions.directionLook = directions.directionWalk;
+		animation.timeAnimation += deltaTime * MULTIPLY_STEP_ANIMATION;
+		resetTimeAnimation(animation.timeAnimation , float(RESET_WALK_ANIMATION));
 
-	int id = idSoundPaths::stepGrass1Sound;
-	playSoundAfterTime(animation.timeAnimation, id);
-
+		int id = idSoundPaths::stepGrass1Sound;
+		playSoundAfterTime(animation.timeAnimation , id);
+	}
 	int shiftWidth = directions.directionLook / NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION;// TODO
 
 	int currentWidth = size.width;

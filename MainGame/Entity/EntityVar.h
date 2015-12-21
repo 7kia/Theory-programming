@@ -34,6 +34,11 @@ const float maxTimeWalk = 12.f;
 
 const int ID_PLAYER_IN_LIST = 0;
 
+const float NUMBER_DEGREES = 360.f;
+const float QUARTER_PART_CIRCLE = NUMBER_DEGREES / 4;
+const float EIGHTH_PART_CIRCLE = QUARTER_PART_CIRCLE / 2;
+const float SHIFT_CIRCLE_LOOK = -EIGHTH_PART_CIRCLE / 2;
+
 enum idEntity
 {
 	playerEntity,
