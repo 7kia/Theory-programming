@@ -170,7 +170,7 @@ void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 {
 	int id = idUnlifeObject::empty;
-	int idNature = idNatureObject::NoneNature;
+	int idNature = idNatureObject::Unbreaking;
 
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
 	typesObject->Init(texturePaths[idTexturePaths::itemsPath], "Empty", storage, id, idNature);
@@ -185,7 +185,7 @@ void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 {
 	int id = idUnlifeObject::skeletDeathEffect;
-	int idNature = idNatureObject::NoneNature;
+	int idNature = idNatureObject::Unbreaking;
 	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
 	String texturePath = texturePaths[idTexturePaths::skeletPath];
 	String name = "Skelet Death";

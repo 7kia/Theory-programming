@@ -103,6 +103,14 @@ struct Game
 	void initializeHotKeys();
 	void informationAboutSelect(float x, float y);
 
+	void inforAboutBlocks(int x , int y);
+
+	void inforAboutUnlifeObject(float x , float y);
+
+	void inforAboutItem(float x , float y);
+
+	void inforAboutEntity(float x , float y);
+
 	// processEvents.cpp
 	void processEvents(const float deltaTime);
 	void processArrows();
