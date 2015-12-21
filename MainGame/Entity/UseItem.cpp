@@ -96,7 +96,6 @@ void Entity::searchItem(vector<Item> &items, Vector2f pos)
 	}
 }
 
-
 void Entity::transferInInventory(vector<Item> &items)
 {
 	bool isFindItem = false;
@@ -200,7 +199,7 @@ void Entity::useAsFood(Item &currentItem, Event event)
 
 void Entity::breakItem(Item &currentItem)
 {
-	currentItem.currentToughness -= 1;//&& currentItem.amount < 1
+	currentItem.currentToughness -= 1;
 	if (currentItem.currentToughness < 1) {
 		currentItem.amount--;
 		if(currentItem.amount < 1)
@@ -232,8 +231,6 @@ void UnlifeObject::playHarvestSoundObject()
 
 void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 {
-	//////////////////////////////////////////////////
-	// Выпадение предметов
 
 	vector<Item> &items = world.items;
 	TypeItem *typesItems = world.typesObjects.typesItem;

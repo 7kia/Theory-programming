@@ -7,9 +7,6 @@ Game::Game()
 {
 	window.create(VideoMode(widthMainWindow, heightMainWindow), TITLE_PROGRAM);
 
-
-	initializeField(world.field);
-
 	playMusic = false;
 	::sounds = &world.databaseSound;
 
@@ -25,7 +22,7 @@ Game::Game()
 
 	createListAward();
 
-	// TODO
+	// TODO : create configs for different category variables
 	loadConfig("Configs\\EnemeWaves.conf", world.enemyWaveVariables);
 	difficult = world.enemyWaveVariables[CURRENT_DIFFICULT];
 
@@ -255,7 +252,7 @@ void world::initializeCategorysBreakingObject()
 	listDestroy.stoneKnife.push_back(idNatureObject::groundNature);
 	listDestroy.stoneKnife.push_back(idNatureObject::sandNature);
 
-	listDestroy.none.push_back(idNatureObject::NoneNature);
+	listDestroy.none.push_back(idNatureObject::Unbreaking);
 	/////////////////////////////////////////////////////////////////////////
 	// Проходимые блоки
 

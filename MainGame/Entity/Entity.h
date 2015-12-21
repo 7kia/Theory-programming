@@ -3,13 +3,12 @@
 
 
 const float SCALE_VIEW = 1.5f;
-
 //void initializePlayer(sf::View &view , sf::Listener &listener);
 
 struct Entity
 {
 	sf::Sprite *spriteEntity;
-	sizeSprite size;
+
 	entityAnimation animation;
 	Directions directions;
 	Step step;
@@ -22,7 +21,6 @@ struct Entity
 	bool isAtack;
 	bool giveDamage;
 
-	int radiusUse;
 	int currentLevelFloor;
 
 	foundObjects founds;
@@ -58,16 +56,22 @@ struct Entity
 	void renderCurrentItem(sf::RenderWindow &window);
 
 	// Передвижение. Его анимация и озвучка
+	// Entity.cpp
 	void update(const float deltaTime);
 	void updateDirectionLook();
-	void resetAtack();
+
+	bool isInUseField(float x , float y , bool under);
+	void playAtackSound(Item &currentItem);
+
+	// EntityAnimation.cpp
 	void playAnimationWalk(const float deltaTime);
 	void playAnimationAtack(const float deltaTime);
 	void playSoundAfterTime(float time, const int idSound);
 	void resetTimeAnimation(float &time, float reset);
 
-	void playAtackSound(Item &currentItem);
-	void createDestroyEffect(world &world, Vector3i &pos);
+	void resetAtack();
+//
+
 
 	void playObjectBreakSound(int idNature);
 	void playObjectDropSound(sf::Vector2f pos);
@@ -75,12 +79,13 @@ struct Entity
 	bool isDestroyEffect(sf::Vector3i &pos, world &world);
 	bool isUnlifeObject(sf::Vector3i& pos, world& world);
 
+	// EntityCollision.cpp
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void gravitateToGround(Field &field);
-
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, const float deltaTime);
-	bool isInUseField(float x, float y, bool under);
+	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
 
+	//
 	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
 	bool isExitFromBorder(float x, float y);
@@ -114,6 +119,8 @@ struct Entity
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);
 
+	void createDestroyEffect(world &world , Vector3i &pos);
+
 	void createRedefineItem(world &world, Item &currentItem, int shift);
 	void takeRedefineItem(world &world);
 	void redefineType(Item &currentItem, world &world, int shift);
@@ -137,21 +144,22 @@ struct Entity
 	void upgradeObject(UnlifeObject& object, world& world);
 	//////////////////////////////////////////////////////////////////////////////
 	//{                          Entity                                         }//
-
-
-	// TODO
 	float rotation = -1.f;
 
 	Item *emptyItem;
 
 	TypeEnemy *type;
 
-	void EnemyInit(TypeEnemy &typesEnemy , world &world , int xPos , int yPos , int level);
+	void init(TypeEnemy &typesEnemy , world &world , int xPos , int yPos , int level);
+	void setSpriteEntity();
+	void initItems(world &world);
+	void initPosition(int xPos, int yPos, int level);
+	void initRandowWalk();
 	void initFeatures();
 	void initProtection();
 	void initDamage();
 
-	void EnemyDrop(world &world);
+	void Drop(world &world);
 	void playSoundDeath(world &world);
 
 	void checkLevelHealth(Vector2f& movemoment);
@@ -175,7 +183,6 @@ struct Entity
 	void checkInDirectionWalk(Field &field , float distanse , sf::Vector2i posStart , sf::Vector2i shifts);
 	void redefineDirectionWalk();
 	void checkBlock(Field &field , float distanse);
-	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
 	//{                          Entity                                         }//
 	//////////////////////////////////////////////////////////////////////////////
 	void updateView(sf::View &view , sf::Listener &listener , sf::RenderWindow &window);
@@ -198,7 +205,6 @@ struct Entity
 	Item& getCurrentItem();
 };
 
-bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
-							int &findObjectFromList, int &current, int currentLevel);
+
 bool isItem(float x, float y, std::vector<Item> &items, Item &findItem,
 						int &findItemFromList, int &current, int currentLevel);

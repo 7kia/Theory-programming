@@ -39,6 +39,9 @@ const float QUARTER_PART_CIRCLE = NUMBER_DEGREES / 4;
 const float EIGHTH_PART_CIRCLE = QUARTER_PART_CIRCLE / 2;
 const float SHIFT_CIRCLE_LOOK = -EIGHTH_PART_CIRCLE / 2;
 
+const float BORDER_VALUE_FOR_DIRECTION = float(SIZE_BLOCK) / 3;
+const int DEFAULT_RADIUSE_USE = 1;
+
 enum idEntity
 {
 	playerEntity,
@@ -206,9 +209,6 @@ struct currentCollision {
 	sf::Vector2f posObject = RESET_VECTOR_2F;
 	int levelObject = RESET_COLLISION_VALUE;
 
-	wchar_t block;
-	int idObject = RESET_COLLISION_VALUE;
-
-	void initPos(int xPos, int yPos, int zPos);
+	void initPosBlock(int xPos, int yPos, int zPos);
 	void clear();
 };

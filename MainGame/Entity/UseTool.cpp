@@ -144,7 +144,7 @@ int Entity::defineIdNature(world & world , sf::Vector3i pos)
 			return founds.findObject->typeObject->idNature;
 		}
 		else {
-			return idNatureObject::NoneNature;
+			return idNatureObject::Unbreaking;
 		}
 	}
 	return idNature;

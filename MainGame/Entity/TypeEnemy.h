@@ -30,7 +30,9 @@ struct viewEnemy
 {
 	bool feelEnemy;
 	float radiuseView;
-	void init(float radiuse, bool feel);
+
+	int radiusUse;
+	void init(float radiuse, bool feel, int distanseUse);
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Сущность

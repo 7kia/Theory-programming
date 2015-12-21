@@ -40,7 +40,7 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 
 			xTemp = xPos;
 			yTemp = yPos;
-			addEntity->EnemyInit(*types[countTypes], world, xTemp, yTemp, levelFloor);
+			addEntity->init(*types[countTypes], world, xTemp, yTemp, levelFloor);
 
 			world.Enemys.push_back(*addEntity);
 			posEntity = { xTemp, yTemp, pos.z };

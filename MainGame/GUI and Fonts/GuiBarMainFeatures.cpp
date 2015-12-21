@@ -58,7 +58,9 @@ void barMainFeatures::renderTextEnemy(Entity &enemy, int & current, int & max, i
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
 	pos.y -= Y_SHIFT_BARS * scaleGuiForEnemy.y;
-	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * shift;
+
+	sizeSprite &size = enemy.type->featuresSprite.size;
+	pos.y -= size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * shift;
 
 	currentText->setString(toStringCharacter(current, max));
 
@@ -74,7 +76,9 @@ void barMainFeatures::renderDamageForEnemy(Entity &enemy, TextGame &textGame, Re
 
 	Vector2f pos;
 	pos = enemy.spriteEntity->getPosition();
-	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shift) + shiftEnemyDamage;
+
+	sizeSprite &size = enemy.type->featuresSprite.size;
+	pos.y -= size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (2 + shift) + shiftEnemyDamage;
 
 	// Если нанесли урон то отображаем
 	int damage = enemy.damage.inputDamage;
@@ -111,7 +115,9 @@ void barMainFeatures::renderBarEnemy(Entity &enemy, int &current, int &max, int 
 	int shiftBar = enemy.mana.maxMana > 0;
 	Vector2f pos = enemy.spriteEntity->getPosition();
 	pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
-	pos.y -= enemy.size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
+
+	sizeSprite &size = enemy.type->featuresSprite.size;
+	pos.y -= size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
 
 
 	renderDamageForEnemy(enemy, textGame, window, shiftBar);

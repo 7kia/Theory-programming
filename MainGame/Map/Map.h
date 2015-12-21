@@ -24,29 +24,26 @@ const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 
 struct Field
 {
-	int BLOCK_SIZE;
+	Field();
 
-	wchar_t (*dataMap)[LONG_MAP][WIDTH_MAP];// Карта
+	wchar_t dataMap[HEIGHT_MAP][LONG_MAP][WIDTH_MAP];// Карта
 	int countBlocks = 0;
-	int (*idsNature);
-	wchar_t (*charBlocks);// символьное обозначение блоков
-	int (*coordinateBloks)[NUMBER_COORDINATES];// текстурные координаты
-	int (*toughness);
-	//const sf::String (*nameBlocks) = namesBlocks;
+	int idsNature[NUMBER_TYPE_BLOCKS];
+	wchar_t charBlocks[NUMBER_TYPE_BLOCKS];// символьное обозначение блоков
+	int coordinateBloks[NUMBER_TYPE_BLOCKS][NUMBER_COORDINATES];// текстурные координаты
+	int toughness[NUMBER_TYPE_BLOCKS];
 
-	sf::Sprite *floorSprite;
-	sf::Texture *floorTexture;
+	sf::Sprite floorSprite;
+	sf::Texture floorTexture;
 
-	sf::Sprite *wallSprite;
-	sf::Texture *wallTexture;
+	sf::Sprite wallSprite;
+	sf::Texture wallTexture;
 
-	void initializeDataBlocks();// Данные блоков
-	void setSprite(sf::Sprite *sprite, int l, int i, int j);// Окраска спрайта
+	void initializeDataBlocks();
+	void initializeSpriteBlocks();
+	void setSprite(sf::Sprite &sprite, int l, int i, int j);// Окраска спрайта
+	void readMap(const char* fileName);
 	void setTypeSprite(int personLevelFloor, int l, int i, int j);// Красим пол или стены?
 	sf::String findCharBlocks(wchar_t block);
 	int findIdBlock(wchar_t block);
 };
-
-void initializeField(Field & field);
-void readMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP], const char *fileName);
-void writeMap(wchar_t(*dataMap)[LONG_MAP][WIDTH_MAP]);// TODO

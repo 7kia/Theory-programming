@@ -5,24 +5,22 @@ using namespace std;
 
 void world::initializePlayer(View &view , Listener &listener)
 {
-	mainPerson = &Enemys[0];
-	// TODO
+	mainPerson = &Enemys[ID_PLAYER_IN_LIST];
+
 	float posX = float(CENTER_WORLD.x * SIZE_BLOCK);
 	float posY = float(CENTER_WORLD.y * SIZE_BLOCK);
-	view.setSize(DEFAULT_WIDTH_WINDOW, DEFAULT_HEIGHT_WINDOW);
+	view.setSize(float(DEFAULT_WIDTH_WINDOW), float(DEFAULT_HEIGHT_WINDOW));
 	view.setCenter(posX, posY);
 
-	// TODO
 	listener.setUpVector(0.f, 1.f, 0.f);
 	listener.setGlobalVolume(100.f);
-
 }
 
 void Entity::updateView(View &view , Listener &listener , RenderWindow &window)
 {
 	Vector2u sizeWindow = window.getSize();
 	//sizeWindow.x /= 1.f;//SCALE_VIEW
-	//sizeWindow.y /= 1.f;// TODO
+	//sizeWindow.y /= 1.f;// TODO : increase zoom for camera, small image
 	view.setSize(Vector2f(sizeWindow));
 
 	float tempX = getXPos();
@@ -45,7 +43,6 @@ void Entity::updateView(View &view , Listener &listener , RenderWindow &window)
 
 	view.setCenter(tempX, tempY);
 }
-
 
 void Entity::givenForPersonDamage(Entity &person)
 {
@@ -91,7 +88,7 @@ void Entity::updateAtack(world &world, const float deltaTime)
 
 void Entity::killFindEnemy(world& world)
 {
-	founds.findEnemy->EnemyDrop(world);
+	founds.findEnemy->Drop(world);
 	founds.findEnemy->playSoundDeath(world);
 	world.Enemys.erase(world.Enemys.begin() + founds.findEnemyFromList);
 	world.countEntity--;
@@ -114,7 +111,7 @@ void Entity::hurtEnemy(Item &currentItem, const float deltaTime)
 		playAtackSound(currentItem);
 	}
 }
-
+/*
 void Entity::hurtPerson(Entity& enemy, world& world, const float deltaTime)
 {
 	givenForPersonDamage(enemy);
@@ -129,6 +126,7 @@ void Entity::hurtPerson(Entity& enemy, world& world, const float deltaTime)
 		redefineType(itemEnemy, world, -itemEnemy.typeItem->features.id);
 	}
 }
+*/
 
 void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 {
@@ -154,7 +152,6 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 			checkLevelHealth(movemoment);
 			defineDirectionLook(movemoment);
 
-			// TODO
 			if (feelEnemy == false) {
 				checkBlock(world.field , distanse);
 			}
@@ -211,11 +208,14 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 				if (giveDamage) {
 
 						Field &field = world.field;
+						Vector3i posUse;
 						int x = int(getXPos() / SIZE_BLOCK);
 						int y = int(getYPos() / SIZE_BLOCK);
 						for (int i = -1; i < 2; i++) {
 							for (int j = -1; j < 2; j++) {
-								if (field.dataMap[currentLevelFloor + 1][y + i][x + j] != field.charBlocks[idBlocks::air]) {
+								posUse = { x + j, y + i, currentLevelFloor + 1 };
+								if (field.dataMap[posUse.z][posUse.y][posUse.x] != field.charBlocks[idBlocks::air]
+										|| isUnlifeObject(posUse, world)) {
 									founds.currentTarget = { x + j, y + i, currentLevelFloor + 1 };
 									break;
 								}
@@ -354,6 +354,7 @@ void Entity::computeAngle(RenderWindow &window)
 {
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f pos = window.mapPixelToCoords(pixelPos);
+	sizeSprite &size = type->featuresSprite.size;
 	float dX = pos.x - spriteEntity->getPosition().x - size.width / 2;
 	float dY = pos.y - spriteEntity->getPosition().y - size.height / 2;
 	rotation = (atan2(dX, dY)) * 180 / PI - 180;

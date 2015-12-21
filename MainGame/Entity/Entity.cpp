@@ -11,45 +11,6 @@ void entityProtection::init(float cut, float crash, float unlife)
 	protectionUnlife = unlife;
 }
 
-void currentCollision::initPos(int xPos, int yPos, int zPos)
-{
-	posBlock.x = xPos;
-	posBlock.y = yPos;
-	posBlock.z = zPos;
-}
-
-void currentCollision::clear()
-{
-	posObject = RESET_VECTOR_2F;
-	levelObject = RESET_COLLISION_VALUE;
-	posBlock = RESET_VECTOR_3I;
-
-	block = RESET_COLLISION_VALUE;
-
-}
-
-
-void entityMana::update(const float deltaTime)
-{
-	timeForMana += deltaTime;
-
-	if (timeForMana > timeUpdateMana) {
-		timeForMana = 0;
-
-		if (needMinusMana) {
-			currentMana -= delMana;
-		} else {
-			currentMana += addMana;
-		}
-	}
-
-	if (currentMana < 1) {
-		currentMana = 0;
-	} else if (currentMana > maxMana) {
-		currentMana = maxMana;
-	}
-}
-
 void Step::init(float first)
 {
 	stepFirst = first;
@@ -66,28 +27,6 @@ void DamageInputAndOutput::init(int cut, int crush, float time, float mult)
 	timeInputDamage = 0.f;
 }
 
-void entityAnimation::init(float input, float output)
-{
-	timeAnimation = 0.f;
-	timeFightAnimation = output;
-
-	timeOutputDamage = input;
-	currentTimeFightAnimation = 0.f;
-}
-
-void entityAnimation::updateFight(const float deltaTime, bool &giveDamage, idEntityMode &idMode)
-{
-
-		currentTimeFightAnimation += deltaTime;
-
-		if (currentTimeFightAnimation > timeFightAnimation) {
-			giveDamage = true;
-			idMode = idEntityMode::walk;
-			currentTimeFightAnimation = 0;
-		}
-
-};
-
 void DamageInputAndOutput::updateInputDamage(const float deltaTime)
 {
 	if (inputDamage) {
@@ -101,303 +40,17 @@ void DamageInputAndOutput::updateInputDamage(const float deltaTime)
 	}
 };
 
-void entityStamina::update(const float deltaTime, Direction directionWalk, Step &step)
-{
-	timeForStamina += deltaTime;
-
-	if (timeForStamina > timeUpdateStamina) {
-		timeForStamina = 0;
-
-		if (needMinusStamina && directionWalk != NONE_DIRECTION) {
-			currentStamina -= delStamina;
-		} else {
-			currentStamina += addStamina;
-		}
-	}
-
-	if (currentStamina < 1) {
-		currentStamina = 0;
-		needMinusStamina = false;
-		step.stepCurrent = step.stepFirst;
-	} else if (currentStamina > maxStamina) {
-		currentStamina = maxStamina;
-	}
-
-};
-
-void entityHealth::update(const float deltaTime, bool &isDeath)
-{
-	timeForHealth += deltaTime;
-
-	if (timeForHealth > timeUpdateHealth) {
-		timeForHealth = 0;
-
-		if (needMinusHealth) {
-			currentHealth -= delHealth;
-		} else {
-			currentHealth += addHealth;
-		}
-	}
-
-	if (currentHealth < 1) {
-		isDeath = true;
-		currentHealth = 0;
-	} 
-	else if (currentHealth > maxHealth) {
-		currentHealth = maxHealth;
-	}
-
-};
-
-void entityHungry::update(const float deltaTime, bool &needMinusHealth)
-{
-	timeForHungry += deltaTime;
-
-	if (timeForHungry > timeUpdateHungry) {
-		timeForHungry = 0;
-		currentHungry--;
-	}
-
-	if (currentHungry > maxHungry) {
-		currentHungry = maxHungry;
-	}
-
-	if (currentHungry > 0) {
-		needMinusHealth = false;
-	} else {
-		needMinusHealth = true;
-	}
-};
-
-void entityThirst::update(const float deltaTime, bool &needMinusHealth)
-{
-	timeForThirst += deltaTime;
-
-	if (timeForThirst > timeUpdateThirst) {
-		timeForThirst = 0;
-		currentThirst--;
-	}
-
-	if (currentThirst > maxThirst) {
-		currentThirst = maxThirst;
-	}
-
-	if (currentThirst > 0) {
-		needMinusHealth = false;
-	} else {
-		needMinusHealth = true;
-	}
-}
-
-void Entity::update(const float deltaTime)
-{
-
-	soundEntity.setPosition(getXPos(), getYPos(), 1.f);
-
-	damage.updateInputDamage(deltaTime);
-	mana.update(deltaTime);
-	stamina.update(deltaTime, directions.directionWalk, step);
-	health.update(deltaTime, isDeath);
-	hungry.update(deltaTime, health.needMinusHealth);
-	thirst.update(deltaTime, health.needMinusHealth);
-
-	if (currenMode == idEntityMode::walk
-			|| currenMode == idEntityMode::fight
-			|| currenMode == idEntityMode::panic) {
-		switch (directions.directionWalk) {
-		case UP_LEFT:
-			directions.directionLook = UP_LEFT;
-			movement.y = -step.stepCurrent;
-			movement.x = -step.stepCurrent;
-			break;
-		case UP_RIGHT:
-			directions.directionLook = UP_RIGHT;
-			movement.y = -step.stepCurrent;
-			movement.x = step.stepCurrent;
-			break;
-		case UP:
-			directions.directionLook = UP;
-			movement.y = -step.stepCurrent;
-			break;
-		case DOWN_LEFT:
-			directions.directionLook = DOWN_LEFT;
-			movement.y = step.stepCurrent;
-			movement.x = -step.stepCurrent;
-			break;
-		case DOWN_RIGHT:
-			directions.directionLook = DOWN_RIGHT;
-			movement.y = step.stepCurrent;
-			movement.x = step.stepCurrent;
-			break;
-		case DOWN:
-			directions.directionLook = DOWN;
-			movement.y = step.stepCurrent;
-			break;
-		case LEFT:
-			directions.directionLook = LEFT;
-			movement.x = -step.stepCurrent;
-			break;
-		case RIGHT:
-			directions.directionLook = RIGHT;
-			movement.x = step.stepCurrent;
-			break;
-		case NONE_DIRECTION:
-			movement.x = 0;
-			movement.y = 0;
-			break;
-		default:
-			break;
-		}
-
-		if (directions.directionWalk >= Direction::UP_LEFT) {
-			movement.x *= DIAGONAL_SCALE_SPEED * deltaTime;
-			movement.y *= DIAGONAL_SCALE_SPEED * deltaTime;
-		}
-		else {
-			movement.x *= deltaTime;
-			movement.y *= deltaTime;
-		}
-
-		//if (directions.directionWalk) {
-			updateDirectionLook();
-
-			playAnimationWalk(deltaTime);
-		//}
-
-	}
-
-	if (currenMode == idEntityMode::atack) {
-		animation.updateFight(deltaTime, giveDamage, currenMode);
-
-		playAnimationAtack(deltaTime);
-
-	}
-}
-
-void Entity::updateDirectionLook()
-{
-	if(rotation >= (NUMBER_DEGREES + SHIFT_CIRCLE_LOOK)
-		 || rotation <= (EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK))
-	{
-		directions.directionLook = UP;
-	}
-	else if (rotation >= (1 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
-					 && rotation <= (2 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK))
-	{
-		directions.directionLook = UP_LEFT;
-	}
-	else if (rotation >= (2 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
-					 && rotation <= (3 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
-		directions.directionLook = LEFT;
-	}
-	else if (rotation >= (3 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
-					 && rotation <= (4 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
-		directions.directionLook = DOWN_LEFT;
-	}
-	else if (rotation >= (4 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
-					 && rotation <= (5 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
-		directions.directionLook = DOWN;
-	}
-	else if (rotation >= (5 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
-					 && rotation <= (6 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
-		directions.directionLook = DOWN_RIGHT;
-	}
-	else if (rotation >= (6 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
-					 && rotation <= (7 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
-		directions.directionLook = RIGHT;
-	}
-	else if (rotation >= (7 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)
-					 && rotation <= (8 * EIGHTH_PART_CIRCLE + SHIFT_CIRCLE_LOOK)) {
-		directions.directionLook = UP_RIGHT;
-	}
-
-}
-
-void Entity::resetAtack()
-{
-	animation.currentTimeFightAnimation = 0.f;
-	currenMode = idEntityMode::walk;
-	directions.directionWalk = NONE_DIRECTION;
-	giveDamage = false;
-}
-
-void Entity::playAnimationWalk(const float deltaTime)
-{
-	if (directions.directionWalk) {
-		directions.directionLook = directions.directionWalk;
-		animation.timeAnimation += deltaTime * MULTIPLY_STEP_ANIMATION;
-		resetTimeAnimation(animation.timeAnimation , float(RESET_WALK_ANIMATION));
-
-		int id = idSoundPaths::stepGrass1Sound;
-		playSoundAfterTime(animation.timeAnimation , id);
-	}
-	int shiftWidth = directions.directionLook / NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION;// TODO
-
-	int currentWidth = size.width;
-	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);
-
-	if (shiftWidth) {
-		currentWidth *= -1;
-	}
-
-	int height = size.height;
-	int currentHeight = height * int(animation.timeAnimation);
-	spriteEntity->setTextureRect(IntRect(xPos, currentHeight, currentWidth, height));
-}
-
-void Entity::playAnimationAtack(const float deltaTime)
-{
-	float &timeAnimation = animation.currentTimeFightAnimation;
-	int width = size.width;
-	int height = size.height;
-
-	timeAnimation += deltaTime;
-	resetTimeAnimation(timeAnimation, animation.timeFightAnimation);
-	if(timeAnimation == 0.f)
-	{
-		giveDamage = true;
-	}
-
-	int shiftWidth = directions.directionLook / NUMBER_FOR_COMPUTE_SHIFT_WALK_ANIMATION;// TODO
-
-	int currentWidth = width;
-
-	int xPos = currentWidth * (directions.directionLook - 1 - shiftWidth * 3);
-
-	if (shiftWidth) {
-		currentWidth *= -1;
-	}
-
-	int currentHeight = height * (int(timeAnimation * RESET_ATACK_ANIMATION) + SHIFT_ANIMATION_ATACK);
-	spriteEntity->setTextureRect(IntRect(xPos, currentHeight, currentWidth, height));
-}
-
-void Entity::playSoundAfterTime(float time, const int idSound)
-{
-	if (time == soundBase->startSounds[idSound]) {
-		Vector2f posPerson = { getXPos(), getYPos() };
-		::playSound(idSound, *soundBase, soundEntity, posPerson);
-	}
-}
-
-void Entity::resetTimeAnimation(float &time, float reset)
-{
-	if (time > reset) {
-		time = 0;
-	}
-}
-
 void Entity::playAtackSound(Item &currentItem)
 {
 	Vector2f posPerson = { getXPos(), getYPos() };
 	int idSound;
 	if (currentItem.typeItem->features.isCutting) {
 		idSound = idSoundPaths::metalPunchBody1Sound;
-		::playSound(idSound, *soundBase, soundEntity, posPerson);
+		::playSound(idSound , *soundBase , soundEntity , posPerson);
 	}
 	else {
 		idSound = idSoundPaths::punchBody1Sound;
-		::playSound(idSound, *soundBase, soundEntity, posPerson);
+		::playSound(idSound , *soundBase , soundEntity , posPerson);
 	}
 
 }
@@ -484,143 +137,6 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 	}
 }
 
-void Entity::interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime)
-{
-	if (!wasCollision) {
-		Vector2f posEntity = getPosition();
-		posEntity = posEntity + movement;
-
-		float x = posEntity.x;
-		float y = posEntity.y;
-
-		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
-
-		if (!isExitFromBorder(posEntity.x , posEntity.y)) {
-			int xPos = int(x / SIZE_BLOCK);
-			int yPos = int(y / SIZE_BLOCK);
-
-			float xFar = (x + size.width / 2) / SIZE_BLOCK;
-			float yFar = (y + size.height / 2) / SIZE_BLOCK;
-			/////////////////////////////////////////////
-			// Стены
-			for (int i = yPos; float(i) < yFar; i++) {
-				for (int j = xPos; float(j) < xFar; j++) {
-
-					if (!isInListBlocks(listDestroy.passableBlocks , map[currentLevelFloor + 1][i][j])) {
-						wasCollision = true;
-
-						collision.initPos(j , i , currentLevelFloor + 1);
-						collision.block = map[currentLevelFloor + 1][i][j];
-					}
-
-					if (wasCollision) {
-						break;
-					}
-				}
-			}
-			/////////////////////////////////////////////
-			// Пол
-			for (int i = yPos; float(i) < yFar; i++) {
-				for (int j = xPos; float(j) < xFar; j++) {
-					if (isInListBlocks(listDestroy.notPassableFloor , map[currentLevelFloor][i][j])) {
-						wasCollision = true;
-
-						collision.initPos(j , i , currentLevelFloor);
-						collision.block = map[currentLevelFloor][i][j];
-					}
-
-					if (wasCollision) {
-						break;
-					}
-				}
-			}
-		}
-		else {
-			wasCollision = true;
-		}
-
-	}
-
-
-	if(!wasCollision)
-	{
-		spriteEntity->move(movement);
-	}
-	else 
-	{
-		directions.directionWalk = NONE_DIRECTION;
-	}
-
-
-	gravitateToGround(field);
-
-	movement = { 0.f, 0.f };
-}
-
-void Entity::gravitateToGround(Field &field)
-{
-	int x = int(getXPos() / SIZE_BLOCK);
-	int y = int(getYPos() / SIZE_BLOCK);
-	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
-
-	if (map[currentLevelFloor][y][x] == field.charBlocks[idBlocks::air]) {
-		currentLevelFloor--;
-		spriteEntity->setPosition(float(x * SIZE_BLOCK) , float(y * SIZE_BLOCK));
-	}
-}
-
-void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , const float deltaTime)// ИСПРАВЬ for enity and mainPerson
-{
-
-	wasCollision = false;
-
-	collision.clear();
-
-	Sprite *spriteObject;
-	FloatRect objectBound;
-
-	int levelUnlifeObject;
-	Sprite *transparentSpiteObject;
-	FloatRect objectAltBound;
-
-	spriteEntity->move(movement);
-	FloatRect entityBound = spriteEntity->getGlobalBounds();
-	spriteEntity->move(-movement);
-
-
-	for (int i = 0; i < unlifeObjects.size(); i++) {
-		levelUnlifeObject = unlifeObjects[i].currentLevel;
-
-		spriteObject = unlifeObjects[i].spriteObject;
-		objectBound = spriteObject->getGlobalBounds();
-
-		transparentSpiteObject = unlifeObjects[i].transparentSpiteObject;
-		objectAltBound = transparentSpiteObject->getGlobalBounds();
-
-		if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-			wasCollision = true;
-
-			collision.posObject = unlifeObjects[i].getPosition();
-			collision.levelObject = unlifeObjects[i].currentLevel;
-
-			directions.directionWalk = NONE_DIRECTION;
-			break;
-		}
-		else if (type->id == idEntity::playerEntity) {
-			if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
-			}
-			else {
-				transparentSpiteObject->setColor(NORMAL_COLOR);
-			}
-		}
-
-	}
-
-}
-
-
-
 bool Entity::isEmptySlot()
 {
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
@@ -632,23 +148,6 @@ bool Entity::isEmptySlot()
 	return false;
 }
 
-
-
-bool isObject(float x, float y, std::vector<UnlifeObject> &unlifeObjects, UnlifeObject &findObject,
-							int &findObjectFromList, int &current, int currentLevel)
-{
-	int levelObject = unlifeObjects[current].currentLevel;
-
-	Sprite *spriteObject = unlifeObjects[current].spriteObject;
-	FloatRect objectBound = spriteObject->getGlobalBounds();
-
-	if (objectBound.contains(x, y) && levelObject == currentLevel) {
-		findObject = unlifeObjects[current];
-		findObjectFromList = current;
-		return true;
-	}
-	return false;
-}
 //////////////////////////////////////////////////////
 // Поиск предмета
 bool isItem(float x, float y, vector<Item> &items, Item &findItem, int &findItemFromList, int currentLevel)
@@ -670,11 +169,13 @@ bool Entity::isInUseField(float x, float y, bool under)
 	int xPosBlock = int(x / SIZE_BLOCK);
 	int yPosBlock = int(y / SIZE_BLOCK);
 
-	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + radiusUse > xPosBlock)
-								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= xPosBlock);
+	sizeSprite &size = type->featuresSprite.size;
+	viewEnemy &view = type->view;
+	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + view.radiusUse > xPosBlock)
+								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= xPosBlock);
 
-	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + radiusUse > yPosBlock)
-								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= yPosBlock);
+	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + view.radiusUse > yPosBlock)
+								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= yPosBlock);
 
 	bool checkUnderPerson = xPosBlock == ((int(getXPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK)
 													&& yPosBlock == ((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);
@@ -687,6 +188,26 @@ bool Entity::isInUseField(float x, float y, bool under)
 	}
 
 	return false;
+}
+
+bool Entity::isExitFromBorder(int x, int y)
+{
+
+	if (((x < WIDTH_MAP) && (x > 0))
+			&& (y < (LONG_MAP - 1) && (y > 0))) {
+		return false;
+	}
+	return true;
+}
+
+bool Entity::isExitFromBorder(float x , float y)
+{
+
+	if ((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0)
+		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
+		return false;
+	}
+	return true;
 }
 
 Vector2i  Entity::isEmptyFloor(Field &field, int Level)
@@ -732,26 +253,6 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 	return{ -1, -1 };
 }
 
-bool Entity::isExitFromBorder(int x, int y)
-{
-
-	if (((x < WIDTH_MAP) && (x > 0))
-			&& (y < (LONG_MAP - 1) && (y > 0))) {
-		return false;
-	}
-	return true;
-}
-
-bool Entity::isExitFromBorder(float x , float y)
-{
-
-	if ((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0)
-		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
-		return false;
-	}
-	return true;
-}
-
 ////////////////////////////////////////////////////////////////////
 void Entity::throwItem(Field &field, vector<Item> &items)
 {
@@ -766,6 +267,8 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		addItem->setPosition(int(getXPos() / SIZE_BLOCK),
 												 int(getYPos() / SIZE_BLOCK),
 												 currentLevelFloor + 1);
+
+		sizeSprite &size = type->featuresSprite.size;
 		Vector2f posHero = { getXPos() + size.width / 2, getYPos() + size.height / 2 };// Начало отсчёта не в центре спрайта
 		addItem->mainSprite->setPosition(posHero);
 		addItem->mainSprite->scale(scaleOutItems);
@@ -841,17 +344,55 @@ bool Entity::isInListObjects(vector<int> &listObjects, int id) {
 
 	}
 
-
 	return false;
 }
 
+void Entity::renderCurrentItem(sf::RenderWindow& window)
+{
 
-void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
+	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+	bool isEmptyItem = currentItem.typeItem->features.name == founds.emptyItem->typeItem->features.name;
+	if (!isEmptyItem) {
+		Sprite& spriteItem = *currentItem.mainSprite;
+
+
+		bool condition = directions.directionLook < DOWN_LEFT;
+		bool condition2 = directions.directionLook != UP_LEFT;
+		int shiftAngle = shiftAngleUseItem * (condition && condition2) + !condition * 4;
+
+		int shiftX;
+		int shiftY;
+
+		// TODO ANIMATION
+		bool prickBlow = rand() % 2 == 1;
+		choceShiftUseItem(shiftX, shiftY, prickBlow);
+
+
+		sizeSprite &size = type->featuresSprite.size;
+
+		Vector2f pos = { getXPos() + size.width / 2 + shiftX,
+			getYPos() + size.width / 2 + shiftY };
+		spriteItem.setOrigin(0, 0);
+		spriteItem.setRotation(45.f * (directions.directionLook - shiftAngle));
+		spriteItem.setScale(scaleUseItems);
+
+		spriteItem.setPosition(pos);
+		window.draw(spriteItem);
+
+
+		spriteItem.setRotation(0);
+		spriteItem.setScale(normalSize);
+		spriteItem.setOrigin(SIZE_ITEM / 2, SIZE_ITEM / 2);
+	}
+}
+
+void Entity::choceShiftUseItem(int& shiftX , int& shiftY , bool prickBlow)
 {
 	float percentTime = 1.f - 2.f * animation.currentTimeFightAnimation / animation.timeFightAnimation;
 	shiftX = int(-spriteEntity->getOrigin().x);
 	shiftY = int(-spriteEntity->getOrigin().y);
 
+	sizeSprite &size = type->featuresSprite.size;
 
 	switch (directions.directionLook) {
 	case UP:
@@ -905,43 +446,5 @@ void Entity::choceShiftUseItem(int& shiftX, int& shiftY, bool prickBlow)
 	default:
 		break;
 
-	}
-}
-
-void Entity::renderCurrentItem(sf::RenderWindow& window)
-{
-
-	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
-	bool isEmptyItem = currentItem.typeItem->features.name == founds.emptyItem->typeItem->features.name;
-	if (!isEmptyItem) {
-		Sprite& spriteItem = *currentItem.mainSprite;
-
-
-		bool condition = directions.directionLook < DOWN_LEFT;
-		bool condition2 = directions.directionLook != UP_LEFT;
-		int shiftAngle = shiftAngleUseItem * (condition && condition2) + !condition * 4;
-
-		int shiftX;
-		int shiftY;
-
-		// TODO ANIMATION
-		bool prickBlow = rand() % 2 == 1;
-		choceShiftUseItem(shiftX, shiftY, prickBlow);
-
-
-
-		Vector2f pos = { getXPos() + size.width / 2 + shiftX,
-			getYPos() + size.width / 2 + shiftY };
-		spriteItem.setOrigin(0, 0);
-		spriteItem.setRotation(45.f * (directions.directionLook - shiftAngle));
-		spriteItem.setScale(scaleUseItems);
-
-		spriteItem.setPosition(pos);
-		window.draw(spriteItem);
-
-
-		spriteItem.setRotation(0);
-		spriteItem.setScale(normalSize);
-		spriteItem.setOrigin(SIZE_ITEM / 2, SIZE_ITEM / 2);
 	}
 }

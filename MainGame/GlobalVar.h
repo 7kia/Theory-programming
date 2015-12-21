@@ -74,7 +74,6 @@ typedef enum
 
 typedef enum
 {
-	NoneNature = -2,
 	Unbreaking = -1,
 	woodNature = 0,
 	stoneNature,

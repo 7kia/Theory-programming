@@ -22,7 +22,7 @@ void createOnlyEnemy(world &world , std::vector<TypeEnemy*> &types , std::vector
 			pos.x = CENTER_WORLD.x;
 			pos.y = CENTER_WORLD.y;
 
-			addEnemy->EnemyInit(*types[countTypes] , world , pos.x , pos.y , pos.z);
+			addEnemy->init(*types[countTypes] , world , pos.x , pos.y , pos.z);
 			world.Enemys.push_back(*addEnemy);
 			//isPlaceForCreate(world , pos);
 
@@ -73,61 +73,22 @@ void createEmptyEnemy(world& world)
 	emptyObjects &emptyObjects = world.emptyObjects;
 	Entity &emptyEnemy = emptyObjects.emptyEnemy;
 
-	emptyEnemy.EnemyInit(*typeEnemy , world , -1 , -1 , -1);
+	emptyEnemy.init(*typeEnemy , world , -1 , -1 , -1);
 }
 
-void Entity::EnemyInit(TypeEnemy &typesEnemy, world &world,
+void Entity::init(TypeEnemy &typesEnemy, world &world,
 											int xPos, int yPos, int level)
 {
-	spriteEntity = new Sprite;
-
 	type = &typesEnemy;
 
 	soundBase = &world.databaseSound;
 
-	itemFromPanelQuickAccess = new Item[type->amountSlots];
-	idSelectItem = 0;
-	itemFromPanelQuickAccess[idSelectItem].setType(type->typeItem);
-	itemFromPanelQuickAccess[idSelectItem].amount = type->typeItem.maxAmount;
-	for (int i = 1; i < type->amountSlots; i++)
-	{
-		itemFromPanelQuickAccess[i].setType(*world.emptyObjects.emptyItem.typeItem);
-	}
-
-	size.width = type->featuresSprite.size.width;
-	size.height = type->featuresSprite.size.height;
-
-	// Дальность подбора предметов
-	radiusUse = 1;
-
-	currenMode = idEntityMode::walk;
-
+	initItems(world);
 	step.init(SPEED_ENTITY);
 
-	// Текстура
-	spriteEntity->setTexture(*type->textureEntity);
-	spriteEntity->setTextureRect(IntRect(0, 0, size.width, size.height));
-
-	// Позиция и направление
-	currentLevelFloor = level;
-	currenMode = idEntityMode::walk;
-
-	spriteEntity->setOrigin(float(size.width / 2), float(size.height / 2));
-	spriteEntity->setPosition(float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2),
-														float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2));
-
-	directions.directionWalk = NONE_DIRECTION;
-	directions.directionLook = DOWN;
-
-	////////////////////////////////////////////////////////////////////////
-	// Для случайного перемещения по карте
-	step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
-
-	step.currentTime = 0;
-
-	int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
-	directions.directionWalk = Direction(randomDirection);
-	////////////////////////////////////////////////////////////////////////
+	setSpriteEntity();
+	initPosition(xPos , yPos , level);
+	initRandowWalk();
 
 	emptyObjects &emptyObjects = world.emptyObjects;
 	founds.init(world.emptyObjects);
@@ -137,6 +98,51 @@ void Entity::EnemyInit(TypeEnemy &typesEnemy, world &world,
 	initDamage();
 }
 
+void Entity::setSpriteEntity()
+{
+	spriteEntity = new Sprite;
+
+	sizeSprite  &sizes = type->featuresSprite.size;
+	spriteEntity->setTexture(*type->textureEntity);
+	spriteEntity->setTextureRect(IntRect(0 , 0 , sizes.width , sizes.height));
+}
+
+void Entity::initItems(world &world)
+{
+	itemFromPanelQuickAccess = new Item[type->amountSlots];
+	idSelectItem = 0;
+	itemFromPanelQuickAccess[idSelectItem].setType(type->typeItem);
+	itemFromPanelQuickAccess[idSelectItem].amount = type->typeItem.maxAmount;
+	for (int i = 1; i < type->amountSlots; i++) {
+		itemFromPanelQuickAccess[i].setType(*world.emptyObjects.emptyItem.typeItem);
+	}
+}
+
+void Entity::initPosition(int xPos , int yPos , int level)
+{
+	currentLevelFloor = level;
+	currenMode = idEntityMode::walk;
+
+	sizeSprite  &size = type->featuresSprite.size;
+	spriteEntity->setOrigin(float(size.width / 2) , float(size.height / 2));
+	spriteEntity->setPosition(float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2) ,
+														float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2));
+	directions.directionWalk = NONE_DIRECTION;
+	directions.directionLook = DOWN;
+}
+
+void Entity::initRandowWalk()
+{
+	currenMode = idEntityMode::walk;
+
+	step.timeWalk = minTimeWalk + rand() % (int(maxTimeWalk - minTimeWalk));
+
+	step.currentTime = 0;
+
+	int randomDirection = 1 + rand() % Direction::AMOUNT_DIRECTION;
+	directions.directionWalk = Direction(randomDirection);
+}
+
 void foundObjects::init(emptyObjects & emptyObjects)
 {
 	emptyItem = &emptyObjects.emptyItem;
@@ -144,6 +150,7 @@ void foundObjects::init(emptyObjects & emptyObjects)
 	emptyObject = &emptyObjects.emptyObject;
 
 }
+
 
 void Entity::initFeatures()
 {
@@ -175,7 +182,6 @@ void Entity::initDamage()
 	damage.init(type->damage.cuttingDamage, type->damage.crushingDamage, TIME_ATACK, 1.f);
 }
 
-
 void Entity::randomWalk(const float deltaTime) {
 
 	if (currenMode == idEntityMode::walk) {
@@ -197,15 +203,12 @@ void Entity::randomWalk(const float deltaTime) {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void Entity::takeDamage(DamageInputAndOutput damageEnemy, Item &currentItem)
 {
 	bool isDestroy = currentItem.typeItem->features.isDestroy;
 	if (isDestroy) {
 		currentItem.currentToughness -= 1;
 	}
-
 
 	typeDamageItem damagePersonItem = currentItem.typeItem->damageItem;
 	float multiplirer = damageEnemy.damageMultiplirer;
@@ -244,27 +247,24 @@ void Entity::takeDamage(DamageInputAndOutput damageEnemy, Item &currentItem)
 
 void Entity::choiceDirections(Vector2f movemoment)
 {
-	//TODO
-	float zero = SIZE_BLOCK / 3;
+	bool xAboutZero = movemoment.x >= -BORDER_VALUE_FOR_DIRECTION && movemoment.x <= BORDER_VALUE_FOR_DIRECTION;
+	bool yAboutZero = movemoment.y >= -BORDER_VALUE_FOR_DIRECTION && movemoment.y <= BORDER_VALUE_FOR_DIRECTION;
 
-	bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
-	bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
-
-	if (movemoment.x > zero && movemoment.y > zero) {
+	if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = DOWN_RIGHT;
-	} else if (movemoment.x < -zero && movemoment.y > zero) {
+	} else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = DOWN_LEFT;
-	} else if (movemoment.x < -zero && movemoment.y < -zero) {
+	} else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y < -BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = UP_LEFT;
-	} else if (movemoment.x > zero && movemoment.y < zero) {
+	} else if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y < BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = UP_RIGHT;
-	} else if (movemoment.y >= zero && xAboutZero) {
+	} else if (movemoment.y >= BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionWalk = DOWN;
-	} else if (movemoment.y <= -zero && xAboutZero) {
+	} else if (movemoment.y <= -BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionWalk = UP;
-	} else if (movemoment.x >= zero && yAboutZero) {
+	} else if (movemoment.x >= BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionWalk = RIGHT;
-	} else if (movemoment.x <= -zero && yAboutZero) {
+	} else if (movemoment.x <= -BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionWalk = LEFT;
 	} else {
 		directions.directionWalk = NONE_DIRECTION;
@@ -273,27 +273,24 @@ void Entity::choiceDirections(Vector2f movemoment)
 
 void Entity::defineDirectionLook(Vector2f movemoment)
 {
-	//TODO
-	float zero = SIZE_BLOCK / 3;
+	bool xAboutZero = movemoment.x >= -BORDER_VALUE_FOR_DIRECTION && movemoment.x <= BORDER_VALUE_FOR_DIRECTION;
+	bool yAboutZero = movemoment.y >= -BORDER_VALUE_FOR_DIRECTION && movemoment.y <= BORDER_VALUE_FOR_DIRECTION;
 
-	bool xAboutZero = movemoment.x >= -zero && movemoment.x <= zero;
-	bool yAboutZero = movemoment.y >= -zero && movemoment.y <= zero;
-
-	if (movemoment.x > zero && movemoment.y > zero) {
+	if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = DOWN_RIGHT;
-	} else if (movemoment.x < -zero && movemoment.y > zero) {
+	} else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = DOWN_LEFT;
-	} else if (movemoment.x < -zero && movemoment.y < -zero) {
+	} else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y < -BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = UP_LEFT;
-	} else if (movemoment.x > zero && movemoment.y < zero) {
+	} else if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y < BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = UP_RIGHT;
-	} else if (movemoment.y >= zero && xAboutZero) {
+	} else if (movemoment.y >= BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionLook = DOWN;
-	} else if (movemoment.y <= -zero && xAboutZero) {
+	} else if (movemoment.y <= -BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionLook = UP;
-	} else if (movemoment.x >= zero && yAboutZero) {
+	} else if (movemoment.x >= BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionLook = RIGHT;
-	} else if (movemoment.x <= -zero && yAboutZero) {
+	} else if (movemoment.x <= -BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionLook = LEFT;
 	} else {
 		directions.directionLook = NONE_DIRECTION;
@@ -313,8 +310,7 @@ void Entity::choiceBlock(world &world)
 	int yShift = 0;
 	choiceDirectionLook(xShift, yShift);
 
-
-	/////////////////////////////////////////////
+	
 	Field &field = world.field;
 	wchar_t	*block = &field.dataMap[level][y][x];
 	int idNature;
@@ -332,7 +328,6 @@ void Entity::choiceBlock(world &world)
 			}
 		}
 		idNature = findObject.typeObject->idNature;
-		//founds.currentTarget = 
 	}
 	else
 	{
@@ -402,10 +397,9 @@ void Entity::entityStandPanic(Vector2f &movemoment)
 
 void Entity::buildLadder(world &world)
 {
-
 	int x = int(getXPos() / SIZE_BLOCK);
 	int y = int(getYPos() / SIZE_BLOCK);
-	int level = currentLevelFloor + 1;//currentLevelFloor + 1;
+	int level = currentLevelFloor + 1;
 
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
 
@@ -421,12 +415,7 @@ void Entity::buildLadder(world &world)
 			}
 		}
 	}
-
-
-
-
 }
-
 
 bool Entity::findLadder(world &world, Vector3i pos)
 {
@@ -563,53 +552,7 @@ void Entity::checkBlock(Field& field, float distanse)
 	checkInDirectionWalk(field, distanse, startPosition, shifts);
 }
 
-void Entity::interactionWithEntity(vector<Entity> *enemys, int id, const float deltaTime)// ИСПРАВЬ for enity and mainPerson
-{
-	if (!wasCollision) {
-		float &dx = movement.x;
-		float &dy = movement.y;
-
-		float x;
-		float y;
-		x = getXPos();
-		y = getYPos();
-
-		
-			Sprite *spriteObject;
-			FloatRect objectBound;
-
-			int levelUnlifeObject;
-
-			spriteEntity->move(movement);
-			FloatRect entityBound = spriteEntity->getGlobalBounds();
-			spriteEntity->move(-movement);
-
-
-			vector<Entity> &objects = *enemys;
-			for (int i = 0; i != objects.size(); ++i) {
-
-				if (id != i) {
-					levelUnlifeObject = objects[i].currentLevelFloor;
-
-					spriteObject = objects[i].spriteEntity;
-					objectBound = spriteObject->getGlobalBounds();
-
-
-					if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor)) {
-						wasCollision = true;
-
-						founds.findEnemy = &objects[i];
-						directions.directionWalk = NONE_DIRECTION;
-						break;
-					}
-
-				}
-
-			}
-	}
-}
-
-void Entity::EnemyDrop(world& world)
+void Entity::Drop(world& world)
 {
 	Field &field = world.field;
 	vector<Item> &items = world.items;

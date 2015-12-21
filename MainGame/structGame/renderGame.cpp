@@ -48,16 +48,14 @@ void Game::renderMap(FloatRect const& rectWindow)
 		topBorder = HEIGHT_MAP - 1;
 
 	l = lowBorder;
-	FloatRect rectWallSprite;
-	FloatRect rectFloorSprite;
 	while (l <= topBorder) {
 
 		for (int i = 0; i < LONG_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP - BORDER1; j++) {
 				field.setTypeSprite(mainPerson.currentLevelFloor, l, i, j);
 
-				drawInWindow(*field.floorSprite, rectWindow);
-				drawInWindow(*field.wallSprite, rectWindow);
+				drawInWindow(field.floorSprite, rectWindow);
+				drawInWindow(field.wallSprite, rectWindow);
 			}
 		}
 
@@ -158,10 +156,8 @@ void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 
 void Game::drawAwardItems(vector<Vector2i> &listAward)
 {
-	int currentLevel = difficult;
 	TypeItem *typesItems = world.typesObjects.typesItem;
 
-	Entity *mainPerson = world.mainPerson;
 	View &view = world.view;
 
 	Vector2f centerWindow = view.getCenter();
@@ -185,7 +181,6 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 		string amountItems;
 		intToString(listAward[i].y, amountItems);
 		currentText->setString(amountItems);
-		int sizeText = currentText->getCharacterSize();
 		float middleText = float(computeMiddleString(*currentText));
 
 		posText = posImage;
@@ -208,7 +203,6 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 
 void Game::setPositionAwardText()
 {
-	Entity *mainPerson = world.mainPerson;
 	View &view = world.view;
 
 	Vector2f centerWindow = view.getCenter();
@@ -225,7 +219,6 @@ void Game::setPositionTitleAward(Vector2f const& centerWindow, Vector2f &posText
 	Text *currentText = &textGame.texts[idText::panelTitleText];
 
 	currentText->setString(TEXT_AWARD);
-	int sizeText = currentText->getCharacterSize();
 	float middleText = float(computeMiddleString(*currentText));
 	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TITLE_TEXT;
 	posText.x -= middleText;
