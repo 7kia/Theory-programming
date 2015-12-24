@@ -25,6 +25,4 @@ struct listDestroyObjectsAndBlocks//Game.cpp
 	std::vector<int> axe;
 	std::vector<int> backhoe;
 	std::vector<int> pickax;
-
-
 };

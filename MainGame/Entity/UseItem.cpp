@@ -18,7 +18,7 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 	bool isEnemy = founds.findEnemy != founds.emptyEnemy;
 	//	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
 	bool isAtack = event.key.code == Mouse::Left;
-	if (isEnemy && isAtack && isInUseField(pos.x , pos.y , true)) {
+	if (isEnemy && isAtack && isInUseField(pos, true)) {
 
 		if (founds.findEnemy->currentLevelFloor == currentLevelFloor) {
 
@@ -35,7 +35,7 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 		case idCategoryItem::backhoe:
 		case idCategoryItem::pickax:
 		case idCategoryItem::axe:
-			if (isInUseField(pos.x , pos.y , true)) {
+			if (isInUseField(pos, true)) {
 				int level;
 				defineLevel(level , event);
 
@@ -58,7 +58,7 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 			break;
 		case idCategoryItem::block:
 		case idCategoryItem::unlifeObject:
-			if (isInUseField(pos.x , pos.y , false)) {
+			if (isInUseField(pos, false)) {
 				int level;
 				defineLevel(level , event);
 
@@ -80,14 +80,14 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 			useAsHealthPotion(currentItem , world , event);
 			break;
 		case idCategoryItem::bukketEmpty:// ÈÑÏÐÀÂÜ
-			if (isInUseField(pos.x , pos.y , true)) {
+			if (isInUseField(pos, true)) {
 				int level;
 				defineLevel(level , event);
 				useAsEmptyBukket(currentItem , world , level);
 			}
 			break;
 		case idCategoryItem::bottleEmpty:
-			if (isInUseField(pos.x , pos.y , true)) {
+			if (isInUseField(pos, true)) {
 				int level;
 				defineLevel(level , event);
 				useAsEmptyBottle(currentItem , world , level);
@@ -138,10 +138,10 @@ void Entity::createRedefineItem(world &world, Item &currentItem, int shift)
 	TypeItem *typesItems = world.typesObjects.typesItem;
 	addItem->setType(typesItems[defineType]);
 
-	Vector2f posItem = { getXPos() / SIZE_BLOCK, getYPos() / SIZE_BLOCK };
-	addItem->setPosition(int(posItem.x + 1),
-						 int(posItem.y + 1),
-						 currentLevelFloor + 1);
+	Vector3i posItem = { int(getXPos() / SIZE_BLOCK) + 1,
+											int(getYPos() / SIZE_BLOCK) + 1,
+											currentLevelFloor + 1 };
+	addItem->setPosition(posItem);
 
 	vector<Item> &items = world.items;
 	items.push_back(*addItem);
@@ -168,7 +168,7 @@ void Entity::takeItem(world &world, Vector2f pos)
 
 
 	if (nameFindItem != nameEmptyItem) {
-		if (isInUseField(pos.x, pos.y, true)) {
+		if (isInUseField(pos, true)) {
 			
 			if (isEmptySlot() && founds.findItemFromList > RESET_COLLISION_VALUE) {
 				searchItem(items , pos);
@@ -351,13 +351,15 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 	// TODO BUG :
 	Item* addItem = new Item;
 	int currentAmount;
+	Vector3i shift = { 1 , 1 , 1 };
+	Vector3i posAdd = pos + shift;
 	for (size_t i = start; i < finish; i++) {
 		// Generate only one item 
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
 		for (int j = 0; j < currentAmount; j++) {
 			// Work normal
 			addItem->setType(typesItems[idItems[i]]);
-			addItem->setPosition(pos.x + 1, pos.y + 1, pos.z + 1);
+			addItem->setPosition(posAdd);
 			items.push_back(*addItem);
 
 		}
@@ -380,9 +382,10 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	Item &currecntItem = itemFromPanelQuickAccess[idSelectItem];
 
 	UnlifeObject addObject;
+	Vector3i posAdd = { pos.x + 1, pos.y + 1 , pos.z };
 	TypeUnlifeObject *typesObject = world.typesObjects.typesUnlifeObject;
 	addObject.setType(typesObject[idUnlifeObject::destroyBlockEffect]);
-	addObject.setPosition(pos.x + 1, pos.y + 1 , pos.z);
+	addObject.setPosition(posAdd);
 
 	Field &field = world.field;
 	wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
@@ -393,7 +396,7 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	vector<UnlifeObject> &objects = world.unlifeObjects;
 	objects.push_back(addObject);
 
-	founds.currentTarget = { pos.x + 1, pos.y + 1, pos.z };
+	founds.currentTarget = posAdd;
 	founds.findObject = &objects[objects.size() - 1];
 }
 
@@ -401,28 +404,25 @@ void Entity::actionMain(world &world, Vector2f pos)
 {
 	if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
 
-		int x = int(pos.x / SIZE_BLOCK);
-		int y = int(pos.y / SIZE_BLOCK);
+		Vector2i posBlock = { int(pos.x / SIZE_BLOCK) , int(pos.y / SIZE_BLOCK) };
 
 		Field &field = world.field;
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
-		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor + 1][y][x])) {
+		if (isInListBlocks(listDestroy.ladder , field.dataMap[currentLevelFloor + 1][posBlock.y][posBlock.x])) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
-			Vector2f posCurrent = { float(x * SIZE_BLOCK + posOrigin.x), float(y * SIZE_BLOCK + posOrigin.y) };
+			Vector2f posCurrent = { float(posBlock.x * SIZE_BLOCK + posOrigin.x),
+															float(posBlock.y * SIZE_BLOCK + posOrigin.y) };
 
-			spriteEntity->setPosition(posCurrent.x, posCurrent.y);
+			spriteEntity->setPosition(posCurrent.x , posCurrent.y);
 			currentLevelFloor += 1;
 
-		} 
-		else
-		{
-			if(founds.findObject != founds.emptyObject)
-			{
-							if (isInListObjects(listDestroy.harvestObjects, founds.findObject->typeObject->id))
-		{
-			upgradeObject(*founds.findObject, world);
 		}
+		else {
+			if (founds.findObject != founds.emptyObject) {
+				if (isInListObjects(listDestroy.harvestObjects , founds.findObject->typeObject->id)) {
+					upgradeObject(*founds.findObject , world);
+				}
 
 			}
 		}
@@ -434,16 +434,16 @@ void Entity::actionMain(world &world, Vector2f pos)
 void Entity::actionAlternate(world &world, Vector2f pos)
 {
 	if (currentLevelFloor >= 1) {
-		int x = int(pos.x / SIZE_BLOCK);
-		int y = int(pos.y / SIZE_BLOCK);
+		Vector2i posBlock = { int(pos.x / SIZE_BLOCK), int(pos.y / SIZE_BLOCK) };
+
 
 		Field &field = world.field;
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
-		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor][y][x])) {
+		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor][posBlock.y][posBlock.x])) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 
-			spriteEntity->setPosition(x * SIZE_BLOCK + posOrigin.x, y * SIZE_BLOCK + posOrigin.y);
+			spriteEntity->setPosition(posBlock.x * SIZE_BLOCK + posOrigin.x, posBlock.y * SIZE_BLOCK + posOrigin.y);
 			currentLevelFloor -= 1;
 		}
 	}

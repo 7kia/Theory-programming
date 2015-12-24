@@ -7,39 +7,44 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 {
 	UnlifeObject addObject;
 
-	int topLevel = 2;
+	Vector3i pos;
+	pos.z = 2;
 
+	pos = { 4, 12, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakGrow]);
-	addObject.setPosition(4, 12, topLevel);
+	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
 	///*
+	pos = { 8, 12, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakSmall]);
-	addObject.setPosition(8, 12, topLevel);
+	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
+	pos = { 12, 13, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakSeadling]);
-	addObject.setPosition(12, 13, topLevel);
+	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
+	pos = { 12, 18, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::appleSeadling]);
-	addObject.setPosition(12, 18, topLevel);
+	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
+	pos = { 5, 11, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::smallStone]);
-	addObject.setPosition(5, 11, topLevel);
+	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
+	pos = { 5, 11, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::wolfDeathEffect]);
-	addObject.setPosition(2, 2, topLevel);
+	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
 
 	emptyObject.setType(typesUnlifeObjects[idUnlifeObject::empty]);
 }
 
-////////////////////////////////////////////////////////////////////
-// Вспомагательные функции
 float UnlifeObject::getXPos()
 {
 	return spriteObject->getPosition().x;
@@ -49,7 +54,6 @@ float UnlifeObject::getYPos()
 {
 	return spriteObject->getPosition().y;
 }
-////////////////////////////////////////////////////////////////////
 
 void UnlifeObject::setType(TypeUnlifeObject &type)
 {
@@ -59,37 +63,34 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 	typeObject = &type;
 	isDestroy = type.isDestroy;
 
+	setSpriteTexture(*spriteObject , type.mainSize , *type.textureObject);
+	setSpriteTexture(*transparentSpiteObject , type.transparentSize , *type.textureObject);
 
-	int width = type.mainSize.size.width;
-	int height = type.mainSize.size.height;
-	int pixelXPos = type.mainSize.pixPos.x;
-	int pixelYPos = type.mainSize.pixPos.y;
-	spriteObject->setTexture(*type.textureObject);
-	spriteObject->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
-	spriteObject->setOrigin(float(width / 2), float(height / 2));
-
-	width = type.transparentSize.size.width;
-	height = type.transparentSize.size.height;
-	pixelXPos = type.transparentSize.pixPos.x;
-	pixelYPos = type.transparentSize.pixPos.y;
-	transparentSpiteObject->setTexture(*type.textureObject);
-	transparentSpiteObject->setTextureRect(IntRect(pixelXPos, pixelYPos, width, height));
-	transparentSpiteObject->setOrigin(float(width / 2), float(height / 2));
-
-	// Прочность 
 	currentToughness = type.toughnessObject;
 
 	timeLife = 0.f;
 }
 
-void UnlifeObject::setPosition(int xPos, int yPos, int Level)
+void UnlifeObject::setSpriteTexture(sf::Sprite& sprite, featuresSprite features, Texture &texture)
 {
-	float numberX = float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2);
-	float numberY = float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
+	int width = features.size.width;
+	int height = features.size.height;
+	int pixelXPos = features.pixPos.x;
+	int pixelYPos = features.pixPos.y;
+	spriteObject->setTexture(texture);
+	spriteObject->setTextureRect(IntRect(pixelXPos , pixelYPos , width , height));
+	spriteObject->setOrigin(float(width / 2) , float(height / 2));
+
+}
+
+void UnlifeObject::setPosition(Vector3i pos)
+{
+	float numberX = float(pos.x * SIZE_BLOCK - SIZE_BLOCK / 2);
+	float numberY = float(pos.y * SIZE_BLOCK - SIZE_BLOCK / 2);
 
 	int heightMain = typeObject->mainSize.size.height;
 	int height = typeObject->transparentSize.size.height;
-	currentLevel = Level;
+	currentLevel = pos.z;
 	spriteObject->setPosition(numberX, numberY);
 	transparentSpiteObject->setPosition(numberX, numberY - (height - heightMain) / 2);
 }

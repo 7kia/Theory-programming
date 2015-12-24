@@ -51,3 +51,4 @@ void initializeTexts(TextGame &textGame);
 void initTextAboutSelect(TextGame& textGame);
 void initDeathText(TextGame &textGame);
 void initPanelText(TextGame &textGame);
+void initOtherText(TextGame &textGame);

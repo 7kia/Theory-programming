@@ -60,7 +60,7 @@ struct Entity
 	void update(const float deltaTime);
 	void updateDirectionLook();
 
-	bool isInUseField(float x , float y , bool under);
+	bool isInUseField(sf::Vector2f pos, bool under);
 	void playAtackSound(Item &currentItem);
 
 	// EntityAnimation.cpp
@@ -93,6 +93,9 @@ struct Entity
 	float getXPos();
 	float getYPos();
 	sf::Vector2f getPosition();
+	int getXPosOnMap();
+	int getYPosOnMap();
+	sf::Vector2i getMapPosition();
 
 	void choiceDirectionLook(int &xShift, int &yShift);
 	//////////////////////////////////////////////////////////////////////////////////////////vv
@@ -150,10 +153,10 @@ struct Entity
 
 	TypeEnemy *type;
 
-	void init(TypeEnemy &typesEnemy , world &world , int xPos , int yPos , int level);
+	void init(TypeEnemy &typesEnemy , world &world , sf::Vector3i posEntity);
 	void setSpriteEntity();
 	void initItems(world &world);
-	void initPosition(int xPos, int yPos, int level);
+	void initPosition(sf::Vector3i pos);
 	void initRandowWalk();
 	void initFeatures();
 	void initProtection();
@@ -162,15 +165,15 @@ struct Entity
 	void Drop(world &world);
 	void playSoundDeath(world &world);
 
-	void checkLevelHealth(Vector2f& movemoment);
-	void entityStandPanic(sf::Vector2f &movemoment);
+	void checkLevelHealth(Vector2f& movement);
+	void entityStandPanic(sf::Vector2f &movement);
 
 	void randomWalk(const float deltaTime);
 
 	void takeDamage(DamageInputAndOutput damageEnemy , Item& currentItem);
 
-	void choiceDirections(Vector2f movemoment);
-	void defineDirectionLook(Vector2f movemoment);
+	void choiceDirections(Vector2f movement);
+	void defineDirectionLook(Vector2f movement);
 	void choiceBlock(world &world);
 
 	void resetFightAnimation();
@@ -203,6 +206,3 @@ struct Entity
 	Item& getCurrentItem();
 };
 
-
-bool isItem(float x, float y, std::vector<Item> &items, Item &findItem,
-						int &findItemFromList, int &current, int currentLevel);

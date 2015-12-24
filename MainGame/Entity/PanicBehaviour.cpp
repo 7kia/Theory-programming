@@ -1,12 +1,12 @@
 #include "Entity.h"
 
-void Entity::entityStandPanic(Vector2f &movemoment)
+void Entity::entityStandPanic(Vector2f &movement)
 {
 	bool canPanic = type->converse.canPanic;
 	currenMode = idEntityMode::panic;
 	if (canPanic) {
-		movemoment = { -movemoment.x, -movemoment.y };
-		choiceDirections(movemoment);
+		movement = { -movement.x, -movement.y };
+		choiceDirections(movement);
 
 		animation.currentTimeFightAnimation = 0.f;
 

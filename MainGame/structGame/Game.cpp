@@ -109,40 +109,29 @@ void world::initializeCategorysBreakingObject()
 	TypeUnlifeObject *typesUnlifeObject = typesObjects.typesUnlifeObject;
 	wchar_t* charBlocks = field.charBlocks;
 
-	//////////////////////////////////////
-	// Блоки уничтожаемые лопатой
 	listDestroy.backhoe.push_back(idNatureObject::groundNature);
 	listDestroy.backhoe.push_back(idNatureObject::sandNature);
-	//////////////////////////////////////
-	// Блоки уничтожаемые топором
+
 	listDestroy.axe.push_back(idNatureObject::woodNature);
-	//////////////////////////////////////
-	// Блоки уничтожаемые киркой
+
 	listDestroy.pickax.push_back(idNatureObject::stoneNature);
-	//////////////////////////////////////
-	// Блоки уничтожаемые каменным ножом
+
 	listDestroy.stoneKnife.push_back(idNatureObject::stoneNature);
 	listDestroy.stoneKnife.push_back(idNatureObject::woodNature);
 	listDestroy.stoneKnife.push_back(idNatureObject::groundNature);
 	listDestroy.stoneKnife.push_back(idNatureObject::sandNature);
 
 	listDestroy.none.push_back(idNatureObject::Unbreaking);
-	/////////////////////////////////////////////////////////////////////////
-	// Проходимые блоки
 
 	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::air]);
 	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::water]);
 	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::woodLadder]);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Проходим по полу
 	listDestroy.notPassableFloor.push_back(charBlocks[idBlocks::air]);
-	/////////////////////////////////////////////////////////////////////////
-	// Лестницы
+
 	listDestroy.ladder.push_back(charBlocks[idBlocks::woodLadder]);
-	/////////////////////////////////////////////////////////////////////////
+
 	listDestroy.harvestObjects.push_back(typesUnlifeObject[idUnlifeObject::appleGrowTree].id);
-	/////////////////////////////////////////////////////////////////////////
 
 }
 

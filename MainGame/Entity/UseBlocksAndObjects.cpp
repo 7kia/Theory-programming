@@ -27,12 +27,12 @@ void Entity::useBlock(Vector3i pos, world &world,
 			*block = field.charBlocks[idUseBlock];
 			successfullUse = true;
 		}
-		// Неживой объет
 		else if (idUseObject > -1) {
 			UnlifeObject* addObject = new UnlifeObject;
+			Vector3i posAdd = { pos.x + 1, pos.y + 1 , currentLevelFloor + 1 };
 
 			addObject->setType(typesUnlifeObjects[idUseObject]);
-			addObject->setPosition(pos.x + 1, pos.y + 1, currentLevelFloor + 1);
+			addObject->setPosition(posAdd);
 			unlifeObjects.push_back(*addObject);
 
 			delete addObject;
@@ -42,12 +42,10 @@ void Entity::useBlock(Vector3i pos, world &world,
 			successfullUse = false;
 		}
 
-		////////////////////////////////
-		// Если успешно применён
+
 		if (successfullUse) {
 			breakItem(currentItem);
 		}
-		////////////////////////////////
 	}
 
 }
@@ -58,21 +56,21 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 	Sprite &spriteObject = *object.spriteObject;
 	Vector2f currentPos = spriteObject.getPosition();
 	Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
-		int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
+												int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
 
 	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
 
 	Vector3i posItems = { posOnMap.x - 1, posOnMap.y - 1, currentLevelFloor + 1 };
 	object.dropObject(posItems, world, true);
 
+	Vector3i posObject = { posOnMap.x, posOnMap.y , object.currentLevel };
 	object.setType(nextType);
-	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
+	object.setPosition(posObject);
 }
 
 
 void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 {
-	TypeItem *typesItems = world.typesObjects.typesItem;
 	Field& field = world.field;
 
 	bool pouredWater = event.key.code == Mouse::Left;
@@ -82,8 +80,9 @@ void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 		if (idUseBlock) {
 
 			int level = currentLevelFloor + 1;
-			int x = founds.currentTarget.x;
-			int y = founds.currentTarget.y;
+			Vector3i &posBlock = founds.currentTarget;
+			int x = posBlock.x;
+			int y = posBlock.y;
 
 			bool isWall = field.dataMap[level][y][x] != field.charBlocks[idBlocks::air];
 			if (isWall == false) {

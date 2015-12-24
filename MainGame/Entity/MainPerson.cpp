@@ -7,10 +7,10 @@ void world::initializePlayer(View &view , Listener &listener)
 {
 	mainPerson = &Enemys[ID_PLAYER_IN_LIST];
 
-	float posX = float(CENTER_WORLD.x * SIZE_BLOCK);
-	float posY = float(CENTER_WORLD.y * SIZE_BLOCK);
+
+	Vector2f centerView = { float(CENTER_WORLD.x * SIZE_BLOCK),   float(CENTER_WORLD.y * SIZE_BLOCK) };
 	view.setSize(float(DEFAULT_WIDTH_WINDOW), float(DEFAULT_HEIGHT_WINDOW));
-	view.setCenter(posX, posY);
+	view.setCenter(centerView);
 
 	listener.setUpVector(0.f, 1.f, 0.f);
 	listener.setGlobalVolume(100.f);
@@ -78,8 +78,8 @@ void Entity::hurtEnemy(Item &currentItem, const float deltaTime)
 {
 	currenMode = idEntityMode::atack;
 
-	Vector2f posPerson = { getXPos(), getYPos() };
-	Vector2f posEnemy = { founds.findEnemy->getXPos(), founds.findEnemy->getYPos() };
+	Vector2f posPerson = getPosition();
+	Vector2f posEnemy = founds.findEnemy->getPosition();
 	float distanse = distansePoints(posPerson, posEnemy);
 
 	animation.updateFight(deltaTime, giveDamage, currenMode);

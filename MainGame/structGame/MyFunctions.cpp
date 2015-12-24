@@ -5,13 +5,13 @@ using namespace std;
 
 float distansePoints(Vector2f firstPoint, Vector2f secondPoint)
 {
-	return sqrt( (firstPoint.x - secondPoint.x) * (firstPoint.x - secondPoint.x)// ÈÑÏÐÀÂÜ
+	return sqrt( (firstPoint.x - secondPoint.x) * (firstPoint.x - secondPoint.x)
 							+ (firstPoint.y - secondPoint.y) * (firstPoint.y - secondPoint.y));
 }
 
 Vector2f vectorDirection(Vector2f firstPoint, Vector2f secondPoint)
 {
-	return { (secondPoint.x - firstPoint.x) ,/// distansePoints(firstPoint, secondPoint)
+	return { (secondPoint.x - firstPoint.x) ,
 		(secondPoint.y - firstPoint.y) };
 }
 

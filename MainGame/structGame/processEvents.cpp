@@ -81,7 +81,7 @@ void Game::processPersonAction(Vector2f pos)
 	Entity &mainPerson = world.Enemys[0];
 
 	if (Keyboard::isKeyPressed(keys[actionAlternate])) {
-		if (mainPerson.isInUseField(pos.x, pos.y, true)) {
+		if (mainPerson.isInUseField(pos, true)) {
 			mainPerson.actionAlternate(world, pos);
 		}
 	}
@@ -89,7 +89,7 @@ void Game::processPersonAction(Vector2f pos)
 		mainPerson.throwItem(world.field, world.items);
 	}
 	else if (Keyboard::isKeyPressed(keys[actionMain])) {
-		if (mainPerson.isInUseField(pos.x, pos.y, true)) {
+		if (mainPerson.isInUseField(pos, true)) {
 			mainPerson.actionMain(world, pos);
 		}
 	}

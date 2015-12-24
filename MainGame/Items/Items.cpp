@@ -17,7 +17,9 @@ void dropBlock(world &world, Vector3i &pos, int level)
 	int id = field.findIdBlock(block);
 	if (id > idItem::airItem) {
 		addItem->setType(typesItems[id]);
-		addItem->setPosition(pos.x + 1, pos.y + 1, level);
+
+		Vector3i posAdd = { pos.x + 1, pos.y + 1, level };
+		addItem->setPosition(posAdd);
 		items.push_back(*addItem);
 	}
 
@@ -32,11 +34,12 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 	emptyItem.setType(typesItem[idItem::emptyItem]);
 
 	for (int i = idItem::airItem + 1; i < AMOUNT_TYPES_ITEM; i++) {
-		for (int countItem = 1; countItem <= 4; countItem++)
-		{
-				addItem->setType(typesItem[i]);
-		addItem->setPosition(CENTER_WORLD.x + i / 2 + 2, CENTER_WORLD.y + i % 3 + 2, 2);
-		items.push_back(*addItem);
+		for (int countItem = 1; countItem <= 4; countItem++) {
+			addItem->setType(typesItem[i]);
+			Vector3i posAdd = { CENTER_WORLD.x + i / 2 + 2, CENTER_WORLD.y + i % 3 + 2, 2 };
+
+			addItem->setPosition(posAdd);
+			items.push_back(*addItem);
 		}
 
 	}
@@ -115,11 +118,11 @@ void Item::setType(TypeItem &type)
 	currentToughness = maxToughness;
 }
 
-void Item::setPosition(int xPos, int yPos, int Level)
+void Item::setPosition(Vector3i pos)
 {
-	float numberX = float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2);
-	float numberY = float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2);
+	float numberX = float(pos.x * SIZE_BLOCK - SIZE_BLOCK / 2);
+	float numberY = float(pos.y * SIZE_BLOCK - SIZE_BLOCK / 2);
 
-	currentLevel = Level;
+	currentLevel = pos.z;
 	mainSprite->setPosition(numberX, numberY);
 }

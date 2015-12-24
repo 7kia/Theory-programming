@@ -18,24 +18,28 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barHungry::renderBar(int& current, int& max, Vector2f centerWindow, Vector2u sizeWindow,
-													RenderWindow& window)
+void barHungry::renderBar(int& current, int& max, featuresWindow& features)
 {
+	RenderWindow &window = *features.window;
+	Vector2f centerWindow = features.center;
+
 	Vector2f pos;
 	pos = centerWindow;
 	
-	// TODO
+	// TODO : if will need scale then add
 	//highHungry.setScale(scaleGuiForMainPerson);
 	//lowHungry.setScale(scaleGuiForMainPerson);
 	//levelHungry.setScale(scaleGuiForMainPerson);
 
-	renderHigh(pos, sizeWindow, window);
+	renderHigh(pos, features);
 	renderLevel(current, max, pos, window);
-	renderLow(pos, centerWindow, sizeWindow, window);
+	renderLow(pos, features);
 }
 
-void barHungry::renderHigh(Vector2f& pos, Vector2u sizeWindow, RenderWindow& window)
+void barHungry::renderHigh(Vector2f& pos, featuresWindow &features)
 {
+	RenderWindow &window = *features.window;
+	Vector2u sizeWindow = features.size;
 
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) ;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI);
@@ -55,24 +59,31 @@ void barHungry::renderLevel(int& current, int& max, Vector2f& pos, RenderWindow&
 	window.draw(levelHungry);
 }
 
-void barHungry::renderLow(Vector2f pos, Vector2f centerWindow, Vector2u sizeWindow, RenderWindow& window)
+void barHungry::renderLow(Vector2f pos, featuresWindow& features)
 {
+	RenderWindow &window = *features.window;
+	Vector2f centerWindow = features.center;
+	Vector2u sizeWindow = features.size;
+
 	pos = centerWindow;
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI) ;
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) ;
 	lowHungry.setPosition(pos);
 	window.draw(lowHungry);
-
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf::Vector2u sizeWindow, sf::RenderWindow& window)
+void barThirst::renderBar(int& current, int& max, featuresWindow &features)
 {
+	RenderWindow &window = *features.window;
+	Vector2f centerWindow = features.center;
+	Vector2u sizeWindow = features.size;
+
 	Vector2f pos = centerWindow;
 	pos.x -= sizeWindow.x / 2 - float(WIDTH_BARS_GUI);
 	pos.y += sizeWindow.y / 2 - float(HEIGHT_HUNGY_GUI) - float(HEIGHT_THIRST_GUI) ;
 
 
-	//TODO
+	//TODO : if will need scale then add
 	//bottle.setScale(scaleGuiForMainPerson);
 	bottle.setPosition(pos);
 	window.draw(bottle);
@@ -82,7 +93,7 @@ void barThirst::renderBar(int& current, int& max, sf::Vector2f centerWindow, sf:
 	pos.y += LEVEL_SHIFT_THIRST + LEVEL_THIRST * (1 - level);
 	int currentLevel = int(LEVEL_THIRST * level);
 	int currentShift = int(LEVEL_THIRST * (1 - level));
-	// TODO
+	// TODO : if will need scale then add
 	//levelThirst.setScale(scaleGuiForMainPerson);
 	levelThirst.setTextureRect(IntRect(X_THIRST_GUI, Y_THIRST_GUI + HEIGHT_THIRST_GUI + currentShift, WIDTH_THIRST_GUI, currentLevel));
 	levelThirst.setPosition(pos);
@@ -100,9 +111,8 @@ void GUI::renderTextDeath(Entity &mainPerson, sf::Vector2f position, sf::RenderW
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity>& enemy, TextGame &textGame)
+void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity>& enemys, TextGame &textGame)
 {
-
 	Vector2f centerWindow = window.getView().getCenter();
 	Vector2u sizeWindow = window.getSize();
 	featuresWindow featuresWindow;
@@ -125,19 +135,31 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 	panels.panelQuickAccess.renderItems(mainPerson, featuresWindow,
 																			textGame, mainFeatures, itemFeatures);
 
-	//////////////////////////////////////////////////////////////////////// 
-	// Ўкала здоровь€
+	setHealthBars(featuresWindow , mainPerson ,
+								enemys , textGame);
+	setStaminaBars(featuresWindow , mainPerson ,
+								 enemys , textGame);
+	setManaBars(featuresWindow , mainPerson ,
+							enemys , textGame);
+
+	hungry.renderBar(mainPerson.hungry.currentHungry, mainPerson.hungry.maxHungry, featuresWindow);
+	thirst.renderBar(mainPerson.thirst.currentThirst, mainPerson.thirst.maxThirst, featuresWindow);
+}
+
+void GUI::setHealthBars(featuresWindow &featuresWindow, Entity &mainPerson ,
+												vector<Entity>& enemy , TextGame &textGame)
+{
+	RenderWindow &window = *featuresWindow.window;
+
 	featuresSprite sizes;
-	sizes.init(WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_HEALTH_GUI, Y_LEVEL_HEALTH_GUI);
+	sizes.init(WIDTH_LEVEL_BAR_GUI , HEIGHT_LEVEL_BAR_GUI , X_LEVEL_HEALTH_GUI , Y_LEVEL_HEALTH_GUI);
 
 	int health = mainPerson.health.currentHealth;
 	int healthMax = mainPerson.health.maxHealth;
 	int shiftHealth = 3;
-	mainFeatures.renderBarMainPerson(mainPerson, health, healthMax, shiftHealth, mainFeatures.levelHealth,
-																	 sizes, featuresWindow, textGame);
+	mainFeatures.renderBarMainPerson(mainPerson , health , healthMax , shiftHealth , mainFeatures.levelHealth ,
+																	 sizes , featuresWindow , textGame);
 
-	////////////////////////////////////////////////////////////////
-	// дл€ противников
 	int shiftHelathEnemy = 1;//2
 	int healthEnemy;
 	int healthMaxEnemy;
@@ -148,36 +170,40 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 
 		isFindedEnemy = i == mainPerson.founds.findEnemyFromList;
 		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
-						&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
+			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
 
 		if (isInView && isFindedEnemy) {
 
 			healthEnemy = enemy[i].health.currentHealth;
 			healthMaxEnemy = enemy[i].health.maxHealth;
 
-			mainFeatures.renderBarEnemy(enemy[i], healthEnemy, healthMaxEnemy, shiftHelathEnemy, mainFeatures.levelHealth,
-																	sizes, textGame, window);
-		}	
+			mainFeatures.renderBarEnemy(enemy[i] , healthEnemy , healthMaxEnemy , shiftHelathEnemy , mainFeatures.levelHealth ,
+																	sizes , textGame , window);
+		}
 
 	}
-	////////////////////////////////////////////////////////////////
-	// Ўкала выносливости
-	sizes.init(0, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI);
+}
+
+void GUI::setStaminaBars(featuresWindow &featuresWindow, Entity& mainPerson, std::vector<Entity>& enemy, TextGame& textGame)
+{
+	RenderWindow &window = *featuresWindow.window;
+
+	featuresSprite sizes;
+	sizes.init(0 , HEIGHT_LEVEL_BAR_GUI , X_LEVEL_STAMINA_GUI , Y_LEVEL_STAMINA_GUI);
 
 	int stamina = mainPerson.stamina.currentStamina;
 	int staminaMax = mainPerson.stamina.maxStamina;
 	int shiftStamina = 2;
-	mainFeatures.renderBarMainPerson(mainPerson, stamina, staminaMax, shiftStamina, mainFeatures.levelStamina,
-																	 sizes, featuresWindow, textGame);
+	mainFeatures.renderBarMainPerson(mainPerson , stamina , staminaMax , shiftStamina , mainFeatures.levelStamina ,
+																	 sizes , featuresWindow , textGame);
 
-
-	////////////////////////////////////////////////////////////////
-	// дл€ противников
 
 	int shiftStaminaEnemy = 0;//1
 	int staminaEnemy;
 	int staminaMaxEnemy;
 
+	bool isFindedEnemy;
+	bool isInView;
 	for (int i = 0; i != enemy.size(); ++i) {
 
 		isFindedEnemy = i == mainPerson.founds.findEnemyFromList;
@@ -190,29 +216,35 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 			staminaMaxEnemy = enemy[i].stamina.maxStamina;
 
 			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], staminaEnemy, staminaMaxEnemy, shiftStaminaEnemy, mainFeatures.levelStamina,
-																		sizes, textGame, window);
+				mainFeatures.renderBarEnemy(enemy[i] , staminaEnemy , staminaMaxEnemy , shiftStaminaEnemy , mainFeatures.levelStamina ,
+																		sizes , textGame , window);
 			}
-			
+
 		}
 
 	}
-	
-	////////////////////////////////////////////////////////////////
-	// Ўкала маны
-	sizes.init(0, HEIGHT_LEVEL_BAR_GUI, X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI);
+}
+
+void GUI::setManaBars(featuresWindow &featuresWindow, Entity& mainPerson, std::vector<Entity>& enemy, TextGame& textGame)
+{
+	RenderWindow &window = *featuresWindow.window;
+
+	featuresSprite sizes;
+	sizes.init(0 , HEIGHT_LEVEL_BAR_GUI , X_LEVEL_MANA_GUI , Y_LEVEL_MANA_GUI);
 
 	int mana = mainPerson.mana.currentMana;
 	int manaMax = mainPerson.mana.maxMana;
 	int shiftMana = 1;
-	mainFeatures.renderBarMainPerson(mainPerson, mana, manaMax, shiftMana, mainFeatures.levelMana,
-																	 sizes, featuresWindow, textGame);
+	mainFeatures.renderBarMainPerson(mainPerson , mana , manaMax , shiftMana , mainFeatures.levelMana ,
+																	 sizes , featuresWindow , textGame);
 
 
 	int shiftManaEnemy = 0;
 	int manaEnemy;
 	int manaMaxEnemy;
 
+	bool isFindedEnemy;
+	bool isInView;
 	for (int i = 0; i != enemy.size(); ++i) {
 
 		isFindedEnemy = i == mainPerson.founds.findEnemyFromList;
@@ -224,21 +256,14 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 			manaEnemy = enemy[i].mana.currentMana;
 			manaMaxEnemy = enemy[i].mana.maxMana;
 
-			if (staminaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i], manaEnemy, manaMaxEnemy, shiftManaEnemy, mainFeatures.levelMana,
-																		sizes, textGame, window);
+			if (manaMaxEnemy) {
+				mainFeatures.renderBarEnemy(enemy[i] , manaEnemy , manaMaxEnemy , shiftManaEnemy , mainFeatures.levelMana ,
+																		sizes , textGame , window);
 			}
 
 		}
 
 	}
-
-	////////////////////////////////////////////////////////////////////////
-	hungry.renderBar(mainPerson.hungry.currentHungry, mainPerson.hungry.maxHungry, centerWindow, sizeWindow, window);
-	thirst.renderBar(mainPerson.thirst.currentThirst, mainPerson.thirst.maxThirst, centerWindow, sizeWindow, window);
-	////////////////////////////////////////////////////////////////////////
-
-
 }
 
 GUI::~GUI()

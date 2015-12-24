@@ -2,7 +2,7 @@
 
 
 void Entity::init(TypeEnemy &typesEnemy , world &world ,
-									int xPos , int yPos , int level)
+									Vector3i posEntity)
 {
 	type = &typesEnemy;
 
@@ -12,7 +12,7 @@ void Entity::init(TypeEnemy &typesEnemy , world &world ,
 	step.init(SPEED_ENTITY);
 
 	setSpriteEntity();
-	initPosition(xPos , yPos , level);
+	initPosition(posEntity);
 	initRandowWalk();
 
 	emptyObjects &emptyObjects = world.emptyObjects;
@@ -42,15 +42,15 @@ void Entity::setSpriteEntity()
 	spriteEntity->setTextureRect(IntRect(0 , 0 , sizes.width , sizes.height));
 }
 
-void Entity::initPosition(int xPos , int yPos , int level)
+void Entity::initPosition(Vector3i pos)
 {
-	currentLevelFloor = level;
+	currentLevelFloor = pos.z;
 	currenMode = idEntityMode::walk;
 
 	sizeSprite  &size = type->featuresSprite.size;
 	spriteEntity->setOrigin(float(size.width / 2) , float(size.height / 2));
-	spriteEntity->setPosition(float(xPos * SIZE_BLOCK - SIZE_BLOCK / 2) ,
-													 float(yPos * SIZE_BLOCK - SIZE_BLOCK / 2));
+	spriteEntity->setPosition(float(pos.x * SIZE_BLOCK - SIZE_BLOCK / 2) ,
+													 float(pos.y * SIZE_BLOCK - SIZE_BLOCK / 2));
 	directions.directionWalk = NONE_DIRECTION;
 	directions.directionLook = DOWN;
 }

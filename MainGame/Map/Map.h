@@ -7,6 +7,7 @@
 const sf::Color UP_VIEW(255, 255, 255, 150);
 const sf::Color NORMAL_VIEW(255, 255, 255, 255);
 const sf::Color DOWN_VIEW(127, 127, 127, 255);
+const sf::IntRect NONE_IMAGE(0 , 0 , 0 , 0);
 
 const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 {

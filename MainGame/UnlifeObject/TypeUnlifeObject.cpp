@@ -234,7 +234,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 	typesObject->mainSize.init(WIDTH_DESTROY_BLOCK_EFFECT, HEIGHT_DESTROY_BLOCK_EFFECT, 0, 0);
 	typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
-	typesObject->transparentSize.init(0, 0, 0, 0);
+	typesObject->transparentSize.init(WIDTH_DESTROY_BLOCK_EFFECT , HEIGHT_DESTROY_BLOCK_EFFECT , 0 , 0);
 
 	// Предметы
 	drop.addItem(1, 3, idItem::logOakItem);

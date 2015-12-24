@@ -95,24 +95,24 @@ void Field::setTypeSprite(int personLevelFloor, int l, int i, int j)
 	if (l == personLevelFloor - 1) {
 		floorSprite.setColor(DOWN_VIEW);
 		setSprite(floorSprite, l, i, j);
-		wallSprite.setTextureRect(IntRect(0, 0, 0, 0));
+		wallSprite.setTextureRect(NONE_IMAGE);
 	}
 	else if (l == personLevelFloor)
 	{
 		floorSprite.setColor(NORMAL_VIEW);
 		setSprite(floorSprite, l, i, j);
-		wallSprite.setTextureRect(IntRect(0, 0, 0, 0));
+		wallSprite.setTextureRect(NONE_IMAGE);
 	}
 	else if (l == personLevelFloor + 1)
 	{
 		wallSprite.setColor(NORMAL_VIEW);
 		setSprite(wallSprite, l, i, j);
-		floorSprite.setTextureRect(IntRect(0, 0, 0, 0));
+		floorSprite.setTextureRect(NONE_IMAGE);
 	}
 	else if (l == personLevelFloor + 2) {
 		wallSprite.setColor(UP_VIEW);
 		setSprite(wallSprite, l, i, j);
-		floorSprite.setTextureRect(IntRect(0, 0, 0, 0));
+		floorSprite.setTextureRect(NONE_IMAGE);
 	}
 };
 
@@ -154,7 +154,7 @@ void Field::setSprite(Sprite &sprite, int l, int i, int j)
 	// Неизвестные блоки и воздух обрабатываем отдельно
 	if(dataMap[l][i][j] == charBlocks[idBlocks::air])
 	{
-		sprite.setTextureRect(IntRect(0, 0, 0, 0));
+		sprite.setTextureRect(NONE_IMAGE);
 	}
 	else if(id == idBlocks::amountKnowBlocks)
 	{

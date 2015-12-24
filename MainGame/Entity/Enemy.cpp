@@ -6,7 +6,6 @@ void createOnlyEnemy(world &world , std::vector<TypeEnemy*> &types , std::vector
 {
 	Entity* addEnemy = new Entity();
 	Vector3i pos;
-	pos.z = 2;
 
 	int &countEnemy = world.countEntity;
 
@@ -17,10 +16,9 @@ void createOnlyEnemy(world &world , std::vector<TypeEnemy*> &types , std::vector
 				break;
 			}
 
-			pos.x = CENTER_WORLD.x;
-			pos.y = CENTER_WORLD.y;
+			pos = { CENTER_WORLD.x , CENTER_WORLD.y, 2 };
 
-			addEnemy->init(*types[countTypes] , world , pos.x , pos.y , pos.z);
+			addEnemy->init(*types[countTypes] , world , pos);
 			world.Enemys.push_back(*addEnemy);
 
 		}
@@ -34,7 +32,7 @@ void createOnlyEnemy(world &world , std::vector<TypeEnemy*> &types , std::vector
 
 void initializeEntitys(world &world)// днаюбкемхе ясымнярх 
 {
-	srand(time(nullptr));
+	srand(unsigned(time(nullptr)));
 
 	int *config = world.enemyWaveVariables;
 	config[TIME_UPDATE_DIFFICULT] = config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]
@@ -70,7 +68,7 @@ void createEmptyEnemy(world& world)
 	emptyObjects &emptyObjects = world.emptyObjects;
 	Entity &emptyEnemy = emptyObjects.emptyEnemy;
 
-	emptyEnemy.init(*typeEnemy , world , -1 , -1 , -1);
+	emptyEnemy.init(*typeEnemy , world , RESET_VECTOR_3I);
 }
 
 void Entity::randomWalk(const float deltaTime) {
@@ -161,14 +159,15 @@ void Entity::Drop(world& world)
 	throwItem(field, items);
 
 	int currentAmount;
+	Vector3i posItem = { founds.currentTarget.x + 1,
+											 founds.currentTarget.y + 1,
+											currentLevelFloor + 1 };
 	for (int i = 0; i < countItem; i++) {
 
 		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 2);
 		for (int j = 0; j < currentAmount; j++) {
 			addItem->setType(typesItems[typeEnemy.drop.dropItems[i]]);
-			addItem->setPosition(founds.currentTarget.x + 1,
-								 founds.currentTarget.y + 1,
-								 currentLevelFloor + 1);
+			addItem->setPosition(posItem);
 			world.items.push_back(*addItem);
 
 		}
@@ -192,7 +191,7 @@ void Entity::playSoundDeath(world& world)
 	switch (type->id) {
 	case idEntity::wolfEnemy:
 		addObject.setType(typeObjects[idUnlifeObject::wolfDeathEffect]);
-		addObject.setPosition(pos.x, pos.y, pos.z);
+		addObject.setPosition(pos);
 		break;
 	case idEntity::skeletEnemy:
 	case idEntity::skeletBuilderEnemy:
@@ -200,7 +199,7 @@ void Entity::playSoundDeath(world& world)
 	case idEntity::skeletLumbermillEnemy:
 	case idEntity::skeletMinerEnemy:
 		addObject.setType(typeObjects[idUnlifeObject::skeletDeathEffect]);
-		addObject.setPosition(pos.x, pos.y, pos.z);
+		addObject.setPosition(pos);
 		break;
 	default:
 		findSound = false;

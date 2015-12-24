@@ -46,13 +46,13 @@ void Game::dropAward(vector<Vector2i> &listAward)
 	vector<Item> &items = world.items;
 	Item addItem;
 
-
+	Vector3i posAward = { CENTER_WORLD.x, CENTER_WORLD.y, 2 };
 	for (Vector2i awardInfo : listAward) {
 
 
 		for (size_t count = 0; count < awardInfo.y; count++) {
 			addItem.setType(typesItems[awardInfo.x]);
-			addItem.setPosition(CENTER_WORLD.x, CENTER_WORLD.y, 2);
+			addItem.setPosition(posAward);
 			addItem.mainSprite->setScale(scaleOutItems);
 
 			items.push_back(addItem);

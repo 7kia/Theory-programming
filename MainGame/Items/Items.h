@@ -27,7 +27,7 @@ struct Item
 	void resetTimeAnimation(float &time, float &reset);
 
 	void setType(TypeItem &type);
-	void setPosition(int x, int y, int Level);
+	void setPosition(sf::Vector3i pos);
 
 	float getXPos();
 	float getYPos();

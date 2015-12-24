@@ -121,13 +121,14 @@ void Game::upgradeObject(UnlifeObject &object)
 	redefineObject &redefine = object.typeObject->redefine;
 	Sprite &spriteObject = *object.spriteObject;
 	Vector2f currentPos = spriteObject.getPosition();
-	Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
-		int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
+	Vector3i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
+												int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK),
+												object.currentLevel };
 
 	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
 
 	object.setType(nextType);
-	object.setPosition(posOnMap.x, posOnMap.y, object.currentLevel);
+	object.setPosition(posOnMap);
 }
 
 

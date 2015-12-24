@@ -25,10 +25,7 @@ void initializeTexts(TextGame &textGame)
 	initTextAboutSelect(textGame);
 	initDeathText(textGame);
 	initPanelText(textGame);
-
-	textGame.InitText(idText::inputDamage, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-	textGame.InitText(idText::levelBar, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
-	textGame.InitText(idText::itemGui, Color::White, Text::Regular | Text::Underlined, SIZE_NORMAL_TEXT);
+	initOtherText(textGame);
 }
 
 void initDeathText(TextGame& textGame)
@@ -59,4 +56,11 @@ void initPanelText(TextGame &textGame)
 	textGame.InitText(idText::panelWaveText, Color::White, Text::Regular, SIZE_NORMAL_TEXT);
 	textGame.InitText(idText::panelHelpText, Color::White, Text::Regular | Text::Underlined, SIZE_BIG_TEXT);
 	textGame.InitText(idText::panelTitleText, Color::White, Text::Bold, SIZE_BIG_TEXT);
+}
+
+void initOtherText(TextGame& textGame)
+{
+	textGame.InitText(idText::inputDamage , Color::White , Text::Regular | Text::Underlined , SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::levelBar , Color::White , Text::Regular | Text::Underlined , SIZE_NORMAL_TEXT);
+	textGame.InitText(idText::itemGui , Color::White , Text::Regular | Text::Underlined , SIZE_NORMAL_TEXT);
 }

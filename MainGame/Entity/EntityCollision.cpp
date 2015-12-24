@@ -183,13 +183,13 @@ void Entity::interactionWithMap(Field &field , listDestroyObjectsAndBlocks& list
 
 void Entity::gravitateToGround(Field &field)
 {
-	int x = int(getXPos() / SIZE_BLOCK);
-	int y = int(getYPos() / SIZE_BLOCK);
+	Vector2i posBlock = { int(getXPos() / SIZE_BLOCK), int(getYPos() / SIZE_BLOCK) };
+
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
 
-	if (map[currentLevelFloor][y][x] == field.charBlocks[idBlocks::air]) {
+	if (map[currentLevelFloor][posBlock.y][posBlock.x] == field.charBlocks[idBlocks::air]) {
 		currentLevelFloor--;
-		spriteEntity->setPosition(float(x * SIZE_BLOCK) , float(y * SIZE_BLOCK));
+		spriteEntity->setPosition(float(posBlock.x * SIZE_BLOCK) , float(posBlock.y * SIZE_BLOCK));
 	}
 }
 

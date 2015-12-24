@@ -160,11 +160,4 @@ struct Game
 	void renderGui();
 	void showFPS(const Time timeSinceLastUpdate);
 };
-void initializeCategorysBreakingObject(Game &game);
-
-void updateEntity(Game &game, const float deltaTime);
-void renderEntitys(Game &game);
-
-void renderUnlifeObjects(Game &game);
-
 void destroyGame(Game & game);

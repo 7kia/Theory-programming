@@ -27,7 +27,8 @@ struct UnlifeObject
 	float timeLife;
 
 	void setType(TypeUnlifeObject &type);
-	void setPosition(int x, int y, int Level);
+	void setSpriteTexture(sf::Sprite &sprite, featuresSprite features, sf::Texture &texture);
+	void setPosition(sf::Vector3i pos);
 
 	bool isDestroyed();
 

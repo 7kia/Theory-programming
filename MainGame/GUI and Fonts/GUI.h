@@ -18,6 +18,13 @@ struct GUI
 
 	void renderTextDeath(Entity &mainPerson, sf::Vector2f position, sf::RenderWindow &window, TextGame &textGame);
 	void setPositionGui(sf::RenderWindow &window, Entity &mainPerson, std::vector<Entity>& enemy, TextGame &textGame);
+	void setHealthBars(featuresWindow &featuresWindow, Entity &mainPerson ,
+										 std::vector<Entity>& enemy , TextGame &textGame);
+	void setStaminaBars(featuresWindow &featuresWindow , Entity &mainPerson ,
+										 std::vector<Entity>& enemy , TextGame &textGame);
+	void setManaBars(featuresWindow &featuresWindow, Entity &mainPerson ,
+										 std::vector<Entity>& enemy , TextGame &textGame);
+
 	~GUI();
 };
 

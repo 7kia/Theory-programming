@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <wchar.h>
+#include <assert.h>
 
 #include <iostream>
 #include <string>

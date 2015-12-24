@@ -20,7 +20,6 @@ void Game::render()
 	renderMap(rectWindow);
 	renderItems(rectWindow);
 
-
 	mainPerson.renderCurrentItem(window);
 	window.draw(*mainPerson.spriteEntity);
 
@@ -285,7 +284,6 @@ void Game::setPositionEndGameText()
 
 	currentText->setPosition(posText);
 
-
 	currentText = &textGame.texts[idText::panelHelpText];
 	posText.x = centerWindow.x;
 
@@ -296,7 +294,6 @@ void Game::setPositionEndGameText()
 	posText.x -= middleText;
 
 	currentText->setPosition(posText);
-
 }
 
 

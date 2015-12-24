@@ -17,14 +17,14 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 	distanse = distansePoints(searcherPoint , enemyPoint);
 
 	if (distanse <= radiuseView && onLevel) {
-		Vector2f movemoment;
+		Vector2f movement;
 		if (noAtack) {
 			currenMode = idEntityMode::fight;
 
-			movemoment = vectorDirection(searcherPoint , enemyPoint);
+			movement = vectorDirection(searcherPoint , enemyPoint);
 
-			checkLevelHealth(movemoment);
-			defineDirectionLook(movemoment);
+			checkLevelHealth(movement);
+			defineDirectionLook(movement);
 
 			if (feelEnemy == false) {
 				checkBlock(world.field , distanse);
@@ -33,7 +33,7 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 			bool isFight = currenMode == idEntityMode::fight;
 			if (isFight) {
 
-				choiceDirections(movemoment);
+				choiceDirections(movement);
 
 				if (wasCollision) {
 
@@ -75,6 +75,7 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 			}
 			else {
 
+
 				if (giveDamage) {
 
 					searchNearCollision(world);
@@ -92,46 +93,46 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 	}
 }
 
-void Entity::checkLevelHealth(Vector2f &movemoment)
+void Entity::checkLevelHealth(Vector2f &movement)
 {
 	entityHealth &healthEnemy = health;
 	bool isLowHealth = healthEnemy.currentHealth < (healthEnemy.maxHealth / 4);
 	bool canPanic = type->converse.canPanic;
 	if (isLowHealth && canPanic) {
-		entityStandPanic(movemoment);
+		entityStandPanic(movement);
 	}
 	else {
 		currenMode = idEntityMode::fight;
 	}
 }
 
-void Entity::defineDirectionLook(Vector2f movemoment)
+void Entity::defineDirectionLook(Vector2f movement)
 {
-	bool xAboutZero = movemoment.x >= -BORDER_VALUE_FOR_DIRECTION && movemoment.x <= BORDER_VALUE_FOR_DIRECTION;
-	bool yAboutZero = movemoment.y >= -BORDER_VALUE_FOR_DIRECTION && movemoment.y <= BORDER_VALUE_FOR_DIRECTION;
+	bool xAboutZero = movement.x >= -BORDER_VALUE_FOR_DIRECTION && movement.x <= BORDER_VALUE_FOR_DIRECTION;
+	bool yAboutZero = movement.y >= -BORDER_VALUE_FOR_DIRECTION && movement.y <= BORDER_VALUE_FOR_DIRECTION;
 
-	if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
+	if (movement.x > BORDER_VALUE_FOR_DIRECTION && movement.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = DOWN_RIGHT;
 	}
-	else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
+	else if (movement.x < -BORDER_VALUE_FOR_DIRECTION && movement.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = DOWN_LEFT;
 	}
-	else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y < -BORDER_VALUE_FOR_DIRECTION) {
+	else if (movement.x < -BORDER_VALUE_FOR_DIRECTION && movement.y < -BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = UP_LEFT;
 	}
-	else if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y < BORDER_VALUE_FOR_DIRECTION) {
+	else if (movement.x > BORDER_VALUE_FOR_DIRECTION && movement.y < BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionLook = UP_RIGHT;
 	}
-	else if (movemoment.y >= BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
+	else if (movement.y >= BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionLook = DOWN;
 	}
-	else if (movemoment.y <= -BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
+	else if (movement.y <= -BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionLook = UP;
 	}
-	else if (movemoment.x >= BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
+	else if (movement.x >= BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionLook = RIGHT;
 	}
-	else if (movemoment.x <= -BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
+	else if (movement.x <= -BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionLook = LEFT;
 	}
 	else {
@@ -141,17 +142,10 @@ void Entity::defineDirectionLook(Vector2f movemoment)
 
 void Entity::choiceBlock(world &world)
 {
-	int x = collision.posBlock.x;
-	int y = collision.posBlock.y;
-	int level = collision.posBlock.z;
-
-	int xShift = 0;
-	int yShift = 0;
-	choiceDirectionLook(xShift , yShift);
-
+	Vector3i &posBlock = collision.posBlock;
 
 	Field &field = world.field;
-	wchar_t	*block = &field.dataMap[level][y][x];
+	wchar_t	*block = &field.dataMap[posBlock.z][posBlock.y][posBlock.x];
 	int idNature;
 	idNature = field.idsNature[field.findIdBlock(*block)];
 
@@ -167,7 +161,7 @@ void Entity::choiceBlock(world &world)
 		idNature = findObject.typeObject->idNature;
 	}
 	else {
-		founds.currentTarget = { x, y, level };
+		founds.currentTarget = collision.posBlock;
 	}
 	if (idNature != idNatureObject::Unbreaking) {
 		currenMode = idEntityMode::atack;
@@ -175,33 +169,33 @@ void Entity::choiceBlock(world &world)
 	}
 }
 
-void Entity::choiceDirections(Vector2f movemoment)
+void Entity::choiceDirections(Vector2f movement)
 {
-	bool xAboutZero = movemoment.x >= -BORDER_VALUE_FOR_DIRECTION && movemoment.x <= BORDER_VALUE_FOR_DIRECTION;
-	bool yAboutZero = movemoment.y >= -BORDER_VALUE_FOR_DIRECTION && movemoment.y <= BORDER_VALUE_FOR_DIRECTION;
+	bool xAboutZero = movement.x >= -BORDER_VALUE_FOR_DIRECTION && movement.x <= BORDER_VALUE_FOR_DIRECTION;
+	bool yAboutZero = movement.y >= -BORDER_VALUE_FOR_DIRECTION && movement.y <= BORDER_VALUE_FOR_DIRECTION;
 
-	if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
+	if (movement.x > BORDER_VALUE_FOR_DIRECTION && movement.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = DOWN_RIGHT;
 	}
-	else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y > BORDER_VALUE_FOR_DIRECTION) {
+	else if (movement.x < -BORDER_VALUE_FOR_DIRECTION && movement.y > BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = DOWN_LEFT;
 	}
-	else if (movemoment.x < -BORDER_VALUE_FOR_DIRECTION && movemoment.y < -BORDER_VALUE_FOR_DIRECTION) {
+	else if (movement.x < -BORDER_VALUE_FOR_DIRECTION && movement.y < -BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = UP_LEFT;
 	}
-	else if (movemoment.x > BORDER_VALUE_FOR_DIRECTION && movemoment.y < BORDER_VALUE_FOR_DIRECTION) {
+	else if (movement.x > BORDER_VALUE_FOR_DIRECTION && movement.y < BORDER_VALUE_FOR_DIRECTION) {
 		directions.directionWalk = UP_RIGHT;
 	}
-	else if (movemoment.y >= BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
+	else if (movement.y >= BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionWalk = DOWN;
 	}
-	else if (movemoment.y <= -BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
+	else if (movement.y <= -BORDER_VALUE_FOR_DIRECTION && xAboutZero) {
 		directions.directionWalk = UP;
 	}
-	else if (movemoment.x >= BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
+	else if (movement.x >= BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionWalk = RIGHT;
 	}
-	else if (movemoment.x <= -BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
+	else if (movement.x <= -BORDER_VALUE_FOR_DIRECTION && yAboutZero) {
 		directions.directionWalk = LEFT;
 	}
 	else {
@@ -211,66 +205,62 @@ void Entity::choiceDirections(Vector2f movemoment)
 
 void Entity::checkBlock(Field& field , float distanse)
 {
-	int x = 0;
-	int y = 0;
+	Vector2i startPosition = { 0, 0 };
+	Vector2i shifts = { 0, 0 };
 
-	int xShift = 0;
-	int yShift = 0;
 	switch (directions.directionLook) {
 	case DOWN_LEFT:
-		x = int(getXPos() / SIZE_BLOCK - 1);
-		y = int(getYPos() / SIZE_BLOCK + 1);
-		xShift = -1;
-		yShift = 1;
+		startPosition.x = getXPosOnMap() - 1;
+		startPosition.y = getYPosOnMap() + 1;
+		shifts.x = -1;
+		shifts.y = 1;
 		break;
 	case DOWN_RIGHT:
-		x = int(getXPos() / SIZE_BLOCK + 1);
-		y = int(getYPos() / SIZE_BLOCK + 1);
-		xShift = 1;
-		yShift = 1;
+		startPosition.x = getXPosOnMap() + 1;
+		startPosition.y = getYPosOnMap() + 1;
+		shifts.x = 1;
+		shifts.y = 1;
 		break;
 	case UP_LEFT:
-		x = int(getXPos() / SIZE_BLOCK - 1);
-		y = int(getYPos() / SIZE_BLOCK - 1);
-		xShift = -1;
-		yShift = -1;
+		startPosition.x = getXPosOnMap() - 1;
+		startPosition.y = getYPosOnMap() - 1;
+		shifts.x = -1;
+		shifts.y = -1;
 		break;
 	case UP_RIGHT:
-		x = int(getXPos() / SIZE_BLOCK + 1);
-		y = int(getYPos() / SIZE_BLOCK - 1);
-		xShift = 1;
-		yShift = -1;
+		startPosition.x = getXPosOnMap() + 1;
+		startPosition.y = getYPosOnMap() - 1;
+		shifts.x = 1;
+		shifts.y = -1;
 		break;
 	case LEFT:
-		x = int(getXPos() / SIZE_BLOCK - 1);
-		y = int(getYPos() / SIZE_BLOCK);
-		xShift = -1;
-		yShift = 0;
+		startPosition.x = getXPosOnMap() - 1;
+		startPosition.y = getYPosOnMap();
+		shifts.x = -1;
+		shifts.y = 0;
 		break;
 	case RIGHT:
-		x = int(getXPos() / SIZE_BLOCK + 1);
-		y = int(getYPos() / SIZE_BLOCK);
-		xShift = 1;
-		yShift = 0;
+		startPosition.x = getXPosOnMap() + 1;
+		startPosition.y = getYPosOnMap();
+		shifts.x = 1;
+		shifts.y = 0;
 		break;
 	case UP:
-		x = int(getXPos() / SIZE_BLOCK);
-		y = int(getYPos() / SIZE_BLOCK - 1);
-		xShift = 0;
-		yShift = -1;
+		startPosition.x = getXPosOnMap();
+		startPosition.y = getYPosOnMap() - 1;
+		shifts.x = 0;
+		shifts.y = -1;
 		break;
 	case DOWN:
-		x = int(getXPos() / SIZE_BLOCK);
-		y = int(getYPos() / SIZE_BLOCK + 1);
-		xShift = 0;
-		yShift = 1;
+		startPosition.x = getXPosOnMap();
+		startPosition.y = getYPosOnMap() + 1;
+		shifts.x = 0;
+		shifts.y = 1;
 		break;
 	default:
 		break;
 	}
 
-	Vector2i startPosition = { x, y };
-	Vector2i shifts = { xShift, yShift };
 	checkInDirectionWalk(field , distanse , startPosition , shifts);
 }
 
@@ -279,25 +269,23 @@ void Entity::checkInDirectionWalk(Field &field , float distanse , sf::Vector2i p
 	int level = currentLevelFloor + 1;
 	int x = posStart.x;
 	int y = posStart.y;
-	int xShift = shifts.x;
-	int yShift = shifts.y;
 
 
 	int countCheckingBlocks = int(distanse / SIZE_BLOCK);
 	int count = 1;
 	while (!isExitFromBorder(x , y) && count < countCheckingBlocks) {
 
-		bool checkX = field.dataMap[level][y][x + xShift] != field.charBlocks[idBlocks::air];
-		bool checkY = field.dataMap[level][y + yShift][x] != field.charBlocks[idBlocks::air];
-		bool checkXAndY = field.dataMap[level][y + yShift][x + xShift] != field.charBlocks[idBlocks::air];
+		bool checkX = field.dataMap[level][y][x + shifts.x] != field.charBlocks[idBlocks::air];
+		bool checkY = field.dataMap[level][y + shifts.y][x] != field.charBlocks[idBlocks::air];
+		bool checkXAndY = field.dataMap[level][y + shifts.y][x + shifts.x] != field.charBlocks[idBlocks::air];
 		bool summaryCondition = false;
-		if (xShift != 0 && yShift != 0) {
+		if (shifts.x != 0 && shifts.y != 0) {
 			summaryCondition = checkXAndY;
 		}
-		if (xShift != 0) {
+		if (shifts.x != 0) {
 			summaryCondition = checkX;
 		}
-		else if (yShift != 0) {
+		else if (shifts.y != 0) {
 			summaryCondition = checkY;
 		}
 
@@ -308,8 +296,8 @@ void Entity::checkInDirectionWalk(Field &field , float distanse , sf::Vector2i p
 			}
 			break;
 		}
-		x += xShift;
-		y += yShift;
+		x += shifts.x;
+		y += shifts.y;
 		count++;
 	}
 }
@@ -318,18 +306,23 @@ void Entity::searchNearCollision(world & world)
 {
 	Field &field = world.field;
 	Vector3i posUse;
-	int x = int(getXPos() / SIZE_BLOCK);
-	int y = int(getYPos() / SIZE_BLOCK);
+	int x = getXPosOnMap();
+	int y = getYPosOnMap();
+	bool needExit = false;
 	for (int i = -1; i < 2; i++) {
 		for (int j = -1; j < 2; j++) {
 			posUse = { x + j, y + i, currentLevelFloor + 1 };
 			if (field.dataMap[posUse.z][posUse.y][posUse.x] != field.charBlocks[idBlocks::air]
 					|| isUnlifeObject(posUse , world)) {
-				founds.currentTarget = { x + j, y + i, currentLevelFloor + 1 };
+				founds.currentTarget = posUse;
+				needExit = true;
 				break;
 			}
 		}
-
+		if(needExit)
+		{
+			break;
+		}
 	}
 
 }
@@ -338,9 +331,9 @@ void Entity::searchWay(world &world)
 {
 	Item &itemEnemy = itemFromPanelQuickAccess[idSelectItem];
 
-	Vector3i posEnemy = { int(getXPos() / SIZE_BLOCK),
-		int(getXPos() / SIZE_BLOCK),
-		currentLevelFloor + 1 };
+	Vector3i posEnemy = { getXPosOnMap(),
+												getYPosOnMap(),
+												currentLevelFloor + 1 };
 
 	if (!findLadder(world , posEnemy)) {
 
@@ -359,8 +352,8 @@ void Entity::searchWay(world &world)
 
 void Entity::buildLadder(world &world)
 {
-	int x = int(getXPos() / SIZE_BLOCK);
-	int y = int(getYPos() / SIZE_BLOCK);
+	int x = getXPosOnMap();
+	int y = getYPos() / SIZE_BLOCK;
 	int level = currentLevelFloor + 1;
 
 	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
@@ -381,8 +374,8 @@ void Entity::buildLadder(world &world)
 bool Entity::findLadder(world &world , Vector3i pos)
 {
 
-	int x = int(getXPos() / SIZE_BLOCK);
-	int y = int(getYPos() / SIZE_BLOCK);
+	int x = getXPosOnMap();
+	int y = getYPosOnMap();
 	int level = pos.z;//currentLevelFloor + 1;
 
 	Field &field = world.field;

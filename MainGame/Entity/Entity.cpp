@@ -97,6 +97,21 @@ sf::Vector2f Entity::getPosition()
 	return { getXPos(), getYPos() };
 }
 
+int Entity::getXPosOnMap()
+{
+	return int(getXPos() / SIZE_BLOCK);
+}
+
+int Entity::getYPosOnMap()
+{
+	return int(getYPos() / SIZE_BLOCK);
+}
+
+sf::Vector2i Entity::getMapPosition()
+{
+	return sf::Vector2i(getXPosOnMap() , getYPosOnMap());
+}
+
 void Entity::choiceDirectionLook(int& xShift, int& yShift)
 {
 	switch (directions.directionLook) {
@@ -148,37 +163,20 @@ bool Entity::isEmptySlot()
 	return false;
 }
 
-//////////////////////////////////////////////////////
-// Поиск предмета
-bool isItem(float x, float y, vector<Item> &items, Item &findItem, int &findItemFromList, int currentLevel)
+bool Entity::isInUseField(Vector2f pos, bool under)
 {
-	int levelItem = items[findItemFromList].currentLevel;
-
-	Sprite *spriteItem = items[findItemFromList].mainSprite;
-	FloatRect objectItem = spriteItem->getGlobalBounds();
-
-	if (objectItem.contains(x, y) && levelItem == currentLevel) {
-		return true;
-	}
-	return false;
-}
-//////////////////////////////////////////////////////
-
-bool Entity::isInUseField(float x, float y, bool under)
-{
-	int xPosBlock = int(x / SIZE_BLOCK);
-	int yPosBlock = int(y / SIZE_BLOCK);
+	Vector2i posBlock = { int(pos.x / SIZE_BLOCK), int(pos.y / SIZE_BLOCK) };
 
 	sizeSprite &size = type->featuresSprite.size;
 	viewEnemy &view = type->view;
-	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + view.radiusUse > xPosBlock)
-								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= xPosBlock);
+	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + view.radiusUse > posBlock.x)
+								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= posBlock.x);
 
-	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + view.radiusUse > yPosBlock)
-								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= yPosBlock);
+	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + view.radiusUse > posBlock.y)
+								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= posBlock.y);
 
-	bool checkUnderPerson = xPosBlock == ((int(getXPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK)
-													&& yPosBlock == ((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);
+	bool checkUnderPerson = posBlock.x == ((int(getXPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK)
+													&& posBlock.y == ((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);
 
 	if (checkX && checkY) {
 		{
@@ -212,8 +210,7 @@ bool Entity::isExitFromBorder(float x , float y)
 
 Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 {
-	int x = int(getXPos() / SIZE_BLOCK);
-	int y = int(getYPos() / SIZE_BLOCK);
+	Vector2i posOnMap = getMapPosition();
 
 	wchar_t *charBlocks = field.charBlocks;
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
@@ -222,27 +219,27 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 		for (int j = -1; j < 2; j++) {
 			// Если над лестницей стена не переходим
 			if (i == 0 && j == 0) {// Если спускаемся блок лестницы не проверяем
-				if (isExitFromBorder(x, y) == false && Level != currentLevelFloor) {
-					if (map[Level][y][x] != charBlocks[idBlocks::air]) {
+				if (isExitFromBorder(posOnMap.x, posOnMap.y) == false && Level != currentLevelFloor) {
+					if (map[Level][posOnMap.y][posOnMap.x] != charBlocks[idBlocks::air]) {
 						return{ -1, -1 };
 					}
 				}
 			} else {
-				if (isExitFromBorder(x + i, y + j) == false) {
+				if (isExitFromBorder(posOnMap.x + i, posOnMap.y + j) == false) {
 					// Проверка стены
 					if (Level != currentLevelFloor) {
 						// Проверяем пол и стену над ним
-						if (map[Level][y + j][x + i] != charBlocks[idBlocks::air]
-								&& (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air]
-								|| map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]))// ИСПРАВЬ
+						if (map[Level][posOnMap.y + j][posOnMap.x + i] != charBlocks[idBlocks::air]
+								&& (map[Level + 1][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::air]
+								|| map[Level + 1][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::woodLadder]))// ИСПРАВЬ
 						{
-							return{ x + i, y + j };
+							return{ posOnMap.x + i, posOnMap.y + j };
 						}
 					} else {// Проверяем пол
-						if (map[Level][y + j][x + i] == charBlocks[idBlocks::air]
-								|| map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder])// ИСПРАВЬ
+						if (map[Level][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::air]
+								|| map[Level + 1][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::woodLadder])// ИСПРАВЬ
 						{
-							return{ x + i, y + j };
+							return{ posOnMap.x + i, posOnMap.y + j };
 						}
 					}
 				}
@@ -264,9 +261,10 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 		Item* addItem = new Item;
 		*addItem = itemFromPanelQuickAccess[idSelectItem];
 		// Задаём уровень расположения
-		addItem->setPosition(int(getXPos() / SIZE_BLOCK),
-												 int(getYPos() / SIZE_BLOCK),
-												 currentLevelFloor + 1);
+		Vector3i posItem = { getXPosOnMap(),
+												 getYPosOnMap(),
+												 currentLevelFloor + 1 };
+		addItem->setPosition(posItem);
 
 		sizeSprite &size = type->featuresSprite.size;
 		Vector2f posHero = { getXPos() + size.width / 2, getYPos() + size.height / 2 };// Начало отсчёта не в центре спрайта
