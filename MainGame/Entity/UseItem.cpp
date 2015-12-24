@@ -191,6 +191,9 @@ void Entity::searchItem(vector<Item> &items, Vector2f pos)
 
 		transferInInventory(items);
 
+		assert(items.size() != 0);
+		assert(founds.findItemFromList > RESET_COLLISION_VALUE);
+
 		items.erase(items.begin() + founds.findItemFromList);
 	}
 }

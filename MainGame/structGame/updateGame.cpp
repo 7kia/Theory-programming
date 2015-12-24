@@ -85,6 +85,7 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 		else if(idTypeObject != destroyBlockEffect){
 			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();
 			if (stateSound == sf::SoundSource::Status::Stopped) {
+				assert(objects.size() != 0);
 				objects.erase(objects.begin() + i);
 			}
 		}
@@ -100,6 +101,7 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 				objects[i].timeLife = 0.f;
 
 				if (currentToughness < 1) {
+					assert(objects.size() != 0);
 					objects.erase(objects.begin() + i);
 					continue;
 				}

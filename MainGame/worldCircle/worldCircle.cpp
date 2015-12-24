@@ -23,6 +23,8 @@ void world::deleteObjects()
 	while (i < deleteUnlifeObjects.size()) {
 		id = deleteUnlifeObjects[i];
 		if (!unlifeObjects.empty()) {
+			assert(unlifeObjects.size() != 0);
+			assert(id > RESET_COLLISION_VALUE);
 			unlifeObjects.erase(unlifeObjects.begin() + id);
 		}
 		i++;
@@ -79,6 +81,8 @@ void Game::destroyUnlife()
 	while (i < Enemys.size()) {
 		if (Enemys[i].protection.deathDay) {
 			Enemys[i].playSoundDeath(world);
+
+			assert(Enemys.size() != 0);
 			Enemys.erase(Enemys.begin() + i);
 			world.countEntity--;
 			continue;
