@@ -48,6 +48,11 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 };
 
 
+const TypeItem* Item::getType()
+{
+	return typeItem;
+}
+
 ////////////////////////////////////////////////////////////////////
 // Анимация и озвучка предметов НЕРАБОТАЕТ пока
 void Item::update(const float deltaTime, dataSound &databaseSound)

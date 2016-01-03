@@ -9,7 +9,7 @@ void itemFeatures::renderNameItem(Entity& mainPerson, Vector2f& position, featur
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[mainPerson.idSelectItem].typeItem->features.name;
+	String nameCurrentItem = mainPerson.itemsEntity[mainPerson.idSelectItem].typeItem->features.name;
 	Text *currentText = &textGame.texts[idText::itemGui];
 
 	currentText->setString(nameCurrentItem);
@@ -50,7 +50,7 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
+	String nameCurrentItem = mainPerson.itemsEntity[0].typeItem->features.name;
 	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
 	Text *currentText = &textGame.texts[idText::itemGui];
 
@@ -64,7 +64,7 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 	//////////////////////////////////////////////
 
 
-	Item& currentItem = mainPerson.itemFromPanelQuickAccess[i];
+	Item& currentItem = mainPerson.itemsEntity[i];
 	TypeItem *typeItem = currentItem.typeItem;
 	featuresItem *featuresItem = &typeItem->features;
 	int categoryItem = typeItem->features.category;

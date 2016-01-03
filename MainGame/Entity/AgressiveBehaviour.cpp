@@ -329,7 +329,7 @@ void Entity::searchNearCollision(world & world)
 
 void Entity::searchWay(world &world)
 {
-	Item &itemEnemy = itemFromPanelQuickAccess[idSelectItem];
+	Item &itemEnemy = itemsEntity[idSelectItem];
 
 	Vector3i posEnemy = { getXPosOnMap(),
 												getYPosOnMap(),
@@ -356,7 +356,7 @@ void Entity::buildLadder(world &world)
 	int y = getYPos() / SIZE_BLOCK;
 	int level = currentLevelFloor + 1;
 
-	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
+	Item &currentItem = itemsEntity[idSelectItem];
 
 	Field &field = world.field;
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;

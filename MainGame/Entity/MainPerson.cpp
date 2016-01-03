@@ -54,7 +54,7 @@ void Entity::updateAtack(world &world, const float deltaTime)
 			killFindEnemy(world);
 		}
 		else {
-			Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+			Item& currentItem = itemsEntity[idSelectItem];
 			hurtEnemy(currentItem, deltaTime);
 		}
 	}
@@ -98,5 +98,5 @@ void Entity::playSoundChoiseItem()
 
 Item & Entity::getCurrentItem()
 {
-	return itemFromPanelQuickAccess[idSelectItem];
+	return itemsEntity[idSelectItem];
 }

@@ -152,10 +152,55 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 	}
 }
 
+Item & Entity::getFindItem()
+{
+	return *founds.findItem;
+}
+
+UnlifeObject & Entity::getFindUnlifeObject()
+{
+	return *founds.findObject;
+}
+
+Entity & Entity::getFindEntity()
+{
+	return *founds.findEnemy;
+}
+
+Item * Entity::getRefOnEmptyItem()
+{
+	return founds.emptyItem;
+}
+
+UnlifeObject* Entity::getRefOnEmptyUnlifeObject()
+{
+	return founds.emptyObject;
+}
+
+Entity* Entity::getRefOnEmptyEntity()
+{
+	return founds.emptyEnemy;
+}
+
+int Entity::getIdFindItem()
+{
+	return founds.findItemFromList;
+}
+
+int Entity::getIdFindUnlifeObject()
+{
+	return founds.findObjectFromList;
+}
+
+int Entity::getIdFindEntity()
+{
+	return founds.findEnemyFromList;
+}
+
 bool Entity::isEmptySlot()
 {
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		if (itemFromPanelQuickAccess[i].typeItem == founds.emptyItem->typeItem) {
+		if (itemsEntity[i].getType() == getRefOnEmptyItem()->getType()) {
 			emptySlot = i;
 			return true;
 		}
@@ -253,13 +298,13 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 ////////////////////////////////////////////////////////////////////
 void Entity::throwItem(Field &field, vector<Item> &items)
 {
-	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+	Item& currentItem = itemsEntity[idSelectItem];
 	if (currentItem.typeItem != founds.emptyItem->typeItem) {
 		// Определяем позицию
 
 
 		Item* addItem = new Item;
-		*addItem = itemFromPanelQuickAccess[idSelectItem];
+		*addItem = itemsEntity[idSelectItem];
 		// Задаём уровень расположения
 		Vector3i posItem = { getXPosOnMap(),
 												 getYPosOnMap(),
@@ -275,7 +320,7 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 
 		playObjectDropSound(posHero);
 
-		itemFromPanelQuickAccess[idSelectItem] = *founds.emptyItem;
+		itemsEntity[idSelectItem] = *founds.emptyItem;
 	}
 }
 
@@ -348,7 +393,7 @@ bool Entity::isInListObjects(vector<int> &listObjects, int id) {
 void Entity::renderCurrentItem(sf::RenderWindow& window)
 {
 
-	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+	Item& currentItem = itemsEntity[idSelectItem];
 	bool isEmptyItem = currentItem.typeItem->features.name == founds.emptyItem->typeItem->features.name;
 	if (!isEmptyItem) {
 		Sprite& spriteItem = *currentItem.mainSprite;

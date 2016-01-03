@@ -74,16 +74,16 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	String nameCurrentItem = mainPerson.itemFromPanelQuickAccess[0].typeItem->features.name;
+	String nameCurrentItem = mainPerson.itemsEntity[0].typeItem->features.name;
 	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
 
 	int startPosition = widthPanelQuickAccess / 2;
 	for (int i = 0; i < mainPerson.type->amountSlots; i++) {
 
-		nameCurrentItem = mainPerson.itemFromPanelQuickAccess[i].typeItem->features.name;
+		nameCurrentItem = mainPerson.itemsEntity[i].typeItem->features.name;
 		if (nameCurrentItem != nameEmptyItem) {
 
-			Item& currentItem = mainPerson.itemFromPanelQuickAccess[i];
+			Item& currentItem = mainPerson.itemsEntity[i];
 
 			int shift = shiftSelect * i;
 			Vector2f pos;

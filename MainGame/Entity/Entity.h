@@ -24,10 +24,24 @@ struct Entity
 	int currentLevelFloor;
 
 	foundObjects founds;
+	Item& getFindItem();
+	UnlifeObject& getFindUnlifeObject();
+	Entity& getFindEntity();
+
+	Item* getRefOnEmptyItem();
+	UnlifeObject* getRefOnEmptyUnlifeObject();
+	Entity* getRefOnEmptyEntity();
+
+
+	int getIdFindItem();
+	int getIdFindUnlifeObject();
+	int getIdFindEntity();
+
+
 	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
 	idEntityMode currenMode;
-	Item *itemFromPanelQuickAccess;
+	Item *itemsEntity;
 	int idSelectItem;
 
 	bool wasCollision;

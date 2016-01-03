@@ -62,7 +62,7 @@ void Entity::breakFindObject(Item &currentItem)
 
 void Entity::breakNearCollision(world &world)
 {
-	Item &currentItem = itemFromPanelQuickAccess[idSelectItem];
+	Item &currentItem = itemsEntity[idSelectItem];
 	vector<int> *listBreaking = currentItem.typeItem->destroy;
 	Field &field = world.field;
 
@@ -81,7 +81,7 @@ void Entity::breakNearCollision(world &world)
 			resetAtack();
 		}
 		else if(isObject){
-			useTool(posUse, world, itemFromPanelQuickAccess[idSelectItem]);
+			useTool(posUse, world, itemsEntity[idSelectItem]);
 		}
 
 	}

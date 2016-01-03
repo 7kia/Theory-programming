@@ -12,7 +12,7 @@ struct Item
 	sf::Sprite *spriteForUse;
 
 	TypeItem *typeItem;
-
+	const TypeItem* getType();
 	int amount;
 
 	int currentToughness;

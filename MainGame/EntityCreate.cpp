@@ -25,12 +25,12 @@ void Entity::init(TypeEnemy &typesEnemy , world &world ,
 
 void Entity::initItems(world &world)
 {
-	itemFromPanelQuickAccess = new Item[type->amountSlots];
+	itemsEntity = new Item[type->amountSlots];
 	idSelectItem = 0;
-	itemFromPanelQuickAccess[idSelectItem].setType(type->typeItem);
-	itemFromPanelQuickAccess[idSelectItem].amount = type->typeItem.maxAmount;
+	itemsEntity[idSelectItem].setType(type->typeItem);
+	itemsEntity[idSelectItem].amount = type->typeItem.maxAmount;
 	for (int i = 1; i < type->amountSlots; i++) {
-		itemFromPanelQuickAccess[i].setType(*world.emptyObjects.emptyItem.typeItem);
+		itemsEntity[i].setType(*world.emptyObjects.emptyItem.typeItem);
 	}
 }
 

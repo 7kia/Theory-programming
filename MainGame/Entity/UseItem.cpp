@@ -6,7 +6,7 @@ using namespace std;
 
 void Entity::useItem(world &world , Event &event , Vector2f pos)
 {
-	Item& currentItem = itemFromPanelQuickAccess[idSelectItem];
+	Item& currentItem = itemsEntity[idSelectItem];
 
 	int x = int(pos.x / SIZE_BLOCK);
 	int y = int(pos.y / SIZE_BLOCK);
@@ -201,11 +201,13 @@ void Entity::searchItem(vector<Item> &items, Vector2f pos)
 void Entity::transferInInventory(vector<Item> &items)
 {
 	bool isFindItem = false;
-	int idFindItem = items[founds.findItemFromList].typeItem->features.id;
+	int idFindItem = founds.findItemFromList;
+
+	int idTypeFindItem = items[idFindItem].typeItem->features.id;
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		Item &item = itemFromPanelQuickAccess[i];
+		Item &item = itemsEntity[i];
 		int idItem = item.typeItem->features.id;
-		bool isTypesEqual = idItem == idFindItem;
+		bool isTypesEqual = idItem == idTypeFindItem;
 
 		if (isTypesEqual && (item.amount + 1 <= item.typeItem->maxAmount)) {
 			item.amount++;
@@ -216,8 +218,8 @@ void Entity::transferInInventory(vector<Item> &items)
 	}
 
 	if (isFindItem == false) {
-		itemFromPanelQuickAccess[emptySlot] = items[founds.findItemFromList];
-		itemFromPanelQuickAccess[emptySlot].mainSprite->scale(normalSize);
+		itemsEntity[emptySlot] = items[idFindItem];
+		itemsEntity[emptySlot].mainSprite->scale(normalSize);
 	}
 }
 
@@ -382,7 +384,7 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 
 void Entity::createDestroyEffect(world &world, Vector3i &pos)
 {
-	Item &currecntItem = itemFromPanelQuickAccess[idSelectItem];
+	Item &currecntItem = itemsEntity[idSelectItem];
 
 	UnlifeObject addObject;
 	Vector3i posAdd = { pos.x + 1, pos.y + 1 , pos.z };
