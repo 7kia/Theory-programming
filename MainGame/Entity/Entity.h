@@ -8,6 +8,7 @@ const float SCALE_VIEW = 1.5f;
 struct Entity
 {
 
+public:
 	sf::Sprite *spriteEntity;
 
 	entityAnimation animation;
@@ -236,11 +237,10 @@ struct Entity
 
 	void playSoundChoiseItem();
 
-	private:
-		Item *emptyItem;
-		
-public:
 // TODO : DO PRIVATE
 		TypeEnemy *type;
+
+	private:
+		Item *emptyItem;
 };
 

@@ -27,9 +27,9 @@ void Entity::initItems(world &world)
 {
 	itemsEntity = new Item[type->amountSlots];
 	idSelectItem = 0;
-	itemsEntity[0].setType(type->typeItem);
-	itemsEntity[0].amount = type->typeItem.maxAmount;
-	for (int i = 1; i < type->amountSlots; i++) {
+	itemsEntity[idSelectItem].setType(type->typeItem);
+	itemsEntity[idSelectItem].amount = type->typeItem.maxAmount;
+	for (int i = idSelectItem; i < type->amountSlots; i++) {
 		itemsEntity[i].setType(world.getTypeItem(idItem::emptyItem));
 	}
 }

@@ -52,12 +52,12 @@ public:
 
 	float getXPos();
 	float getYPos();
+	// TODO : do private
+	TypeItem *typeItem;
 
 private:
 	sf::Sprite *mainSprite;
 	sf::Sprite *spriteForUse;
-	// TODO : do private
-	TypeItem *typeItem;
 
 };
 
