@@ -18,8 +18,8 @@ void Entity::useBlock(Vector3i pos, world &world,
 
 		wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
 
-		int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
-		int idUseObject = currentItem.typeItem->idAdd.idUnlideOnjectForUse;
+		int idUseBlock = currentItem.getIdAddObject(idBlockForUse);
+		int idUseObject = currentItem.getIdAddObject(idUnlideOnjectForUse);
 
 		bool isIdBlock = idUseBlock > -1;
 		bool isAir = *block == field.charBlocks[idBlocks::air];
@@ -73,14 +73,14 @@ void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 {
 	Field& field = world.field;
 
-	bool pouredWater = event.key.code == Mouse::Left;
+	bool pouredWater = (event.key.code == Mouse::Left);
 	if (pouredWater) {
 
-		int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+		int idUseBlock = currentItem.getIdAddObject(idBlockForUse);
 		if (idUseBlock) {
 
-			int level = currentLevelFloor + 1;
-			Vector3i &posBlock = founds.currentTarget;
+			Vector3i &posBlock = getCurrentTarget();
+			int level = getLevelWall();
 			int x = posBlock.x;
 			int y = posBlock.y;
 

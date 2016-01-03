@@ -6,14 +6,12 @@ using namespace std;
 
 void Entity::useItem(world &world , Event &event , Vector2f pos)
 {
-	Item& currentItem = itemsEntity[idSelectItem];
+	Item& currentItem = getCurrentItem();
 
-	int x = int(pos.x / SIZE_BLOCK);
-	int y = int(pos.y / SIZE_BLOCK);
-	Vector3i &posUse = founds.currentTarget;
+	Vector3i &posUse = getCurrentTarget();
 
-	posUse.x = x;
-	posUse.y = y;
+	posUse.x = inMapCoordinate(pos.x);
+	posUse.y = inMapCoordinate(pos.y);
 
 	bool isEnemy = founds.findEnemy != founds.emptyEnemy;
 	//	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
@@ -30,8 +28,7 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 	}
 	else {
 
-		int category = currentItem.typeItem->features.category;
-		switch (category) {
+		switch (currentItem.getIdCategory()) {
 		case idCategoryItem::backhoe:
 		case idCategoryItem::pickax:
 		case idCategoryItem::axe:
@@ -39,18 +36,15 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 				int level;
 				defineLevel(level , event);
 
-
-				posUse = { x, y, level };
-
 				Field &field = world.field;
-				wchar_t	*block = &field.dataMap[level][y][x];
+				wchar_t	*block = &field.dataMap[level][posUse.y][posUse.x];
 				int idNature;
 				idNature = field.idsNature[field.findIdBlock(*block)];
 
 				if (idNature <= idNatureObject::Unbreaking) {
-					idNature = founds.findObject->typeObject->idNature;
+					idNature = getFindUnlifeObject().typeObject->idNature;
 				}
-				if (idNature != idNatureObject::Unbreaking && isInListObjects(*currentItem.typeItem->destroy , idNature)) {
+				if ((idNature != idNatureObject::Unbreaking) && isInListObjects(*currentItem.getListDestroy(), idNature)) {
 					currenMode = idEntityMode::atack;
 					giveDamage = false;
 				}
@@ -62,7 +56,7 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 				int level;
 				defineLevel(level , event);
 
-				posUse = { x, y, level };
+				posUse.z = level;
 
 				useBlock(posUse , world , currentItem);
 			}
@@ -117,7 +111,7 @@ void Entity::minusAmount(Item &currentItem)
 {
 	currentItem.amount--;
 	if (currentItem.amount < 1)
-		currentItem = *founds.emptyItem;
+		currentItem = *getRefOnEmptyItem();
 }
 
 void Entity::redefineType(Item &currentItem, world &world, int shift)
@@ -129,24 +123,18 @@ void Entity::redefineType(Item &currentItem, world &world, int shift)
 
 void Entity::createRedefineItem(world &world, Item &currentItem, int shift)
 {
-	int *idItem = &currentItem.typeItem->features.id;
-	int defineType = *idItem + shift;
-	*idItem = defineType - shift;
+	int defineType = currentItem.getIdType() + shift;
 
-	Item *addItem = new Item;
+	Item addItem;
+	addItem.setType(world.getTypeItem(defineType));
 
-	TypeItem *typesItems = world.typesObjects.typesItem;
-	addItem->setType(typesItems[defineType]);
+	Vector3i posItem = { inMapCoordinate(getXPos()) + 1,
+											inMapCoordinate(getYPos()) + 1,
+											getLevelWall() };
+	addItem.setPosition(posItem);
 
-	Vector3i posItem = { int(getXPos() / SIZE_BLOCK) + 1,
-											int(getYPos() / SIZE_BLOCK) + 1,
-											currentLevelFloor + 1 };
-	addItem->setPosition(posItem);
+	world.addItem(addItem);
 
-	vector<Item> &items = world.items;
-	items.push_back(*addItem);
-
-	delete addItem;
 }
 
 void Entity::takeRedefineItem(world & world)
@@ -162,16 +150,15 @@ void Entity::takeRedefineItem(world & world)
 
 void Entity::takeItem(world &world, Vector2f pos)
 {
-	vector<Item> &items = world.items;
-	String nameFindItem = founds.findItem->typeItem->features.name;
-	String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+	String nameFindItem = getFindItem().getName();
+	String nameEmptyItem = getRefOnEmptyItem()->getName();
 
 
 	if (nameFindItem != nameEmptyItem) {
 		if (isInUseField(pos, true)) {
 			
-			if (isEmptySlot() && founds.findItemFromList > RESET_COLLISION_VALUE) {
-				searchItem(items , pos);
+			if (isEmptySlot() && getIdFindItem() > RESET_COLLISION_VALUE) {
+				searchItem(world.items , pos);
 				playSound(idSoundPaths::luggage1Sound , *soundBase , soundEntity , getPosition());
 			}
 		}
@@ -180,46 +167,50 @@ void Entity::takeItem(world &world, Vector2f pos)
 
 void Entity::searchItem(vector<Item> &items, Vector2f pos)
 {
-	int levelItem = items[founds.findItemFromList].currentLevel;
+	int idFindItem = getIdFindItem();
+	Item &findItem = items[idFindItem];
 
-	Sprite *spriteItem = items[founds.findItemFromList].mainSprite;
-	FloatRect objectItem = spriteItem->getGlobalBounds();
+	FloatRect objectItem = findItem.getGlobalBounds();
 
-	bool onOneLevel = levelItem == currentLevelFloor + 1;
-	bool itemIsFind = objectItem.contains(pos.x, pos.y) && onOneLevel;
+	bool onOneLevel = (findItem.getLevelOnMap() == getLevelWall());
+	bool itemIsFind = objectItem.contains(pos) && onOneLevel;
 	if (itemIsFind) {
 
 		transferInInventory(items);
 
 		assert(items.size() != 0);
-		assert(founds.findItemFromList > RESET_COLLISION_VALUE);
+		assert(idFindItem > RESET_COLLISION_VALUE);
 
-		items.erase(items.begin() + founds.findItemFromList);
+		items.erase(items.begin() + idFindItem);
 	}
 }
 
 void Entity::transferInInventory(vector<Item> &items)
 {
 	bool isFindItem = false;
-	int idFindItem = founds.findItemFromList;
+	int idFindItem = getIdFindItem();
 
-	int idTypeFindItem = items[idFindItem].typeItem->features.id;
+	int idTypeFindItem = items[idFindItem].getIdType();
+	int idTypeItem;
+	bool isTypesEqual;
+	Item &item = itemsEntity[0];
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
-		Item &item = itemsEntity[i];
-		int idItem = item.typeItem->features.id;
-		bool isTypesEqual = idItem == idTypeFindItem;
 
-		if (isTypesEqual && (item.amount + 1 <= item.typeItem->maxAmount)) {
-			item.amount++;
+		item = itemsEntity[i];
+		idTypeItem = item.getIdType();
+		isTypesEqual = (idTypeItem == idTypeFindItem);
+
+		if (isTypesEqual && ((item.getAmount() + 1) <= item.getMaxAmount())) {
+			item.increaseAmount(1);
 			isFindItem = true;
 			break;
 		}
 
 	}
 
-	if (isFindItem == false) {
-		itemsEntity[emptySlot] = items[idFindItem];
-		itemsEntity[emptySlot].mainSprite->scale(normalSize);
+	if (!isFindItem) {
+		fillEmptySlot(items[idFindItem]);
+		getEmtySlot().setScale(normalSize);
 	}
 }
 
@@ -252,11 +243,11 @@ void Entity::useAsEmptyBottle(Item &currentItem, world &world, int level)
 	bool useToAnyLevel = level > -1;
 	if (useToAnyLevel) {
 
-		int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+		int idUseBlock = currentItem.getIdAddObject(idBlockForUse);
 		if (idUseBlock) {
 
-			int x = founds.currentTarget.x;
-			int y = founds.currentTarget.y;
+			int x = getCurrentTarget().x;
+			int y = getCurrentTarget().y;
 			wchar_t block = field.dataMap[level][y][x];
 			bool isWater = block == field.charBlocks[idUseBlock];
 			if (isWater) {
@@ -272,11 +263,11 @@ void Entity::useAsEmptyBukket(Item &currentItem, world &world, int level)
 	Field &field = world.field;
 	bool useToAnyLevel = level > -1;
 	if (useToAnyLevel) {
-		int idUseBlock = currentItem.typeItem->idAdd.idBlockForUse;
+		int idUseBlock = currentItem.getIdAddObject(idBlockForUse);
 		if (idUseBlock) {
 
-			int x = founds.currentTarget.x;
-			int y = founds.currentTarget.y;
+			int x = getCurrentTarget().x;
+			int y = getCurrentTarget().y;
 
 			wchar_t *block = &field.dataMap[level][y][x];
 			bool isWater = *block == field.charBlocks[idUseBlock];
@@ -307,7 +298,7 @@ void Entity::breakItem(Item &currentItem)
 	if (currentItem.currentToughness < 1) {
 		currentItem.amount--;
 		if(currentItem.amount < 1)
-			currentItem = *founds.emptyItem;
+			currentItem = *getRefOnEmptyItem();
 	}
 }
 
@@ -384,7 +375,7 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 
 void Entity::createDestroyEffect(world &world, Vector3i &pos)
 {
-	Item &currecntItem = itemsEntity[idSelectItem];
+	Item &currecntItem = getCurrentItem();
 
 	UnlifeObject addObject;
 	Vector3i posAdd = { pos.x + 1, pos.y + 1 , pos.z };
@@ -396,12 +387,12 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
 	int idBlock = field.findIdBlock(*block);
 	int toughness = field.toughness[idBlock];
-	addObject.currentToughness = toughness - currecntItem.typeItem->damageItem.crushingDamage;
+	addObject.currentToughness = toughness - currecntItem.getDamage(crushingDamage);
 
 	vector<UnlifeObject> &objects = world.unlifeObjects;
 	objects.push_back(addObject);
 
-	founds.currentTarget = posAdd;
+	getCurrentTarget() = posAdd;
 	founds.findObject = &objects[objects.size() - 1];
 }
 

@@ -94,39 +94,36 @@ void Entity::randomWalk(const float deltaTime) {
 
 void Entity::takeDamage(DamageInputAndOutput damageEnemy, Item &currentItem)
 {
-	bool isDestroy = currentItem.typeItem->features.isDestroy;
-	if (isDestroy) {
+	if (currentItem.getAttributeDestroyed()) {
 		currentItem.currentToughness -= 1;
 	}
 
-	typeDamageItem damagePersonItem = currentItem.typeItem->damageItem;
 	float multiplirer = damageEnemy.damageMultiplirer;
 
+	int cutDamage = currentItem.getDamage(cuttingDamage);
+	int crushDamage = currentItem.getDamage(crushingDamage);
+	int unlifDamage = currentItem.getDamage(unlifeDamage);
 
-	damageEnemy.inputCutDamage = int(multiplirer * (damageEnemy.cuttingDamage + damagePersonItem.cuttingDamage));
-	damageEnemy.inputCrashDamage = int(multiplirer * (damageEnemy.crushingDamage + damagePersonItem.crushingDamage));
-	damageEnemy.inputUnlifeDamage = int(multiplirer * (damageEnemy.unlifeDamage + damagePersonItem.unlifeDamage));
-
-	int cuttingDamage = currentItem.typeItem->damageItem.cuttingDamage;
-	int crushingDamage = currentItem.typeItem->damageItem.crushingDamage;
-	int unlifingDamage = currentItem.typeItem->damageItem.unlifeDamage;
+	damageEnemy.inputCutDamage = int(multiplirer * (damageEnemy.cuttingDamage + cutDamage));
+	damageEnemy.inputCrashDamage = int(multiplirer * (damageEnemy.crushingDamage + crushDamage));
+	damageEnemy.inputUnlifeDamage = int(multiplirer * (damageEnemy.unlifeDamage + unlifDamage));
 
 
-	float cutDamage = damageEnemy.damageMultiplirer * cuttingDamage;
-	float crashDamage = damageEnemy.damageMultiplirer * crushingDamage;
-	float unlifeDamage = damageEnemy.damageMultiplirer * unlifingDamage;
+	float cutDamageFloat = damageEnemy.damageMultiplirer * cutDamage;
+	float crashDamageFloat = damageEnemy.damageMultiplirer * crushDamage;
+	float unlifeDamageFloat = damageEnemy.damageMultiplirer * unlifDamage;
 
-	cutDamage *= protection.protectionCut;
-	crashDamage *= protection.protectionCrash;
-	unlifeDamage *= protection.protectionUnlife;
+	cutDamageFloat *= protection.protectionCut;
+	crashDamageFloat *= protection.protectionCrash;
+	unlifeDamageFloat *= protection.protectionUnlife;
 
-	damageEnemy.inputDamage = int(cutDamage + crashDamage + unlifeDamage);
+	damageEnemy.inputDamage = int(cutDamageFloat + crashDamageFloat + unlifeDamageFloat);
 	health.currentHealth -= damageEnemy.inputDamage;
 
 	damage.inputDamage = damageEnemy.inputDamage;
 	damageEnemy.inputDamage = 0;
 
-	int categoryItem = currentItem.typeItem->features.category;
+	int categoryItem = currentItem.getIdCategory();
 	if (categoryItem == idCategoryItem::weapon) {
 		breakItem(currentItem);
 	}
@@ -159,8 +156,8 @@ void Entity::Drop(world& world)
 	throwItem(field, items);
 
 	int currentAmount;
-	Vector3i posItem = { founds.currentTarget.x + 1,
-											 founds.currentTarget.y + 1,
+	Vector3i posItem = { getCurrentTarget().x + 1,
+											 getCurrentTarget().y + 1,
 											currentLevelFloor + 1 };
 	for (int i = 0; i < countItem; i++) {
 

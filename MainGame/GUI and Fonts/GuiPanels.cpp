@@ -74,13 +74,13 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	String nameCurrentItem = mainPerson.itemsEntity[0].typeItem->features.name;
-	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
+	String nameCurrentItem = mainPerson.itemsEntity[0].getName();
+	String nameEmptyItem = mainPerson.getRefOnEmptyItem()->getName();
 
 	int startPosition = widthPanelQuickAccess / 2;
 	for (int i = 0; i < mainPerson.type->amountSlots; i++) {
 
-		nameCurrentItem = mainPerson.itemsEntity[i].typeItem->features.name;
+		nameCurrentItem = mainPerson.itemsEntity[i].getName();
 		if (nameCurrentItem != nameEmptyItem) {
 
 			Item& currentItem = mainPerson.itemsEntity[i];
@@ -90,18 +90,18 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 				centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ÈÑÏÐÀÂÜ
 		
-			currentItem.mainSprite->setPosition(pos);
+			currentItem.setPosition(Vector3i(pos.x, pos.y, currentItem.getLevelOnMap()));
 
 
 			if (mainPerson.idSelectItem == i) {
 				itemFeatures.renderFeatures(mainPerson, features, textGame, bars);
-				currentItem.mainSprite->setScale(normalSize);
+				currentItem.setScale(normalSize);
 			}
 			else
 			{
-				currentItem.mainSprite->setScale(scaleOutItems);
+				currentItem.setScale(scaleOutItems);
 			}
-			window.draw(*currentItem.mainSprite);
+			window.draw(currentItem.getSprite());
 			renderAmountItem(currentItem.amount, pos, textGame, features);
 		}
 

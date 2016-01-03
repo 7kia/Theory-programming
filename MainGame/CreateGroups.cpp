@@ -52,6 +52,21 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 	delete addEntity;
 }
 
+void world::addItem(Item item)
+{
+	items.push_back(item);
+}
+
+TypeItem* world::getTypesItem()
+{
+	return typesObjects.typesItem;
+}
+
+const TypeItem world::getTypeItem(int id)
+{
+	return typesObjects.typesItem[id];
+}
+
 bool isPlaceForCreate(world world, Vector3i &pos)
 {
 	vector<Entity> &enemys = world.Enemys;

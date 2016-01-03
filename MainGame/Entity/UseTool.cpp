@@ -21,7 +21,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 	resetAtack();
 
 	UnlifeObject *findObject = founds.findObject;
-	vector<int> *listBreaking = currentItem.typeItem->destroy;
+	vector<int> *listBreaking = currentItem.getListDestroy();
 
 	bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
 
@@ -44,7 +44,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 				breakItem(currentItem);
 			}
 
-			founds.currentTarget = RESET_VECTOR_3I;
+			getCurrentTarget() = RESET_VECTOR_3I;
 			idFinded = RESET_COLLISION_VALUE;
 		}
 
@@ -54,19 +54,18 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 void Entity::breakFindObject(Item &currentItem)
 {
 	UnlifeObject *findObject = founds.findObject;
-	typeDamageItem &damageItem = currentItem.typeItem->damageItem;
 
 	int &toughnessObject = findObject->currentToughness;
-	toughnessObject -= damageItem.crushingDamage;
+	toughnessObject -= currentItem.getDamage(crushingDamage);
 }
 
 void Entity::breakNearCollision(world &world)
 {
-	Item &currentItem = itemsEntity[idSelectItem];
-	vector<int> *listBreaking = currentItem.typeItem->destroy;
+	Item &currentItem = getCurrentItem();
+	vector<int> *listBreaking = currentItem.getListDestroy();
 	Field &field = world.field;
 
-	Vector3i &posUse = founds.currentTarget;
+	Vector3i &posUse = getCurrentTarget();
 	int idNature = defineIdNature(world , posUse);
 
 	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
@@ -81,7 +80,7 @@ void Entity::breakNearCollision(world &world)
 			resetAtack();
 		}
 		else if(isObject){
-			useTool(posUse, world, itemsEntity[idSelectItem]);
+			useTool(posUse, world, currentItem);
 		}
 
 	}

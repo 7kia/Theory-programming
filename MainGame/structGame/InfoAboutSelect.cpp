@@ -96,18 +96,16 @@ void Game::inforAboutItem(float x , float y)
 	infoItem.setString("Item : not select");
 	for (int i = 0; i != items.size(); ++i) {
 
-		int level = items[i].currentLevel;
+		int level = items[i].getLevelOnMap();
 
-		Sprite *mainSprite = items[i].mainSprite;
-		FloatRect itemBound = mainSprite->getGlobalBounds();
 
-		if (itemBound.contains(x , y)) {
+		if (items[i].getGlobalBounds().contains(x , y)) {
 			if (level >= mainPerson.currentLevelFloor
 					&& level <= mainPerson.currentLevelFloor + 2) {
-				String name = items[i].typeItem->features.name;
+				String name = items[i].getName();
 				if (name != "") {
-					mainPerson.founds.findItemFromList = i;
-					mainPerson.founds.findItem = &items[i];
+					mainPerson.setIdFindItem(i);
+					mainPerson.getFindItem() = items[i];
 					infoItem.setString("Item : " + name);
 				}
 			}
@@ -138,7 +136,7 @@ void Game::inforAboutEntity(float x , float y)
 		if (objectBound.contains(x , y)) {
 			if (level >= mainPerson.currentLevelFloor - 1
 					&& level <= mainPerson.currentLevelFloor + 1) {
-				String name = Enemys[i].type->name;
+				String name = Enemys[i].getName();
 				if (name != "") {
 
 					mainPerson.founds.findEnemyFromList = i;

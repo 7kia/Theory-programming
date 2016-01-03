@@ -51,7 +51,7 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 					if (isNearFight) {
 						currenMode = idEntityMode::atack;
 						directions.directionWalk = NONE_DIRECTION;
-						founds.currentTarget = RESET_VECTOR_3I;
+						getCurrentTarget() = RESET_VECTOR_3I;
 					}
 
 				}
@@ -80,7 +80,7 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 
 					searchNearCollision(world);
 
-					if (founds.currentTarget != RESET_VECTOR_3I) {
+					if (getCurrentTarget() != RESET_VECTOR_3I) {
 						breakNearCollision(world);
 					}
 				}
@@ -89,7 +89,7 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 		}
 	}
 	else {
-		founds.currentTarget = RESET_VECTOR_3I;
+		getCurrentTarget() = RESET_VECTOR_3I;
 	}
 }
 
@@ -161,7 +161,7 @@ void Entity::choiceBlock(world &world)
 		idNature = findObject.typeObject->idNature;
 	}
 	else {
-		founds.currentTarget = collision.posBlock;
+		getCurrentTarget() = collision.posBlock;
 	}
 	if (idNature != idNatureObject::Unbreaking) {
 		currenMode = idEntityMode::atack;
@@ -314,7 +314,7 @@ void Entity::searchNearCollision(world & world)
 			posUse = { x + j, y + i, currentLevelFloor + 1 };
 			if (field.dataMap[posUse.z][posUse.y][posUse.x] != field.charBlocks[idBlocks::air]
 					|| isUnlifeObject(posUse , world)) {
-				founds.currentTarget = posUse;
+				getCurrentTarget() = posUse;
 				needExit = true;
 				break;
 			}
@@ -329,7 +329,7 @@ void Entity::searchNearCollision(world & world)
 
 void Entity::searchWay(world &world)
 {
-	Item &itemEnemy = itemsEntity[idSelectItem];
+	Item &itemEnemy = getCurrentItem();
 
 	Vector3i posEnemy = { getXPosOnMap(),
 												getYPosOnMap(),
@@ -337,11 +337,11 @@ void Entity::searchWay(world &world)
 
 	if (!findLadder(world , posEnemy)) {
 
-		String nameCurrentItem = itemEnemy.typeItem->features.name;
-		String nameEmptyItem = founds.emptyItem->typeItem->features.name;
+		String nameCurrentItem = itemEnemy.getName();
+		String nameEmptyItem = getRefOnEmptyItem()->getName();
 
-		bool isLadder = itemEnemy.typeItem->features.category == idCategoryItem::block;
-		bool isNotEmpty = nameCurrentItem != nameEmptyItem;
+		bool isLadder = (itemEnemy.getIdCategory() == idCategoryItem::block);
+		bool isNotEmpty = (nameCurrentItem != nameEmptyItem);
 
 		if (isNotEmpty && isLadder) {
 			buildLadder(world);
@@ -353,10 +353,10 @@ void Entity::searchWay(world &world)
 void Entity::buildLadder(world &world)
 {
 	int x = getXPosOnMap();
-	int y = getYPos() / SIZE_BLOCK;
+	int y = getYPosOnMap();
 	int level = currentLevelFloor + 1;
 
-	Item &currentItem = itemsEntity[idSelectItem];
+	Item &currentItem = getCurrentItem();
 
 	Field &field = world.field;
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;

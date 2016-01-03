@@ -9,7 +9,7 @@ void itemFeatures::renderNameItem(Entity& mainPerson, Vector2f& position, featur
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	String nameCurrentItem = mainPerson.itemsEntity[mainPerson.idSelectItem].typeItem->features.name;
+	String nameCurrentItem = mainPerson.itemsEntity[mainPerson.idSelectItem].getName();
 	Text *currentText = &textGame.texts[idText::itemGui];
 
 	currentText->setString(nameCurrentItem);
@@ -50,8 +50,8 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	String nameCurrentItem = mainPerson.itemsEntity[0].typeItem->features.name;
-	String nameEmptyItem = mainPerson.founds.emptyItem->typeItem->features.name;
+	String nameCurrentItem = mainPerson.itemsEntity[0].getName();
+	String nameEmptyItem = mainPerson.getRefOnEmptyItem()->getName();
 	Text *currentText = &textGame.texts[idText::itemGui];
 
 	Vector2f posName;// —начала выписываем характеристики, потом им€(так как им€ перед ними)
@@ -65,17 +65,16 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 
 
 	Item& currentItem = mainPerson.itemsEntity[i];
-	TypeItem *typeItem = currentItem.typeItem;
-	featuresItem *featuresItem = &typeItem->features;
-	int categoryItem = typeItem->features.category;
+	const TypeItem *typeItem = currentItem.getType();
+	const featuresItem featuresItem = typeItem->features;
+	int categoryItem = currentItem.getIdCategory();
 	Vector2f pos;
 
 	int startPosition = widthPanelQuickAccess / 2;
 	int shift = shiftSelect * i;// TODO
 															/////////////////////////////////////////////////////////////
 															// ≈сли предмет инструмент или оружие
-	bool isDestroy = featuresItem->isDestroy;
-	if (isDestroy) {
+	if (currentItem.getAttributeDestroyed()) {
 		pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
 			centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };
 		// то отображаем прочность
@@ -100,9 +99,9 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 	pos = { posName.x + halfSizeString,
 		centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess - Y_SHIFT_OUT_PANEL };
 	// ѕеревод из числа в строку
-	int itemCutDam = typeItem->damageItem.cuttingDamage;
-	int itemCrashDam = typeItem->damageItem.crushingDamage;
-	int itemUnlifeDam = typeItem->damageItem.unlifeDamage;
+	int itemCutDam = typeItem->damageItem[cuttingDamage];
+	int itemCrashDam = typeItem->damageItem[crushingDamage];
+	int itemUnlifeDam = typeItem->damageItem[unlifeDamage];
 
 	string itemCut;
 	string itemCrash;

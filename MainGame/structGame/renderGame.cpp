@@ -77,14 +77,14 @@ void Game::renderItems(FloatRect const& rectWindow)
 
 
 			if (levelItem == levelPlayer) {
-				items[i].mainSprite->setColor(DOWN_VIEW);
+				items[i].setColor(DOWN_VIEW);
 			} else if (levelItem == levelPlayer + 1) {
-				items[i].mainSprite->setColor(NORMAL_VIEW);
+				items[i].setColor(NORMAL_VIEW);
 			} else if (levelItem == levelPlayer + 2) {
-				items[i].mainSprite->setColor(UP_VIEW);
+				items[i].setColor(UP_VIEW);
 			}
 
-			drawInWindow(*items[i].mainSprite, rectWindow);
+			drawInWindow(items[i].getSprite(), rectWindow);
 		}
 
 	}
@@ -173,7 +173,7 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	Text *currentText = &textGame.texts[idText::panelText];
 	Vector2f posText = centerWindow;
 
-	Item *drawItem = new Item;
+	Item drawItem;
 
 	for (size_t i = 0; i < listAward.size(); i++) {
 		string amountItems;
@@ -188,14 +188,14 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 		window.draw(*currentText);
 
 
-		drawItem->setType(typesItems[listAward[i].x]);
-		drawItem->mainSprite->setPosition(posImage);
-		drawItem->mainSprite->setScale(SCALE_AWARD_ITEMS, SCALE_AWARD_ITEMS);
+		drawItem.setType(typesItems[listAward[i].x]);
+		drawItem.setPosition(Vector3i(posImage.x, posImage.y, drawItem.getLevelOnMap()));
+		drawItem.setScale(SCALE_AWARD_ITEMS);
 		posImage.x += DISTANSE_BETWEEN_AWARD_ITEMS + SIZE_ITEM;
-		window.draw(*drawItem->mainSprite);
+		window.draw(drawItem.getSprite());
 	}
 
-	delete drawItem;
+
 
 }
 

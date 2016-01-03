@@ -53,7 +53,7 @@ void Game::dropAward(vector<Vector2i> &listAward)
 		for (size_t count = 0; count < awardInfo.y; count++) {
 			addItem.setType(typesItems[awardInfo.x]);
 			addItem.setPosition(posAward);
-			addItem.mainSprite->setScale(scaleOutItems);
+			addItem.setScale(scaleOutItems);
 
 			items.push_back(addItem);
 		}

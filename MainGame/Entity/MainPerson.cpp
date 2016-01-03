@@ -46,19 +46,18 @@ void Entity::updateView(View &view , Listener &listener , RenderWindow &window)
 
 void Entity::updateAtack(world &world, const float deltaTime)
 {
-	bool isEnemy = founds.findEnemyFromList > -1;
-	bool notMyself = founds.findEnemy != this;
-	if (giveDamage && isEnemy && notMyself) {
+	bool isEnemy = getIdFindEntity() > -1;
+	bool notMyself = (&(getFindEntity()) != this);
+	if (getStateGiveDamage() && isEnemy && notMyself) {
 
-		if (founds.findEnemy->isDeath) {
+		if (getFindEntity().getStateDeath()) {
 			killFindEnemy(world);
 		}
 		else {
-			Item& currentItem = itemsEntity[idSelectItem];
-			hurtEnemy(currentItem, deltaTime);
+			hurtEnemy(getCurrentItem() , deltaTime);
 		}
 	}
-	else if(!isEnemy && giveDamage)
+	else if(!isEnemy && getStateGiveDamage())
 	{	
 		breakNearCollision(world);	
 	}
@@ -66,9 +65,10 @@ void Entity::updateAtack(world &world, const float deltaTime)
 
 void Entity::killFindEnemy(world& world)
 {
-	founds.findEnemy->Drop(world);
-	founds.findEnemy->playSoundDeath(world);
-	world.Enemys.erase(world.Enemys.begin() + founds.findEnemyFromList);
+	Entity &findEnemy = getFindEntity();
+	findEnemy.Drop(world);
+	findEnemy.playSoundDeath(world);
+	world.Enemys.erase(world.Enemys.begin() + getIdFindEntity());
 	world.countEntity--;
 
 	resetAtack();
@@ -79,13 +79,13 @@ void Entity::hurtEnemy(Item &currentItem, const float deltaTime)
 	currenMode = idEntityMode::atack;
 
 	Vector2f posPerson = getPosition();
-	Vector2f posEnemy = founds.findEnemy->getPosition();
+	Vector2f posEnemy = getFindEntity().getPosition();
 	float distanse = distansePoints(posPerson, posEnemy);
 
 	animation.updateFight(deltaTime, giveDamage, currenMode);
-	if (giveDamage && distanse <= SIZE_BLOCK * 2.5f) {
+	if (getStateGiveDamage() && distanse <= SIZE_BLOCK * 2.5f) {
 		resetAtack();
-		founds.findEnemy->takeDamage(damage, currentItem);
+		getFindEntity().takeDamage(damage, currentItem);
 		playAtackSound(currentItem);
 	}
 }

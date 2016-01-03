@@ -48,9 +48,84 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 };
 
 
+sf::FloatRect Item::getGlobalBounds()
+{
+	return mainSprite->getGlobalBounds();
+}
+
+void Item::setScale(sf::Vector2f scale)
+{
+	mainSprite->scale(scale);
+}
+
+sf::Sprite& Item::getSprite()
+{
+	return *mainSprite;
+}
+
+void Item::setColor(sf::Color color)
+{
+	mainSprite->setColor(color);
+}
+
 const TypeItem* Item::getType()
 {
 	return typeItem;
+}
+
+sf::String Item::getName()
+{
+	return typeItem->features.name;
+}
+
+int Item::getIdType()
+{
+	return typeItem->features.id;
+}
+
+int Item::getIdCategory()
+{
+	return typeItem->features.category;
+}
+
+bool Item::getAttributeDestroyed()
+{
+	return typeItem->features.isDestroy;
+}
+
+bool Item::getAttributeCutting()
+{
+	return typeItem->features.isCutting;
+}
+
+int Item::getDamage(int id)
+{
+	return typeItem->damageItem[id];
+}
+
+int Item::getIdAddObject(int id)
+{
+	return typeItem->idAdd[id];
+}
+
+int Item::getAmount()
+{
+	return amount;
+}
+
+int Item::getMaxAmount()
+{
+	return typeItem->maxAmount;
+}
+
+void Item::increaseAmount(int number)
+{
+	amount += number;
+}
+
+int Item::getLevelOnMap()
+{
+	return currentLevel;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -88,7 +163,7 @@ float Item::getYPos()
 }
 ////////////////////////////////////////////////////////////////////
 
-void Item::setType(TypeItem &type)
+void Item::setType(TypeItem type)
 {
 	typeItem = &type;
 
@@ -130,4 +205,9 @@ void Item::setPosition(Vector3i pos)
 
 	currentLevel = pos.z;
 	mainSprite->setPosition(numberX, numberY);
+}
+
+std::vector<int>* Item::getListDestroy()
+{
+	return typeItem->destroy;
 }

@@ -9,7 +9,7 @@ const int shiftAngleUseItem = 2;
 const sf::Vector2f scaleOutItems = { 0.75f, 0.75f };
 const sf::Vector2f scaleUseItems = { 0.5f, 0.5f };
 const sf::Vector2f normalSize = { 1.f, 1.f };
-const float SCALE_AWARD_ITEMS = 2.f;
+const sf::Vector2f SCALE_AWARD_ITEMS = { 2.f, 2.f };
 const int SIZE_ITEM = SIZE_BLOCK;
 
 // stoneItem - Камень

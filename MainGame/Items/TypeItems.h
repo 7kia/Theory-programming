@@ -5,20 +5,20 @@
 #include "../Sounds/Sound.h"
 #include "../structGame/CommonStructs.h"
 
-struct typeDamageItem
+typedef enum
 {
-	int cuttingDamage;// Режущий
-	int crushingDamage;// Дробящий
-	int unlifeDamage;
-	void init(int cut, int crush, int unlife);
-};
+	cuttingDamage,
+	crushingDamage,
+	unlifeDamage,
+	amountTypeDamage
+} idTypeDamage;
 
-struct idCreateObjects
+typedef enum
 {
-	int idBlockForUse;
-	int idUnlideOnjectForUse;
-	void init(int idBlock, int idObject);
-};
+	idBlockForUse,
+	idUnlideOnjectForUse,
+	amountIdCreateObjects
+} idCreateObjects;
 
 struct featuresItem
 {
@@ -58,11 +58,13 @@ public:
 
 	featuresSprite sizeMain;
 	featuresSprite sizeAlternative;
-	typeDamageItem damageItem;
-	idCreateObjects idAdd;
+	int damageItem[amountTypeDamage];
+	int idAdd[amountIdCreateObjects];
+	void initIdsAddObject(int idBlock , int idObject);
+
 
 	void Init(sf::String filenameTexture, featuresItem featuresAddItem,
-						featuresSprite featuresSprite, idCreateObjects idCreated, typeDamageItem damage);
+						featuresSprite featuresSprite);
 	void InitForUse(sf::String filenameTextureForUse, featuresSprite features);
 };
 

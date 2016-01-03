@@ -52,6 +52,8 @@ enum TimeDay {
 struct world
 {
 	std::vector<Item> items;
+	void addItem(Item item);
+
 	std::vector<UnlifeObject> unlifeObjects;
 	std::vector<Entity> Enemys;
 
@@ -61,7 +63,11 @@ struct world
 
 	void initializeCategorysBreakingObject();
 	void initializePlayer(View& view, Listener& listener);
+
 	typesObjectsInWorld typesObjects;
+	TypeItem* getTypesItem();
+	const TypeItem getTypeItem(int id);
+
 	listDestroyObjectsAndBlocks listDestroy;
 	Field field;
 

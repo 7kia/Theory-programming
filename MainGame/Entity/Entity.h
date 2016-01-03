@@ -7,6 +7,7 @@ const float SCALE_VIEW = 1.5f;
 
 struct Entity
 {
+
 	sf::Sprite *spriteEntity;
 
 	entityAnimation animation;
@@ -20,7 +21,8 @@ struct Entity
 	DamageInputAndOutput damage;
 	bool isAtack;
 	bool giveDamage;
-
+	bool getStateGiveDamage();
+	String getName();
 	int currentLevelFloor;
 
 	foundObjects founds;
@@ -32,8 +34,12 @@ struct Entity
 	UnlifeObject* getRefOnEmptyUnlifeObject();
 	Entity* getRefOnEmptyEntity();
 
+	sf::Vector3i& getCurrentTarget();
+	int getLevelFloor();
+	int getLevelWall();
 
 	int getIdFindItem();
+	void setIdFindItem(int number);
 	int getIdFindUnlifeObject();
 	int getIdFindEntity();
 
@@ -43,6 +49,9 @@ struct Entity
 	idEntityMode currenMode;
 	Item *itemsEntity;
 	int idSelectItem;
+	Item& getCurrentItem();
+	Item &getEmtySlot();
+	void fillEmptySlot(Item &item);
 
 	bool wasCollision;
 	bool enemyUp;
@@ -53,13 +62,14 @@ struct Entity
 	int emptySlot;
 
 
-	bool isMoveItem;
-	float dMoveItemX, dMoveItemY;
+
 
 	//////////////////////////////////////////////////
 	// Индикаторы
 
 	bool isDeath = false;
+	bool getStateDeath();
+
 	entityHealth health;
 	entityStamina stamina;
 	entityMana mana;
@@ -100,7 +110,6 @@ struct Entity
 	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
 
 	//
-	sf::Vector2i isEmptyFloor(Field &field, int currentLevel);// Есть вблизи пустые клетки
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
 	bool isExitFromBorder(float x, float y);
 	//Вспомагательные функции
@@ -114,6 +123,8 @@ struct Entity
 	float getAbsolutXPos();
 	float getAbsolutYPos();
 	sf::Vector2f getAbsolutPosition();
+
+	void setPosition(sf::Vector2f pos);
 
 	void choiceDirectionLook(int &xShift, int &yShift);
 	//////////////////////////////////////////////////////////////////////////////////////////vv
@@ -167,9 +178,7 @@ struct Entity
 	//{                          Entity                                         }//
 	float rotation = -1.f;
 
-	Item *emptyItem;
-	// TODO : DO PRIVATE
-	TypeEnemy *type;
+
 
 	const TypeEnemy* getType();
 	const sizeSprite& getSize();
@@ -227,6 +236,11 @@ struct Entity
 
 	void playSoundChoiseItem();
 
-	Item& getCurrentItem();
+	private:
+		Item *emptyItem;
+		
+public:
+// TODO : DO PRIVATE
+		TypeEnemy *type;
 };
 

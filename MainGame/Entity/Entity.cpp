@@ -44,7 +44,7 @@ void Entity::playAtackSound(Item &currentItem)
 {
 	Vector2f posPerson = { getXPos(), getYPos() };
 	int idSound;
-	if (currentItem.typeItem->features.isCutting) {
+	if (currentItem.getAttributeCutting()) {
 		idSound = idSoundPaths::metalPunchBody1Sound;
 		::playSound(idSound , *soundBase , soundEntity , posPerson);
 	}
@@ -127,6 +127,11 @@ sf::Vector2f Entity::getAbsolutPosition()
 	return sf::Vector2f(getAbsolutXPos(), getAbsolutYPos());
 }
 
+void Entity::setPosition(Vector2f pos)
+{
+	return spriteEntity->setPosition(pos);
+}
+
 void Entity::choiceDirectionLook(int& xShift, int& yShift)
 {
 	switch (directions.directionLook) {
@@ -167,6 +172,16 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 	}
 }
 
+bool Entity::getStateGiveDamage()
+{
+	return giveDamage;
+}
+
+String Entity::getName()
+{
+	return type->name;
+}
+
 Item & Entity::getFindItem()
 {
 	return *founds.findItem;
@@ -197,9 +212,29 @@ Entity* Entity::getRefOnEmptyEntity()
 	return founds.emptyEnemy;
 }
 
+sf::Vector3i& Entity::getCurrentTarget()
+{
+	return founds.currentTarget;
+}
+
+int Entity::getLevelFloor()
+{
+	return currentLevelFloor;
+}
+
+int Entity::getLevelWall()
+{
+	return currentLevelFloor + 1;
+}
+
 int Entity::getIdFindItem()
 {
 	return founds.findItemFromList;
+}
+
+void Entity::setIdFindItem(int number)
+{
+	founds.findItemFromList = number;
 }
 
 int Entity::getIdFindUnlifeObject()
@@ -210,6 +245,16 @@ int Entity::getIdFindUnlifeObject()
 int Entity::getIdFindEntity()
 {
 	return founds.findEnemyFromList;
+}
+
+Item & Entity::getEmtySlot()
+{
+	return itemsEntity[emptySlot];
+}
+
+void Entity::fillEmptySlot(Item& item)
+{
+	itemsEntity[emptySlot] = item;
 }
 
 const TypeEnemy* Entity::getType()
@@ -262,7 +307,7 @@ bool Entity::isInUseField(Vector2f pos, bool under)
 		&& (absolutePosition.y - (radiusUse + 1) <= posBlock.y);
 
 	bool checkUnderPerson = (posBlock.x == absolutePosition.x)
-		&& (posBlock.y == absolutePosition.y);//((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);
+		&& (posBlock.y == absolutePosition.y);
 
 	if (checkX && checkY) {
 		{
@@ -276,7 +321,6 @@ bool Entity::isInUseField(Vector2f pos, bool under)
 
 bool Entity::isExitFromBorder(int x, int y)
 {
-
 	if (((x < WIDTH_MAP) && (x > 0))
 			&& (y < (LONG_MAP - 1) && (y > 0))) {
 		return false;
@@ -286,87 +330,39 @@ bool Entity::isExitFromBorder(int x, int y)
 
 bool Entity::isExitFromBorder(float x , float y)
 {
-
 	if ((x < (SIZE_BLOCK * WIDTH_MAP)) && (x > 0)
 		&& (y < (SIZE_BLOCK * (LONG_MAP - 1)) && (y > 0))) {
 		return false;
 	}
 	return true;
 }
-
-Vector2i  Entity::isEmptyFloor(Field &field, int Level)
-{
-	Vector2i posOnMap = getMapPosition();
-	int x = posOnMap.x;
-	int y = posOnMap.y;
-
-	wchar_t *charBlocks = field.charBlocks;
-	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
-
-	for (int i = -1; i < 2; i++) {
-		for (int j = -1; j < 2; j++) {
-			// Если над лестницей стена не переходим
-			if ((i == 0) && (j == 0)) {// Если спускаемся блок лестницы не проверяем
-				if (!isExitFromBorder(x, y) && (Level != currentLevelFloor)) {
-					if (map[Level][y][x] != charBlocks[idBlocks::air]) {
-						return{ -1, -1 };
-					}
-				}
-			} 
-			else {
-				if (isExitFromBorder(x + i, y + j) == false) {
-					// Проверка стены
-					bool goUp = Level != currentLevelFloor;
-					if (goUp) {
-						bool checkFloor = (map[Level][y + j][x + i] == charBlocks[idBlocks::air]);
-						bool checkWall = (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air])
-													|| (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]);
-						if (checkFloor && checkWall)
-						{
-							return{ x + i, y + j };
-						}
-					}
-					else {// Проверяем пол
-						if ((map[Level][y + j][x + i] == charBlocks[idBlocks::air])
-								|| (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]))
-						{
-							return{ x + i, y + j };
-						}
-					}
-				}
-			}
-		}
-
-	}
-	return{ -1, -1 };
-}
-
 ////////////////////////////////////////////////////////////////////
 void Entity::throwItem(Field &field, vector<Item> &items)
 {
-	Item& currentItem = itemsEntity[idSelectItem];
-	if (currentItem.typeItem != founds.emptyItem->typeItem) {
-		// Определяем позицию
+	Item& currentItem = getCurrentItem();
+	if (currentItem.getType() != getRefOnEmptyItem()->getType()) {
 
+		Item addItem = getCurrentItem();
 
-		Item* addItem = new Item;
-		*addItem = itemsEntity[idSelectItem];
-		// Задаём уровень расположения
 		Vector3i posItem = { getXPosOnMap(),
 												 getYPosOnMap(),
 												 currentLevelFloor + 1 };
-		addItem->setPosition(posItem);
+		addItem.setPosition(posItem);
 
-		sizeSprite &size = type->featuresSprite.size;
-		Vector2f posHero = { getXPos() + size.width / 2, getYPos() + size.height / 2 };// Начало отсчёта не в центре спрайта
-		addItem->mainSprite->setPosition(posHero);
-		addItem->mainSprite->scale(scaleOutItems);
-		items.push_back(*addItem);
-		delete addItem;
+		Vector2f posHero = getPosition();
+		posHero.x += getWidth() / 2;
+		posHero.y += getHeight() / 2;// Начало отсчёта не в центре спрайта
+
+		posItem.x = posHero.x;
+		posItem.y = posHero.y;
+
+		addItem.setPosition(posItem);
+		addItem.setScale(scaleOutItems);
+		items.push_back(addItem);
 
 		playObjectDropSound(posHero);
 
-		itemsEntity[idSelectItem] = *founds.emptyItem;
+		getCurrentItem() = *getRefOnEmptyItem();
 	}
 }
 
@@ -439,10 +435,14 @@ bool Entity::isInListObjects(vector<int> &listObjects, int id) {
 void Entity::renderCurrentItem(sf::RenderWindow& window)
 {
 
-	Item& currentItem = itemsEntity[idSelectItem];
-	bool isEmptyItem = currentItem.typeItem->features.name == founds.emptyItem->typeItem->features.name;
+	Item& currentItem = getCurrentItem();
+
+	string s = string(currentItem.getName());
+	String nameCurrentItem = currentItem.getName();
+	String nameEmptyItem = getRefOnEmptyItem()->getName();
+	bool isEmptyItem = (nameCurrentItem == nameEmptyItem);
 	if (!isEmptyItem) {
-		Sprite& spriteItem = *currentItem.mainSprite;
+		Sprite& spriteItem = currentItem.getSprite();
 
 
 		bool condition = directions.directionLook < DOWN_LEFT;
@@ -473,6 +473,11 @@ void Entity::renderCurrentItem(sf::RenderWindow& window)
 		spriteItem.setScale(normalSize);
 		spriteItem.setOrigin(SIZE_ITEM / 2, SIZE_ITEM / 2);
 	}
+}
+
+bool Entity::getStateDeath()
+{
+	return isDeath;
 }
 
 void Entity::choceShiftUseItem(int& shiftX , int& shiftY , bool prickBlow)
