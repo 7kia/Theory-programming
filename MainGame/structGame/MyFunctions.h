@@ -20,4 +20,5 @@ size_t computeMiddleString(sf::Text &text);
 size_t computeSizeString(sf::Text &text);
 void defineOriginInMiddleString(sf::Text &text);
 
+int inMapCoordinate(float number);
 sf::Vector2i inMapCoordinate(sf::Vector2f pos);

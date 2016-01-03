@@ -111,6 +111,10 @@ struct Entity
 	int getYPosOnMap();
 	sf::Vector2i getMapPosition();
 
+	float getAbsolutXPos();
+	float getAbsolutYPos();
+	sf::Vector2f getAbsolutPosition();
+
 	void choiceDirectionLook(int &xShift, int &yShift);
 	//////////////////////////////////////////////////////////////////////////////////////////vv
 	// ITEMS
@@ -169,6 +173,8 @@ struct Entity
 
 	const TypeEnemy* getType();
 	const sizeSprite& getSize();
+	int getWidth();
+	int getHeight();
 	int getRadiuseUse();
 
 	void init(TypeEnemy &typesEnemy , world &world , sf::Vector3i posEntity);

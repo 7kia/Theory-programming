@@ -112,6 +112,21 @@ sf::Vector2i Entity::getMapPosition()
 	return sf::Vector2i(getXPosOnMap() , getYPosOnMap());
 }
 
+float Entity::getAbsolutXPos()
+{
+	return getXPos() + (SIZE_BLOCK / 2);
+}
+
+float Entity::getAbsolutYPos()
+{
+	return getYPos() + (SIZE_BLOCK / 2);
+}
+
+sf::Vector2f Entity::getAbsolutPosition()
+{
+	return sf::Vector2f(getAbsolutXPos(), getAbsolutYPos());
+}
+
 void Entity::choiceDirectionLook(int& xShift, int& yShift)
 {
 	switch (directions.directionLook) {
@@ -207,6 +222,16 @@ const sizeSprite& Entity::getSize()
 	return getType()->featuresSprite.size;
 }
 
+int Entity::getWidth()
+{
+	return getSize().width;
+}
+
+int Entity::getHeight()
+{
+	return getSize().height;
+}
+
 int Entity::getRadiuseUse()
 {
 	return getType()->view.radiusUse;
@@ -225,19 +250,19 @@ bool Entity::isEmptySlot()
 
 bool Entity::isInUseField(Vector2f pos, bool under)
 {
+	// TODO : CurrentPosition
 	Vector2i posBlock = inMapCoordinate(pos);
 
-	sizeSprite size = getSize();
 	int radiusUse = getRadiuseUse();
+	Vector2i absolutePosition = inMapCoordinate(getAbsolutPosition());
+	bool checkX = ( (absolutePosition.x + radiusUse ) > posBlock.x)
+								&& (absolutePosition.x - (radiusUse + 1) <= posBlock.x);
 
-	bool checkX = ( (((getXPos() + size.width / 2) / SIZE_BLOCK) + radiusUse )> posBlock.x)
-								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= posBlock.x);
+	bool checkY = ((absolutePosition.y + radiusUse)> posBlock.y)
+		&& (absolutePosition.y - (radiusUse + 1) <= posBlock.y);
 
-	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + radiusUse > posBlock.y)
-								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= posBlock.y);
-
-	bool checkUnderPerson = posBlock.x == ((int(getXPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK)
-													&& posBlock.y == ((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);
+	bool checkUnderPerson = (posBlock.x == absolutePosition.x)
+		&& (posBlock.y == absolutePosition.y);//((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);
 
 	if (checkX && checkY) {
 		{
@@ -272,6 +297,8 @@ bool Entity::isExitFromBorder(float x , float y)
 Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 {
 	Vector2i posOnMap = getMapPosition();
+	int x = posOnMap.x;
+	int y = posOnMap.y;
 
 	wchar_t *charBlocks = field.charBlocks;
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
@@ -279,28 +306,31 @@ Vector2i  Entity::isEmptyFloor(Field &field, int Level)
 	for (int i = -1; i < 2; i++) {
 		for (int j = -1; j < 2; j++) {
 			// Если над лестницей стена не переходим
-			if (i == 0 && j == 0) {// Если спускаемся блок лестницы не проверяем
-				if (isExitFromBorder(posOnMap.x, posOnMap.y) == false && Level != currentLevelFloor) {
-					if (map[Level][posOnMap.y][posOnMap.x] != charBlocks[idBlocks::air]) {
+			if ((i == 0) && (j == 0)) {// Если спускаемся блок лестницы не проверяем
+				if (!isExitFromBorder(x, y) && (Level != currentLevelFloor)) {
+					if (map[Level][y][x] != charBlocks[idBlocks::air]) {
 						return{ -1, -1 };
 					}
 				}
-			} else {
-				if (isExitFromBorder(posOnMap.x + i, posOnMap.y + j) == false) {
+			} 
+			else {
+				if (isExitFromBorder(x + i, y + j) == false) {
 					// Проверка стены
-					if (Level != currentLevelFloor) {
-						// Проверяем пол и стену над ним
-						if (map[Level][posOnMap.y + j][posOnMap.x + i] != charBlocks[idBlocks::air]
-								&& (map[Level + 1][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::air]
-								|| map[Level + 1][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::woodLadder]))// ИСПРАВЬ
+					bool goUp = Level != currentLevelFloor;
+					if (goUp) {
+						bool checkFloor = (map[Level][y + j][x + i] == charBlocks[idBlocks::air]);
+						bool checkWall = (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::air])
+													|| (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]);
+						if (checkFloor && checkWall)
 						{
-							return{ posOnMap.x + i, posOnMap.y + j };
+							return{ x + i, y + j };
 						}
-					} else {// Проверяем пол
-						if (map[Level][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::air]
-								|| map[Level + 1][posOnMap.y + j][posOnMap.x + i] == charBlocks[idBlocks::woodLadder])// ИСПРАВЬ
+					}
+					else {// Проверяем пол
+						if ((map[Level][y + j][x + i] == charBlocks[idBlocks::air])
+								|| (map[Level + 1][y + j][x + i] == charBlocks[idBlocks::woodLadder]))
 						{
-							return{ posOnMap.x + i, posOnMap.y + j };
+							return{ x + i, y + j };
 						}
 					}
 				}

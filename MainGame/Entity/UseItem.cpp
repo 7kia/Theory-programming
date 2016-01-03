@@ -409,11 +409,21 @@ void Entity::actionMain(world &world, Vector2f pos)
 {
 	if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
 
-		Vector2i posBlock = { int(pos.x / SIZE_BLOCK) , int(pos.y / SIZE_BLOCK) };
+		Vector2i posBlock = inMapCoordinate(pos);
 
 		Field &field = world.field;
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
-		if (isInListBlocks(listDestroy.ladder , field.dataMap[currentLevelFloor + 1][posBlock.y][posBlock.x])) {
+
+		wchar_t *charBlocks = field.charBlocks;
+		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+		//int x = posOnMap.x;
+		//int y = posOnMap.y;
+
+		bool checkOverLadder = (map[currentLevelFloor + 2][posBlock.y][posBlock.x] == charBlocks[idBlocks::air])
+									|| (map[currentLevelFloor + 2][posBlock.y][posBlock.x] == charBlocks[idBlocks::woodLadder]);
+
+		if (isInListBlocks(listDestroy.ladder , field.dataMap[currentLevelFloor + 1][posBlock.y][posBlock.x])
+				&& checkOverLadder) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 			Vector2f posCurrent = { float(posBlock.x * SIZE_BLOCK + posOrigin.x),
@@ -439,12 +449,18 @@ void Entity::actionMain(world &world, Vector2f pos)
 void Entity::actionAlternate(world &world, Vector2f pos)
 {
 	if (currentLevelFloor >= 1) {
-		Vector2i posBlock = { int(pos.x / SIZE_BLOCK), int(pos.y / SIZE_BLOCK) };
 
-
+		Vector2i posBlock = inMapCoordinate(pos);
 		Field &field = world.field;
+
+		wchar_t *charBlocks = field.charBlocks;
+		wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
+
+		bool checkUnderLadder = (map[currentLevelFloor + 1][posBlock.y][posBlock.x] == charBlocks[idBlocks::air]);
+
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
-		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor][posBlock.y][posBlock.x])) {
+		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor][posBlock.y][posBlock.x])
+				&& checkUnderLadder) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
 

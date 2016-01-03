@@ -60,7 +60,12 @@ void defineOriginInMiddleString(Text& text)
 	text.setOrigin(origin);
 }
 
+int inMapCoordinate(float number)
+{
+	return int(number / SIZE_BLOCK);
+}
+
 Vector2i inMapCoordinate(Vector2f pos)
 {
-	return{ int(pos.x / SIZE_BLOCK), int(pos.y / SIZE_BLOCK) };
+	return{ inMapCoordinate(pos.x), inMapCoordinate(pos.y) };
 }
