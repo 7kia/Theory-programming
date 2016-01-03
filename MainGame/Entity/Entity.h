@@ -164,8 +164,12 @@ struct Entity
 	float rotation = -1.f;
 
 	Item *emptyItem;
-
+	// TODO : DO PRIVATE
 	TypeEnemy *type;
+
+	const TypeEnemy* getType();
+	const sizeSprite& getSize();
+	int getRadiuseUse();
 
 	void init(TypeEnemy &typesEnemy , world &world , sf::Vector3i posEntity);
 	void setSpriteEntity();

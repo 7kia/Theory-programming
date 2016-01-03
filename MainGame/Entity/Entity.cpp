@@ -197,6 +197,21 @@ int Entity::getIdFindEntity()
 	return founds.findEnemyFromList;
 }
 
+const TypeEnemy* Entity::getType()
+{
+	return type;
+}
+
+const sizeSprite& Entity::getSize()
+{
+	return getType()->featuresSprite.size;
+}
+
+int Entity::getRadiuseUse()
+{
+	return getType()->view.radiusUse;
+}
+
 bool Entity::isEmptySlot()
 {
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
@@ -210,15 +225,16 @@ bool Entity::isEmptySlot()
 
 bool Entity::isInUseField(Vector2f pos, bool under)
 {
-	Vector2i posBlock = { int(pos.x / SIZE_BLOCK), int(pos.y / SIZE_BLOCK) };
+	Vector2i posBlock = inMapCoordinate(pos);
 
-	sizeSprite &size = type->featuresSprite.size;
-	viewEnemy &view = type->view;
-	bool checkX = (((getXPos() + size.width / 2) / SIZE_BLOCK) + view.radiusUse > posBlock.x)
-								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= posBlock.x);
+	sizeSprite size = getSize();
+	int radiusUse = getRadiuseUse();
 
-	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + view.radiusUse > posBlock.y)
-								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (view.radiusUse + 1) <= posBlock.y);
+	bool checkX = ( (((getXPos() + size.width / 2) / SIZE_BLOCK) + radiusUse )> posBlock.x)
+								&& (((getXPos() + size.width / 2) / SIZE_BLOCK) - (radiusUse + 1) <= posBlock.x);
+
+	bool checkY = (((getYPos() + size.height / 2) / SIZE_BLOCK) + radiusUse > posBlock.y)
+								&& (((getYPos() + size.height / 2) / SIZE_BLOCK) - (radiusUse + 1) <= posBlock.y);
 
 	bool checkUnderPerson = posBlock.x == ((int(getXPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK)
 													&& posBlock.y == ((int(getYPos()) + SIZE_BLOCK / 2) / SIZE_BLOCK);

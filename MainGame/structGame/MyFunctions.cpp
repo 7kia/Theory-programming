@@ -59,3 +59,8 @@ void defineOriginInMiddleString(Text& text)
 	Vector2f origin = { float(widthText) / 4 , float(text.getCharacterSize()) };
 	text.setOrigin(origin);
 }
+
+Vector2i inMapCoordinate(Vector2f pos)
+{
+	return{ int(pos.x / SIZE_BLOCK), int(pos.y / SIZE_BLOCK) };
+}
