@@ -28,6 +28,7 @@ public:
 
 	foundObjects founds;
 	Item& getFindItem();
+	void setFindItem(Item & item);
 	UnlifeObject& getFindUnlifeObject();
 	Entity& getFindEntity();
 

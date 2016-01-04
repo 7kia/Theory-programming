@@ -105,7 +105,7 @@ void Game::inforAboutItem(float x , float y)
 				String name = items[i].getName();
 				if (name != "") {
 					mainPerson.setIdFindItem(i);
-					mainPerson.getFindItem() = items[i];
+					mainPerson.setFindItem(items[i]);
 					infoItem.setString("Item : " + name);
 				}
 			}

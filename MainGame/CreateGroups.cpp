@@ -62,7 +62,7 @@ TypeItem* world::getTypesItem()
 	return typesObjects.typesItem;
 }
 
-const TypeItem world::getTypeItem(int id)
+TypeItem& const world::getTypeItem(int id)
 {
 	return typesObjects.typesItem[id];
 }

@@ -187,6 +187,11 @@ Item & Entity::getFindItem()
 	return *founds.findItem;
 }
 
+void Entity::setFindItem(Item & item)
+{
+	founds.findItem = &item;
+}
+
 UnlifeObject & Entity::getFindUnlifeObject()
 {
 	return *founds.findObject;

@@ -150,16 +150,21 @@ void Entity::takeRedefineItem(world & world)
 
 void Entity::takeItem(world &world, Vector2f pos)
 {
-	String nameFindItem = getFindItem().getName();
-	String nameEmptyItem = getRefOnEmptyItem()->getName();
+	int idFindItem = getIdFindItem();
+
+	if (idFindItem > RESET_COLLISION_VALUE) {
+
+		String nameFindItem = getFindItem().getName();
+		String nameEmptyItem = getRefOnEmptyItem()->getName();
 
 
-	if (nameFindItem != nameEmptyItem) {
-		if (isInUseField(pos, true)) {
-			
-			if (isEmptySlot() && getIdFindItem() > RESET_COLLISION_VALUE) {
-				searchItem(world.items , pos);
-				playSound(idSoundPaths::luggage1Sound , *soundBase , soundEntity , getPosition());
+		if (nameFindItem != nameEmptyItem) {
+			if (isInUseField(pos , true)) {
+
+				if (isEmptySlot() && (idFindItem > RESET_COLLISION_VALUE)) {
+					searchItem(world.items , pos);
+					playSound(idSoundPaths::luggage1Sound , *soundBase , soundEntity , getPosition());
+				}
 			}
 		}
 	}
@@ -168,21 +173,22 @@ void Entity::takeItem(world &world, Vector2f pos)
 void Entity::searchItem(vector<Item> &items, Vector2f pos)
 {
 	int idFindItem = getIdFindItem();
-	Item &findItem = items[idFindItem];
+		Item &findItem = items[idFindItem];
 
-	FloatRect objectItem = findItem.getGlobalBounds();
+		FloatRect objectItem = findItem.getGlobalBounds();
 
-	bool onOneLevel = (findItem.getLevelOnMap() == getLevelWall());
-	bool itemIsFind = objectItem.contains(pos) && onOneLevel;
-	if (itemIsFind) {
+		bool onOneLevel = (findItem.getLevelOnMap() == getLevelWall());
+		bool itemIsFind = objectItem.contains(pos) && onOneLevel;
+		if (itemIsFind) {
 
-		transferInInventory(items);
+			transferInInventory(items);
 
-		assert(items.size() != 0);
-		assert(idFindItem > RESET_COLLISION_VALUE);
+			assert(items.size() != 0);
+			assert(idFindItem > RESET_COLLISION_VALUE);
 
-		items.erase(items.begin() + idFindItem);
-	}
+			items.erase(items.begin() + idFindItem);
+		}
+
 }
 
 void Entity::transferInInventory(vector<Item> &items)
@@ -194,13 +200,16 @@ void Entity::transferInInventory(vector<Item> &items)
 	int idTypeItem;
 	bool isTypesEqual;
 	Item &item = itemsEntity[0];
+	bool slotIsEmpty;
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 
 		item = itemsEntity[i];
 		idTypeItem = item.getIdType();
 		isTypesEqual = (idTypeItem == idTypeFindItem);
+		slotIsEmpty = (idTypeItem == idItem::emptyItem);
 
-		if (isTypesEqual && ((item.getAmount() + 1) <= item.getMaxAmount())) {
+		if (isTypesEqual && !slotIsEmpty && 
+				((item.getAmount() + 1) <= item.getMaxAmount())) {
 			item.increaseAmount(1);
 			isFindItem = true;
 			break;

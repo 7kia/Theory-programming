@@ -44,7 +44,7 @@ public:
 	void playSound(float time, float start, const int idSound);
 	void resetTimeAnimation(float &time, float &reset);
 
-	void setType(TypeItem type);
+	void setType(TypeItem &type);
 	void setPosition(sf::Vector3i pos);
 
 	std::vector<int>* getListDestroy();
@@ -52,12 +52,13 @@ public:
 
 	float getXPos();
 	float getYPos();
-	// TODO : do private
-	TypeItem *typeItem;
 
 private:
 	sf::Sprite *mainSprite;
 	sf::Sprite *spriteForUse;
+
+	// TODO : do private
+	TypeItem *typeItem;
 
 };
 

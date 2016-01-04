@@ -163,7 +163,7 @@ float Item::getYPos()
 }
 ////////////////////////////////////////////////////////////////////
 
-void Item::setType(TypeItem type)
+void Item::setType(TypeItem &type)
 {
 	typeItem = &type;
 
