@@ -207,6 +207,11 @@ void Item::setPosition(Vector3i pos)
 	mainSprite->setPosition(numberX, numberY);
 }
 
+void Item::setPositionSprite(sf::Vector2f pos)
+{
+	mainSprite->setPosition(pos);
+}
+
 std::vector<int>* Item::getListDestroy()
 {
 	return typeItem->destroy;

@@ -46,6 +46,7 @@ public:
 
 	void setType(TypeItem &type);
 	void setPosition(sf::Vector3i pos);
+	void setPositionSprite(sf::Vector2f pos);
 
 	std::vector<int>* getListDestroy();
 

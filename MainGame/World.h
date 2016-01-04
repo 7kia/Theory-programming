@@ -66,7 +66,7 @@ struct world
 
 	typesObjectsInWorld typesObjects;
 	TypeItem* getTypesItem();
-	TypeItem & const getTypeItem(int id);
+	TypeItem & getTypeItem(int id);
 
 	listDestroyObjectsAndBlocks listDestroy;
 	Field field;

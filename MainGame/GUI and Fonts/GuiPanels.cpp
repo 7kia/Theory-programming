@@ -74,24 +74,27 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	String nameCurrentItem = mainPerson.itemsEntity[0].getName();
+	Item& currentItem = mainPerson.itemsEntity[0];
+	String nameCurrentItem = currentItem.getName();
 	String nameEmptyItem = mainPerson.getRefOnEmptyItem()->getName();
 
 	int startPosition = widthPanelQuickAccess / 2;
+	Vector2f pos;
+	int shift;
 	for (int i = 0; i < mainPerson.type->amountSlots; i++) {
 
-		nameCurrentItem = mainPerson.itemsEntity[i].getName();
+		currentItem = mainPerson.itemsEntity[i];
+		nameCurrentItem = currentItem.getName();
 		if (nameCurrentItem != nameEmptyItem) {
 
-			Item& currentItem = mainPerson.itemsEntity[i];
+			shift = shiftSelect * i;
 
-			int shift = shiftSelect * i;
-			Vector2f pos;
-			pos = { centerWindow.x - startPosition + shift + SHIFT_START_ITEM_PANEL,
-				centerWindow.y + sizeWindow.y / 2 - heightPanelQuickAccess / 2 };// ÈÑÏÐÀÂÜ
+			pos = centerWindow;
+			pos.x += -startPosition + shift + SHIFT_START_ITEM_PANEL;
+			pos.y += sizeWindow.y / 2 - heightPanelQuickAccess / 2;
+
 		
-			currentItem.setPosition(Vector3i(pos.x, pos.y, currentItem.getLevelOnMap()));
-
+			currentItem.setPositionSprite(pos);
 
 			if (mainPerson.idSelectItem == i) {
 				itemFeatures.renderFeatures(mainPerson, features, textGame, bars);

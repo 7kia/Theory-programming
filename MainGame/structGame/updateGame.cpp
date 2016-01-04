@@ -9,9 +9,9 @@ void Game::update(const float &deltaTime)
 	processEvents(deltaTime);
 
 	Entity &mainPerson = world.Enemys[0];
-	if (mainPerson.isDeath == false
-			&& stateGame != pauseState
-			&& stateGame != endGameState) {
+	if ((mainPerson.isDeath == false)
+			&& (stateGame != pauseState)
+			&& (stateGame != endGameState)) {
 		updatePlayer(deltaTime);
 		updateEntity(deltaTime);
 		updateUnlifeObjects(deltaTime);
