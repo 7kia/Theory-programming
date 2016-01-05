@@ -24,6 +24,7 @@ public:
 	bool giveDamage;
 	bool getStateGiveDamage();
 	String getName();
+	FloatRect getGlobalBounds();
 	int currentLevelFloor;
 
 	foundObjects founds;
@@ -108,6 +109,7 @@ public:
 	// EntityCollision.cpp
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void gravitateToGround(Field &field);
+	void interactionWitnShoots(std::vector<shoot>& unlifeObjects , const float deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, const float deltaTime);
 	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
 

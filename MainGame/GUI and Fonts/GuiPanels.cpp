@@ -81,7 +81,6 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 	int startPosition = widthPanelQuickAccess / 2;
 	Vector2f pos;
 	int shift;
-	assert(mainPerson.itemsEntity[0].getType() != mainPerson.founds.emptyItem->getType());
 
 	for (int i = 0; i < mainPerson.type->amountSlots; i++) {
 
@@ -109,10 +108,8 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 			window.draw(currentItem->getSprite());
 			renderAmountItem(currentItem->amount, pos, textGame, features);
 		}
-		assert(mainPerson.itemsEntity[0].getType() != mainPerson.founds.emptyItem->getType());
 
 	}
-	assert(mainPerson.itemsEntity[0].getType() != mainPerson.founds.emptyItem->getType());
 
 }
 

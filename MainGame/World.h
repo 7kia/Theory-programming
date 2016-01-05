@@ -54,6 +54,7 @@ struct world
 	std::vector<Item> items;
 	void addItem(Item item);
 
+	std::vector<shoot> shoots;
 	std::vector<UnlifeObject> unlifeObjects;
 	std::vector<Entity> Enemys;
 

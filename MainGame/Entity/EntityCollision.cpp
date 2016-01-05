@@ -193,3 +193,28 @@ void Entity::gravitateToGround(Field &field)
 	}
 }
 
+void Entity::interactionWitnShoots(vector<shoot> &shoots , const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
+{
+
+	int levelEntity = getLevelWall();
+	int levelShoot;
+	FloatRect entityBound = getGlobalBounds();
+	FloatRect shootBound;
+
+
+	for (int i = 0; i < shoots.size(); i++) {
+		levelShoot = shoots[i].getLevel();
+		shootBound = shoots[i].getGlobalBounds();
+
+		if(entityBound.intersects(shootBound)
+			 && (levelEntity == levelShoot))
+		{
+			// TODO : replace takeDamage
+			//for (int i = 0; i < amountTypeDamage; i++)
+			//{ 
+					health.currentHealth -= shoots[i].getDamage(crushingDamage);
+			//}
+		}
+	}
+
+}

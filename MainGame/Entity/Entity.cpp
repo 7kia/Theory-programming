@@ -182,6 +182,11 @@ String Entity::getName()
 	return type->name;
 }
 
+FloatRect Entity::getGlobalBounds()
+{
+	return spriteEntity->getGlobalBounds();
+}
+
 Item & Entity::getFindItem()
 {
 	return *founds.findItem;

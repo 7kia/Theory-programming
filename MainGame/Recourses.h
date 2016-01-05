@@ -45,6 +45,11 @@ typedef enum {
 	hitSandSound,
 	hitStoneSound,
 
+	shootPistolSound ,
+	shootRifleSound ,
+	shooyHeavyRifleSound ,
+	reloadRifleSound,
+
 	waveEndSound,
 	levelUpSound,
 	itemChoiseIdSound,
@@ -106,6 +111,11 @@ const std::string soundPaths[idSoundPaths::amountSoundSound]
 	pathToSounds + "breaking\\hit_ground_1.ogg",
 	pathToSounds + "breaking\\hit_sand_1.ogg",
 	pathToSounds + "breaking\\hit_stone_1.ogg",
+
+	pathToSounds + "breaking\\pistol_shot.ogg",
+	pathToSounds + "breaking\\rifle_shot.ogg",
+	pathToSounds + "breaking\\heavy_rifle_shot.ogg",
+	pathToSounds + "breaking\\rifle_reload.ogg",
 
 	pathToSounds + "GUI\\wave_end.ogg",
 	pathToSounds + "GUI\\level_up.ogg",

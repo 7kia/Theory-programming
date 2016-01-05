@@ -14,26 +14,24 @@ void Game::processEvents(const float deltaTime)
 		Vector2f pos = window.mapPixelToCoords(mousePos);
 
 		if (!mainPerson->isDeath) {
-			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 			informationAboutSelect(pos.x, pos.y);
-			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 			processArrows();
-			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 			processPanelQuickAccess();
-			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 			mainPerson->computeAngle(window);
-			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 		}
 		processOtherAction(event, pos);
-		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 	}
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 }
 
@@ -106,10 +104,8 @@ void Game::processPersonAction(Vector2f pos)
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[takeItem])) {
-		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 		mainPerson->takeItem(world, pos);
-		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 	}
 	else if (Keyboard::isKeyPressed(keys[run])) {
@@ -121,7 +117,6 @@ void Game::processPersonAction(Vector2f pos)
 void Game::processOtherAction(Event &event, Vector2f pos)
 {
 	Entity *mainPerson = world.mainPerson;
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 	if (!mainPerson->isDeath) {
 		switch (event.type) {
@@ -138,7 +133,6 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 			break;
 		}
 	}
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 	switch (event.type) {
 	case Event::Resized:
@@ -150,7 +144,6 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 	default:
 		break;
 	}
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 }
 

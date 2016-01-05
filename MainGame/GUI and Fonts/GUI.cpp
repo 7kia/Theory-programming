@@ -134,7 +134,6 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 
 	panels.panelQuickAccess.renderItems(mainPerson, featuresWindow,
 																			textGame, mainFeatures, itemFeatures);
-	assert(mainPerson.itemsEntity[0].getType() != mainPerson.founds.emptyItem->getType());
 
 	setHealthBars(featuresWindow , mainPerson ,
 								enemys , textGame);

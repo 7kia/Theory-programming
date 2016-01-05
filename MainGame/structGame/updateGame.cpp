@@ -8,18 +8,18 @@ void Game::update(const float &deltaTime)
 {
 	Entity *mainPerson = world.mainPerson;
 
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	processEvents(deltaTime);
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	if ((mainPerson->isDeath == false)
 			&& (stateGame != pauseState)
 			&& (stateGame != endGameState)) {
-		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+	
 
 		updatePlayer(deltaTime);
-		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+	
 
 		updateEntity(deltaTime);
 		updateUnlifeObjects(deltaTime);
@@ -31,28 +31,28 @@ void Game::update(const float &deltaTime)
 void Game::updatePlayer(const float &deltaTime)
 {
 	Entity *mainPerson = world.mainPerson;
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	mainPerson->update(deltaTime);
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	if(mainPerson->currenMode == idEntityMode::atack || mainPerson->getStateGiveDamage())
 	{
 		mainPerson->updateAtack(world, deltaTime);
 	}
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 	mainPerson->interactionWithEntity(&world.Enemys , 0 , deltaTime);
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	mainPerson->interactionWithMap(world.field, world.listDestroy, deltaTime);
 	mainPerson->getCoordinateForView(mainPerson->getPosition(), world.view);
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	mainPerson->updateView(world.view, world.listener, window);
 	window.setView(world.view);
-	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 
 	//printf("Angle %f \n", mainPerson.rotation);
 }
@@ -102,7 +102,7 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 		else if(idTypeObject != destroyBlockEffect){
 			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();
 			if (stateSound == sf::SoundSource::Status::Stopped) {
-				assert(objects.size() != 0);
+				(objects.size() != 0);
 				objects.erase(objects.begin() + i);
 			}
 		}

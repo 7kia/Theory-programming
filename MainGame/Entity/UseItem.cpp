@@ -164,7 +164,7 @@ void Entity::takeItem(world &world, Vector2f pos)
 				if (isEmptySlot() && (idFindItem > RESET_COLLISION_VALUE)) {
 					searchItem(world.items , pos);
 
-					assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+				
 
 					playSound(idSoundPaths::luggage1Sound , *soundBase , soundEntity , getPosition());
 				}
@@ -183,10 +183,10 @@ void Entity::searchItem(vector<Item> &items, Vector2f pos)
 		bool onOneLevel = (findItem.getLevelOnMap() == getLevelWall());
 		bool itemIsFind = objectItem.contains(pos) && onOneLevel;
 		if (itemIsFind) {
-			assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+		
 
 			transferInInventory(items);
-			assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+		
 
 			assert(items.size() != 0);
 			assert(idFindItem > RESET_COLLISION_VALUE);
@@ -207,7 +207,7 @@ void Entity::transferInInventory(vector<Item> &items)
 	Item *item = &itemsEntity[0];
 	bool slotIsEmpty;
 
-	assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+
 
 	for (int i = 0; i < AMOUNT_ACTIVE_SLOTS; i++) {
 
@@ -224,19 +224,19 @@ void Entity::transferInInventory(vector<Item> &items)
 		}
 
 	}
-	assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+
 
 	if (!isFindItem) {
-		assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+	
 
 		fillEmptySlot(items[idFindItem]);
-		assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+	
 
 		getEmtySlot().setScale(normalSize);
-		assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+	
 
 	}
-	assert(itemsEntity[0].getType() != founds.emptyItem->getType());
+
 
 }
 
