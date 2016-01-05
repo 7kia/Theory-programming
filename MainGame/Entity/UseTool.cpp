@@ -61,8 +61,8 @@ void Entity::breakFindObject(Item &currentItem)
 
 void Entity::breakNearCollision(world &world)
 {
-	Item &currentItem = getCurrentItem();
-	vector<int> *listBreaking = currentItem.getListDestroy();
+	Item *currentItem = &getCurrentItem();
+	vector<int> *listBreaking = currentItem->getListDestroy();
 	Field &field = world.field;
 
 	Vector3i &posUse = getCurrentTarget();
@@ -80,7 +80,7 @@ void Entity::breakNearCollision(world &world)
 			resetAtack();
 		}
 		else if(isObject){
-			useTool(posUse, world, currentItem);
+			useTool(posUse, world, *currentItem);
 		}
 
 	}

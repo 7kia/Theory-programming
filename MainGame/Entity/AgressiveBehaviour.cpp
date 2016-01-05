@@ -356,7 +356,7 @@ void Entity::buildLadder(world &world)
 	int y = getYPosOnMap();
 	int level = currentLevelFloor + 1;
 
-	Item &currentItem = getCurrentItem();
+	Item *currentItem = &getCurrentItem();
 
 	Field &field = world.field;
 	wchar_t(*map)[LONG_MAP][WIDTH_MAP] = field.dataMap;
@@ -365,7 +365,7 @@ void Entity::buildLadder(world &world)
 		for (int j = -1; j <= 1; j++) {
 			if (map[level][y + j][x + i] == air) {
 				Vector3i pos = { x + i, y + j, level };
-				useBlock(pos , world , currentItem);
+				useBlock(pos , world , *currentItem);
 			}
 		}
 	}

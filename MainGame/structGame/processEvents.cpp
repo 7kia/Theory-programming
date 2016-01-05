@@ -4,25 +4,36 @@ using namespace hotKeys;
 
 void Game::processEvents(const float deltaTime)
 {
+	Entity *mainPerson = world.mainPerson;
+
+
 	Event event;
 	while (window.pollEvent(event)) {
 
-		Entity &mainPerson = world.Enemys[0];
 		Vector2i mousePos = Mouse::getPosition(window);
 		Vector2f pos = window.mapPixelToCoords(mousePos);
 
-		if (mainPerson.isDeath == false) {
+		if (!mainPerson->isDeath) {
+			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 			informationAboutSelect(pos.x, pos.y);
+			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 			processArrows();
-			processPanelQuickAccess();
+			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
-			mainPerson.computeAngle(window);
+			processPanelQuickAccess();
+			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
+			mainPerson->computeAngle(window);
+			assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 		}
 		processOtherAction(event, pos);
+		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 	}
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 }
 
@@ -54,6 +65,7 @@ void Game::processArrows()
 
 void Game::processInterface()
 {
+
 	if (Keyboard::isKeyPressed(keys[pauseGame])) {
 		if (stateGame == gameState) {
 			stateGame = pauseState;
@@ -78,48 +90,55 @@ void Game::processInterface()
 
 void Game::processPersonAction(Vector2f pos)
 {
-	Entity &mainPerson = world.Enemys[0];
+	Entity *mainPerson = world.mainPerson;
 
 	if (Keyboard::isKeyPressed(keys[actionAlternate])) {
-		if (mainPerson.isInUseField(pos, true)) {
-			mainPerson.actionAlternate(world, pos);
+		if (mainPerson->isInUseField(pos, true)) {
+			mainPerson->actionAlternate(world, pos);
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[throwItem])) {
-		mainPerson.throwItem(world.field, world.items);
+		mainPerson->throwItem(world.field, world.items);
 	}
 	else if (Keyboard::isKeyPressed(keys[actionMain])) {
-		if (mainPerson.isInUseField(pos, true)) {
-			mainPerson.actionMain(world, pos);
+		if (mainPerson->isInUseField(pos, true)) {
+			mainPerson->actionMain(world, pos);
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[takeItem])) {
-		mainPerson.takeItem(world, pos);
+		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
+		mainPerson->takeItem(world, pos);
+		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 	}
 	else if (Keyboard::isKeyPressed(keys[run])) {
-		mainPerson.run();
+		mainPerson->run();
 	}
+
 }
 
 void Game::processOtherAction(Event &event, Vector2f pos)
 {
-	Entity &mainPerson = world.Enemys[0];
+	Entity *mainPerson = world.mainPerson;
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
-	if (!mainPerson.isDeath) {
+	if (!mainPerson->isDeath) {
 		switch (event.type) {
 		case Event::KeyPressed:
 			processInterface();
 			processPersonAction(pos);
 			break;
 		case Event::MouseButtonPressed:
-			if (mainPerson.currenMode != idEntityMode::atack) {
-				mainPerson.useItem(world , event , pos);
+			if (mainPerson->currenMode != idEntityMode::atack) {
+				mainPerson->useItem(world , event , pos);
 			}
 			break;
 		default:
 			break;
 		}
 	}
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 	switch (event.type) {
 	case Event::Resized:
@@ -131,6 +150,8 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 	default:
 		break;
 	}
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 }
 
 void Game::processPanelQuickAccess()

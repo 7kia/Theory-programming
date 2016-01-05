@@ -6,14 +6,21 @@ using namespace std;
 
 void Game::update(const float &deltaTime)
 {
-	processEvents(deltaTime);
+	Entity *mainPerson = world.mainPerson;
 
-	Entity &mainPerson = world.Enemys[0];
-	if ((mainPerson.isDeath == false)
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
+	processEvents(deltaTime);
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
+	if ((mainPerson->isDeath == false)
 			&& (stateGame != pauseState)
 			&& (stateGame != endGameState)) {
+		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 		updatePlayer(deltaTime);
+		assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
 		updateEntity(deltaTime);
 		updateUnlifeObjects(deltaTime);
 		updateWorldTimeCircles();
@@ -23,21 +30,29 @@ void Game::update(const float &deltaTime)
 
 void Game::updatePlayer(const float &deltaTime)
 {
-	Entity &mainPerson = world.Enemys[0];
+	Entity *mainPerson = world.mainPerson;
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
-	mainPerson.update(deltaTime);
-	if(mainPerson.currenMode == idEntityMode::atack || mainPerson.giveDamage)
+	mainPerson->update(deltaTime);
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
+	if(mainPerson->currenMode == idEntityMode::atack || mainPerson->getStateGiveDamage())
 	{
-		mainPerson.updateAtack(world, deltaTime);
+		mainPerson->updateAtack(world, deltaTime);
 	}
-	mainPerson.interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
-	mainPerson.interactionWithEntity(&world.Enemys , 0 , deltaTime);
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
-	mainPerson.interactionWithMap(world.field, world.listDestroy, deltaTime);
-	mainPerson.getCoordinateForView(mainPerson.getPosition(), world.view);
+	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
+	mainPerson->interactionWithEntity(&world.Enemys , 0 , deltaTime);
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
-	mainPerson.updateView(world.view, world.listener, window);
+	mainPerson->interactionWithMap(world.field, world.listDestroy, deltaTime);
+	mainPerson->getCoordinateForView(mainPerson->getPosition(), world.view);
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
+
+	mainPerson->updateView(world.view, world.listener, window);
 	window.setView(world.view);
+	assert(mainPerson->itemsEntity[0].getType() != mainPerson->founds.emptyItem->getType());
 
 	//printf("Angle %f \n", mainPerson.rotation);
 }
