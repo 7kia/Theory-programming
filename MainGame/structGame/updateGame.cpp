@@ -12,10 +12,12 @@ void Game::update(const float &deltaTime)
 	if ((mainPerson.isDeath == false)
 			&& (stateGame != pauseState)
 			&& (stateGame != endGameState)) {
+
 		updatePlayer(deltaTime);
 		updateEntity(deltaTime);
 		updateUnlifeObjects(deltaTime);
 		updateWorldTimeCircles();
+
 	}
 }
 

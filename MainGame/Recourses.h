@@ -19,6 +19,7 @@ typedef enum {
 	inventoryPath ,
 
 	itemsPath ,
+	bulletPath,
 
 	awardGuiPath ,
 	menuGuiPath ,
@@ -77,6 +78,7 @@ const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 	"recourses\\images\\gui\\inventory.png",
 
 	"recourses\\images\\things\\Items.png",
+	"recourses\\images\\things\\bullet.png",
 
 	"recourses\\images\\gui\\Award.png",
 	"recourses\\images\\gui\\Menu.png"

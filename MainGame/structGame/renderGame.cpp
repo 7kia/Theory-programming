@@ -25,8 +25,10 @@ void Game::render()
 
 	renderEntitys(rectWindow);
 	renderUnlifeObjects(rectWindow);
+	assert(world.Enemys[ID_PLAYER_IN_LIST].itemsEntity[0].getType() != world.emptyObjects.emptyItem.getType());
 
 	gui.setPositionGui(window, mainPerson, world.Enemys, textGame);
+	assert(world.Enemys[ID_PLAYER_IN_LIST].itemsEntity[0].getType() != world.emptyObjects.emptyItem.getType());
 
 	renderGui();
 

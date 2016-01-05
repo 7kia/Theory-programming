@@ -29,6 +29,7 @@ Game::Game()
 	initializeTypeEnemy(types.typesEnemy, types.typesItem);
 	initializeEntitys(world);
 
+
 	world.initializePlayer(world.view, world.listener);
 	initializeHotKeys();
 
@@ -41,6 +42,7 @@ Game::Game()
 	{
 		playDayMusic();
 	}
+
 }
 
 void Game::loadConfig(char *nameConfig, int *variables)

@@ -22,3 +22,5 @@ void defineOriginInMiddleString(sf::Text &text);
 
 int inMapCoordinate(float number);
 sf::Vector2i inMapCoordinate(sf::Vector2f pos);
+
+void cleanIntArray(int* array , int size);

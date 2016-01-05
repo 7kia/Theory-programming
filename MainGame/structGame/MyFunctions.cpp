@@ -69,3 +69,11 @@ Vector2i inMapCoordinate(Vector2f pos)
 {
 	return{ inMapCoordinate(pos.x), inMapCoordinate(pos.y) };
 }
+
+void cleanIntArray(int* array, int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		array[i] = 0;
+	}
+}

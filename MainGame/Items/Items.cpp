@@ -55,7 +55,7 @@ sf::FloatRect Item::getGlobalBounds()
 
 void Item::setScale(sf::Vector2f scale)
 {
-	mainSprite->scale(scale);
+	mainSprite->setScale(scale);
 }
 
 sf::Sprite& Item::getSprite()

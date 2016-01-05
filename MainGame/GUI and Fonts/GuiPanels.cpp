@@ -74,17 +74,19 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 	Vector2f centerWindow = features.center;
 	Vector2u sizeWindow = features.size;
 
-	Item& currentItem = mainPerson.itemsEntity[0];
-	String nameCurrentItem = currentItem.getName();
+	Item* currentItem = &mainPerson.itemsEntity[0];
+	String nameCurrentItem = currentItem->getName();
 	String nameEmptyItem = mainPerson.getRefOnEmptyItem()->getName();
 
 	int startPosition = widthPanelQuickAccess / 2;
 	Vector2f pos;
 	int shift;
+	assert(mainPerson.itemsEntity[0].getType() != mainPerson.founds.emptyItem->getType());
+
 	for (int i = 0; i < mainPerson.type->amountSlots; i++) {
 
-		currentItem = mainPerson.itemsEntity[i];
-		nameCurrentItem = currentItem.getName();
+		currentItem = &mainPerson.itemsEntity[i];
+		nameCurrentItem = currentItem->getName();
 		if (nameCurrentItem != nameEmptyItem) {
 
 			shift = shiftSelect * i;
@@ -94,21 +96,23 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 			pos.y += sizeWindow.y / 2 - heightPanelQuickAccess / 2;
 
 		
-			currentItem.setPositionSprite(pos);
+			currentItem->setPositionSprite(pos);
 
 			if (mainPerson.idSelectItem == i) {
 				itemFeatures.renderFeatures(mainPerson, features, textGame, bars);
-				currentItem.setScale(normalSize);
+				currentItem->setScale(normalSize);
 			}
 			else
 			{
-				currentItem.setScale(scaleOutItems);
+				currentItem->setScale(scaleOutItems);
 			}
-			window.draw(currentItem.getSprite());
-			renderAmountItem(currentItem.amount, pos, textGame, features);
+			window.draw(currentItem->getSprite());
+			renderAmountItem(currentItem->amount, pos, textGame, features);
 		}
+		assert(mainPerson.itemsEntity[0].getType() != mainPerson.founds.emptyItem->getType());
 
 	}
+	assert(mainPerson.itemsEntity[0].getType() != mainPerson.founds.emptyItem->getType());
 
 }
 
