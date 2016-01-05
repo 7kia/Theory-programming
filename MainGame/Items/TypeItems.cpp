@@ -15,6 +15,7 @@ void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list)
 	initSeadling(typesItem, list);
 	initGroundBlock(typesItem, list);
 	initWeapon(typesItem, list);
+	initDistanseWeapon(typesItem , list);
 	initTools(typesItem, list);
 	initFoods(typesItem, list);
 	initHaveWater(typesItem, list);
@@ -45,7 +46,7 @@ void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::stone, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(stone, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -67,7 +68,7 @@ void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::stoneBrick, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(stoneBrick, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -101,7 +102,7 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::planksBlock, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(planksBlock, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -124,7 +125,7 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::woodLadder, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(woodLadder, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -146,7 +147,7 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::logOak, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(logOak, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -180,7 +181,7 @@ void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::oakSeadling);
+	addType.initIdsAddObject(NONE_BLOCK, oakSeadling , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -202,7 +203,7 @@ void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::appleSeadling);
+	addType.initIdsAddObject(NONE_BLOCK, appleSeadling , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -237,7 +238,7 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	addType.initListDestroy(list.none);
 
 	addType.maxAmount = 4;
-	addType.initIdsAddObject(idBlocks::dirt, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(dirt, NONE_OBJECT , NONE_SHOOT);
 
 	addType.Init(*pathTexture, featuresAddItem,
 							 sizeMain);
@@ -258,7 +259,7 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::grass, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(grass, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -280,7 +281,7 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::sand, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(sand, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -314,7 +315,7 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.stoneKnife);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -336,7 +337,7 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -358,7 +359,7 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -380,7 +381,7 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -402,7 +403,7 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -411,6 +412,102 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typesItem[numberItem] = addType;
 
 	delete pathTexture;
+}
+
+void initDistanseWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
+
+	int numberItem = idItem::pistolItem;
+
+	featuresAddItem.init("Pistol" , numberItem , idCategoryItem::distanceWeapon , false);
+	featuresAddItem.defineToughness(true , 128);
+
+	sizeMain.init(SIZE_ITEM , SIZE_ITEM , PIXEL_X_PISTOL_ITEM , PIXEL_Y_PISTOL_ITEM);
+
+	addType.damageItem[cuttingDamage] = 1;
+	addType.damageItem[crushingDamage] = 5;
+	addType.damageItem[unlifeDamage] = 0;
+
+	addType.initListDestroy(list.none);
+
+	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , pistolShoot);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture , featuresAddItem ,
+							 sizeMain);
+
+	typesItem[numberItem] = addType;
+
+	// ружьё
+	numberItem = idItem::rifleItem;
+
+	featuresAddItem.init("Rifle" , numberItem , idCategoryItem::distanceWeapon , true);
+	featuresAddItem.defineToughness(true , 512);
+
+	sizeMain.init(SIZE_ITEM , SIZE_ITEM , PIXEL_X_RIFLE_ITEM , PIXEL_Y_RIFLE_ITEM);
+
+	addType.damageItem[cuttingDamage] = 20;
+	addType.damageItem[crushingDamage] = 20;
+	addType.damageItem[unlifeDamage] = 0;
+
+	addType.initListDestroy(list.none);
+
+	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , rifleShoot);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture , featuresAddItem ,
+							 sizeMain);
+
+	typesItem[numberItem] = addType;
+	// тяжёлое ружьё
+	numberItem = idItem::heavyRifleItem;
+
+	featuresAddItem.init("Heavy rifle" , numberItem , idCategoryItem::distanceWeapon , true);
+	featuresAddItem.defineToughness(true , 512);
+
+	sizeMain.init(SIZE_ITEM , SIZE_ITEM , PIXEL_X_HEAVY_RIFLE_ITEM , PIXEL_Y_HEAVY_RIFLE_ITEM);
+
+	addType.damageItem[cuttingDamage] = 35;
+	addType.damageItem[crushingDamage] = 35;
+	addType.damageItem[unlifeDamage] = 0;
+
+	addType.initListDestroy(list.none);
+
+	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , heavyRifleShoot);
+
+	addType.maxAmount = 1;
+	addType.Init(*pathTexture , featuresAddItem ,
+							 sizeMain);
+
+	typesItem[numberItem] = addType;
+	// тяжёлое ружьё
+	numberItem = idItem::bulletItem;
+
+	featuresAddItem.init("Bullet" , numberItem , idCategoryItem::other , false);
+	featuresAddItem.defineToughness(false , 512);
+
+	sizeMain.init(SIZE_ITEM , SIZE_ITEM , PIXEL_X_BULLET_ITEM , PIXEL_Y_BULLET_ITEM);
+
+	addType.damageItem[cuttingDamage] = 0;
+	addType.damageItem[crushingDamage] = 1;
+	addType.damageItem[unlifeDamage] = 0;
+
+	addType.initListDestroy(list.none);
+
+	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , NONE_SHOOT);
+
+	addType.maxAmount = 32;
+	addType.Init(*pathTexture , featuresAddItem ,
+							 sizeMain);
+
+	typesItem[numberItem] = addType;
 }
 
 void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
@@ -436,7 +533,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.backhoe);
 
-	addType.initIdsAddObject(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(air, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -460,7 +557,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.pickax);
 
-	addType.initIdsAddObject(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(air, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -482,7 +579,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.pickax);
 
-	addType.initIdsAddObject(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(air, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -509,7 +606,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.axe);
 
-	addType.initIdsAddObject(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(air, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -530,7 +627,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.axe);
 
-	addType.initIdsAddObject(idBlocks::air, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(air, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -565,7 +662,7 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -587,7 +684,7 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -609,7 +706,7 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -631,7 +728,7 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT, NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -667,7 +764,7 @@ void initEmptyItem(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 
 	addType.initListDestroy(list.none);
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 1;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -705,7 +802,7 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	addType.damageItem[crushingDamage] = 3;
 	addType.damageItem[unlifeDamage] = 0;
 
-	addType.initIdsAddObject(idBlocks::water, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(water, NONE_OBJECT, NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -725,7 +822,7 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	addType.damageItem[crushingDamage] = 4;
 	addType.damageItem[unlifeDamage] = 0;
 
-	addType.initIdsAddObject(idBlocks::water, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(water, NONE_OBJECT, NONE_SHOOT);
 
 	addType.maxAmount = 4;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -745,7 +842,7 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	addType.damageItem[crushingDamage] = 2;
 	addType.damageItem[unlifeDamage] = 0;
 
-	addType.initIdsAddObject(idBlocks::water, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(water, NONE_OBJECT, NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -765,7 +862,7 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	addType.damageItem[crushingDamage] = 2;
 	addType.damageItem[unlifeDamage] = 0;
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -785,7 +882,7 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	addType.damageItem[crushingDamage] = 2;
 	addType.damageItem[unlifeDamage] = 0;
 
-	addType.initIdsAddObject(idBlocks::NONE_BLOCK, idUnlifeObject::NONE_OBJECT);
+	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT, NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
@@ -796,10 +893,11 @@ void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 }
 
 
-void TypeItem::initIdsAddObject(int idBlock, int idObject)
+void TypeItem::initIdsAddObject(int idBlock, int idObject, int idShoot)
 {
 	idAdd[idBlockForUse] = idBlock;
 	idAdd[idUnlideOnjectForUse] = idObject;
+	idAdd[idAddShoot] = idShoot;
 }
 
 void featuresItem::init(String nameItem, int idItem, int idCategory, bool cutting)

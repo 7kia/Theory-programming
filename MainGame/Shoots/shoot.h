@@ -1,5 +1,8 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+
+#include  <assert.h>
+#include "../structGame/MyFunctions.h"
 #include "TypeShoots.h"
 
 struct shoot

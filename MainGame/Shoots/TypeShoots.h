@@ -1,10 +1,19 @@
 #pragma once
-#include "../Items/TypeItems.h"
+#include <SFML\Graphics.hpp>
 
 const sf::IntRect rectBullet(0 , 0 , 10 , 10);
 
 typedef enum
 {
+	cuttingDamage ,
+	crushingDamage ,
+	unlifeDamage ,
+	amountTypeDamage
+} idTypeDamage;
+
+typedef enum
+{
+	NONE_SHOOT = -1,
 	pistolShoot,
 	rifleShoot,
 	heavyRifleShoot,

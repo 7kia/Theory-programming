@@ -128,6 +128,18 @@ const int PIXEL_Y_SEADLING_OAK_ITEM = SIZE_ITEM;
 // seedling apple - саженец яблони
 const int PIXEL_X_SEADLING_APPLE_ITEM = SIZE_ITEM * 5;
 const int PIXEL_Y_SEADLING_APPLE_ITEM = SIZE_ITEM * 2;
+
+const int PIXEL_X_PISTOL_ITEM = SIZE_ITEM * 7;
+const int PIXEL_Y_PISTOL_ITEM = SIZE_ITEM * 4;
+
+const int PIXEL_X_RIFLE_ITEM = SIZE_ITEM * 7;
+const int PIXEL_Y_RIFLE_ITEM = SIZE_ITEM * 5;
+
+const int PIXEL_X_HEAVY_RIFLE_ITEM = SIZE_ITEM * 7;
+const int PIXEL_Y_HEAVY_RIFLE_ITEM = SIZE_ITEM * 6;
+
+const int PIXEL_X_BULLET_ITEM = SIZE_ITEM * 7;
+const int PIXEL_Y_BULLET_ITEM = SIZE_ITEM * 7;
 // ДОБАВЛЕНИЕ ПРЕДМЕТА
 
 
@@ -169,6 +181,11 @@ namespace idItem {
 		// Дубины
 		woodClubItem,
 		ironClubItem,
+		// Ружья
+		pistolItem,
+		rifleItem,
+		heavyRifleItem,
+		bulletItem,
 		// Сосуды с водой и без
 		glassBottleItem,
 		glassbukketWithWater,
@@ -196,6 +213,7 @@ typedef enum
 	bukketWithWater,
 	bukketEmpty,
 	weapon,
+	distanceWeapon,
 	axe,
 	backhoe,
 	amounCategory

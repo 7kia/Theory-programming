@@ -34,21 +34,15 @@ void Game::updatePlayer(const float &deltaTime)
 
 
 	mainPerson->update(deltaTime);
-
-
 	if(mainPerson->currenMode == idEntityMode::atack || mainPerson->getStateGiveDamage())
 	{
 		mainPerson->updateAtack(world, deltaTime);
 	}
-
-
 	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 	mainPerson->interactionWithEntity(&world.Enemys , 0 , deltaTime);
-
-
 	mainPerson->interactionWithMap(world.field, world.listDestroy, deltaTime);
+	mainPerson->interactionWitnShoots(world.shoots , deltaTime);
 	mainPerson->getCoordinateForView(mainPerson->getPosition(), world.view);
-
 
 	mainPerson->updateView(world.view, world.listener, window);
 	window.setView(world.view);
@@ -61,7 +55,7 @@ void Game::updatePlayer(const float &deltaTime)
 void Game::updateEntity(const float deltaTime)
 {
 	vector<Entity>& Enemys = world.Enemys;
-	Entity &mainPerson = world.Enemys[0];
+	Entity *mainPerson = world.mainPerson;
 
 	Field &field = world.field;
 	for (int i = 1; i < Enemys.size(); ++i) {
@@ -72,7 +66,7 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
 
 		if (Enemys[i].type->converse.isAgressiveForPlayer) {
-			Enemys[i].searchEnemy(mainPerson , world , deltaTime);
+			Enemys[i].searchEnemy(*mainPerson , world , deltaTime);
 		}
 		Enemys[i].randomWalk(deltaTime);
 	}

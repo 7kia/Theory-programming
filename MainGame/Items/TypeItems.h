@@ -2,21 +2,15 @@
 #include <SFML\Graphics.hpp>
 
 #include "../ListObjectsAndBlocks.h"
+#include  "../Shoots/TypeShoots.h"
 #include "../Sounds/Sound.h"
 #include "../structGame/CommonStructs.h"
 
 typedef enum
 {
-	cuttingDamage,
-	crushingDamage,
-	unlifeDamage,
-	amountTypeDamage
-} idTypeDamage;
-
-typedef enum
-{
 	idBlockForUse,
 	idUnlideOnjectForUse,
+	idAddShoot,
 	amountIdCreateObjects
 } idCreateObjects;
 
@@ -60,7 +54,7 @@ public:
 	featuresSprite sizeAlternative;
 	int damageItem[amountTypeDamage];
 	int idAdd[amountIdCreateObjects];
-	void initIdsAddObject(int idBlock , int idObject);
+	void initIdsAddObject(int idBlock , int idObject, int idShoot);
 
 
 	void Init(sf::String filenameTexture, featuresItem featuresAddItem,
@@ -75,6 +69,7 @@ void initWoodBlock(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
 void initSeadling(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
 void initGroundBlock(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
 void initWeapon(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
+void initDistanseWeapon(TypeItem *typesItem , listDestroyObjectsAndBlocks &list);
 void initTools(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
 void initFoods(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
 void initHaveWater(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);

@@ -36,7 +36,7 @@ void initializeItems(vector<Item> &items, TypeItem *typesItem, Item &emptyItem)
 	for (int i = idItem::airItem + 1; i < AMOUNT_TYPES_ITEM; i++) {
 		for (int countItem = 1; countItem <= 4; countItem++) {
 			addItem->setType(typesItem[i]);
-			Vector3i posAdd = { CENTER_WORLD.x + i / 2 + 2, CENTER_WORLD.y + i % 3 + 2, 2 };
+			Vector3i posAdd = { CENTER_WORLD.x + i / 4 + 2, CENTER_WORLD.y + i % 5 + 2, 2 };
 
 			addItem->setPosition(posAdd);
 			items.push_back(*addItem);
