@@ -95,6 +95,16 @@ void UnlifeObject::setPosition(Vector3i pos)
 	transparentSpiteObject->setPosition(numberX, numberY - (height - heightMain) / 2);
 }
 
+void UnlifeObject::setMainColor(sf::Color color)
+{
+	spriteObject->setColor(color);
+}
+
+void UnlifeObject::setTransparentColor(sf::Color color)
+{
+	transparentSpiteObject->setColor(color);
+}
+
 bool UnlifeObject::isDestroyed()
 {
 	return currentToughness < 1;

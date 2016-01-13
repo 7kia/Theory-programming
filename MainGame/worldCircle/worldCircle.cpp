@@ -32,6 +32,7 @@ void world::deleteObjects()
 			assert(unlifeObjects.size() != 0);
 			assert(id > RESET_VALUE);
 			unlifeObjects.erase(unlifeObjects.begin() + id);
+			deleteUnlifeObjects.erase(deleteUnlifeObjects.begin() + i);
 			continue;
 		}
 		i++;

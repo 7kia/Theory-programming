@@ -30,49 +30,31 @@ void Field::initializeDataBlocks()
 	idsNature[idBlocks::grass] = idNatureObject::groundNature;
 	toughness[idBlocks::grass] = 40;
 
-	charBlocks[idBlocks::dirt] = u'\x011';
-	coordinateBloks[idBlocks::dirt][0] = 0;
-	coordinateBloks[idBlocks::dirt][1] = SIZE_BLOCK;
-	idsNature[idBlocks::dirt] = idNatureObject::groundNature;
-	toughness[idBlocks::dirt] = 40;
-
-	charBlocks[idBlocks::stone] = u'\x012';
+	charBlocks[idBlocks::stone] = u'\x011';
 	coordinateBloks[idBlocks::stone][0] = 0;
 	coordinateBloks[idBlocks::stone][1] = SIZE_BLOCK * 2;
 	idsNature[idBlocks::stone] = idNatureObject::stoneNature;
 	toughness[idBlocks::stone] = 360;
 
-	charBlocks[idBlocks::sand] = u'\x013';
-	coordinateBloks[idBlocks::sand][0] = 0;
-	coordinateBloks[idBlocks::sand][1] = SIZE_BLOCK * 3;
-	idsNature[idBlocks::sand] = idNatureObject::sandNature;
-	toughness[idBlocks::sand] = 20;
-
-	charBlocks[idBlocks::water] = u'\x014';
-	coordinateBloks[idBlocks::water][0] = SIZE_BLOCK;
-	coordinateBloks[idBlocks::water][1] = 0;
-	idsNature[idBlocks::water] = idNatureObject::waterNature;
-	toughness[idBlocks::water] = 1;
-
-	charBlocks[idBlocks::logOak] = u'\x015';
+	charBlocks[idBlocks::logOak] = u'\x012';
 	coordinateBloks[idBlocks::logOak][0] = SIZE_BLOCK * 3;
 	coordinateBloks[idBlocks::logOak][1] = 0;
 	idsNature[idBlocks::logOak] = idNatureObject::woodNature;
 	toughness[idBlocks::logOak] = 160;
 
-	charBlocks[idBlocks::planksBlock] = u'\x016';
+	charBlocks[idBlocks::planksBlock] = u'\x013';
 	coordinateBloks[idBlocks::planksBlock][0] = SIZE_BLOCK * 2;
 	coordinateBloks[idBlocks::planksBlock][1] = 0;
 	idsNature[idBlocks::planksBlock] = idNatureObject::woodNature;
 	toughness[idBlocks::planksBlock] = 220;
 
-	charBlocks[idBlocks::stoneBrick] = u'\x017';
+	charBlocks[idBlocks::stoneBrick] = u'\x014';
 	coordinateBloks[idBlocks::stoneBrick][0] = SIZE_BLOCK;
 	coordinateBloks[idBlocks::stoneBrick][1] = SIZE_BLOCK * 2;
 	idsNature[idBlocks::stoneBrick] = idNatureObject::stoneNature;
 	toughness[idBlocks::stoneBrick] = 600;
 
-	charBlocks[idBlocks::woodLadder] = u'\x018';
+	charBlocks[idBlocks::woodLadder] = u'\x015';
 	coordinateBloks[idBlocks::woodLadder][0] = SIZE_BLOCK * 2;
 	coordinateBloks[idBlocks::woodLadder][1] = SIZE_BLOCK;
 	idsNature[idBlocks::woodLadder] = idNatureObject::woodNature;

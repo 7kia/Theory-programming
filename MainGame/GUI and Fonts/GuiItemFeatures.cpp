@@ -136,14 +136,6 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 		window.draw(hungrySprite);
 	}
 	////////////////
-	// Жажда
-	else if (categoryItem == idCategoryItem::bottleWithWater
-					 || categoryItem == idCategoryItem::bukketWithWater) {
-		thirstSprite.setPosition(pos);
-		thirstSprite.setScale(SCALE_FEATURES);
-		window.draw(thirstSprite);
-	}
-	////////////////
 	// Другое не показываем
 	else {
 		itemToug = "";// ИСПРАВЬ

@@ -26,14 +26,11 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 			}
 
 			addEntity.init(*types[countTypes], world, posEntity);
-			assert(world.Enemys[0].getType()->id == 0);
 			world.Enemys.push_back(addEntity);
 			if(!isPlaceForCreate(world, posEntity))
 			{
 				world.Enemys.pop_back();
-				assert(world.Enemys[0].getType()->id == 0);
 			}
-			assert(world.Enemys[0].getType()->id == 0);
 			posEntity.x++;
 			if (posEntity.x >  pos.x + finish) {
 				posEntity.x = pos.x + start;

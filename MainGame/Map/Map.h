@@ -14,8 +14,6 @@ const sf::String namesBlocks[idBlocks::amountKnowBlocks] =
 	"Unknow",
 	"Air",
 	"Grass",
-	"Dirt",
-	"Sand",
 	"Log oak",
 	"Stone",
 	"Stone brick",

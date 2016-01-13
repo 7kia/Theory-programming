@@ -15,7 +15,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	String name = "MainPerson";
 
 	objectDropItems drop;
-	drop.addItem(0, 0, idItem::dirtItem);
+	drop.addItem(0, 0, idItem::grassItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_PLAYER, HEIGHT_PLAYER, 0, 0);
 	typeEnemy->protection.init(0.0015f, 1.f, 0.f);
@@ -37,7 +37,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	texturePath = texturePaths[idTexturePaths::wolfPath];
 	name = "Wolf";
 
-	drop.addItem(1 , 4 , idItem::rawMeatWolfItem);
+	drop.addItem(0 , 1 , idItem::mushroomItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_WOLF , HEIGHT_WOLF , 0 , 0);
 	typeEnemy->protection.init(1.5f , 1.f , 0.f);
@@ -59,7 +59,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	texturePath = texturePaths[idTexturePaths::skeletPath];
 	name = "Skelet";
 
-	drop.addItem( 1, 2, idItem::dirtItem );
+	drop.addItem(0 , 1 , idItem::mushroomItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
@@ -81,7 +81,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 
 	name = "Skelet digger";
 
-	drop.addItem(1, 2, idItem::dirtItem);
+	drop.addItem(0 , 1 , idItem::mushroomItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
@@ -103,7 +103,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 
 	name = "Skelet miner";
 
-	drop.addItem(1, 2, idItem::dirtItem);
+	drop.addItem(0 , 1 , idItem::mushroomItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
@@ -125,7 +125,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 
 	name = "Skelet lumbermill";
 
-	drop.addItem(1, 2, idItem::dirtItem);
+	drop.addItem(0 , 1 , idItem::mushroomItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
@@ -146,7 +146,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 
 	name = "Skelet builder";
 
-	drop.addItem(1, 2, idItem::dirtItem);
+	drop.addItem(0 , 1 , idItem::mushroomItem);
 
 	typeEnemy->featuresSprite.init(WIDTH_SKELET, HEIGHT_SKELET, 0, 0);
 	typeEnemy->protection.init(0.f, 1.f, 1.f);

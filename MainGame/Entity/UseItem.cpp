@@ -64,29 +64,6 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 		case idCategoryItem::food:
 			useAsFood(currentItem , event);
 			break;
-		case idCategoryItem::bukketWithWater:
-			useAsBukketWithWater(currentItem , world , event);
-			break;
-		case idCategoryItem::bottleWithWater:
-			useAsBottleWithWater(currentItem , world , event);
-			break;
-		case idCategoryItem::healthPotion:
-			useAsHealthPotion(currentItem , world , event);
-			break;
-		case idCategoryItem::bukketEmpty:// ÈÑÏÐÀÂÜ
-			if (isInUseField(pos, true)) {
-				int level;
-				defineLevel(level , event);
-				useAsEmptyBukket(currentItem , world , level);
-			}
-			break;
-		case idCategoryItem::bottleEmpty:
-			if (isInUseField(pos, true)) {
-				int level;
-				defineLevel(level , event);
-				useAsEmptyBottle(currentItem , world , level);
-			}
-			break;
 		case idCategoryItem::distanceWeapon:
 			
 			useAsRifle(currentItem , world);
@@ -244,71 +221,15 @@ void Entity::transferInInventory(vector<Item> &items)
 
 }
 
-void Entity::useAsBottleWithWater(Item &currentItem, world &world, Event event)
-{
-	bool drinking = event.key.code == Mouse::Right;
-	bool isThirts = thirst.currentThirst < thirst.maxThirst;
-	if (drinking && isThirts)
-	{
-		thirst.currentThirst += currentItem.currentToughness;
-		redefineType(currentItem, world, -1);
-	}
-
-}
 
 void Entity::useAsHealthPotion(Item &currentItem, world &world, Event event)
 {
 	bool drinking = event.key.code == Mouse::Right;
 	bool lowHealth = health.currentHealth < (health.maxHealth / 2);
 	if (drinking && lowHealth) {
-		health.currentHealth += currentItem.currentToughness;
-		redefineType(currentItem, world, -(idItem::healthPotionItem - idItem::glassBottleItem - 1));
+		health.currentHealth += currentItem.currentToughness;	
 	}
 
-}
-
-void Entity::useAsEmptyBottle(Item &currentItem, world &world, int level)
-{
-	Field &field = world.field;
-	bool useToAnyLevel = level > -1;
-	if (useToAnyLevel) {
-
-		int idUseBlock = currentItem.getIdAddObject(idBlockForUse);
-		if (idUseBlock) {
-
-			int x = getCurrentTarget().x;
-			int y = getCurrentTarget().y;
-			wchar_t block = field.dataMap[level][y][x];
-			bool isWater = block == field.charBlocks[idUseBlock];
-			if (isWater) {
-				redefineType(currentItem, world, 1);
-			}
-		}
-	}
-
-}
-
-void Entity::useAsEmptyBukket(Item &currentItem, world &world, int level)
-{
-	Field &field = world.field;
-	bool useToAnyLevel = level > -1;
-	if (useToAnyLevel) {
-		int idUseBlock = currentItem.getIdAddObject(idBlockForUse);
-		if (idUseBlock) {
-
-			int x = getCurrentTarget().x;
-			int y = getCurrentTarget().y;
-
-			wchar_t *block = &field.dataMap[level][y][x];
-			bool isWater = *block == field.charBlocks[idUseBlock];
-			if (isWater) {
-				*block = field.charBlocks[idBlocks::air];
-				redefineType(currentItem, world, 1);
-			}
-
-		}
-
-	}
 }
 
 void Entity::useAsFood(Item &currentItem, Event event)
@@ -352,6 +273,16 @@ void UnlifeObject::playHarvestSoundObject()
 	default:
 		break;
 	}
+}
+
+sf::FloatRect UnlifeObject::getMainGlobalBounds()
+{
+	return spriteObject->getGlobalBounds();
+}
+
+sf::FloatRect UnlifeObject::getTransparentGlobalBounds()
+{
+	return  transparentSpiteObject->getGlobalBounds();
 }
 
 void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)

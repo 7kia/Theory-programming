@@ -22,7 +22,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , c
 	wasCollision = false;
 	collision.clear();
 
-	Sprite *spriteObject;
+
 	FloatRect objectBound;
 
 	int levelUnlifeObject;
@@ -37,11 +37,8 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , c
 	for (int i = 0; i < unlifeObjects.size(); i++) {
 		levelUnlifeObject = unlifeObjects[i].currentLevel;
 
-		spriteObject = unlifeObjects[i].spriteObject;
-		objectBound = spriteObject->getGlobalBounds();
-
-		transparentSpiteObject = unlifeObjects[i].transparentSpiteObject;
-		objectAltBound = transparentSpiteObject->getGlobalBounds();
+		objectBound = unlifeObjects[i].getMainGlobalBounds();
+		objectAltBound = unlifeObjects[i].getTransparentGlobalBounds();
 
 		if (entityBound.intersects(objectBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
 			wasCollision = true;
@@ -54,10 +51,10 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , c
 		}
 		else if (type->id == idEntity::playerEntity) {
 			if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
-				transparentSpiteObject->setColor(TRANSPARENT_COLOR);
+				unlifeObjects[i].setTransparentColor(TRANSPARENT_COLOR);
 			}
 			else {
-				transparentSpiteObject->setColor(NORMAL_COLOR);
+				unlifeObjects[i].setTransparentColor(NORMAL_COLOR);
 			}
 		}
 

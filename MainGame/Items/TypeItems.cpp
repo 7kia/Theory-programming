@@ -18,7 +18,6 @@ void initializeTypesItem(TypeItem *typesItem , listDestroyObjectsAndBlocks &list
 	initDistanseWeapon(typesItem,  list);
 	initTools(typesItem, list);
 	initFoods(typesItem, list);
-	initHaveWater(typesItem, list);
 	initEmptyItem(typesItem, list);
 }
 
@@ -224,29 +223,7 @@ void initGroundBlock(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 	String* pathTexture = new String;
 	*pathTexture = texturePaths[idTexturePaths::itemsPath];
 
-	int numberItem = idItem::dirtItem;
-
-	featuresAddItem.init("Dirt block", numberItem, idCategoryItem::block, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_DIRT, PIXEL_Y_DIRT);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 1;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initListDestroy(list.none);
-
-	addType.maxAmount = 4;
-	addType.initIdsAddObject(dirt, NONE_OBJECT , NONE_SHOOT);
-
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Земля с травой
-	numberItem = idItem::grassItem;
+	int numberItem = idItem::grassItem;
 
 	featuresAddItem.init("Grass", numberItem, idCategoryItem::block, false);
 	featuresAddItem.defineToughness(false, 1);
@@ -266,29 +243,7 @@ void initGroundBlock(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 							 sizeMain);
 
 	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Песок
-	numberItem = idItem::sandItem;
-
-	featuresAddItem.init("Sand block", numberItem, idCategoryItem::block, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SAND, PIXEL_Y_SAND);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 1;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initListDestroy(list.none);
-
-	addType.initIdsAddObject(sand, NONE_OBJECT , NONE_SHOOT);
-
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-
+	
 	delete pathTexture;
 }
 
@@ -670,50 +625,6 @@ void initFoods(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 
 	typesItem[numberItem] = addType;
 	/////////////////////////////////////
-	// Мясо волка
-	numberItem = idItem::rawMeatWolfItem;
-
-	featuresAddItem.init("Raw meat wolf", numberItem, idCategoryItem::other, false);
-	featuresAddItem.defineToughness(false, 4);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_RAW_MEAT_WOLF, PIXEL_Y_RAW_MEAT_WOLF);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 1;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initListDestroy(list.none);
-
-	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////
-	// Жаренное мясо волка
-	numberItem = idItem::roastMeatWolfItem;
-
-	featuresAddItem.init("Roast meat wolf", numberItem, idCategoryItem::food, false);
-	featuresAddItem.defineToughness(false, 10);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_ROAST_MEAT_WOLF, PIXEL_Y_ROAST_MEAT_WOLF);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 1;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initListDestroy(list.none);
-
-	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT , NONE_SHOOT);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////////////
 	// Яблоко
 	numberItem = idItem::appleItem;
 
@@ -732,6 +643,27 @@ void initFoods(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture, featuresAddItem,
+							 sizeMain);
+
+	typesItem[numberItem] = addType;
+
+	/////////////////////////////
+	// Стеклянная бытылка с водой
+	numberItem = idItem::healthPotionItem;
+
+	featuresAddItem.init("Health potion" , numberItem , idCategoryItem::healthPotion , false);
+	featuresAddItem.defineToughness(false , 100);
+
+	sizeMain.init(SIZE_ITEM , SIZE_ITEM , PIXEL_X_HEALTH_POTION , PIXEL_Y_HEALTH_POTION);
+
+	addType.damageItem[cuttingDamage] = 0;
+	addType.damageItem[crushingDamage] = 2;
+	addType.damageItem[unlifeDamage] = 0;
+
+	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , NONE_SHOOT);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture , featuresAddItem ,
 							 sizeMain);
 
 	typesItem[numberItem] = addType;
@@ -774,124 +706,6 @@ void initEmptyItem(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 	/////////////////////////////
 	delete pathTexture;
 }
-
-void initHaveWater(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
-{
-	TypeItem addType;
-
-	featuresItem featuresAddItem;
-	featuresSprite sizeMain;
-
-	String* pathTexture = new String;
-	*pathTexture = texturePaths[idTexturePaths::itemsPath];
-
-	int numberItem = idItem::woodBukketItem;
-
-	/////////////////////////////////////////////////////////
-	// Напитки и сосуды
-
-	/////////////////////////////
-	// Деревянное ведро
-
-	featuresAddItem.init("Wood bukket", numberItem, idCategoryItem::bukketEmpty, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET, PIXEL_Y_WOOD_BUKKET);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 3;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initIdsAddObject(water, NONE_OBJECT, NONE_SHOOT);
-
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Деревянное ведро с водой
-	numberItem = idItem::woodBukketWithWaterItem;
-
-	featuresAddItem.init("Wood bukket with water", numberItem, idCategoryItem::bukketWithWater, false);
-	featuresAddItem.defineToughness(false, 20);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_WOOD_BUKKET_WITH_WATER, PIXEL_Y_WOOD_BUKKET_WITH_WATER);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 4;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initIdsAddObject(water, NONE_OBJECT, NONE_SHOOT);
-
-	addType.maxAmount = 4;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Стеклянная бытылка
-	numberItem = idItem::glassBottleItem;
-
-	featuresAddItem.init("Glass bottle", numberItem, idCategoryItem::bottleEmpty, false);
-	featuresAddItem.defineToughness(false, 1);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE, PIXEL_Y_GLASS_BOTTLE);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 2;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initIdsAddObject(water, NONE_OBJECT, NONE_SHOOT);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Стеклянная бытылка с водой
-	numberItem = idItem::glassbukketWithWater;
-
-	featuresAddItem.init("Glass bottle with water", numberItem, idCategoryItem::bottleWithWater, false);
-	featuresAddItem.defineToughness(false, 5);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_GLASS_BOTTLE_WITH_WATER, PIXEL_Y_GLASS_BOTTLE_WITH_WATER);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 2;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , NONE_SHOOT);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	/////////////////////////////
-	// Стеклянная бытылка с водой
-	numberItem = idItem::healthPotionItem;
-
-	featuresAddItem.init("Health potion", numberItem, idCategoryItem::healthPotion, false);
-	featuresAddItem.defineToughness(false, 100);
-
-	sizeMain.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_HEALTH_POTION, PIXEL_Y_HEALTH_POTION);
-
-	addType.damageItem[cuttingDamage] = 0;
-	addType.damageItem[crushingDamage] = 2;
-	addType.damageItem[unlifeDamage] = 0;
-
-	addType.initIdsAddObject(NONE_BLOCK, NONE_OBJECT, NONE_SHOOT);
-
-	addType.maxAmount = 16;
-	addType.Init(*pathTexture, featuresAddItem,
-							 sizeMain);
-
-	typesItem[numberItem] = addType;
-	delete pathTexture;
-}
-
 
 void TypeItem::initIdsAddObject(int idBlock, int idObject, int idShoot)
 {
@@ -952,10 +766,6 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 
 	switch (features.category) {
 	case idCategoryItem::block:
-	case idCategoryItem::bukketEmpty:
-	case idCategoryItem::bottleEmpty:
-	case idCategoryItem::bottleWithWater:
-	case idCategoryItem::bukketWithWater:
 		idAdd[idUnlideOnjectForUse] = -1;
 		break;
 	case idCategoryItem::unlifeObject:

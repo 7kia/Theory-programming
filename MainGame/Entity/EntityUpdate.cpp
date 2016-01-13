@@ -11,7 +11,6 @@ void Entity::update(const float deltaTime)
 	stamina.update(deltaTime , directions.directionWalk , step);
 	health.update(deltaTime , isDeath);
 	hungry.update(deltaTime , health.needMinusHealth);
-	thirst.update(deltaTime , health.needMinusHealth);
 
 	if (currenMode == idEntityMode::walk
 			|| currenMode == idEntityMode::fight
@@ -212,27 +211,6 @@ void entityHungry::update(const float deltaTime , bool &needMinusHealth)
 		needMinusHealth = true;
 	}
 };
-
-void entityThirst::update(const float deltaTime , bool &needMinusHealth)
-{
-	timeForThirst += deltaTime;
-
-	if (timeForThirst > timeUpdateThirst) {
-		timeForThirst = 0;
-		currentThirst--;
-	}
-
-	if (currentThirst > maxThirst) {
-		currentThirst = maxThirst;
-	}
-
-	if (currentThirst > 0) {
-		needMinusHealth = false;
-	}
-	else {
-		needMinusHealth = true;
-	}
-}
 
 void Entity::resetAtack()
 {

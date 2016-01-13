@@ -43,8 +43,6 @@ void initializeEntitys(world &world)// днаюбкемхе ясымнярх
 
 void createEnemys(world& world)
 {
-	Entity* addEnemy = new Entity();
-
 	TypeEnemy *typesEnemy = world.typesObjects.typesEnemy;
 	std::vector<TypeEnemy*> types;
 	std::vector<int> amount;
@@ -55,9 +53,9 @@ void createEnemys(world& world)
 	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
 	amount.push_back(1);
 
-	createOnlyEnemy(world , types , amount);
+	Vector3i pos = { CENTER_WORLD.x , CENTER_WORLD.y, 2 };
+	createGroup(world , types , amount, 3, pos);
 
-	delete addEnemy;
 }
 
 void createEmptyEnemy(world& world)

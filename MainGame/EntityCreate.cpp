@@ -86,7 +86,6 @@ void Entity::initFeatures()
 	mana.maxMana = type->features.maxMana;
 	mana.currentMana = mana.maxMana;
 
-	thirst.currentThirst = thirst.maxThirst;
 	hungry.currentHungry = hungry.maxHungry;
 }
 

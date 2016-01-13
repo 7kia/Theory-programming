@@ -169,14 +169,6 @@ struct entityHungry {
 	void update(const float deltaTime, bool& needMinusHealth);
 };
 
-struct entityThirst {
-	float timeForThirst = 0;
-	float timeUpdateThirst = 60;
-	int currentThirst = 20;
-	int maxThirst = 20;
-	void update(const float deltaTime, bool& needMinusHealth);
-};
-
 struct entityProtection {
 	float protectionCut;
 	float protectionCrash;

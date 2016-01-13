@@ -30,12 +30,17 @@ struct UnlifeObject
 	void setSpriteTexture(sf::Sprite &sprite, featuresSprite features, sf::Texture &texture);
 	void setPosition(sf::Vector3i pos);
 
+	void setMainColor(sf::Color color);
+	void setTransparentColor(sf::Color color);
+
 	bool isDestroyed();
 
 	void dropObject(sf::Vector3i pos, world &world, bool harvest);
 	void playObjectDropSoundObject();
 	void playHarvestSoundObject();
 
+	sf::FloatRect getMainGlobalBounds();
+	sf::FloatRect getTransparentGlobalBounds();
 	float getXPos();
 	float getYPos();
 	sf::Vector2f getPosition();	

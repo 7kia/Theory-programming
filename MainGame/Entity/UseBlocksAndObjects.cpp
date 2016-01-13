@@ -69,49 +69,6 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 }
 
 
-void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
-{
-	Field& field = world.field;
-
-	bool pouredWater = (event.key.code == Mouse::Left);
-	if (pouredWater) {
-
-		int idUseBlock = currentItem.getIdAddObject(idBlockForUse);
-		if (idUseBlock) {
-
-			Vector3i &posBlock = getCurrentTarget();
-			int level = getLevelWall();
-			int x = posBlock.x;
-			int y = posBlock.y;
-
-			bool isWall = field.dataMap[level][y][x] != field.charBlocks[idBlocks::air];
-			if (isWall == false) {
-
-				bool isFloor = field.dataMap[level - 1][y][x] != field.charBlocks[idBlocks::air];
-				if (isFloor == false) {
-					field.dataMap[level - 1][y][x] = field.charBlocks[idUseBlock];
-					minusAmount(currentItem);
-				}
-				else {
-					field.dataMap[level][y][x] = field.charBlocks[idUseBlock];
-					minusAmount(currentItem);
-				}
-
-			}
-
-		}
-
-	}
-
-	bool drinking = event.key.code == Mouse::Right;
-	bool isThirts = thirst.currentThirst < thirst.maxThirst;
-	if (drinking && isThirts) {
-		thirst.currentThirst += currentItem.currentToughness;
-		redefineType(currentItem, world, -1);
-	}
-
-}
-
 void Entity::useAsRifle(Item & currentItem , world & world)
 {
 	int idBullets = searchBulletInInventory();
@@ -141,7 +98,7 @@ void Entity::useAsRifle(Item & currentItem , world & world)
 			::playSound(currentItem.getIdSoundShoot() , *soundBase ,
 									soundEntity , currentItem.getPositionSprite());
 			minusAmount(itemsEntity[idBullets]);
-
+			currenMode = idEntityMode::atack;
 		}
 
 

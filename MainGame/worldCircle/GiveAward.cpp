@@ -11,14 +11,10 @@ void Game::createListAward()
 	awardForWave.push_back({ idItem::mushroomItem , 4 });
 
 	awardForLevel[0].push_back({ idItem::stoneAxeItem , 1 });
-	awardForLevel[0].push_back({ idItem::roastMeatWolfItem , 1 });
-	awardForLevel[0].push_back({ idItem::glassbukketWithWater , 4 });
 	awardForLevel[0].push_back({ idItem::seadlingOakItem , 4 });
 	awardForLevel[0].push_back({ idItem::seadlingApple , 1 });
 
 	awardForLevel[1].push_back({ idItem::stonePickaxItem , 1 });
-	awardForLevel[1].push_back({ idItem::woodBukketWithWaterItem , 16 });
-	awardForLevel[1].push_back({ idItem::glassBottleItem , 4 });
 	awardForLevel[1].push_back({ idItem::planksBlockItem , 40 });
 
 	awardForLevel[2].push_back({ idItem::ironSwordItem , 1 });

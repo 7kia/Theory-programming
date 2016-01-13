@@ -9,14 +9,11 @@ typedef enum
 	unknow,
 	air,
 	grass,
-	dirt,
-	sand,
 	logOak,
 	stone,
 	stoneBrick,
 	planksBlock,
 	woodLadder,
-	water,
 	borderBlock,
 	amountKnowBlocks
 } idBlocks;

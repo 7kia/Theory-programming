@@ -79,7 +79,6 @@ public:
 	entityStamina stamina;
 	entityMana mana;
 	entityHungry hungry;
-	entityThirst thirst;
 	entityProtection protection;
 	void choceShiftUseItem(int &shiftX, int &shiftY, bool prickBlow);
 	void renderCurrentItem(sf::RenderWindow &window);
@@ -163,12 +162,8 @@ public:
 	void takeRedefineItem(world &world);
 	void redefineType(Item &currentItem, world &world, int shift);
 
-	void useAsBottleWithWater(Item &currentItem, world &world, sf::Event event);
 	void useAsHealthPotion(Item& currentItem, world& world, Event event);
 	void useAsFood(Item &currentItem, sf::Event event);
-	void useAsEmptyBottle(Item &currentItem, world &world, int level);
-	void useAsEmptyBukket(Item &currentItem, world &world, int level);
-	void useAsBukketWithWater(Item &currentItem, world &world, sf::Event event);
 
 	void useAsRifle(Item &currentItem , world &world);
 	int searchBulletInInventory();

@@ -12,7 +12,6 @@ void initializeGUI(GUI &gui, TextGame &textGame)
 
 	createGUITexture(gui.textureGui[barTexture], texturePaths[idTexturePaths::barsPath]);
 	createGUI(gui.hungry, gui.textureGui[barTexture]);
-	createGUI(gui.thirst, gui.textureGui[barTexture]);
 	createGUI(gui.mainFeatures, gui.textureGui[barTexture]);
 	createGUI(gui.itemFeatures, gui.textureGui[widgetsTexture], gui.textureGui[barTexture]);
 }
@@ -143,7 +142,6 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 							enemys , textGame);
 
 	hungry.renderBar(mainPerson.hungry.currentHungry, mainPerson.hungry.maxHungry, featuresWindow);
-	thirst.renderBar(mainPerson.thirst.currentThirst, mainPerson.thirst.maxThirst, featuresWindow);
 }
 
 void GUI::setHealthBars(featuresWindow &featuresWindow, Entity &mainPerson ,

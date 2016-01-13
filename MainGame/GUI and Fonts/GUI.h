@@ -9,7 +9,6 @@ struct GUI
 	panels panels;
 
 	barHungry hungry;
-	barThirst thirst;
 	barMainFeatures mainFeatures;
 	itemFeatures itemFeatures;
 

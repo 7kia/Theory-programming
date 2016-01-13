@@ -127,7 +127,6 @@ void world::initializeCategorysBreakingObject()
 	listDestroy.none.push_back(idNatureObject::Unbreaking);
 
 	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::air]);
-	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::water]);
 	listDestroy.passableBlocks.push_back(charBlocks[idBlocks::woodLadder]);
 
 	listDestroy.notPassableFloor.push_back(charBlocks[idBlocks::air]);
