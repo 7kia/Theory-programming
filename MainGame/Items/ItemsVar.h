@@ -129,6 +129,8 @@ namespace idItem {
 		heavyRifleItem,
 		bulletItem,
 		
+		mineItem,
+
 		healthPotionItem,
 
 		amountItem

@@ -70,4 +70,6 @@ void initWeapon(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
 void initDistanseWeapon(TypeItem *typesItem , listDestroyObjectsAndBlocks &list);
 void initTools(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
 void initFoods(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initPotions(TypeItem *typesItem , listDestroyObjectsAndBlocks &list);
+void initTraps(TypeItem *typesItem , listDestroyObjectsAndBlocks &list);
 void initEmptyItem(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);

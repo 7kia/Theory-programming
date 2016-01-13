@@ -43,6 +43,7 @@ public:
 void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
 void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
 void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
-void initEffects(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
+void initTraps(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);
+void initEffects(TypeUnlifeObject *typesUnlifeObjects , dataSound &storage);
 
 void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage);

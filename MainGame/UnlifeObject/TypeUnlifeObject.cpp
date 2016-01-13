@@ -9,6 +9,7 @@ void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound
 	initTree(typesUnlifeObjects, storage);
 	initStones(typesUnlifeObjects, storage);
 	initEmpty(typesUnlifeObjects, storage);
+	initTraps(typesUnlifeObjects , storage);
 
 	initEffects(typesUnlifeObjects, storage);
 }
@@ -179,6 +180,29 @@ void initEmpty(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	typesObject->defineToughness(false, 0);
 	typesObject->transparentSize.init(0, 0, 0, 0);
 
+}
+
+void initTraps(TypeUnlifeObject * typesUnlifeObjects , dataSound & storage)
+{
+	int id = idUnlifeObject::mineObject;
+	int idNature = idNatureObject::stoneNature;
+	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
+	String texturePath = texturePaths[idTexturePaths::minePath];
+	String name = "Mine";
+	bool canDestroy = true;
+	int toughness = 20;
+
+	typesObject->mainSize.init(0 , 0 , 0 , 0);
+	typesObject->Init(texturePath , name , storage , id , idNature);
+	typesObject->defineToughness(canDestroy , toughness);
+	typesObject->transparentSize.init(WIDTH_MINE , HEIGHT_MINE , PIXEL_X_MINE , PIXEL_Y_MINE);
+
+	objectDropItems drop;
+	drop.addItem(0 , 0 , idItem::grassItem);
+
+	typesObject->redefine.init(idUnlifeObject::smallStone , 0);
+	typesObject->drop.init(drop);
+	drop.clear();
 }
 
 void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)

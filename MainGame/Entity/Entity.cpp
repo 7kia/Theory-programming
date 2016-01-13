@@ -262,6 +262,11 @@ int Entity::getIdFindEntity()
 	return founds.findEnemyFromList;
 }
 
+int Entity::getIdType()
+{
+	return type->id;
+}
+
 Item & Entity::getEmtySlot()
 {
 	return itemsEntity[emptySlot];

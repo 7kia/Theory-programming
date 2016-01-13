@@ -49,6 +49,8 @@ struct g_Functions
 	static bool isInListObjects(std::vector<int>& listObjects , int id);
 	static bool isInListShoots(std::vector<int>& listObjects , int id);
 
+	static void addIdDeleteInList(int id , std::vector<int>& list);
+
 	static void cleanIntArray(int* array , int size);
 
 	static bool checkDiaposon(int number , int start , int end);

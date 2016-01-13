@@ -21,6 +21,9 @@ typedef enum {
 	itemsPath ,
 	bulletPath,
 
+	minePath,
+	mineExplosionPath,
+
 	awardGuiPath ,
 	menuGuiPath ,
 	amountTexturePaths
@@ -49,6 +52,8 @@ typedef enum {
 	shootRifleSound ,
 	shooyHeavyRifleSound ,
 	reloadRifleSound,
+
+	mineExplosionSound,
 
 	waveEndSound,
 	levelUpSound,
@@ -85,6 +90,9 @@ const sf::String texturePaths[idTexturePaths::amountTexturePaths] =
 	"recourses\\images\\things\\Items.png",
 	"recourses\\images\\things\\bullet.png",
 
+	"recourses\\images\\unlife\\mine.png",
+	"recourses\\images\\unlife\\mineExplosion.png",
+
 	"recourses\\images\\gui\\Award.png",
 	"recourses\\images\\gui\\Menu.png"
 };
@@ -116,6 +124,8 @@ const std::string soundPaths[idSoundPaths::amountSoundSound]
 	pathToSounds + "breaking\\rifle_shot.ogg",
 	pathToSounds + "breaking\\heavy_rifle_shot.ogg",
 	pathToSounds + "breaking\\rifle_reload.ogg",
+
+	pathToSounds + "breaking\\explode1.ogg",
 
 	pathToSounds + "GUI\\wave_end.ogg",
 	pathToSounds + "GUI\\level_up.ogg",

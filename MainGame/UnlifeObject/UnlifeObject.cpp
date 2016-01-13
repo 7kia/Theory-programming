@@ -11,11 +11,11 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 	pos.z = 2;
 
 	pos = { 4, 12, 2 };
-	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakGrow]);
+	addObject.setType(typesUnlifeObjects[idUnlifeObject::mineObject]);
 	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
-	///*
+	/*
 	pos = { 8, 12, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::oakSmall]);
 	addObject.setPosition(pos);
@@ -41,7 +41,7 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
 
-
+	*/
 	emptyObject.setType(typesUnlifeObjects[idUnlifeObject::empty]);
 }
 
@@ -66,20 +66,21 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 	setSpriteTexture(*spriteObject , type.mainSize , *type.textureObject);
 	setSpriteTexture(*transparentSpiteObject , type.transparentSize , *type.textureObject);
 
+
 	currentToughness = type.toughnessObject;
 
 	timeLife = 0.f;
 }
 
-void UnlifeObject::setSpriteTexture(sf::Sprite& sprite, featuresSprite features, Texture &texture)
+void UnlifeObject::setSpriteTexture(sf::Sprite& sprite, featuresSprite &features, Texture &texture)
 {
 	int width = features.size.width;
 	int height = features.size.height;
 	int pixelXPos = features.pixPos.x;
 	int pixelYPos = features.pixPos.y;
-	spriteObject->setTexture(texture);
-	spriteObject->setTextureRect(IntRect(pixelXPos , pixelYPos , width , height));
-	spriteObject->setOrigin(float(width / 2) , float(height / 2));
+	sprite.setTexture(texture);
+	sprite.setTextureRect(IntRect(pixelXPos , pixelYPos , width , height));
+	sprite.setOrigin(float(width / 2) , float(height / 2));
 
 }
 

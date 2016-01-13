@@ -50,6 +50,13 @@ const int PIXEL_Y_SEADLING_APPLE = PIXEL_Y_OAK_STUMP;
 const int WIDTH_DESTROY_BLOCK_EFFECT = 48;
 const int HEIGHT_DESTROY_BLOCK_EFFECT = 48;
 
+// Саженец яблони
+const int WIDTH_MINE = 48;
+const int HEIGHT_MINE = 48;
+
+const int PIXEL_X_MINE = 0;
+const int PIXEL_Y_MINE = 0;
+
 typedef enum
 {
 	NONE_OBJECT = -1,
@@ -61,11 +68,13 @@ typedef enum
 	appleGrowTree,
 	smallStone,
 
+	mineObject,
 	// Effects
 	shiftEffects,
 
 	skeletDeathEffect,
 	wolfDeathEffect,
 	destroyBlockEffect,
-	empty
+	empty,
+	amountUnlifeObjects
 } idUnlifeObject;

@@ -33,7 +33,7 @@ struct typesObjectsInWorld
 {
 	TypeItem typesItem[AMOUNT_TYPES_ITEM];
 	TypeEnemy typesEnemy[amountEnemy];
-	TypeUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
+	TypeUnlifeObject typesUnlifeObject[amountUnlifeObjects];
 	TypeShoot typesShoot[amountTypeShoots];
 };
 

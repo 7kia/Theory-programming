@@ -44,7 +44,7 @@ void Game::updatePlayer(const float &deltaTime)
 	{
 		mainPerson->updateAtack(world, deltaTime);
 	}
-	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
+	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, world.deleteUnlifeObjects, deltaTime);
 	mainPerson->interactionWithEntity(&world.Enemys , 0 , deltaTime);
 	mainPerson->interactionWithMap(world.field, world.listDestroy, deltaTime);
 	mainPerson->interactionWitnShoots(world.shoots , world.deleteShoots, deltaTime);
@@ -84,7 +84,7 @@ void Game::updateEntity(const float deltaTime)
 		Enemys[i].update(deltaTime);
 
 		if (!Enemys[i].getStateDeath()) {
-			Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects , deltaTime);
+			Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects , world.deleteUnlifeObjects , deltaTime);
 
 			Enemys[i].interactionWithEntity(&world.Enemys , i , deltaTime);
 			Enemys[i].interactionWithMap(field , world.listDestroy , deltaTime);

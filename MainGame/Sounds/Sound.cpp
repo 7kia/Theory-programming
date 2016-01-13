@@ -36,6 +36,7 @@ dataSound::dataSound()
 	initSound(shooyHeavyRifleSound , soundPaths , 0.f);
 	initSound(reloadRifleSound , soundPaths , 0.f);
 
+	initSound(mineExplosionSound , soundPaths , 0.f);
 
 	initSound(waveEndSound, soundPaths, 0.f);
 	initSound(levelUpSound, soundPaths, 0.f);

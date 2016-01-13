@@ -51,7 +51,7 @@ void createEnemys(world& world)
 	amount.push_back(1);
 
 	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
-	amount.push_back(1);
+	amount.push_back(0);
 
 	Vector3i pos = { CENTER_WORLD.x , CENTER_WORLD.y, 2 };
 	createGroup(world , types , amount, 3, pos);

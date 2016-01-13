@@ -84,7 +84,7 @@ bool isPlaceForCreate(world world, Vector3i &pos)
 
 	do {
 		currentEntity.interactionWithMap(world.field, world.listDestroy, 0);
-		currentEntity.interactionWitnUnlifeObject(world.unlifeObjects, 0);
+		currentEntity.interactionWitnUnlifeObject(world.unlifeObjects, world.deleteUnlifeObjects, 0);
 		currentEntity.interactionWithEntity(&enemys, int(enemys.size() - 1), 0.1f);
 
 		isPlace = !currentEntity.wasCollision;

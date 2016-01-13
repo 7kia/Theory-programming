@@ -18,6 +18,8 @@ void initializeTypesItem(TypeItem *typesItem , listDestroyObjectsAndBlocks &list
 	initDistanseWeapon(typesItem,  list);
 	initTools(typesItem, list);
 	initFoods(typesItem, list);
+	initPotions(typesItem , list);
+	initTraps(typesItem , list);
 	initEmptyItem(typesItem, list);
 }
 
@@ -647,9 +649,20 @@ void initFoods(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 
 	typesItem[numberItem] = addType;
 
-	/////////////////////////////
-	// Стеклянная бытылка с водой
-	numberItem = idItem::healthPotionItem;
+	delete pathTexture;
+}
+
+void initPotions(TypeItem * typesItem , listDestroyObjectsAndBlocks & list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::itemsPath];
+
+	int numberItem = idItem::healthPotionItem;
 
 	featuresAddItem.init("Health potion" , numberItem , idCategoryItem::healthPotion , false);
 	featuresAddItem.defineToughness(false , 100);
@@ -661,6 +674,40 @@ void initFoods(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 	addType.damageItem[unlifeDamage] = 0;
 
 	addType.initIdsAddObject(NONE_BLOCK , NONE_OBJECT , NONE_SHOOT);
+
+	addType.maxAmount = 16;
+	addType.Init(*pathTexture , featuresAddItem ,
+							 sizeMain);
+
+	typesItem[numberItem] = addType;
+
+	delete pathTexture;
+}
+
+void initTraps(TypeItem * typesItem , listDestroyObjectsAndBlocks & list)
+{
+	TypeItem addType;
+
+	featuresItem featuresAddItem;
+	featuresSprite sizeMain;
+
+	String* pathTexture = new String;
+	*pathTexture = texturePaths[idTexturePaths::minePath];
+
+	int numberItem = idItem::mineItem;
+
+	featuresAddItem.init("Mine" , numberItem , idCategoryItem::unlifeObject , false);
+	featuresAddItem.defineToughness(false , 1);
+
+	sizeMain.init(WIDTH_MINE , HEIGHT_MINE , PIXEL_X_MINE , PIXEL_Y_MINE);
+
+	addType.damageItem[cuttingDamage] = 0;
+	addType.damageItem[crushingDamage] = 5;
+	addType.damageItem[unlifeDamage] = 0;
+
+		addType.initListDestroy(list.none);
+
+	addType.initIdsAddObject(NONE_BLOCK , mineObject , NONE_SHOOT);
 
 	addType.maxAmount = 16;
 	addType.Init(*pathTexture , featuresAddItem ,
@@ -770,6 +817,7 @@ void TypeItem::Init(String filenameTexture, featuresItem featuresAddItem,
 		break;
 	case idCategoryItem::unlifeObject:
 		idAdd[idBlockForUse] = -1;
+		break;
 	default:
 		idAdd[idUnlideOnjectForUse] = -1;
 		idAdd[idBlockForUse] = -1;

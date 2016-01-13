@@ -47,7 +47,7 @@ public:
 	int getIdFindUnlifeObject();
 	int getIdFindEntity();
 
-
+	int getIdType();
 	//////////////////////////////////////////////////
 	// Для взаимодействия с миром
 	idEntityMode currenMode;
@@ -113,7 +113,8 @@ public:
 	void interactionWitnShoots(std::vector<shoot>& unlifeObjects ,
 														 std::vector<int> &listDelete,
 														 const float deltaTime);
-	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, const float deltaTime);
+	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, 
+																	 std::vector<int> &listDelete , const float deltaTime);
 	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
 
 	//

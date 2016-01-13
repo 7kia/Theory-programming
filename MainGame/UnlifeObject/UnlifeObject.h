@@ -27,7 +27,7 @@ struct UnlifeObject
 	float timeLife;
 
 	void setType(TypeUnlifeObject &type);
-	void setSpriteTexture(sf::Sprite &sprite, featuresSprite features, sf::Texture &texture);
+	void setSpriteTexture(sf::Sprite &sprite, featuresSprite &features, sf::Texture &texture);
 	void setPosition(sf::Vector3i pos);
 
 	void setMainColor(sf::Color color);

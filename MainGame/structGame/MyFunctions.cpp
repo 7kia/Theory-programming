@@ -151,3 +151,10 @@ bool g_Functions::isInListShoots(vector<int> &listObjects , int id) {
 
 	return false;
 }
+
+void g_Functions::addIdDeleteInList(int id , std::vector<int> &list)
+{
+	if (!g_Functions::isInListObjects(list , id)) {
+		list.push_back(id);
+	}
+}

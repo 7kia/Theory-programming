@@ -17,7 +17,7 @@ void currentCollision::clear()
 	posBlock = RESET_VECTOR_3I;
 }
 
-void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
+void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , vector<int> &listDelete , const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
 	wasCollision = false;
 	collision.clear();
@@ -26,7 +26,6 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , c
 	FloatRect objectBound;
 
 	int levelUnlifeObject;
-	Sprite *transparentSpiteObject;
 	FloatRect objectAltBound;
 
 	spriteEntity->move(movement);
@@ -49,9 +48,20 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , c
 			directions.directionWalk = NONE_DIRECTION;
 			break;
 		}
-		else if (type->id == idEntity::playerEntity) {
-			if (entityBound.intersects(objectAltBound) && (levelUnlifeObject == currentLevelFloor + 1)) {
+		else {
+
+			int idEntityType = getIdType();
+			if (entityBound.intersects(objectAltBound)
+					&& (levelUnlifeObject == currentLevelFloor + 1)) {
+
+				if (idEntityType == idEntity::playerEntity) {
 				unlifeObjects[i].setTransparentColor(TRANSPARENT_COLOR);
+				}
+				else {
+					::playSound(mineExplosionSound , *soundBase , soundEntity , getPosition());
+					g_Functions::addIdDeleteInList(i, listDelete);
+
+				}
 			}
 			else {
 				unlifeObjects[i].setTransparentColor(NORMAL_COLOR);
