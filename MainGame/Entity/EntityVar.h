@@ -68,6 +68,7 @@ enum idEntityMode
 struct Directions {
 	Direction directionWalk;
 	Direction directionLook;
+	sf::Vector2f directionToTarget = RESET_VECTOR_2F;
 };
 
 struct Step {
@@ -207,7 +208,7 @@ struct foundObjects {
 struct currentCollision {
 	sf::Vector3i posBlock = RESET_VECTOR_3I;
 	sf::Vector2f posObject = RESET_VECTOR_2F;
-	int levelObject = RESET_COLLISION_VALUE;
+	int levelObject = RESET_VALUE;
 
 	void initPosBlock(int xPos, int yPos, int zPos);
 	void clear();

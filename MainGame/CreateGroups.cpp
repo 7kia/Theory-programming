@@ -4,7 +4,7 @@ using namespace std;
 
 void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount, int square, sf::Vector3i pos)
 {
-	Entity* addEntity = new Entity();
+	Entity addEntity;
 	Vector3i posEntity = pos;
 
 	int &countEntity = world.countEntity;
@@ -25,14 +25,15 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 				break;
 			}
 
-			addEntity->init(*types[countTypes], world, posEntity);
-
-			world.Enemys.push_back(*addEntity);
+			addEntity.init(*types[countTypes], world, posEntity);
+			assert(world.Enemys[0].getType()->id == 0);
+			world.Enemys.push_back(addEntity);
 			if(!isPlaceForCreate(world, posEntity))
 			{
 				world.Enemys.pop_back();
+				assert(world.Enemys[0].getType()->id == 0);
 			}
-
+			assert(world.Enemys[0].getType()->id == 0);
 			posEntity.x++;
 			if (posEntity.x >  pos.x + finish) {
 				posEntity.x = pos.x + start;
@@ -49,7 +50,6 @@ void createGroup(world &world, std::vector<TypeEnemy*> &types, std::vector<int> 
 	types.clear();
 	amount.clear();
 
-	delete addEntity;
 }
 
 void world::addItem(Item item)
@@ -62,9 +62,16 @@ TypeItem* world::getTypesItem()
 	return typesObjects.typesItem;
 }
 
-TypeItem& const world::getTypeItem(int id)
+TypeItem& world::getTypeItem(int id)
 {
+	assert(g_Functions::checkDiaposon(id , RESET_VALUE , idItem::amountItem));
 	return typesObjects.typesItem[id];
+}
+
+TypeShoot& world::getTypeShoot(int id)
+{
+	assert(g_Functions::checkDiaposon(id, RESET_VALUE , amountTypeShoots));
+	return typesObjects.typesShoot[id];
 }
 
 bool isPlaceForCreate(world world, Vector3i &pos)
@@ -141,6 +148,7 @@ void createSmallGroupSkelets(world &world, Vector3i pos)
 	amount.push_back(config[AMOUNT_SKELET_BUILDER_IN_SMALL_GROUP]);
 
 	createGroup(world, types, amount, 2, pos);
+	assert(world.Enemys[0].getType()->id == 0);
 }
 
 void createMiddleGroupSkelets(world &world, Vector3i pos)

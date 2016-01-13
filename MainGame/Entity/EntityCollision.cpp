@@ -13,7 +13,7 @@ void currentCollision::initPosBlock(int xPos , int yPos , int zPos)
 void currentCollision::clear()
 {
 	posObject = RESET_VECTOR_2F;
-	levelObject = RESET_COLLISION_VALUE;
+	levelObject = RESET_VALUE;
 	posBlock = RESET_VECTOR_3I;
 }
 
@@ -134,7 +134,7 @@ void Entity::interactionWithMap(Field &field , listDestroyObjectsAndBlocks& list
 			for (int i = yPos; float(i) < yFar; i++) {
 				for (int j = xPos; float(j) < xFar; j++) {
 
-					if (!isInListBlocks(listDestroy.passableBlocks , map[currentLevelFloor + 1][i][j])) {
+					if (!g_Functions::isInListBlocks(listDestroy.passableBlocks , map[currentLevelFloor + 1][i][j])) {
 						wasCollision = true;
 
 						collision.initPosBlock(j , i , currentLevelFloor + 1);
@@ -149,7 +149,7 @@ void Entity::interactionWithMap(Field &field , listDestroyObjectsAndBlocks& list
 			// Ïîë
 			for (int i = yPos; float(i) < yFar; i++) {
 				for (int j = xPos; float(j) < xFar; j++) {
-					if (isInListBlocks(listDestroy.notPassableFloor , map[currentLevelFloor][i][j])) {
+					if (g_Functions::isInListBlocks(listDestroy.notPassableFloor , map[currentLevelFloor][i][j])) {
 						wasCollision = true;
 
 						collision.initPosBlock(j , i , currentLevelFloor);
@@ -193,7 +193,9 @@ void Entity::gravitateToGround(Field &field)
 	}
 }
 
-void Entity::interactionWitnShoots(vector<shoot> &shoots , const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
+void Entity::interactionWitnShoots(vector<shoot> &shoots ,
+																		vector<int> &listDelete , 
+																	 const float deltaTime)// ÈÑÏÐÀÂÜ for enity and mainPerson
 {
 
 	int levelEntity = getLevelWall();
@@ -213,6 +215,7 @@ void Entity::interactionWitnShoots(vector<shoot> &shoots , const float deltaTime
 			//for (int i = 0; i < amountTypeDamage; i++)
 			//{ 
 					health.currentHealth -= shoots[i].getDamage(crushingDamage);
+					listDelete.push_back(i);
 			//}
 		}
 	}

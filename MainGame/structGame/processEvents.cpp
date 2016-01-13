@@ -4,7 +4,7 @@ using namespace hotKeys;
 
 void Game::processEvents(const float deltaTime)
 {
-	Entity *mainPerson = world.mainPerson;
+	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
 
 
 	Event event;
@@ -88,7 +88,7 @@ void Game::processInterface()
 
 void Game::processPersonAction(Vector2f pos)
 {
-	Entity *mainPerson = world.mainPerson;
+	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
 
 	if (Keyboard::isKeyPressed(keys[actionAlternate])) {
 		if (mainPerson->isInUseField(pos, true)) {
@@ -116,7 +116,7 @@ void Game::processPersonAction(Vector2f pos)
 
 void Game::processOtherAction(Event &event, Vector2f pos)
 {
-	Entity *mainPerson = world.mainPerson;
+	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
 
 	if (!mainPerson->isDeath) {
 		switch (event.type) {

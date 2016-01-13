@@ -4,25 +4,25 @@
 
 #include "TypeItems.h"
 #include "ItemsVar.h"
-
+#include "../Map/BlocksVar.h"
 using namespace sf;
 using namespace std;
 
-void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list)
+void initializeTypesItem(TypeItem *typesItem , listDestroyObjectsAndBlocks &list)
 {
 	initStoneBlock(typesItem, list);
 	initWoodBlock(typesItem, list);
 	initSeadling(typesItem, list);
 	initGroundBlock(typesItem, list);
 	initWeapon(typesItem, list);
-	initDistanseWeapon(typesItem , list);
+	initDistanseWeapon(typesItem,  list);
 	initTools(typesItem, list);
 	initFoods(typesItem, list);
 	initHaveWater(typesItem, list);
 	initEmptyItem(typesItem, list);
 }
 
-void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initStoneBlock(TypeItem *typesItem, listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -79,7 +79,7 @@ void initStoneBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initWoodBlock(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -158,7 +158,7 @@ void initWoodBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initSeadling(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -214,7 +214,7 @@ void initSeadling(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initGroundBlock(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -292,7 +292,7 @@ void initGroundBlock(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initWeapon(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -414,7 +414,7 @@ void initWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initDistanseWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initDistanseWeapon(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -510,7 +510,7 @@ void initDistanseWeapon(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	typesItem[numberItem] = addType;
 }
 
-void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initTools(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -639,7 +639,7 @@ void initTools(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initFoods(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 
@@ -739,7 +739,7 @@ void initFoods(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initEmptyItem(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initEmptyItem(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	////////////////////////////////////////////////v
 	// Переменные для записывания данных
@@ -775,7 +775,7 @@ void initEmptyItem(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
 	delete pathTexture;
 }
 
-void initHaveWater(TypeItem* typesItem, listDestroyObjectsAndBlocks& list)
+void initHaveWater(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list)
 {
 	TypeItem addType;
 

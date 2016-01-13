@@ -52,8 +52,8 @@ void createEnemys(world& world)
 	types.push_back(&typesEnemy[idEntity::playerEntity]);
 	amount.push_back(1);
 
-	//types.push_back(&typesEnemy[idEntity::wolfEnemy]);
-	//amount.push_back(4);
+	types.push_back(&typesEnemy[idEntity::wolfEnemy]);
+	amount.push_back(1);
 
 	createOnlyEnemy(world , types , amount);
 

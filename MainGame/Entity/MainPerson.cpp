@@ -66,10 +66,12 @@ void Entity::updateAtack(world &world, const float deltaTime)
 void Entity::killFindEnemy(world& world)
 {
 	Entity &findEnemy = getFindEntity();
-	findEnemy.Drop(world);
-	findEnemy.playSoundDeath(world);
-	world.Enemys.erase(world.Enemys.begin() + getIdFindEntity());
-	world.countEntity--;
+
+	//assert(findEnemy.getType()->id != 0);
+	//world.Enemys.erase(world.Enemys.begin() + getIdFindEntity());
+	//world.countEntity--;
+
+
 
 	resetAtack();
 }
@@ -80,7 +82,7 @@ void Entity::hurtEnemy(Item &currentItem, const float deltaTime)
 
 	Vector2f posPerson = getPosition();
 	Vector2f posEnemy = getFindEntity().getPosition();
-	float distanse = distansePoints(posPerson, posEnemy);
+	float distanse = Math::distansePoints(posPerson, posEnemy);
 
 	animation.updateFight(deltaTime, giveDamage, currenMode);
 	if (getStateGiveDamage() && distanse <= SIZE_BLOCK * 2.5f) {

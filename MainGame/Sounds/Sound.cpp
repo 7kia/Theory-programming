@@ -31,6 +31,12 @@ dataSound::dataSound()
 	initSound(hitSandSound, soundPaths, 0.f);
 	initSound(hitStoneSound, soundPaths, 0.f);
 
+	initSound(shootPistolSound , soundPaths , 0.f);
+	initSound(shootRifleSound , soundPaths , 0.f);
+	initSound(shooyHeavyRifleSound , soundPaths , 0.f);
+	initSound(reloadRifleSound , soundPaths , 0.f);
+
+
 	initSound(waveEndSound, soundPaths, 0.f);
 	initSound(levelUpSound, soundPaths, 0.f);
 

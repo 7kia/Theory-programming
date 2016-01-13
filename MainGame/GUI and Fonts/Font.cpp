@@ -35,7 +35,7 @@ void initDeathText(TextGame& textGame)
 	Text *currentText = &textGame.texts[idText::mainPersonIsDeath];
 	size_t sizeString = stringDeathPerson.getSize();
 
-	defineOriginInMiddleString(*currentText);
+	g_Functions::defineOriginInMiddleString(*currentText);
 
 	currentText->setString(stringDeathPerson);
 }

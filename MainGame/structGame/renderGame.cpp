@@ -19,6 +19,7 @@ void Game::render()
 
 	renderMap(rectWindow);
 	renderItems(rectWindow);
+	renderShoots(rectWindow);
 
 	mainPerson.renderCurrentItem(window);
 	window.draw(*mainPerson.spriteEntity);
@@ -90,6 +91,37 @@ void Game::renderItems(FloatRect const& rectWindow)
 		}
 
 	}
+}
+
+void Game::renderShoots(FloatRect rect)
+{
+	vector<shoot>& shoots = world.shoots;
+
+	int shootLevel;
+
+	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
+	const int personLevel = mainPerson->currentLevelFloor;
+	for (int i = 0; i < shoots.size(); ++i) {
+		shootLevel = shoots[i].getLevel();
+		if ((shootLevel >= personLevel - 1) && (shootLevel <= personLevel + 1)) {
+
+			Color currentColor;
+			if (personLevel) {
+				currentColor = NORMAL_COLOR;
+			}
+			else if (personLevel - 1) {
+				currentColor = DOWN_VIEW;
+			}
+			else if (personLevel + 1) {
+				currentColor = UP_VIEW;
+			}
+			shoots[i].getSprite().setColor(currentColor);
+
+			drawInWindow(shoots[i].getSprite() , rect);
+		}
+
+	}
+
 }
 
 void Game::renderEntitys(FloatRect const& rectWindow)
@@ -176,12 +208,12 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 	Vector2f posText = centerWindow;
 
 	Item drawItem;
-
+	string amountItems;
 	for (size_t i = 0; i < listAward.size(); i++) {
-		string amountItems;
-		intToString(listAward[i].y, amountItems);
+		
+		amountItems = Math::intToString(listAward[i].y);
 		currentText->setString(amountItems);
-		float middleText = float(computeMiddleString(*currentText));
+		float middleText = float(Math::computeMiddleString(*currentText));
 
 		posText = posImage;
 		posText.y += SIZE_ITEM;
@@ -191,7 +223,7 @@ void Game::drawAwardItems(vector<Vector2i> &listAward)
 
 
 		drawItem.setType(typesItems[listAward[i].x]);
-		drawItem.setPosition(Vector3i(posImage.x, posImage.y, drawItem.getLevelOnMap()));
+		drawItem.setPositionSprite(posImage);
 		drawItem.setScale(SCALE_AWARD_ITEMS);
 		posImage.x += DISTANSE_BETWEEN_AWARD_ITEMS + SIZE_ITEM;
 		window.draw(drawItem.getSprite());
@@ -219,7 +251,7 @@ void Game::setPositionTitleAward(Vector2f const& centerWindow, Vector2f &posText
 	Text *currentText = &textGame.texts[idText::panelTitleText];
 
 	currentText->setString(TEXT_AWARD);
-	float middleText = float(computeMiddleString(*currentText));
+	float middleText = float(Math::computeMiddleString(*currentText));
 	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TITLE_TEXT;
 	posText.x -= middleText;
 
@@ -235,7 +267,7 @@ void Game::setPositionHelpTextAward(sf::Vector2f const & centerWindow, sf::Vecto
 	currentText = &textGame.texts[idText::panelHelpText];
 	currentText->setString(TEXT_HELP_AWARD);
 
-	float middleText = float(computeMiddleString(*currentText));
+	float middleText = float(Math::computeMiddleString(*currentText));
 	posText.y += SHIFT_Y_AWARD_HELP_TEXT + sizeText;
 	posText.x -= middleText;
 
@@ -255,15 +287,14 @@ void Game::setPositionWaveText(sf::Vector2f& posText)
 
 	currentText = &textGame.texts[idText::panelHelpText];
 
-	string numberWave;
-	intToString(difficult, numberWave);
+	string numberWave = Math::intToString(difficult);
 	String inputString = TEXT_NUMBER_WAVE_START;
 	inputString += String(numberWave);
 	inputString += TEXT_NUMBER_WAVE_END;
 
 	currentText->setString(inputString);
 
-	float middleText = float(computeMiddleString(*currentText));
+	float middleText = float(Math::computeMiddleString(*currentText));
 	posText.y += sizeText;
 	posText.x -= middleText;
 
@@ -280,7 +311,7 @@ void Game::setPositionEndGameText()
 
 	currentText->setString(TEXT_VICTORY);
 	int sizeText = currentText->getCharacterSize();
-	float middleText = float(computeMiddleString(*currentText));
+	float middleText = float(Math::computeMiddleString(*currentText));
 	posText.y += -HEIGHT_AWARD_GUI / 2 + SHIFT_Y_AWARD_TITLE_TEXT;
 	posText.x -= middleText;
 
@@ -291,7 +322,7 @@ void Game::setPositionEndGameText()
 
 	currentText->setString(TEXT_UNDER_VICTORY);
 
-	middleText = float(computeMiddleString(*currentText));
+	middleText = float(Math::computeMiddleString(*currentText));
 	posText.y += SHIFT_Y_AWARD_HELP_TEXT + sizeText;
 	posText.x -= middleText;
 

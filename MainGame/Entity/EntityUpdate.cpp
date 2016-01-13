@@ -250,6 +250,8 @@ void Entity::computeAngle(RenderWindow &window)
 	float dX = pos.x - spriteEntity->getPosition().x - size.width / 2;
 	float dY = pos.y - spriteEntity->getPosition().y - size.height / 2;
 	rotation = (atan2(dX , dY)) * 180 / PI - 180;
+
+	directions.directionToTarget = Math::getNormalVector(sf::Vector2f(dX, dY));
 	if (rotation < 0) {
 		rotation += 360;
 	}

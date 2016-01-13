@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
+#include  "../structGame/MyFunctions.h"
 const int SIZE_BIG_TEXT = 32;
 const int SIZE_NORMAL_TEXT = 18;
 const int SIZE_SMALL_TEXT = 14;

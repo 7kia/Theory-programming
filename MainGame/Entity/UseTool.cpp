@@ -26,7 +26,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 	bool isDestroyEffect = findObject->typeObject->id == idUnlifeObject::destroyBlockEffect;
 
 	int idNature = defineIdNature(world.field, isDestroyEffect, pos);
-	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
+	bool canBreakTheItem = g_Functions::isInListObjects(*listBreaking, idNature);
 
 
 	if (canBreakTheItem) {
@@ -36,7 +36,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 		if (findObject->isDestroyed()) {
 			vector<int> &deleteUnlifeObjects = world.deleteUnlifeObjects;
 			int &idFinded = founds.findObjectFromList;
-			if (!isInListObjects(deleteUnlifeObjects, idFinded) && idFinded > -1) {
+			if (!g_Functions::isInListObjects(deleteUnlifeObjects, idFinded) && idFinded > -1) {
 
 				destroyFindObject(isDestroyEffect, pos, world);
 				deleteUnlifeObjects.push_back(idFinded);
@@ -45,7 +45,7 @@ void Entity::useToolToObject(Vector3i &pos, world &world, Item &currentItem)
 			}
 
 			getCurrentTarget() = RESET_VECTOR_3I;
-			idFinded = RESET_COLLISION_VALUE;
+			idFinded = RESET_VALUE;
 		}
 
 	}
@@ -68,7 +68,7 @@ void Entity::breakNearCollision(world &world)
 	Vector3i &posUse = getCurrentTarget();
 	int idNature = defineIdNature(world , posUse);
 
-	bool canBreakTheItem = isInListObjects(*listBreaking, idNature);
+	bool canBreakTheItem = g_Functions::isInListObjects(*listBreaking, idNature);
 	if (canBreakTheItem) {
 
 		wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];

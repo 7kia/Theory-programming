@@ -14,14 +14,14 @@ void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
 	Vector2f searcherPoint = getPosition();
 
 	float distanse;
-	distanse = distansePoints(searcherPoint , enemyPoint);
+	distanse = Math::distansePoints(searcherPoint , enemyPoint);
 
 	if (distanse <= radiuseView && onLevel) {
 		Vector2f movement;
 		if (noAtack) {
 			currenMode = idEntityMode::fight;
 
-			movement = vectorDirection(searcherPoint , enemyPoint);
+			movement = Math::vectorDirection(searcherPoint , enemyPoint);
 
 			checkLevelHealth(movement);
 			defineDirectionLook(movement);

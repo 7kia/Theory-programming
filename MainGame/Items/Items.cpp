@@ -128,6 +128,23 @@ int Item::getLevelOnMap()
 	return currentLevel;
 }
 
+void Item::setLevelOnMap(int number)
+{
+	currentLevel = number;
+}
+
+int Item::getIdTypeShoot()
+{
+	// Если понадобятся разные виды пуль
+	// getIdType() - idItem::pistolItem
+	return getIdType() - idItem::pistolItem;
+}
+
+int Item::getIdSoundShoot()
+{
+	return shootPistolSound + (getIdType() - idItem::pistolItem);
+}
+
 ////////////////////////////////////////////////////////////////////
 // Анимация и озвучка предметов НЕРАБОТАЕТ пока
 void Item::update(const float deltaTime, dataSound &databaseSound)
@@ -137,10 +154,10 @@ void Item::update(const float deltaTime, dataSound &databaseSound)
 
 void Item::playSound(float time, float start, const int idSound)
 {
-	if (time == start) {
-		//soundsEntity[idSound]->play();
-	}
+	
 }
+
+
 
 void Item::resetTimeAnimation(float &time, float &reset)
 {
@@ -161,6 +178,12 @@ float Item::getYPos()
 {
 	return mainSprite->getPosition().y;
 }
+
+sf::Vector2f Item::getPositionSprite()
+{
+	return sf::Vector2f(getXPos() , getYPos());
+}
+
 ////////////////////////////////////////////////////////////////////
 
 void Item::setType(TypeItem &type)

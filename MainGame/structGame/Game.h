@@ -65,6 +65,7 @@ enum StateGame
 struct world;
 struct Game
 {
+	Game();
 	sf::RenderWindow window;
 
 	GUI gui;
@@ -90,8 +91,6 @@ struct Game
 	unsigned int widthMainWindow = DEFAULT_WIDTH_WINDOW;
 	unsigned int heightMainWindow = DEFAULT_HEIGHT_WINDOW;
 
-
-	Game();
 	void loadConfig(char *nameConfig, int *variables);
 	void initializeHotKeys();
 	void informationAboutSelect(float x, float y);
@@ -116,6 +115,7 @@ struct Game
 	// updateGame.cpp
 	void update(const float& deltaTime);
 	void updatePlayer(const float& deltaTime);
+	void updateBullets(const float deltaTime);
 	void updateEntity(const float deltaTime);
 	void updateUnlifeObjects(const float& deltaTime);
 	void upgradeObject(UnlifeObject& object);
@@ -140,6 +140,7 @@ struct Game
 	void switchMusic();
 	void playDayMusic();
 	void playNightMusic();
+	void renderShoots(FloatRect rect);
 	// renderGame.cpp
 	void render();
 	void drawInWindow(sf::Sprite &sprite, sf::FloatRect const& rectWindow);

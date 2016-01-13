@@ -8,9 +8,15 @@ void Game::updateWorldTimeCircles()
 	float currentWorldTime = world.worldTime.getElapsedTime().asSeconds();
 
 	world.deleteObjects();
+	world.deleteBullets();
+	world.deleteEntitys();
 
 	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
+
 		generateGroups();
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
+
 		updateTimeDay(currentWorldTime);
 		printf("World time: %f\n", currentWorldTime);
 	}
@@ -24,12 +30,57 @@ void world::deleteObjects()
 		id = deleteUnlifeObjects[i];
 		if (!unlifeObjects.empty()) {
 			assert(unlifeObjects.size() != 0);
-			assert(id > RESET_COLLISION_VALUE);
+			assert(id > RESET_VALUE);
 			unlifeObjects.erase(unlifeObjects.begin() + id);
+			continue;
 		}
 		i++;
 	}
 	deleteUnlifeObjects.clear();
+}
+
+void world::deleteBullets()
+{
+	int i = 0;
+	int id;
+	while (i < deleteShoots.size()) {
+		id = deleteShoots[i];
+		if (!shoots.empty()) {
+			assert(shoots.size() != 0);
+			assert(id > RESET_VALUE);
+			//if(g_Functions::isInListObjects(shoots, id))
+			shoots.erase(shoots.begin() + id);
+			deleteShoots.erase(deleteShoots.begin() + i);
+
+			continue;
+		}
+		i++;
+	}
+	deleteShoots.clear();
+}
+
+void world::deleteEntitys()
+{
+	int i = 0;
+	int id;
+	while (i < deleteEnemys.size()) {
+		id = deleteEnemys[i];
+		if (!Enemys.empty()) {
+			assert(deleteEnemys.size() != 0);
+			assert(id > RESET_VALUE);
+
+			Enemys[id].Drop(*this);
+			Enemys[id].playSoundDeath(*this);
+
+			Enemys.erase(Enemys.begin() + id);
+
+			countEntity--;
+			deleteEnemys.erase(deleteEnemys.begin() + i);
+			continue;
+		}
+		i++;
+	}
+	deleteEnemys.clear();
 }
 
 void Game::updateTimeDay(float &time)

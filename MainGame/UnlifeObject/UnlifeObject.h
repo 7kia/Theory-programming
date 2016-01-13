@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 
-#include "../Map/BlocksVar.h"
+
 #include "../GlobalVar.h"
 #include "../Sounds/Sound.h"
 

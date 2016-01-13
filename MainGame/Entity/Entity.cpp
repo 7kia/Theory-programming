@@ -172,6 +172,11 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 	}
 }
 
+Entity::~Entity()
+{
+	//assert(getType()->id != 0);
+}
+
 bool Entity::getStateGiveDamage()
 {
 	return giveDamage;
@@ -303,13 +308,18 @@ bool Entity::isEmptySlot()
 	return false;
 }
 
+int Entity::getAmountSlots()
+{
+	return type->amountSlots;
+}
+
 bool Entity::isInUseField(Vector2f pos, bool under)
 {
 	// TODO : CurrentPosition
-	Vector2i posBlock = inMapCoordinate(pos);
+	Vector2i posBlock = Math::inMapCoordinate(pos);
 
 	int radiusUse = getRadiuseUse();
-	Vector2i absolutePosition = inMapCoordinate(getAbsolutPosition());
+	Vector2i absolutePosition = Math::inMapCoordinate(getAbsolutPosition());
 	bool checkX = ( (absolutePosition.x + radiusUse ) > posBlock.x)
 								&& (absolutePosition.x - (radiusUse + 1) <= posBlock.x);
 
@@ -353,22 +363,18 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 	if (currentItem.getType() != getRefOnEmptyItem()->getType()) {
 
 		Item addItem = getCurrentItem();
-
-		Vector3i posItem = { getXPosOnMap(),
-												 getYPosOnMap(),
-												 currentLevelFloor + 1 };
-		addItem.setPosition(posItem);
-
 		Vector2f posHero = getPosition();
-		posHero.x += getWidth() / 2;
-		posHero.y += getHeight() / 2;// Начало отсчёта не в центре спрайта
 
-		posItem.x = posHero.x;
-		posItem.y = posHero.y;
-
-		addItem.setPosition(posItem);
+		addItem.setPositionSprite(posHero);
+		addItem.setLevelOnMap(getLevelWall());
 		addItem.setScale(scaleOutItems);
 		items.push_back(addItem);
+
+		/*
+		
+		*/
+		//posHero.x += getWidth() / 2;
+		//posHero.y += getHeight() / 2;// Начало отсчёта не в центре спрайта
 
 		playObjectDropSound(posHero);
 
@@ -389,57 +395,6 @@ void Entity::run()
 		stepCurrent = stepFirst * 3;
 		stamina.needMinusStamina = true;
 	}
-}
-
-bool Entity::isInListBlocks(vector<wchar_t> &listObjects , wchar_t block) {
-	if (&listObjects != nullptr) {
-
-		size_t size = listObjects.size();
-		if (size) {
-			for (size_t i = 0; i < size; i++) {
-				if (block == listObjects[i]) {
-					return true;
-				}
-			}
-		}
-
-	}
-	
-	return false;
-}
-
-bool Entity::isInListIds(int id, vector<wchar_t> &listIds) {
-	if (&listIds != nullptr) {
-
-		size_t size = listIds.size();
-		if (size) {
-			for (size_t i = 0; i < size; i++) {
-				if (id == listIds[i]) {
-					return true;
-				}
-			}
-		}
-
-	}
-
-	return false;
-}
-
-bool Entity::isInListObjects(vector<int> &listObjects, int id) {
-	if(&listObjects != nullptr)
-	{
-		size_t size = listObjects.size();
-		if (size) {
-			for (size_t i = 0; i < size; i++) {
-				if (id == listObjects[i]) {
-					return true;
-				}
-			}
-		}
-
-	}
-
-	return false;
 }
 
 void Entity::renderCurrentItem(sf::RenderWindow& window)

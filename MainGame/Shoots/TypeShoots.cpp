@@ -1,4 +1,4 @@
-#include "shoot.h"
+#include "TypeShoots.h"
 
 using namespace sf;
 using namespace std;
@@ -14,7 +14,7 @@ void TypeShoot::init(int id, const String *pathTexture , int *typesDamage)
 
 TypeShoot::~TypeShoot()
 {
-	delete textureShoot;// TODO : bug ?
+	//delete textureShoot;// TODO : bug ?
 }
 
 void initTypeShoots(TypeShoot * typesShoots)
@@ -25,18 +25,18 @@ void initTypeShoots(TypeShoot * typesShoots)
 	typeDamage[crushingDamage] = 16;
 	typeDamage[unlifeDamage] = 0;
 	typesShoots[pistolShoot].init(bulletPath, texturePaths, typeDamage);
-	cleanIntArray(typeDamage , amountTypeDamage);
+	g_Functions::cleanIntArray(typeDamage , amountTypeDamage);
 
 	typeDamage[cuttingDamage] = 32;
 	typeDamage[crushingDamage] = 32;
 	typeDamage[unlifeDamage] = 0;
 	typesShoots[rifleShoot].init(bulletPath , texturePaths , typeDamage);
-	cleanIntArray(typeDamage , amountTypeDamage);
+	g_Functions::cleanIntArray(typeDamage , amountTypeDamage);
 
 	typeDamage[cuttingDamage] = 70;
 	typeDamage[crushingDamage] = 70;
 	typeDamage[unlifeDamage] = 0;
 	typesShoots[heavyRifleShoot].init(bulletPath , texturePaths , typeDamage);
-	cleanIntArray(typeDamage , amountTypeDamage);
+	g_Functions::cleanIntArray(typeDamage , amountTypeDamage);
 
 }

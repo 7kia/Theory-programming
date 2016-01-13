@@ -60,7 +60,7 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 	int i = mainPerson.idSelectItem;
 	int paritySize = currentText->getString().getSize() % 2;
 	int shiftName = currentText->getCharacterSize();// TODO
-	int halfSizeString = shiftName * (2 - paritySize) + int(computeSizeString(*currentText) / 2);
+	int halfSizeString = shiftName * (2 - paritySize) + int(Math::computeSizeString(*currentText) / 2);
 	//////////////////////////////////////////////
 
 
@@ -103,35 +103,30 @@ void itemFeatures::renderFeatures(Entity& mainPerson, featuresWindow features,
 	int itemCrashDam = typeItem->damageItem[crushingDamage];
 	int itemUnlifeDam = typeItem->damageItem[unlifeDamage];
 
-	string itemCut;
-	string itemCrash;
-	string itemUnlife;
-
-	intToString(itemCutDam, itemCut);
-	intToString(itemCrashDam, itemCrash);
-	intToString(itemUnlifeDam, itemUnlife);
-
+	string itemCut = Math::intToString(itemCutDam);
+	string itemCrash = Math::intToString(itemCrashDam);
+	string itemUnlife = Math::intToString(itemUnlifeDam);
 
 	renderIconWithScale(cutSprite, pos, window);
 	renderValueMiddle(itemCut, currentText, pos, window);
 
-	pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+	pos.x += Math::computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
 	renderIconWithScale(crashSprite, pos, window);
 	renderValueMiddle(itemCrash, currentText, pos, window);
 
-	pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+	pos.x += Math::computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
 	renderIconWithScale(unlifeSprite, pos, window);
 	renderValueMiddle(itemUnlife, currentText, pos, window);
 
 	//////////////////////////////////////////////////////////
 	// Отображение характеристик
 
-	pos.x += computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
+	pos.x += Math::computeSizeString(*currentText) + SHIFT_FEATURES_PANEL;
 	int itemToughness = currentItem.currentToughness;
 
-	string itemToug;
+	string itemToug = Math::intToString(itemToughness);
 
-	intToString(itemToughness, itemToug);
+
 
 	////////////////
 	// Голод

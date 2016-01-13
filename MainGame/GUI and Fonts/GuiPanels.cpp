@@ -50,8 +50,7 @@ void panelQuickAccess::renderAmountItem(int amount, Vector2f pos, TextGame &text
 	Text *currentText = &textGame.texts[idText::itemGui];
 
 	if (amount > 1) {
-		string str;
-		intToString(amount, str);
+		string str = Math::intToString(amount);
 
 		currentText->setString(str);
 

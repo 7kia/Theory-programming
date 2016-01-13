@@ -20,6 +20,7 @@ Game::Game()
 	initializeTypesItem(types.typesItem, world.listDestroy);
 	initializeItems(world.items, types.typesItem, world.emptyObjects.emptyItem);
 
+	initTypeShoots(world.typesObjects.typesShoot);
 	createListAward();
 
 	// TODO : create configs for different category variables
@@ -80,7 +81,7 @@ void Game::loadConfig(char *nameConfig, int *variables)
 				}
 				else {
 					std::cout << "value = %s " << value << std::endl;
-					stringToInt(variables[id], value);
+					variables[id] = Math::stringToInt(value);
 
 					id++;
 					value.clear();

@@ -111,3 +111,34 @@ void Entity::useAsBukketWithWater(Item &currentItem, world &world, Event event)
 	}
 
 }
+
+void Entity::useAsRifle(Item & currentItem , world & world)
+{
+	int idBullets = searchBulletInInventory();
+
+	if(idBullets > RESET_VALUE)
+	{
+		createBullet(world.shoots , world.getTypeShoot(currentItem.getIdTypeShoot()));
+		::playSound(currentItem.getIdSoundShoot(), *soundBase,
+								soundEntity, currentItem.getPositionSprite());
+	}
+	else
+	{
+		
+	}
+}
+
+int Entity::searchBulletInInventory()
+{
+	Item *currentItem = &itemsEntity[0];
+	int idBullet = getCurrentItem().getIdTypeShoot() + idItem::pistolItem;
+	for (int i = 0; i < getAmountSlots(); i++)
+	{
+		currentItem = &itemsEntity[i];
+		if (currentItem->getIdType() == idBullet)
+		{
+			return i;
+		}
+	}
+	return RESET_VALUE;
+}

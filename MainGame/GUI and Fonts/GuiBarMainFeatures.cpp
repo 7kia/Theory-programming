@@ -42,9 +42,9 @@ void barMainFeatures::renderText(int &current, int& max, Vector2f scale,
 {
 	Text* currentText = &textGame.texts[idText::levelBar];
 
-	currentText->setString(toStringCharacter(current, max));
+	currentText->setString(Math::toStringCharacter(current, max));
 
-	float middleString = float(computeMiddleString(*currentText));
+	float middleString = float(Math::computeMiddleString(*currentText));
 	position = { position.x + WIDTH_LEVEL_BAR_GUI / 2 - middleString, position.y - Y_SHIFT_BARS / 2 };
 	currentText->setPosition(position);
 
@@ -62,7 +62,7 @@ void barMainFeatures::renderTextEnemy(Entity &enemy, int & current, int & max, i
 	sizeSprite &size = enemy.type->featuresSprite.size;
 	pos.y -= size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * shift;
 
-	currentText->setString(toStringCharacter(current, max));
+	currentText->setString(Math::toStringCharacter(current, max));
 
 	pos.x -= currentText->getString().getSize() * currentText->getCharacterSize() / 4;
 	currentText->setPosition(pos);
@@ -83,12 +83,11 @@ void barMainFeatures::renderDamageForEnemy(Entity &enemy, TextGame &textGame, Re
 	// Если нанесли урон то отображаем
 	int damage = enemy.damage.inputDamage;
 	if (damage) {
-		std::string stringDamage;
-		intToString(damage, stringDamage);
+		std::string stringDamage = Math::intToString(damage);
 
 		currentText->setString(stringDamage);
 
-		pos.x -= computeMiddleString(*currentText);
+		pos.x -= Math::computeMiddleString(*currentText);
 		currentText->setPosition(pos);
 		window.draw(*currentText);
 	}

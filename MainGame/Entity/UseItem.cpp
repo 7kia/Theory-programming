@@ -10,8 +10,8 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 
 	Vector3i &posUse = getCurrentTarget();
 
-	posUse.x = inMapCoordinate(pos.x);
-	posUse.y = inMapCoordinate(pos.y);
+	posUse.x = Math::inMapCoordinate(pos.x);
+	posUse.y = Math::inMapCoordinate(pos.y);
 
 	bool isEnemy = founds.findEnemy != founds.emptyEnemy;
 	//	bool isObject = founds.findObject->typeObject->id != founds.emptyObject->typeObject->id;
@@ -44,7 +44,7 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 				if (idNature <= idNatureObject::Unbreaking) {
 					idNature = getFindUnlifeObject().typeObject->idNature;
 				}
-				if ((idNature != idNatureObject::Unbreaking) && isInListObjects(*currentItem.getListDestroy(), idNature)) {
+				if ((idNature != idNatureObject::Unbreaking) && g_Functions::isInListObjects(*currentItem.getListDestroy(), idNature)) {
 					currenMode = idEntityMode::atack;
 					giveDamage = false;
 				}
@@ -87,6 +87,10 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 				useAsEmptyBottle(currentItem , world , level);
 			}
 			break;
+		case idCategoryItem::distanceWeapon:
+			
+			useAsRifle(currentItem , world);
+			break;
 		case idCategoryItem::other:
 			break;
 		default:
@@ -128,8 +132,8 @@ void Entity::createRedefineItem(world &world, Item &currentItem, int shift)
 	Item addItem;
 	addItem.setType(world.getTypeItem(defineType));
 
-	Vector3i posItem = { inMapCoordinate(getXPos()) + 1,
-											inMapCoordinate(getYPos()) + 1,
+	Vector3i posItem = { Math::inMapCoordinate(getXPos()) + 1,
+											Math::inMapCoordinate(getYPos()) + 1,
 											getLevelWall() };
 	addItem.setPosition(posItem);
 
@@ -152,7 +156,7 @@ void Entity::takeItem(world &world, Vector2f pos)
 {
 	int idFindItem = getIdFindItem();
 
-	if (idFindItem > RESET_COLLISION_VALUE) {
+	if (idFindItem > RESET_VALUE) {
 
 		String nameFindItem = getFindItem().getName();
 		String nameEmptyItem = getRefOnEmptyItem()->getName();
@@ -161,7 +165,7 @@ void Entity::takeItem(world &world, Vector2f pos)
 		if (nameFindItem != nameEmptyItem) {
 			if (isInUseField(pos , true)) {
 
-				if (isEmptySlot() && (idFindItem > RESET_COLLISION_VALUE)) {
+				if (isEmptySlot() && (idFindItem > RESET_VALUE)) {
 					searchItem(world.items , pos);
 
 				
@@ -189,7 +193,7 @@ void Entity::searchItem(vector<Item> &items, Vector2f pos)
 		
 
 			assert(items.size() != 0);
-			assert(idFindItem > RESET_COLLISION_VALUE);
+			assert(idFindItem > RESET_VALUE);
 
 			items.erase(items.begin() + idFindItem);
 		}
@@ -426,7 +430,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 {
 	if (currentLevelFloor >= 0 && currentLevelFloor < HEIGHT_MAP - 1) {
 
-		Vector2i posBlock = inMapCoordinate(pos);
+		Vector2i posBlock = Math::inMapCoordinate(pos);
 
 		Field &field = world.field;
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
@@ -439,7 +443,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 		bool checkOverLadder = (map[currentLevelFloor + 2][posBlock.y][posBlock.x] == charBlocks[idBlocks::air])
 									|| (map[currentLevelFloor + 2][posBlock.y][posBlock.x] == charBlocks[idBlocks::woodLadder]);
 
-		if (isInListBlocks(listDestroy.ladder , field.dataMap[currentLevelFloor + 1][posBlock.y][posBlock.x])
+		if (g_Functions::isInListBlocks(listDestroy.ladder , field.dataMap[currentLevelFloor + 1][posBlock.y][posBlock.x])
 				&& checkOverLadder) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
@@ -452,7 +456,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 		}
 		else {
 			if (founds.findObject != founds.emptyObject) {
-				if (isInListObjects(listDestroy.harvestObjects , founds.findObject->typeObject->id)) {
+				if (g_Functions::isInListObjects(listDestroy.harvestObjects , founds.findObject->typeObject->id)) {
 					upgradeObject(*founds.findObject , world);
 				}
 
@@ -467,7 +471,7 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 {
 	if (currentLevelFloor >= 1) {
 
-		Vector2i posBlock = inMapCoordinate(pos);
+		Vector2i posBlock = Math::inMapCoordinate(pos);
 		Field &field = world.field;
 
 		wchar_t *charBlocks = field.charBlocks;
@@ -476,7 +480,7 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 		bool checkUnderLadder = (map[currentLevelFloor + 1][posBlock.y][posBlock.x] == charBlocks[idBlocks::air]);
 
 		listDestroyObjectsAndBlocks &listDestroy = world.listDestroy;
-		if (isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor][posBlock.y][posBlock.x])
+		if (g_Functions::isInListBlocks(listDestroy.ladder, field.dataMap[currentLevelFloor][posBlock.y][posBlock.x])
 				&& checkUnderLadder) {
 
 			Vector2f posOrigin = spriteEntity->getOrigin();
@@ -487,3 +491,20 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 	}
 }
 
+void Entity::createBullet(vector<shoot>& shoots , TypeShoot &type)
+{
+	shoot addShoot;
+	addShoot.setType(type);
+
+	Vector2f shiftBullet = directions.directionToTarget;
+	shiftBullet.x *= getWidth() * 2;
+	shiftBullet.y *= getHeight() * 2;
+	addShoot.setPosition(getPosition() + shiftBullet , getLevelWall());
+
+	Vector2f speedBullet = directions.directionToTarget;
+	speedBullet.x *= startSpeedBullet.x;
+	speedBullet.y *= startSpeedBullet.y;
+
+	addShoot.setDirection(speedBullet);
+	shoots.push_back(addShoot);
+}

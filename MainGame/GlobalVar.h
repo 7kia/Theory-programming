@@ -5,16 +5,9 @@
 #include <wchar.h>
 #include <assert.h>
 
-#include <iostream>
-#include <string>
-#include <sstream>// Для перевода числа в строку
+const int SIZE_BLOCK = 48;//32 default
 
-#include "Recourses.h"
-#include "Items/ItemsVar.h"
-#include "Map/BlocksVar.h"
-#include "UnlifeObject/UnlifeObjectVar.h"
-
-#include "../structGame/MyFunctions.h"
+const sf::Vector2f SIZES_BLOCK = { float(SIZE_BLOCK), float(SIZE_BLOCK) };
 
 const sf::String stringDeathPerson = "DEATH";
 
@@ -54,8 +47,6 @@ const float DIAGONAL_SCALE_SPEED = 0.7f;
 const float PI = 3.14159265f;// ИСПРАВЬ
 
 const int SIZE_STRING = 256;
-
-const char DIVIDE_SYMBOL = '/';
 
 typedef enum
 {

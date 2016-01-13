@@ -2,10 +2,15 @@
 
 using namespace sf;
 
-void shoot::initPosition(sf::Vector2f dir , int lvl)
+void shoot::setPosition(sf::Vector2f pos , int lvl)
+{
+	sprite.setPosition(pos);
+	level = lvl;
+}
+
+void shoot::setDirection(sf::Vector2f dir)
 {
 	direction = dir;
-	level = lvl;
 }
 
 int shoot::getLevel()
@@ -20,22 +25,23 @@ sf::Vector2f shoot::getDirection()
 
 void shoot::move(const float deltaTime)
 {
-	Vector2f vectorShift = direction;
+	direction.x *= (1.f - accelerationBullet.x);
+	direction.y *= (1.f - accelerationBullet.y);
 
-	vectorShift.x *= deltaTime;
-	vectorShift.y *= deltaTime;
+	Vector2f shift = direction;
+	shift *= deltaTime;
 
-	sprite->move(vectorShift);
+	sprite.move(shift);
 }
 
 sf::Sprite& shoot::getSprite()
 {
-	return *sprite;
+	return sprite;
 }
 
 sf::FloatRect shoot::getGlobalBounds()
 {
-	return sprite->getGlobalBounds();
+	return sprite.getGlobalBounds();
 }
 
 TypeShoot shoot::getType()
@@ -45,6 +51,15 @@ TypeShoot shoot::getType()
 
 int shoot::getDamage(int id)
 {
-	assert((id < 0) && (id > amountTypeDamage));
+	assert(g_Functions::checkDiaposon(id , RESET_VALUE , amountTypeDamage));
 	return type->damageShoot[id];
 }
+
+void shoot::setType(TypeShoot &defineType)
+{
+	type = &defineType;
+
+	sprite.setTexture(*type->textureShoot);
+	sprite.setTextureRect(rectBullet);
+}
+

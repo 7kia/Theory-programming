@@ -15,7 +15,7 @@ public:
 
 	sf::Sprite& getSprite();
 	void setColor(sf::Color color);
-
+	
 	const TypeItem* getType();
 	sf::String getName();
 	int getIdType();
@@ -37,8 +37,11 @@ public:
 
 	int currentLevel;
 	int getLevelOnMap();
+	void setLevelOnMap(int number);
 
-	// TODO
+	int getIdTypeShoot();
+	int getIdSoundShoot();
+	// TODO : animation
 	float timeAnimation;
 	void update(const float deltaTime, dataSound &databaseSound);
 	void playSound(float time, float start, const int idSound);
@@ -53,6 +56,7 @@ public:
 
 	float getXPos();
 	float getYPos();
+	sf::Vector2f getPositionSprite();
 
 private:
 	sf::Sprite *mainSprite;

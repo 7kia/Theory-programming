@@ -6,31 +6,37 @@ using namespace std;
 
 void Game::update(const float &deltaTime)
 {
-	Entity *mainPerson = world.mainPerson;
+	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
 
-
+	assert(mainPerson->getType()->id == 0);
 
 	processEvents(deltaTime);
-
+	assert(mainPerson->getType()->id == 0);
 
 	if ((mainPerson->isDeath == false)
 			&& (stateGame != pauseState)
 			&& (stateGame != endGameState)) {
 	
-
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 		updatePlayer(deltaTime);
-	
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 
+		updateBullets(deltaTime);
 		updateEntity(deltaTime);
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
+
 		updateUnlifeObjects(deltaTime);
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
+
 		updateWorldTimeCircles();
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 
 	}
 }
 
 void Game::updatePlayer(const float &deltaTime)
 {
-	Entity *mainPerson = world.mainPerson;
+	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
 
 
 	mainPerson->update(deltaTime);
@@ -41,7 +47,7 @@ void Game::updatePlayer(const float &deltaTime)
 	mainPerson->interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 	mainPerson->interactionWithEntity(&world.Enemys , 0 , deltaTime);
 	mainPerson->interactionWithMap(world.field, world.listDestroy, deltaTime);
-	mainPerson->interactionWitnShoots(world.shoots , deltaTime);
+	mainPerson->interactionWitnShoots(world.shoots , world.deleteShoots, deltaTime);
 	mainPerson->getCoordinateForView(mainPerson->getPosition(), world.view);
 
 	mainPerson->updateView(world.view, world.listener, window);
@@ -51,25 +57,53 @@ void Game::updatePlayer(const float &deltaTime)
 	//printf("Angle %f \n", mainPerson.rotation);
 }
 
+void Game::updateBullets(const float deltaTime)
+{
+	vector<shoot>& shoots = world.shoots;
+
+	for (int i = 0; i < shoots.size(); ++i) {
+		if(shoots[i].getDirection() != RESET_VECTOR_2F)
+		{
+			shoots[i].move(deltaTime);
+			if(Math::distansePoints(ZERO_VECTOR_2F, shoots[i].getDirection()) < ABOUT_ZERO_VALUE_SPEED_BULLET)
+			{
+				world.deleteShoots.push_back(i);
+			}
+		}
+	}
+}
 
 void Game::updateEntity(const float deltaTime)
 {
 	vector<Entity>& Enemys = world.Enemys;
-	Entity *mainPerson = world.mainPerson;
+	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
+	assert(mainPerson->getType()->id == 0);
 
 	Field &field = world.field;
 	for (int i = 1; i < Enemys.size(); ++i) {
 		Enemys[i].update(deltaTime);
-		Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects, deltaTime);
 
-		Enemys[i].interactionWithEntity(&world.Enemys, i, deltaTime);
-		Enemys[i].interactionWithMap(field, world.listDestroy, deltaTime);
+		if (!Enemys[i].getStateDeath()) {
+			Enemys[i].interactionWitnUnlifeObject(world.unlifeObjects , deltaTime);
 
-		if (Enemys[i].type->converse.isAgressiveForPlayer) {
-			Enemys[i].searchEnemy(*mainPerson , world , deltaTime);
+			Enemys[i].interactionWithEntity(&world.Enemys , i , deltaTime);
+			Enemys[i].interactionWithMap(field , world.listDestroy , deltaTime);
+
+			if (Enemys[i].type->converse.isAgressiveForPlayer) {
+				Enemys[i].searchEnemy(*mainPerson , world , deltaTime);
+			}
+			Enemys[i].interactionWitnShoots(world.shoots , world.deleteShoots , deltaTime);
+
+			Enemys[i].randomWalk(deltaTime);
 		}
-		Enemys[i].randomWalk(deltaTime);
+		else {
+			if (!g_Functions::isInListObjects(world.deleteEnemys , i)) {
+				world.deleteEnemys.push_back(i);
+			}
+		}
 	}
+	assert(mainPerson->getType()->id == 0);
+
 }
 
 
@@ -155,7 +189,9 @@ void Game::generateGroups()
 	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
 
 	if (nowNight && needGenerateWave && !waveEnemysCreated) {
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 		createGroups(currentWorldTime);
+		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 	}
 
 }
@@ -166,12 +202,13 @@ void Game::createGroups(float time)
 	world.waveEnemysCreated = true;
 
 	Vector3i pos;
-
+	assert(world.Enemys[0].getType()->id == 0);
 	pos = { 5, 5, 2 };
 	createSmallGroupSkelets(world , pos);
-
+	assert(world.Enemys[0].getType()->id == 0);
 	checkDifficult();
 	generateStrongGroups();
+	assert(world.Enemys[0].getType()->id == 0);
 }
 
 void Game::checkDifficult()

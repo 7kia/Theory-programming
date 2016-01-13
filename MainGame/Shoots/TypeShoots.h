@@ -1,7 +1,11 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 
+#include "../Recourses.h"
+#include "../structGame/MyFunctions.h"
 const sf::IntRect rectBullet(0 , 0 , 10 , 10);
+const sf::Vector2f startSpeedBullet(1000.f , 1000.f);
+const sf::Vector2f accelerationBullet(0.01f , 0.01f);
 
 typedef enum
 {

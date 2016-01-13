@@ -34,7 +34,7 @@ struct typesObjectsInWorld
 	TypeItem typesItem[AMOUNT_TYPES_ITEM];
 	TypeEnemy typesEnemy[amountEnemy];
 	TypeUnlifeObject typesUnlifeObject[AMOUNT_TYPES_UNLIFE_OBJECT];
-
+	TypeShoot typesShoot[amountTypeShoots];
 };
 
 struct emptyObjects
@@ -61,6 +61,7 @@ struct world
 	std::vector<int> deleteItems;
 	std::vector<int> deleteUnlifeObjects;
 	std::vector<int> deleteEnemys;
+	std::vector<int> deleteShoots;
 
 	void initializeCategorysBreakingObject();
 	void initializePlayer(View& view, Listener& listener);
@@ -68,6 +69,8 @@ struct world
 	typesObjectsInWorld typesObjects;
 	TypeItem* getTypesItem();
 	TypeItem & getTypeItem(int id);
+
+	TypeShoot & getTypeShoot(int id);
 
 	listDestroyObjectsAndBlocks listDestroy;
 	Field field;
@@ -91,6 +94,8 @@ struct world
 	emptyObjects emptyObjects;
 
 	void deleteObjects();
+	void deleteBullets();
+	void deleteEntitys();
 };
 
 void createOnlyEnemy(world &world, std::vector<TypeEnemy*> &types, std::vector<int> amount);

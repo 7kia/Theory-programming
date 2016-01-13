@@ -41,8 +41,6 @@ public:
 	sf::Texture* textureItem;
 	sf::Texture* textureItemForUse;
 
-	// —Ò˚ÎÍË Ì‡ Á‚ÛÍË
-	//Sound *soundsEntity[sizeBuffer];// »—œ–¿¬‹
 	int maxAmount;
 	featuresItem features;
 
@@ -62,15 +60,15 @@ public:
 	void InitForUse(sf::String filenameTextureForUse, featuresSprite features);
 };
 
-void initializeTypesItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
+void initializeTypesItem(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
 
-void initStoneBlock(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
-void initWoodBlock(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
-void initSeadling(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
-void initGroundBlock(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
-void initWeapon(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
+void initStoneBlock(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initWoodBlock(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initSeadling(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initGroundBlock(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initWeapon(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
 void initDistanseWeapon(TypeItem *typesItem , listDestroyObjectsAndBlocks &list);
-void initTools(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
-void initFoods(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
-void initHaveWater(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
-void initEmptyItem(TypeItem *typesItem, listDestroyObjectsAndBlocks &list);
+void initTools(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initFoods(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initHaveWater(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);
+void initEmptyItem(TypeItem *typesItem,  listDestroyObjectsAndBlocks &list);

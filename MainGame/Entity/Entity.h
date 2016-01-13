@@ -9,6 +9,7 @@ struct Entity
 {
 
 public:
+	~Entity();
 	sf::Sprite *spriteEntity;
 
 	entityAnimation animation;
@@ -64,6 +65,7 @@ public:
 	bool isEmptySlot();
 	int emptySlot;
 
+	int getAmountSlots();
 
 
 
@@ -109,7 +111,9 @@ public:
 	// EntityCollision.cpp
 	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
 	void gravitateToGround(Field &field);
-	void interactionWitnShoots(std::vector<shoot>& unlifeObjects , const float deltaTime);
+	void interactionWitnShoots(std::vector<shoot>& unlifeObjects ,
+														 std::vector<int> &listDelete,
+														 const float deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, const float deltaTime);
 	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
 
@@ -134,9 +138,6 @@ public:
 	//////////////////////////////////////////////////////////////////////////////////////////vv
 	// ITEMS
 	// Использование предметов
-	bool isInListBlocks(std::vector<wchar_t> &listObjects, wchar_t block);
-	bool isInListIds(int id, std::vector<wchar_t>& listIds);
-	bool isInListObjects(std::vector<int> &listTypes, int id);
 
 
 	void transferInInventory(std::vector<Item> &items);
@@ -151,6 +152,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);
 	void actionAlternate(world &world, sf::Vector2f pos);
+	void createBullet(std::vector<shoot>& shoots , TypeShoot &type);
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);
@@ -167,6 +169,9 @@ public:
 	void useAsEmptyBottle(Item &currentItem, world &world, int level);
 	void useAsEmptyBukket(Item &currentItem, world &world, int level);
 	void useAsBukketWithWater(Item &currentItem, world &world, sf::Event event);
+
+	void useAsRifle(Item &currentItem , world &world);
+	int searchBulletInInventory();
 
 	void breakNearCollision(world &world);
 	void useTool(sf::Vector3i &pos, world &world, Item &currentItem);
