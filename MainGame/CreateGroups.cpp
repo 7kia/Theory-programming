@@ -70,7 +70,8 @@ TypeItem& world::getTypeItem(int id)
 
 TypeShoot& world::getTypeShoot(int id)
 {
-	assert(g_Functions::checkDiaposon(id, RESET_VALUE , amountTypeShoots));
+	// Если понадобятся разные виды пуль
+	//assert(g_Functions::checkDiaposon(id, RESET_VALUE , amountTypeShoots));
 	return typesObjects.typesShoot[id];
 }
 

@@ -456,7 +456,7 @@ void Entity::actionMain(world &world, Vector2f pos)
 		}
 		else {
 			if (founds.findObject != founds.emptyObject) {
-				if (g_Functions::isInListObjects(listDestroy.harvestObjects , founds.findObject->typeObject->id)) {
+				if (g_Functions::isInListObjects(listDestroy.harvestObjects , founds.findEnemy->getType()->id)) {
 					upgradeObject(*founds.findObject , world);
 				}
 
@@ -491,7 +491,7 @@ void Entity::actionAlternate(world &world, Vector2f pos)
 	}
 }
 
-void Entity::createBullet(vector<shoot>& shoots , TypeShoot &type)
+void Entity::createBullet(vector<shoot>& shoots , TypeShoot &type, int level)
 {
 	shoot addShoot;
 	addShoot.setType(type);
@@ -499,7 +499,7 @@ void Entity::createBullet(vector<shoot>& shoots , TypeShoot &type)
 	Vector2f shiftBullet = directions.directionToTarget;
 	shiftBullet.x *= getWidth() * 2;
 	shiftBullet.y *= getHeight() * 2;
-	addShoot.setPosition(getPosition() + shiftBullet , getLevelWall());
+	addShoot.setPosition(getPosition() + shiftBullet , level);
 
 	Vector2f speedBullet = directions.directionToTarget;
 	speedBullet.x *= startSpeedBullet.x;

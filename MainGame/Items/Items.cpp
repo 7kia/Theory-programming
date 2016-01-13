@@ -136,8 +136,8 @@ void Item::setLevelOnMap(int number)
 int Item::getIdTypeShoot()
 {
 	// Если понадобятся разные виды пуль
-	// getIdType() - idItem::pistolItem
-	return getIdType() - idItem::pistolItem;
+	// typeItem->idAdd[idAddShoot]
+	return idItem::bulletItem;
 }
 
 int Item::getIdSoundShoot()

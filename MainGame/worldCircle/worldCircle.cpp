@@ -49,6 +49,7 @@ void world::deleteBullets()
 			assert(shoots.size() != 0);
 			assert(id > RESET_VALUE);
 			//if(g_Functions::isInListObjects(shoots, id))
+
 			shoots.erase(shoots.begin() + id);
 			deleteShoots.erase(deleteShoots.begin() + i);
 

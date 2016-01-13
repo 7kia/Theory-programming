@@ -116,11 +116,35 @@ void Entity::useAsRifle(Item & currentItem , world & world)
 {
 	int idBullets = searchBulletInInventory();
 
-	if(idBullets > RESET_VALUE)
-	{
-		createBullet(world.shoots , world.getTypeShoot(currentItem.getIdTypeShoot()));
-		::playSound(currentItem.getIdSoundShoot(), *soundBase,
-								soundEntity, currentItem.getPositionSprite());
+	if (idBullets > RESET_VALUE) {
+		int levelShooter = getLevelWall();
+		int levelEnemy = getFindEntity().getLevelWall();
+
+		bool isEnemyLowThatShooter = levelEnemy < levelShooter;
+		bool enemyOnLevelShooter = (levelEnemy == levelShooter);
+
+		float distanseInFloorXY = Math::distansePoints(getPosition() , getFindEntity().getPosition());
+		bool blocksFloorNotCollisionWithFutureShoot = (isEnemyLowThatShooter
+																									 && (distanseInFloorXY < DISTANSE_ATACK_FOR_HIGH_LEVEL));
+		int levelShoot = levelShooter;
+
+		if (enemyOnLevelShooter
+				|| blocksFloorNotCollisionWithFutureShoot) {
+
+			if (blocksFloorNotCollisionWithFutureShoot) {
+				levelShoot = levelEnemy;
+			}
+
+			// Если понадобятся разные виды пуль
+			//world.getTypeShoot(currentItem.getIdTypeShoot())
+			createBullet(world.shoots , world.getTypeShoot(0) , levelShoot);
+			::playSound(currentItem.getIdSoundShoot() , *soundBase ,
+									soundEntity , currentItem.getPositionSprite());
+			minusAmount(itemsEntity[idBullets]);
+
+		}
+
+
 	}
 	else
 	{
@@ -131,7 +155,7 @@ void Entity::useAsRifle(Item & currentItem , world & world)
 int Entity::searchBulletInInventory()
 {
 	Item *currentItem = &itemsEntity[0];
-	int idBullet = getCurrentItem().getIdTypeShoot() + idItem::pistolItem;
+	int idBullet = getCurrentItem().getIdTypeShoot();// +idItem::heavyRifleItem - 1;
 	for (int i = 0; i < getAmountSlots(); i++)
 	{
 		currentItem = &itemsEntity[i];

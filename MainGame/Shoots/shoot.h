@@ -6,6 +6,7 @@
 #include "TypeShoots.h"
 
 const float ABOUT_ZERO_VALUE_SPEED_BULLET = 50.f;
+const float DISTANSE_ATACK_FOR_HIGH_LEVEL = 100.f;
 
 typedef enum
 {
