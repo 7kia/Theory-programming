@@ -10,7 +10,7 @@ void initializeUnlifeObjects(vector<UnlifeObject> &unlifeObjects, TypeUnlifeObje
 	Vector3i pos;
 	pos.z = 2;
 
-	pos = { 4, 12, 2 };
+	pos = { 23, 23, 2 };
 	addObject.setType(typesUnlifeObjects[idUnlifeObject::mineObject]);
 	addObject.setPosition(pos);
 	unlifeObjects.push_back(addObject);
@@ -54,6 +54,7 @@ float UnlifeObject::getYPos()
 {
 	return spriteObject->getPosition().y;
 }
+
 
 void UnlifeObject::setType(TypeUnlifeObject &type)
 {

@@ -61,7 +61,7 @@ void Game::inforAboutUnlifeObject(float x , float y)
 	infoUnlifeObject.setString("UnlifeObject : not select");
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
 
-		int level = unlifeObjects[i].currentLevel;
+		int level = unlifeObjects[i].getLevel();
 
 		Sprite *spriteObject = unlifeObjects[i].spriteObject;
 		FloatRect objectBound = spriteObject->getGlobalBounds();

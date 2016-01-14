@@ -285,6 +285,16 @@ sf::FloatRect UnlifeObject::getTransparentGlobalBounds()
 	return  transparentSpiteObject->getGlobalBounds();
 }
 
+const sizeSprite & UnlifeObject::getMainSize()
+{
+	return typeObject->mainSize.size;
+}
+
+const sizeSprite & UnlifeObject::getTransparentSize()
+{
+	return typeObject->transparentSize.size;
+}
+
 void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 {
 
@@ -426,16 +436,40 @@ void Entity::createBullet(vector<shoot>& shoots , TypeShoot &type, int level)
 {
 	shoot addShoot;
 	addShoot.setType(type);
+	addShoot.init(getPosition() , directions.directionToTarget,
+								getSize() , level);
+	addShoot.setDirection(setDirectionShoot());
+	shoots.push_back(addShoot);
+}
 
-	Vector2f shiftBullet = directions.directionToTarget;
-	shiftBullet.x *= getWidth() * 2;
-	shiftBullet.y *= getHeight() * 2;
-	addShoot.setPosition(getPosition() + shiftBullet , level);
-
+sf::Vector2f Entity::setDirectionShoot()
+{
 	Vector2f speedBullet = directions.directionToTarget;
 	speedBullet.x *= startSpeedBullet.x;
 	speedBullet.y *= startSpeedBullet.y;
+	return speedBullet;
+}
 
-	addShoot.setDirection(speedBullet);
+int UnlifeObject::getIdType()
+{
+	return typeObject->id;
+}
+
+int UnlifeObject::getLevel()
+{
+	return currentLevel;
+}
+
+
+// Так как shoot и TypeShoot недоступен в UnlifeObject.cpp
+void UnlifeObject::createBullet(vector<shoot>& shoots , TypeShoot &type , int level)
+{
+	shoot addShoot;
+	addShoot.setType(type);
+
+	sf::Vector2f shiftFromOrigin = sf::Vector2f(type.rectSprite.width / 2,
+																							type.rectSprite.height / 2);
+	addShoot.init(getPosition() - shiftFromOrigin , ZERO_VECTOR_2F ,
+								getTransparentSize() , level);
 	shoots.push_back(addShoot);
 }

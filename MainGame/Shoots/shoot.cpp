@@ -49,10 +49,24 @@ TypeShoot shoot::getType()
 	return *type;
 }
 
+int shoot::getIdType()
+{
+	return type->idType;
+}
+
 int shoot::getDamage(int id)
 {
 	assert(g_Functions::checkDiaposon(id , RESET_VALUE , amountTypeDamage));
 	return type->damageShoot[id];
+}
+
+void shoot::init(Vector2f pos , Vector2f direction ,
+								 sizeSprite sizeShooter , int level)
+{
+	Vector2f shiftBullet = direction;
+	shiftBullet.x *= sizeShooter.width * COEFFICIENT_SHIFT_BULLET_FROM_SHOOTER;
+	shiftBullet.y *= sizeShooter.height * COEFFICIENT_SHIFT_BULLET_FROM_SHOOTER;
+	setPosition(pos + shiftBullet , level);
 }
 
 void shoot::setType(TypeShoot &defineType)
@@ -60,6 +74,6 @@ void shoot::setType(TypeShoot &defineType)
 	type = &defineType;
 
 	sprite.setTexture(*type->textureShoot);
-	sprite.setTextureRect(rectBullet);
+	sprite.setTextureRect(type->rectSprite);
 }
 

@@ -166,7 +166,7 @@ void Game::renderUnlifeObjects(FloatRect const& rectWindow)
 	vector<UnlifeObject> &unlifeObjects = world.unlifeObjects;
 	bool inView;
 	for (int i = 0; i != unlifeObjects.size(); ++i) {
-		levelObject = unlifeObjects[i].currentLevel;
+		levelObject = unlifeObjects[i].getLevel();
 
 		inView = levelObject >= levelPerson
 				&& levelObject <= levelPerson + 2;

@@ -221,7 +221,8 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 	typesObject->transparentSize.init(WIDTH_SKELET, HEIGHT_SKELET, 0, HEIGHT_SKELET * 7);
 
 	objectDropItems drop;
-	drop.addItem(0, 0, idItem::stoneItem);
+
+	drop.addItem(0 , 0 , idItem::grassItem);
 
 	//typesObject->redefine.init(idUnlifeObject::smallStone, 0);
 	typesObject->drop.init(drop);
@@ -241,7 +242,7 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 	typesObject->transparentSize.init(WIDTH_WOLF, HEIGHT_WOLF, 0, HEIGHT_WOLF * 7);
 
 	// Предметы
-	drop.addItem(0, 0, idItem::stoneItem);
+	drop.addItem(0 , 0 , idItem::grassItem);
 
 	//typesObject->redefine.init(idUnlifeObject::appleTree, 0);
 	typesObject->drop.init(drop);
@@ -255,16 +256,35 @@ void initEffects(TypeUnlifeObject* typesUnlifeObjects, dataSound &storage)
 	canDestroy = true;
 	toughness = 50;
 
-	typesObject->mainSize.init(WIDTH_DESTROY_BLOCK_EFFECT, HEIGHT_DESTROY_BLOCK_EFFECT, 0, 0);
+	typesObject->mainSize.init(0, 0, 0, 0);
 	typesObject->Init(texturePath, name, storage, id, idNature);
 	typesObject->defineToughness(canDestroy, toughness);
 	typesObject->transparentSize.init(WIDTH_DESTROY_BLOCK_EFFECT , HEIGHT_DESTROY_BLOCK_EFFECT , 0 , 0);
 
 	// Предметы
-	drop.addItem(1, 3, idItem::logOakItem);
-	drop.addItem(1, 2, idItem::seadlingOakItem);
+	drop.addItem(0, 0, idItem::grassItem);
 
 	typesObject->redefine.init(idUnlifeObject::destroyBlockEffect, 0);
+	typesObject->drop.init(drop);
+	drop.clear();
+	////////////////////////////////////////////////////////////////////////////////////////
+	id = idUnlifeObject::mineExplosionEffect;
+	typesObject = &typesUnlifeObjects[id];
+
+	texturePath = texturePaths[idTexturePaths::mineExplosionPath];
+	name = "Mine explosion";
+	canDestroy = true;
+	toughness = 50;
+
+	typesObject->mainSize.init(0 , 0 , 0 , 0);
+	typesObject->Init(texturePath , name , storage , id , idNature);
+	typesObject->defineToughness(canDestroy , toughness);
+	typesObject->transparentSize.init(WIDTH_MINE_EXPLOSION, HEIGHT_MINE_EXPLOSION, 0, 0);
+
+	// Предметы
+	drop.addItem(0 , 0 , idItem::grassItem);
+
+	typesObject->redefine.init(idUnlifeObject::destroyBlockEffect , 0);
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////

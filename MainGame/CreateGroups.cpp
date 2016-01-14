@@ -65,6 +65,12 @@ TypeItem& world::getTypeItem(int id)
 	return typesObjects.typesItem[id];
 }
 
+TypeUnlifeObject& world::getTypeUnlifeObject(int id)
+{
+	assert(g_Functions::checkDiaposon(id , RESET_VALUE , idUnlifeObject::amountUnlifeObjects));
+	return typesObjects.typesUnlifeObject[id];
+}
+
 TypeShoot& world::getTypeShoot(int id)
 {
 	// Если понадобятся разные виды пуль

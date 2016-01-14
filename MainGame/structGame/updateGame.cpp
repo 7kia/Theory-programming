@@ -8,28 +8,17 @@ void Game::update(const float &deltaTime)
 {
 	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
 
-	assert(mainPerson->getType()->id == 0);
-
 	processEvents(deltaTime);
-	assert(mainPerson->getType()->id == 0);
 
 	if ((mainPerson->isDeath == false)
 			&& (stateGame != pauseState)
 			&& (stateGame != endGameState)) {
 	
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 		updatePlayer(deltaTime);
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
-
 		updateBullets(deltaTime);
 		updateEntity(deltaTime);
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
-
 		updateUnlifeObjects(deltaTime);
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
-
 		updateWorldTimeCircles();
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 
 	}
 }
@@ -65,7 +54,9 @@ void Game::updateBullets(const float deltaTime)
 		if(shoots[i].getDirection() != RESET_VECTOR_2F)
 		{
 			shoots[i].move(deltaTime);
-			if(Math::distansePoints(ZERO_VECTOR_2F, shoots[i].getDirection()) < ABOUT_ZERO_VALUE_SPEED_BULLET)
+
+			if((Math::distansePoints(ZERO_VECTOR_2F, shoots[i].getDirection()) < ABOUT_ZERO_VALUE_SPEED_BULLET)
+				&& (shoots[i].getIdType() != mineExplosionShoot))
 			{
 				world.deleteShoots.push_back(i);
 			}
@@ -77,7 +68,6 @@ void Game::updateEntity(const float deltaTime)
 {
 	vector<Entity>& Enemys = world.Enemys;
 	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
-	assert(mainPerson->getType()->id == 0);
 
 	Field &field = world.field;
 	for (int i = 1; i < Enemys.size(); ++i) {
@@ -97,12 +87,10 @@ void Game::updateEntity(const float deltaTime)
 			Enemys[i].randomWalk(deltaTime);
 		}
 		else {
-			if (!g_Functions::isInListObjects(world.deleteEnemys , i)) {
-				world.deleteEnemys.push_back(i);
-			}
+			g_Functions::addIdDeleteInList(i , world.deleteEnemys);
+
 		}
 	}
-	assert(mainPerson->getType()->id == 0);
 
 }
 
@@ -127,14 +115,29 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 			}
 
 		}
-		else if(idTypeObject != destroyBlockEffect){
-			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();
-			if (stateSound == sf::SoundSource::Status::Stopped) {
-				(objects.size() != 0);
-				objects.erase(objects.begin() + i);
+		else if (idTypeObject == mineObject) {
+			if (g_Functions::isInListObjects(world.deleteUnlifeObjects, i)) {
+
+				vector<shoot> &shoots = world.shoots;
+				objects[i].createBullet(shoots ,
+																world.getTypeShoot(mineExplosionShoot) ,
+																objects[i].getLevel());
+				shoots[shoots.size() - 1].setDirection(ZERO_VECTOR_2F);
+
+				Vector2i posInFloorXYOnMap = Math::inMapCoordinate(objects[i].getPosition());
+				Vector3i posEffect = { posInFloorXYOnMap.x + 1, 
+																posInFloorXYOnMap.y + 1,
+																objects[i].getLevel() };
+
+				world.createUnlifeObject(mineExplosionEffect, posEffect);
+				::playSound(mineExplosionSound , *objects[objects.size() - 1].typeObject->soundBase ,
+										objects[objects.size() - 1].soundObject, 
+										objects[i].getPosition());
+				
+				stateGame = pauseState;
 			}
 		}
-		else {
+		else if (idTypeObject == destroyBlockEffect) {
 			int &currentToughness = objects[i].currentToughness;
 			int &maxToughnessObject = objects[i].typeObject->toughnessObject;
 
@@ -158,6 +161,14 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 			}
 
 		}
+		else if (idTypeObject != destroyBlockEffect) {
+			sf::SoundSource::Status stateSound = objects[i].soundObject.getStatus();
+			if (stateSound == sf::SoundSource::Status::Stopped) {
+				assert(objects.size() != 0);
+				objects.erase(objects.begin() + i);
+				continue;
+			}
+		}
 
 		i++;
 	}
@@ -170,12 +181,20 @@ void Game::upgradeObject(UnlifeObject &object)
 	Vector2f currentPos = spriteObject.getPosition();
 	Vector3i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
 												int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK),
-												object.currentLevel };
+												object.getLevel() };
 
-	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
+	TypeUnlifeObject *nextType = &world.typesObjects.typesUnlifeObject[redefine.id];
 
-	object.setType(nextType);
+	object.setType(*nextType);
 	object.setPosition(posOnMap);
+}
+
+void world::createUnlifeObject(int id , const Vector3i &pos) {
+	UnlifeObject addObject;
+
+	addObject.setType(getTypeUnlifeObject(id));
+	addObject.setPosition(pos);
+	unlifeObjects.push_back(addObject);
 }
 
 
@@ -189,9 +208,7 @@ void Game::generateGroups()
 	bool needGenerateWave = int(currentWorldTime) % config[TIME_GENERATE_WAVE_ENEMYS] == 0;
 
 	if (nowNight && needGenerateWave && !waveEnemysCreated) {
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 		createGroups(currentWorldTime);
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 	}
 
 }
@@ -202,13 +219,10 @@ void Game::createGroups(float time)
 	world.waveEnemysCreated = true;
 
 	Vector3i pos;
-	assert(world.Enemys[0].getType()->id == 0);
 	pos = { 5, 5, 2 };
 	createSmallGroupSkelets(world , pos);
-	assert(world.Enemys[0].getType()->id == 0);
 	checkDifficult();
 	generateStrongGroups();
-	assert(world.Enemys[0].getType()->id == 0);
 }
 
 void Game::checkDifficult()

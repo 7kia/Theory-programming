@@ -68,9 +68,12 @@ typedef enum
 	appleGrowTree,
 	smallStone,
 
-	mineObject,
+	
 	// Effects
 	shiftEffects,
+
+	mineObject,
+	mineExplosionEffect,
 
 	skeletDeathEffect,
 	wolfDeathEffect,

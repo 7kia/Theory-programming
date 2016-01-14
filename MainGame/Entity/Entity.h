@@ -153,6 +153,7 @@ public:
 	void actionMain(world &world, sf::Vector2f pos);
 	void actionAlternate(world &world, sf::Vector2f pos);
 	void createBullet(std::vector<shoot>& shoots , TypeShoot &type , int level);
+	sf::Vector2f setDirectionShoot();
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// UseItem.cpp
 	void defineLevel(int &number, sf::Event event);

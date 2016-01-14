@@ -2,7 +2,7 @@
 #include <SFML/Audio.hpp>
 #include "../Recourses.h"
 
-const float minDistanse = 300.f;
+const float minDistanse = 700.f;
 
 const int sizeBuffer = amountSoundSound;
 

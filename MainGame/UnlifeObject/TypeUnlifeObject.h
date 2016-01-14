@@ -3,6 +3,7 @@
 
 #include "../Recourses.h"
 #include "../Items/ItemsVar.h"
+#include "../Shoots/TypeShoots.h"
 #include "../Sounds/Sound.h"
 #include "../structGame/CommonStructs.h"
 #include "UnlifeObjectVar.h"

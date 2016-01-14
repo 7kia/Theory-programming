@@ -34,7 +34,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , v
 
 
 	for (int i = 0; i < unlifeObjects.size(); i++) {
-		levelUnlifeObject = unlifeObjects[i].currentLevel;
+		levelUnlifeObject = unlifeObjects[i].getLevel();
 
 		objectBound = unlifeObjects[i].getMainGlobalBounds();
 		objectAltBound = unlifeObjects[i].getTransparentGlobalBounds();
@@ -43,7 +43,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , v
 			wasCollision = true;
 
 			collision.posObject = unlifeObjects[i].getPosition();
-			collision.levelObject = unlifeObjects[i].currentLevel;
+			collision.levelObject = unlifeObjects[i].getLevel();
 
 			directions.directionWalk = NONE_DIRECTION;
 			break;
@@ -57,10 +57,9 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , v
 				if (idEntityType == idEntity::playerEntity) {
 				unlifeObjects[i].setTransparentColor(TRANSPARENT_COLOR);
 				}
-				else {
+				else if (unlifeObjects[i].getIdType() == mineObject) {
 					::playSound(mineExplosionSound , *soundBase , soundEntity , getPosition());
 					g_Functions::addIdDeleteInList(i, listDelete);
-
 				}
 			}
 			else {
@@ -222,7 +221,8 @@ void Entity::interactionWitnShoots(vector<shoot> &shoots ,
 			//for (int i = 0; i < amountTypeDamage; i++)
 			//{ 
 					health.currentHealth -= shoots[i].getDamage(crushingDamage);
-					listDelete.push_back(i);
+
+					g_Functions::addIdDeleteInList(i, listDelete);
 			//}
 		}
 	}

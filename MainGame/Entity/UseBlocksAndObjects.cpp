@@ -63,7 +63,7 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 	Vector3i posItems = { posOnMap.x - 1, posOnMap.y - 1, currentLevelFloor + 1 };
 	object.dropObject(posItems, world, true);
 
-	Vector3i posObject = { posOnMap.x, posOnMap.y , object.currentLevel };
+	Vector3i posObject = { posOnMap.x, posOnMap.y , object.getLevel() };
 	object.setType(nextType);
 	object.setPosition(posObject);
 }

@@ -63,12 +63,16 @@ struct world
 	std::vector<int> deleteEnemys;
 	std::vector<int> deleteShoots;
 
+	void createUnlifeObject(int id, const sf::Vector3i& pos);
+
 	void initializeCategorysBreakingObject();
 	void initializePlayer(View& view, Listener& listener);
 
 	typesObjectsInWorld typesObjects;
 	TypeItem* getTypesItem();
 	TypeItem & getTypeItem(int id);
+
+	TypeUnlifeObject & getTypeUnlifeObject(int id);
 
 	TypeShoot & getTypeShoot(int id);
 
