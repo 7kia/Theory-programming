@@ -133,11 +133,18 @@ void Item::setLevelOnMap(int number)
 	currentLevel = number;
 }
 
-int Item::getIdTypeShoot()
+int Item::getIdTypeBullet()
 {
 	// Если понадобятся разные виды пуль
 	// typeItem->idAdd[idAddShoot]
 	return idItem::bulletItem;
+}
+
+int Item::getIdTypeShoot()
+{
+	// Если понадобятся разные виды пуль
+	// typeItem->idAdd[idAddShoot]
+	return typeItem->idAdd[idAddShoot];
 }
 
 int Item::getIdSoundShoot()

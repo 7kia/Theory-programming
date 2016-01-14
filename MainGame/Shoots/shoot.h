@@ -16,26 +16,24 @@ typedef enum
 	amountTypeObject
 } idTypeObject;
 
-struct dataSourceShoot
-{
-	int idObject = RESET_VALUE;
-	idTypeObject idType = NONE_TYPE_OBJECT;
-};
 
 struct shoot
 {
 public:
+	void setType(TypeShoot &defineType);
+	TypeShoot getType();
+
 	void setPosition(sf::Vector2f pos, int lvl);
-	void setDirection(sf::Vector2f dir);
 	int getLevel();
+
+	void setDirection(sf::Vector2f dir);
 	sf::Vector2f getDirection();
 
 	void move(const float deltaTime);
+
 	sf::Sprite& getSprite();
 	sf::FloatRect getGlobalBounds();
-	TypeShoot getType();
 	int getDamage(int id);
-	void setType(TypeShoot &defineType);
 
 private:
 	sf::Sprite sprite;
@@ -43,7 +41,5 @@ private:
 
 	sf::Vector2f direction = RESET_VECTOR_2F;
 	int level = RESET_VALUE;
-
-	dataSourceShoot dataSource;
 
 };

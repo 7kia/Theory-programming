@@ -21,6 +21,7 @@ typedef enum
 	pistolShoot,
 	rifleShoot,
 	heavyRifleShoot,
+	mineExplosionShoot,
 	amountTypeShoots
 } idTypeShoots;
 

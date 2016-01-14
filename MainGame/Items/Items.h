@@ -39,6 +39,7 @@ public:
 	int getLevelOnMap();
 	void setLevelOnMap(int number);
 
+	int getIdTypeBullet();
 	int getIdTypeShoot();
 	int getIdSoundShoot();
 	// TODO : animation

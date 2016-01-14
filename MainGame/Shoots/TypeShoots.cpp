@@ -39,4 +39,10 @@ void initTypeShoots(TypeShoot * typesShoots)
 	typesShoots[heavyRifleShoot].init(bulletPath , texturePaths , typeDamage);
 	g_Functions::cleanIntArray(typeDamage , amountTypeDamage);
 
+	typeDamage[cuttingDamage] = 70;
+	typeDamage[crushingDamage] = 70;
+	typeDamage[unlifeDamage] = 0;
+	typesShoots[mineExplosionShoot].init(mineExplosionPath , texturePaths , typeDamage);
+	g_Functions::cleanIntArray(typeDamage , amountTypeDamage);
+
 }

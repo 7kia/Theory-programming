@@ -94,7 +94,7 @@ void Entity::useAsRifle(Item & currentItem , world & world)
 
 			// Если понадобятся разные виды пуль
 			//world.getTypeShoot(currentItem.getIdTypeShoot())
-			createBullet(world.shoots , world.getTypeShoot(0) , levelShoot);
+			createBullet(world.shoots , world.getTypeShoot(currentItem.getIdTypeShoot()) , levelShoot);
 			::playSound(currentItem.getIdSoundShoot() , *soundBase ,
 									soundEntity , currentItem.getPositionSprite());
 			minusAmount(itemsEntity[idBullets]);
@@ -112,7 +112,7 @@ void Entity::useAsRifle(Item & currentItem , world & world)
 int Entity::searchBulletInInventory()
 {
 	Item *currentItem = &itemsEntity[0];
-	int idBullet = getCurrentItem().getIdTypeShoot();// +idItem::heavyRifleItem - 1;
+	int idBullet = getCurrentItem().getIdTypeBullet();// +idItem::heavyRifleItem - 1;
 	for (int i = 0; i < getAmountSlots(); i++)
 	{
 		currentItem = &itemsEntity[i];
