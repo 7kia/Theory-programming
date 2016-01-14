@@ -148,4 +148,9 @@ void Game::inforAboutEntity(float x , float y)
 
 	}
 
+	//if ((mainPerson.founds.findEnemy == mainPerson.founds.emptyEnemy)
+	//|| (mainPerson.founds.currentTarget == RESET_VECTOR_3I)){
+	//	mainPerson.resetAtack();
+	//}
+
 }

@@ -7,7 +7,7 @@ Game::Game()
 {
 	window.create(VideoMode(widthMainWindow, heightMainWindow), TITLE_PROGRAM);
 
-	playMusic = false;
+	playMusic = true;
 	::sounds = &world.databaseSound;
 
 	typesObjectsInWorld &types = world.typesObjects;

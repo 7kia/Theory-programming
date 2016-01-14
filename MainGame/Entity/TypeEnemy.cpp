@@ -68,7 +68,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->features.init(75, 0, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
-	typeEnemy->view.init(RADIUSE_VIEW, true , DEFAULT_RADIUSE_USE);
+	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true , DEFAULT_RADIUSE_USE);
 	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneKnifeItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
@@ -90,7 +90,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->features.init(75, 0, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
-	typeEnemy->view.init(RADIUSE_VIEW, true , DEFAULT_RADIUSE_USE);
+	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true , DEFAULT_RADIUSE_USE);
 	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::ironBackHoerItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
@@ -112,7 +112,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->features.init(75, 0, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
-	typeEnemy->view.init(RADIUSE_VIEW, true , DEFAULT_RADIUSE_USE);
+	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true , DEFAULT_RADIUSE_USE);
 	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stonePickaxItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
@@ -134,7 +134,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->features.init(75, 0, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
-	typeEnemy->view.init(RADIUSE_VIEW, true, DEFAULT_RADIUSE_USE);
+	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true, DEFAULT_RADIUSE_USE);
 	typeEnemy->converse.init(true, false);
 	typeEnemy->initCurrentItem(typesItem, idItem::stoneAxeItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);
@@ -155,7 +155,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->features.init(75, 0, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
-	typeEnemy->view.init(RADIUSE_VIEW, true, DEFAULT_RADIUSE_USE);
+	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true, DEFAULT_RADIUSE_USE);
 	typeEnemy->converse.init(true , false);
 	typeEnemy->initCurrentItem(typesItem, idItem::woodLadderItem);
 	typeEnemy->InitOtherFeatures(id, texturePath, name, AMOUNT_SKELET_SLOTS);

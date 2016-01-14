@@ -52,13 +52,13 @@ void Entity::useBlock(Vector3i pos, world &world,
 
 void Entity::upgradeObject(UnlifeObject &object, world &world)
 {
-	redefineObject &redefine = object.typeObject->redefine;
+	redefineObject *redefine = &object.typeObject->redefine;
 	Sprite &spriteObject = *object.spriteObject;
 	Vector2f currentPos = spriteObject.getPosition();
 	Vector2i posOnMap = { int((currentPos.x + SIZE_BLOCK / 2) / SIZE_BLOCK),
 												int((currentPos.y + SIZE_BLOCK / 2) / SIZE_BLOCK) };
 
-	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine.id];
+	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine->id];
 
 	Vector3i posItems = { posOnMap.x - 1, posOnMap.y - 1, currentLevelFloor + 1 };
 	object.dropObject(posItems, world, true);

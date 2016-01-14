@@ -155,6 +155,14 @@ bool g_Functions::isInListShoots(vector<int> &listObjects , int id) {
 void g_Functions::addIdDeleteInList(int id , std::vector<int> &list)
 {
 	if (!g_Functions::isInListObjects(list , id)) {
-		list.push_back(id);
+		int count = 0;
+		while (count < list.size()) {
+			if (list[count] > id) 				{
+				count++;
+				continue;
+			}
+			break;
+		}
+		list.insert(list.begin() + count, id);
 	}
 }

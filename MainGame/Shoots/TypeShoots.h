@@ -9,8 +9,8 @@ const int WIDTH_BULLET = 10;
 const int HEIGHT_BULLET = 10;
 const sf::IntRect rectBullet(0 , 0 , WIDTH_BULLET , HEIGHT_BULLET);
 
-const int WIDTH_MINE_EXPLOSION = 200;
-const int HEIGHT_MINE_EXPLOSION = 200;
+const int WIDTH_MINE_EXPLOSION = 100;
+const int HEIGHT_MINE_EXPLOSION = 100;
 
 const sf::IntRect rectMineExplosion(0 , 0 , WIDTH_MINE_EXPLOSION , HEIGHT_MINE_EXPLOSION);
 

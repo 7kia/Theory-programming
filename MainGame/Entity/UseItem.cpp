@@ -64,9 +64,11 @@ void Entity::useItem(world &world , Event &event , Vector2f pos)
 		case idCategoryItem::food:
 			useAsFood(currentItem , event);
 			break;
-		case idCategoryItem::distanceWeapon:
-			
+		case idCategoryItem::distanceWeapon:		
 			useAsRifle(currentItem , world);
+			break;
+		case idCategoryItem::healthPotion:
+			useAsHealthPotion(currentItem , world, event);
 			break;
 		case idCategoryItem::other:
 			break;

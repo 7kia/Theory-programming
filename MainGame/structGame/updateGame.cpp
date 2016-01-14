@@ -134,7 +134,6 @@ void Game::updateUnlifeObjects(const float &deltaTime)
 										objects[objects.size() - 1].soundObject, 
 										objects[i].getPosition());
 				
-				stateGame = pauseState;
 			}
 		}
 		else if (idTypeObject == destroyBlockEffect) {
