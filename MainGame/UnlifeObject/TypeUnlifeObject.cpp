@@ -7,7 +7,6 @@ using namespace std;
 void initializeTypeUnlifeObjects(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage) {
 	
 	initTree(typesUnlifeObjects, storage);
-	initStones(typesUnlifeObjects, storage);
 	initEmpty(typesUnlifeObjects, storage);
 	initTraps(typesUnlifeObjects , storage);
 
@@ -57,7 +56,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	drop.addItem(1, 3, idItem::logOakItem);
 	drop.addItem(1, 2, idItem::seadlingOakItem);
 
-	typesObject->redefine.init(idUnlifeObject::oakGrow, 3);
+	typesObject->redefine.init(idUnlifeObject::oakGrow, 60);
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +97,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	// Предметы
 	drop.addItem(1, 2, idItem::logOakItem);
 
-	typesObject->redefine.init(idUnlifeObject::appleGrowTree, 3);
+	typesObject->redefine.init(idUnlifeObject::appleGrowTree, 60);
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +117,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	// Предметы
 	drop.addItem(1, 1, idItem::seadlingOakItem);
 
-	typesObject->redefine.init(idUnlifeObject::oakSmall, 3);
+	typesObject->redefine.init(idUnlifeObject::oakSmall, 60);
 	typesObject->drop.init(drop);
 	drop.clear();
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -139,30 +138,7 @@ void initTree(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
 	// Предметы
 	drop.addItem(1, 1, idItem::seadlingApple);
 
-	typesObject->redefine.init(idUnlifeObject::appleTree, 3);
-	typesObject->drop.init(drop);
-	drop.clear();
-}
-
-void initStones(TypeUnlifeObject *typesUnlifeObjects, dataSound &storage)
-{
-	int id = idUnlifeObject::smallStone;
-	int idNature = idNatureObject::stoneNature;
-	TypeUnlifeObject *typesObject = &typesUnlifeObjects[id];
-	String texturePath = texturePaths[idTexturePaths::itemsPath];
-	String name = "Small stone";
-	bool canDestroy = true;
-	int toughness = 2;
-
-	typesObject->mainSize.init(0, 0, 0, 0);
- typesObject->Init(texturePath, name, storage, id, idNature);
-	typesObject->defineToughness(canDestroy, toughness);
-	typesObject->transparentSize.init(SIZE_ITEM, SIZE_ITEM, PIXEL_X_SMALL_STONE, PIXEL_Y_SMALL_STONE);
-
-	objectDropItems drop;
-	drop.addItem(1, 1, idItem::stoneItem);
-
-	typesObject->redefine.init(idUnlifeObject::smallStone, 0);
+	typesObject->redefine.init(idUnlifeObject::appleTree, 60);
 	typesObject->drop.init(drop);
 	drop.clear();
 }
@@ -200,7 +176,7 @@ void initTraps(TypeUnlifeObject * typesUnlifeObjects , dataSound & storage)
 	objectDropItems drop;
 	drop.addItem(0 , 0 , idItem::grassItem);
 
-	typesObject->redefine.init(idUnlifeObject::smallStone , 0);
+	typesObject->redefine.init(idUnlifeObject::oakSeadling , 0);
 	typesObject->drop.init(drop);
 	drop.clear();
 }

@@ -138,8 +138,6 @@ void GUI::setPositionGui(RenderWindow &window, Entity &mainPerson, vector<Entity
 								enemys , textGame);
 	setStaminaBars(featuresWindow , mainPerson ,
 								 enemys , textGame);
-	setManaBars(featuresWindow , mainPerson ,
-							enemys , textGame);
 
 	hungry.renderBar(mainPerson.hungry.currentHungry, mainPerson.hungry.maxHungry, featuresWindow);
 }
@@ -154,7 +152,7 @@ void GUI::setHealthBars(featuresWindow &featuresWindow, Entity &mainPerson ,
 
 	int health = mainPerson.health.currentHealth;
 	int healthMax = mainPerson.health.maxHealth;
-	int shiftHealth = 3;
+	int shiftHealth = 2;
 	mainFeatures.renderBarMainPerson(mainPerson , health , healthMax , shiftHealth , mainFeatures.levelHealth ,
 																	 sizes , featuresWindow , textGame);
 
@@ -191,7 +189,7 @@ void GUI::setStaminaBars(featuresWindow &featuresWindow, Entity& mainPerson, std
 
 	int stamina = mainPerson.stamina.currentStamina;
 	int staminaMax = mainPerson.stamina.maxStamina;
-	int shiftStamina = 2;
+	int shiftStamina = 1;
 	mainFeatures.renderBarMainPerson(mainPerson , stamina , staminaMax , shiftStamina , mainFeatures.levelStamina ,
 																	 sizes , featuresWindow , textGame);
 
@@ -215,47 +213,6 @@ void GUI::setStaminaBars(featuresWindow &featuresWindow, Entity& mainPerson, std
 
 			if (staminaMaxEnemy) {
 				mainFeatures.renderBarEnemy(enemy[i] , staminaEnemy , staminaMaxEnemy , shiftStaminaEnemy , mainFeatures.levelStamina ,
-																		sizes , textGame , window);
-			}
-
-		}
-
-	}
-}
-
-void GUI::setManaBars(featuresWindow &featuresWindow, Entity& mainPerson, std::vector<Entity>& enemy, TextGame& textGame)
-{
-	RenderWindow &window = *featuresWindow.window;
-
-	featuresSprite sizes;
-	sizes.init(0 , HEIGHT_LEVEL_BAR_GUI , X_LEVEL_MANA_GUI , Y_LEVEL_MANA_GUI);
-
-	int mana = mainPerson.mana.currentMana;
-	int manaMax = mainPerson.mana.maxMana;
-	int shiftMana = 1;
-	mainFeatures.renderBarMainPerson(mainPerson , mana , manaMax , shiftMana , mainFeatures.levelMana ,
-																	 sizes , featuresWindow , textGame);
-
-
-	int shiftManaEnemy = 0;
-	int manaEnemy;
-	int manaMaxEnemy;
-
-	bool isFindedEnemy;
-	bool isInView;
-	for (int i = 0; i != enemy.size(); ++i) {
-
-		isFindedEnemy = i == mainPerson.founds.findEnemyFromList;
-		isInView = enemy[i].currentLevelFloor >= mainPerson.currentLevelFloor - 1
-			&& enemy[i].currentLevelFloor <= mainPerson.currentLevelFloor + 1;
-
-		if (isInView && isFindedEnemy) {
-
-			manaEnemy = enemy[i].mana.currentMana;
-			manaMaxEnemy = enemy[i].mana.maxMana;
-
-			if (manaMaxEnemy) {
-				mainFeatures.renderBarEnemy(enemy[i] , manaEnemy , manaMaxEnemy , shiftManaEnemy , mainFeatures.levelMana ,
 																		sizes , textGame , window);
 			}
 

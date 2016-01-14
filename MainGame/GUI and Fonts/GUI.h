@@ -21,8 +21,6 @@ struct GUI
 										 std::vector<Entity>& enemy , TextGame &textGame);
 	void setStaminaBars(featuresWindow &featuresWindow , Entity &mainPerson ,
 										 std::vector<Entity>& enemy , TextGame &textGame);
-	void setManaBars(featuresWindow &featuresWindow, Entity &mainPerson ,
-										 std::vector<Entity>& enemy , TextGame &textGame);
 
 	~GUI();
 };

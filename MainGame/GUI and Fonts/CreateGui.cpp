@@ -110,6 +110,4 @@ void createGUI(barMainFeatures &gui, Texture &texture)
 	gui.levelStamina.setTexture(texture);
 	gui.levelStamina.setTextureRect(IntRect(X_LEVEL_STAMINA_GUI, Y_LEVEL_STAMINA_GUI, WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI));
 
-	gui.levelMana.setTexture(texture);
-	gui.levelMana.setTextureRect(IntRect(X_LEVEL_MANA_GUI, Y_LEVEL_MANA_GUI, WIDTH_LEVEL_BAR_GUI, HEIGHT_LEVEL_BAR_GUI));
 }

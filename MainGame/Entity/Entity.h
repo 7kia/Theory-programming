@@ -78,7 +78,6 @@ public:
 	void updateRegenerationHealth();
 
 	entityStamina stamina;
-	entityMana mana;
 	entityHungry hungry;
 	entityProtection protection;
 	void choceShiftUseItem(int &shiftX, int &shiftY, bool prickBlow);
@@ -176,7 +175,7 @@ public:
 	void destroyFindObject(bool isEffect, Vector3i pos, world& world);
 	int defineIdNature(Field &field, bool isEffect, sf::Vector3i pos);
 	int defineIdNature(world &world , sf::Vector3i pos);
-	void useBlock(sf::Vector3i pos, world &world, Item & currentItem);
+	void useBlock(sf::Vector3i &pos, world &world, Item & currentItem);
 	void upgradeObject(UnlifeObject& object, world& world);
 	//////////////////////////////////////////////////////////////////////////////
 	//{                          Entity                                         }//

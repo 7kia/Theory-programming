@@ -5,7 +5,7 @@ using namespace sf;
 
 void Entity::useTool(Vector3i &pos, world &world, Item &currentItem) {
 
-	UnlifeObject &findObject = *founds.findObject;
+	UnlifeObject *findObject = founds.findObject;
 
 	int idFinded = founds.findObject->typeObject->id;
 	int idEmpty = founds.emptyObject->typeObject->id;
@@ -65,7 +65,7 @@ void Entity::breakNearCollision(world &world)
 	vector<int> *listBreaking = currentItem->getListDestroy();
 	Field &field = world.field;
 
-	Vector3i &posUse = getCurrentTarget();
+	Vector3i posUse = getCurrentTarget();
 	int idNature = defineIdNature(world , posUse);
 
 	bool canBreakTheItem = g_Functions::isInListObjects(*listBreaking, idNature);
@@ -74,7 +74,7 @@ void Entity::breakNearCollision(world &world)
 		wchar_t	*block = &field.dataMap[posUse.z][posUse.y][posUse.x];
 		bool isObject = isUnlifeObject(posUse , world);
 
-		if (!isObject && *block != field.charBlocks[idBlocks::air]) {
+		if (!isObject && (*block != field.charBlocks[idBlocks::air])) {
 			createDestroyEffect(world, posUse);
 			playObjectBreakSound(idNature);
 			resetAtack();
@@ -104,8 +104,7 @@ void Entity::destroyFindObject(bool isEffect, Vector3i pos, world &world)
 		*block = field.charBlocks[idBlocks::air];
 	}
 	else {
-		founds.findObject->dropObject(posDrop, world, false);
-		
+		founds.findObject->dropObject(getCurrentTarget(), world, false);	
 	}
 
 }
@@ -177,15 +176,21 @@ bool Entity::isUnlifeObject(sf::Vector3i & pos, world & world)
 		float(pos.y + 1) * SIZE_BLOCK - SIZE_BLOCK / 2 };
 
 	int idObject;
-	Sprite *spriteCheck;
+	Sprite *mainSprite;
+	Sprite *transparentSprite;
+
+	FloatRect rect;
 	for (int i = 0; i < objects.size(); i++) {
 		idObject = objects[i].typeObject->id;
-		spriteCheck = objects[i].spriteObject;
-			if (spriteCheck->getGlobalBounds().contains(posAdd)) {
-				// TODO
-				founds.findObject = &objects[i];
-				return true;
-			}
+		mainSprite = objects[i].spriteObject;
+		transparentSprite = objects[i].transparentSpiteObject;
+		if (mainSprite->getGlobalBounds().contains(posAdd)
+				|| transparentSprite->getGlobalBounds().contains(posAdd)) {
+			// TODO
+			founds.findObject = &objects[i];
+			return true;
+		}
+
 	}
 
 	return false;

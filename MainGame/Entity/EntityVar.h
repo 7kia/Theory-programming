@@ -148,22 +148,6 @@ struct entityStamina {
 	void update(const float &deltaTime, Direction directionWalk, Step& step);
 };
 
-struct entityMana {
-	bool isMaxMana = true;
-	bool needMinusMana = false;
-
-	float timeForMana = 0;
-	float timeUpdateMana = 0.5;
-
-	int addMana = 1;
-	int delMana = 2;
-
-	int currentMana = 100;
-	int maxMana = 100;
-
-	void update(const float &deltaTime);
-};
-
 struct entityHungry {
 	float timeForHungry = 0;
 	float timeUpdateHungry = 100;

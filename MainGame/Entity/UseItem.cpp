@@ -159,11 +159,11 @@ void Entity::takeItem(world &world, Vector2f pos)
 void Entity::searchItem(vector<Item> &items, Vector2f pos)
 {
 	int idFindItem = getIdFindItem();
-		Item &findItem = items[idFindItem];
+		Item *findItem = &items[idFindItem];
 
-		FloatRect objectItem = findItem.getGlobalBounds();
+		FloatRect objectItem = findItem->getGlobalBounds();
 
-		bool onOneLevel = (findItem.getLevelOnMap() == getLevelWall());
+		bool onOneLevel = (findItem->getLevelOnMap() == getLevelWall());
 		bool itemIsFind = objectItem.contains(pos) && onOneLevel;
 		if (itemIsFind) {
 		
@@ -305,9 +305,9 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 
 	size_t countItem = typeObject->drop.minCountItems.size();
 
-	vector<int> &minAmount = typeObject->drop.minCountItems;
-	vector<int> &maxAmount = typeObject->drop.maxCountItems;
-	vector<int> &idItems = typeObject->drop.dropItems;
+	vector<int> *minAmount = &typeObject->drop.minCountItems;
+	vector<int> *maxAmount = &typeObject->drop.maxCountItems;
+	vector<int> *idItems = &typeObject->drop.dropItems;
 
 	size_t start = 0;
 	size_t finish = countItem;
@@ -318,23 +318,24 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 	}
 	///////////////////////////////////////
 	// TODO BUG :
-	Item* addItem = new Item;
+	Item addItem;
 	int currentAmount;
-	Vector3i shift = { 1 , 1 , 1 };
+	Vector3i shift = { 1 , 1 , 0 };
 	Vector3i posAdd = pos + shift;
+
 	for (size_t i = start; i < finish; i++) {
 		// Generate only one item 
-		currentAmount = minAmount[i] + rand() % (maxAmount[i] - minAmount[i] + 1);
+		addItem.setType(typesItems[(*idItems)[i]]);
+		addItem.setPosition(posAdd);
+
+		currentAmount = (*minAmount)[i] + rand() % ((*maxAmount)[i] - (*minAmount)[i] + 1);
 		for (int j = 0; j < currentAmount; j++) {
 			// Work normal
-			addItem->setType(typesItems[idItems[i]]);
-			addItem->setPosition(posAdd);
-			items.push_back(*addItem);
+			items.push_back(addItem);
 
 		}
 
 	}
-	delete addItem;
 	///////////////////////////////////////
 	if(harvest)
 	{
@@ -348,7 +349,7 @@ void UnlifeObject::dropObject(Vector3i pos, world &world, bool harvest)
 
 void Entity::createDestroyEffect(world &world, Vector3i &pos)
 {
-	Item &currecntItem = getCurrentItem();
+	Item *currecntItem = &getCurrentItem();
 
 	UnlifeObject addObject;
 	Vector3i posAdd = { pos.x + 1, pos.y + 1 , pos.z };
@@ -360,13 +361,13 @@ void Entity::createDestroyEffect(world &world, Vector3i &pos)
 	wchar_t *block = &field.dataMap[pos.z][pos.y][pos.x];
 	int idBlock = field.findIdBlock(*block);
 	int toughness = field.toughness[idBlock];
-	addObject.currentToughness = toughness - currecntItem.getDamage(crushingDamage);
+	addObject.currentToughness = toughness - currecntItem->getDamage(crushingDamage);
 
-	vector<UnlifeObject> &objects = world.unlifeObjects;
-	objects.push_back(addObject);
+	vector<UnlifeObject> *objects = &world.unlifeObjects;
+	objects->push_back(addObject);
 
 	getCurrentTarget() = posAdd;
-	founds.findObject = &objects[objects.size() - 1];
+	founds.findObject = &(*objects)[objects->size() - 1];
 }
 
 void Entity::actionMain(world &world, Vector2f pos)

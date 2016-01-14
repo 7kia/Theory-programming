@@ -12,10 +12,7 @@ void Game::updateWorldTimeCircles()
 	world.deleteEntitys();
 
 	if (currentWorldTime - int(currentWorldTime) <= faultWorldTime) {
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
-
 		generateGroups();
-		assert(world.Enemys[ID_PLAYER_IN_LIST].getType()->id == 0);
 
 		updateTimeDay(currentWorldTime);
 		printf("World time: %f\n", currentWorldTime);

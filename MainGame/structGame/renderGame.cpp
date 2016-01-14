@@ -27,9 +27,7 @@ void Game::render()
 	renderEntitys(rectWindow);
 	renderUnlifeObjects(rectWindow);
 
-
 	gui.setPositionGui(window, mainPerson, world.Enemys, textGame);
-
 
 	renderGui();
 
@@ -132,21 +130,23 @@ void Game::renderEntitys(FloatRect const& rectWindow)
 
 	Entity &mainPerson = world.Enemys[0];
 	const int personLevel = mainPerson.currentLevelFloor;
+	int entityLevel;
 	for (int i = 1; i < Enemys.size(); ++i) {
 		enemyLevel = Enemys[i].currentLevelFloor;
 		if (enemyLevel >= personLevel - 1 && enemyLevel <= personLevel + 1) {
 
 			
 			Enemys[i].renderCurrentItem(window);
-
+			entityLevel = Enemys[i].getLevelWall();
 			Color currentColor;
-			if (personLevel) {
+
+			if (personLevel == entityLevel) {
 				currentColor = NORMAL_COLOR;
 			}
-			else if (personLevel - 1) {
+			else if ((personLevel - 1) == entityLevel){
 				currentColor = DOWN_VIEW;
 			}
-			else if (personLevel + 1) {
+			else if ((personLevel + 1) == entityLevel){
 				currentColor = UP_VIEW;
 			}
 			Enemys[i].spriteEntity->setColor(currentColor);

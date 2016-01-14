@@ -9,11 +9,10 @@ struct enemyFeatures
 {
 	int maxHealth;
 	int maxStamina;
-	int maxMana;
 	int maxThirst;
 	int maxHungry;
 
-	void init(int health, int stamina, int mana, int thirst, int hungry);
+	void init(int health, int stamina, int thirst, int hungry);
 };
 
 

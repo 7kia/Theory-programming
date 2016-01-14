@@ -3,7 +3,7 @@
 using namespace sf;
 using namespace std;
 
-void Entity::useBlock(Vector3i pos, world &world,
+void Entity::useBlock(Vector3i &pos, world &world,
 					  Item & currentItem)
 {
 
@@ -60,7 +60,7 @@ void Entity::upgradeObject(UnlifeObject &object, world &world)
 
 	TypeUnlifeObject &nextType = world.typesObjects.typesUnlifeObject[redefine->id];
 
-	Vector3i posItems = { posOnMap.x - 1, posOnMap.y - 1, currentLevelFloor + 1 };
+	Vector3i posItems = { posOnMap.x - 1, posOnMap.y - 1, getLevelWall() };
 	object.dropObject(posItems, world, true);
 
 	Vector3i posObject = { posOnMap.x, posOnMap.y , object.getLevel() };

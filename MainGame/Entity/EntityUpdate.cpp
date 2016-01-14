@@ -7,7 +7,6 @@ void Entity::update(const float &deltaTime)
 	soundEntity.setPosition(getXPos() , getYPos() , 1.f);
 
 	damage.updateInputDamage(deltaTime);
-	mana.update(deltaTime);
 	stamina.update(deltaTime , directions.directionWalk , step);
 	health.update(deltaTime , isDeath);
 	hungry.update(deltaTime , health.needMinusHealth);
@@ -117,28 +116,6 @@ void Entity::updateDirectionLook()
 
 }
 
-void entityMana::update(const float &deltaTime)
-{
-	timeForMana += deltaTime;
-
-	if (timeForMana > timeUpdateMana) {
-		timeForMana = 0;
-
-		if (needMinusMana) {
-			currentMana -= delMana;
-		}
-		else {
-			currentMana += addMana;
-		}
-	}
-
-	if (currentMana < 1) {
-		currentMana = 0;
-	}
-	else if (currentMana > maxMana) {
-		currentMana = maxMana;
-	}
-}
 
 void entityStamina::update(const float &deltaTime , Direction directionWalk , Step &step)
 {

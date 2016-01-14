@@ -241,11 +241,11 @@ void Game::generateStrongGroups()
 	Vector3i pos;
 
 	if (difficult > 1) {
-		pos = { 10, 10, 1 };
+		pos = { 10, 10, 2 };
 		createMiddleGroupSkelets(world , pos);
 	}
 	if (difficult > 2) {
-		pos = { 20, 20, 1 };
+		pos = { 20, 20, 2 };
 		createBigGroupSkelets(world , pos);
 	}
 }

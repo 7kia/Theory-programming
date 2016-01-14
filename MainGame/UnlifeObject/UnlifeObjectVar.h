@@ -66,8 +66,6 @@ typedef enum
 	appleSeadling,
 	appleTree,
 	appleGrowTree,
-	smallStone,
-
 	
 	// Effects
 	shiftEffects,
@@ -78,6 +76,7 @@ typedef enum
 	skeletDeathEffect,
 	wolfDeathEffect,
 	destroyBlockEffect,
+
 	empty,
 	amountUnlifeObjects
 } idUnlifeObject;

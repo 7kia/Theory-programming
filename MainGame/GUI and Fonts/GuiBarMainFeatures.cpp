@@ -111,12 +111,13 @@ void barMainFeatures::renderBarMainPerson(Entity &mainPerson, int &current, int 
 void barMainFeatures::renderBarEnemy(Entity &enemy, int &current, int &max, int shift, Sprite &sprite, featuresSprite &sizes,
 																		 TextGame &textGame, RenderWindow &window)
 {
-	int shiftBar = enemy.mana.maxMana > 0;
+	// Сдвиг для 3 шкалы и последующих
+	int shiftBar = 0;
 	Vector2f pos = enemy.spriteEntity->getPosition();
 	pos.x -= scaleGuiForEnemy.x * WIDTH_BARS_GUI / 2;
 
-	sizeSprite &size = enemy.type->featuresSprite.size;
-	pos.y -= size.height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
+	sizeSprite *size = &enemy.type->featuresSprite.size;
+	pos.y -= size->height / 2 + scaleGuiForEnemy.y * HEIGHT_BARS_GUI * (shift + shiftBar);
 
 
 	renderDamageForEnemy(enemy, textGame, window, shiftBar);

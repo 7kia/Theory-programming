@@ -7,7 +7,6 @@ struct barMainFeatures
 	sf::Sprite bar;
 	sf::Sprite levelHealth;
 	sf::Sprite levelStamina;
-	sf::Sprite levelMana;
 	void renderBar(int &current, int& max, sf::Sprite &sprite, sf::Vector2f scale, featuresSprite &sizes,
 								 TextGame &textGame, sf::Vector2f &position, sf::RenderWindow &window);
 	void render(int &current, int& max, sf::Sprite &sprite, sf::Vector2f scale,

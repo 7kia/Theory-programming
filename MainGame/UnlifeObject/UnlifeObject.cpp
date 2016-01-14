@@ -67,7 +67,6 @@ void UnlifeObject::setType(TypeUnlifeObject &type)
 	setSpriteTexture(*spriteObject , type.mainSize , *type.textureObject);
 	setSpriteTexture(*transparentSpiteObject , type.transparentSize , *type.textureObject);
 
-
 	currentToughness = type.toughnessObject;
 
 	timeLife = 0.f;
@@ -94,7 +93,12 @@ void UnlifeObject::setPosition(Vector3i pos)
 	int height = typeObject->transparentSize.size.height;
 	currentLevel = pos.z;
 	spriteObject->setPosition(numberX, numberY);
-	transparentSpiteObject->setPosition(numberX, numberY - (height - heightMain) / 2);
+
+	int shiftHeight = (height - heightMain) / 2;
+	if (getIdType() == idUnlifeObject::destroyBlockEffect) {
+		shiftHeight = 0;
+	}
+	transparentSpiteObject->setPosition(numberX, numberY - shiftHeight);
 }
 
 void UnlifeObject::setMainColor(sf::Color color)

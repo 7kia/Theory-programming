@@ -21,7 +21,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->protection.init(0.0015f, 1.f, 0.f);
 	typeEnemy->protection.deathDay = false;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(100, 100, 0, 20, 20);
+	typeEnemy->features.init(100, 100, 20, 20);
 	typeEnemy->damage.init(1, 0, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * 2, false , DEFAULT_RADIUSE_USE);
@@ -43,7 +43,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->protection.init(1.5f , 1.f , 0.f);
 	typeEnemy->protection.deathDay = false;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(100 , 25 , 0 , 20 , 20);
+	typeEnemy->features.init(100, 25, 20 , 20);
 	typeEnemy->damage.init(5 , 0 , 1.f , 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * 2 , false , DEFAULT_RADIUSE_USE);
@@ -65,7 +65,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(75, 0, 0, 20, 20);
+	typeEnemy->features.init(75, 0,  20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true , DEFAULT_RADIUSE_USE);
@@ -87,7 +87,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(75, 0, 0, 20, 20);
+	typeEnemy->features.init(75, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true , DEFAULT_RADIUSE_USE);
@@ -109,7 +109,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(75, 0, 0, 20, 20);
+	typeEnemy->features.init(75, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true , DEFAULT_RADIUSE_USE);
@@ -131,7 +131,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(75, 0, 0, 20, 20);
+	typeEnemy->features.init(75, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true, DEFAULT_RADIUSE_USE);
@@ -152,7 +152,7 @@ void initializeTypeEnemy(TypeEnemy *typesEnemy , TypeItem *typesItem)
 	typeEnemy->protection.init(0.f, 1.f, 1.f);
 	typeEnemy->protection.deathDay = true;
 	typeEnemy->step.init(SPEED_ENTITY);
-	typeEnemy->features.init(75, 0, 0, 20, 20);
+	typeEnemy->features.init(75, 0, 20, 20);
 	typeEnemy->damage.init(0, 5, 1.f, 1.f);
 	typeEnemy->drop.init(drop);
 	typeEnemy->view.init(RADIUSE_VIEW * RADIUSE_VIEW , true, DEFAULT_RADIUSE_USE);
@@ -181,10 +181,9 @@ void viewEnemy::init(float radiuse , bool feel , int distanseUse)
 	radiusUse = distanseUse;
 }
 
-void enemyFeatures::init(int health, int stamina, int mana, int thirst, int hungry)
+void enemyFeatures::init(int health, int stamina,  int thirst, int hungry)
 {
 	maxHealth = health;
-	maxMana = mana;
 	maxStamina = stamina;
 	maxThirst = thirst;
 	maxHungry = hungry;
