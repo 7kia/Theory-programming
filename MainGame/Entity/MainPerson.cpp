@@ -44,7 +44,7 @@ void Entity::updateView(View &view , Listener &listener , RenderWindow &window)
 	view.setCenter(tempX, tempY);
 }
 
-void Entity::updateAtack(world &world, const float deltaTime)
+void Entity::updateAtack(world &world, const float &deltaTime)
 {
 	bool isEnemy = getIdFindEntity() > -1;
 	bool notMyself = (&(getFindEntity()) != this);
@@ -76,7 +76,7 @@ void Entity::killFindEnemy(world& world)
 	resetAtack();
 }
 
-void Entity::hurtEnemy(Item &currentItem, const float deltaTime)
+void Entity::hurtEnemy(Item &currentItem, const float &deltaTime)
 {
 	currenMode = idEntityMode::atack;
 

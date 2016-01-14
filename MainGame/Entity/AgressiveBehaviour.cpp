@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Entity::searchEnemy(Entity &enemy, world &world, const float deltaTime)
+void Entity::searchEnemy(Entity &enemy, world &world, const float &deltaTime)
 {
 	float radiuseView = type->view.radiuseView;
 	bool feelEnemy = type->view.feelEnemy;

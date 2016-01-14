@@ -469,8 +469,8 @@ void UnlifeObject::createBullet(vector<shoot>& shoots , TypeShoot &type , int le
 	shoot addShoot;
 	addShoot.setType(type);
 
-	sf::Vector2f shiftFromOrigin = sf::Vector2f(type.rectSprite.width / 2,
-																							type.rectSprite.height / 2);
+	sf::Vector2f shiftFromOrigin = sf::Vector2f(float(type.rectSprite.width / 2),
+																							float(type.rectSprite.height / 2));
 	addShoot.init(getPosition() - shiftFromOrigin , ZERO_VECTOR_2F ,
 								getTransparentSize() , level);
 	shoots.push_back(addShoot);

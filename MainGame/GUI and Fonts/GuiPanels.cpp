@@ -112,6 +112,16 @@ void panelQuickAccess::renderItems(Entity& mainPerson, featuresWindow features,
 
 }
 
+void panel::setStateDraw(bool needDraw)
+{
+	draw = needDraw;
+}
+
+bool panel::getStateDraw()
+{
+	return draw;
+}
+
 void panel::setPosition(sf::Vector2f position)
 {
 	sprite.setPosition(position);

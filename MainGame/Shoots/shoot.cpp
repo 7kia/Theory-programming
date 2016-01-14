@@ -23,7 +23,7 @@ sf::Vector2f shoot::getDirection()
 	return direction;
 }
 
-void shoot::move(const float deltaTime)
+void shoot::move(const float &deltaTime)
 {
 	direction.x *= (1.f - accelerationBullet.x);
 	direction.y *= (1.f - accelerationBullet.y);

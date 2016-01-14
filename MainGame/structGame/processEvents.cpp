@@ -2,35 +2,23 @@
 
 using namespace hotKeys;
 
-void Game::processEvents(const float deltaTime)
+void Game::processEvents(const float &deltaTime)
 {
 	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
 
-
 	Event event;
 	while (window.pollEvent(event)) {
-
 		Vector2i mousePos = Mouse::getPosition(window);
 		Vector2f pos = window.mapPixelToCoords(mousePos);
 
 		if (!mainPerson->isDeath) {
-
-
 			informationAboutSelect(pos.x, pos.y);
 
-
 			processArrows();
-
-
 			processPanelQuickAccess();
-
-
 			mainPerson->computeAngle(window);
-
-
 		}
 		processOtherAction(event, pos);
-
 	}
 
 }
@@ -63,25 +51,28 @@ void Game::processArrows()
 
 void Game::processInterface()
 {
-
 	if (Keyboard::isKeyPressed(keys[pauseGame])) {
-		if (stateGame == gameState) {
+
+		panels *panels = &gui.panels;
+		switch (stateGame) {
+		case gameState:
 			stateGame = pauseState;
 			music.pause();
-		}
-		else if (stateGame == pauseState) {
+			break;
+		case pauseState:
 			stateGame = gameState;
 			music.play();
 
-			panels &panels = gui.panels;
-			panel &panel = panels.awardPanel;
-			Sprite &sprite = panel.sprite;
 
-			panel.draw = false;
-		}
-		else if(stateGame == endGameState)
-		{
+			panels->awardPanel.setStateDraw(false);
+			break;
+		case endGameState:
 			window.close();
+
+			break;
+		default:
+			break;
+
 		}
 	}
 }
@@ -104,12 +95,10 @@ void Game::processPersonAction(Vector2f pos)
 		}
 	}
 	else if (Keyboard::isKeyPressed(keys[takeItem])) {
-
 		mainPerson->takeItem(world, pos);
-
 	}
 	else if (Keyboard::isKeyPressed(keys[run])) {
-		mainPerson->run();
+		mainPerson->switchStateRun();
 	}
 
 }
@@ -144,7 +133,6 @@ void Game::processOtherAction(Event &event, Vector2f pos)
 	default:
 		break;
 	}
-
 }
 
 void Game::processPanelQuickAccess()
@@ -152,12 +140,10 @@ void Game::processPanelQuickAccess()
 	Entity &mainPerson = world.Enemys[0];
 
 	if (Keyboard::isKeyPressed(Keyboard::Num0)) {
-
 		if (mainPerson.idSelectItem != 9) {
 			mainPerson.playSoundChoiseItem();
 		}
 		mainPerson.idSelectItem = 9;
-
 	}
 	else {
 		for (int i = 0; i < mainPerson.type->amountSlots - 1; i++) {
@@ -170,7 +156,6 @@ void Game::processPanelQuickAccess()
 
 			}
 		}
-
 	}
 
 }

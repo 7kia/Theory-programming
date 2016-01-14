@@ -69,7 +69,7 @@ void createEmptyEnemy(world& world)
 	emptyEnemy.init(*typeEnemy , world , RESET_VECTOR_3I);
 }
 
-void Entity::randomWalk(const float deltaTime) {
+void Entity::randomWalk(const float &deltaTime) {
 
 	if (currenMode == idEntityMode::walk) {
 		if (step.currentTime < step.timeWalk && directions.directionWalk != Direction::NONE_DIRECTION) {

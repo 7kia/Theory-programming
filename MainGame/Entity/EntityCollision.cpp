@@ -17,7 +17,7 @@ void currentCollision::clear()
 	posBlock = RESET_VECTOR_3I;
 }
 
-void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , vector<int> &listDelete , const float deltaTime)// »—œ–¿¬‹ for enity and mainPerson
+void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , vector<int> &listDelete , const float &deltaTime)// »—œ–¿¬‹ for enity and mainPerson
 {
 	wasCollision = false;
 	collision.clear();
@@ -71,7 +71,7 @@ void Entity::interactionWitnUnlifeObject(vector<UnlifeObject> &unlifeObjects , v
 
 }
 
-void Entity::interactionWithEntity(vector<Entity> *enemys , int id , const float deltaTime)// »—œ–¿¬‹ for enity and mainPerson
+void Entity::interactionWithEntity(vector<Entity> *enemys , int id , const float &deltaTime)// »—œ–¿¬‹ for enity and mainPerson
 {
 	if (!wasCollision) {
 		float &dx = movement.x;
@@ -117,7 +117,7 @@ void Entity::interactionWithEntity(vector<Entity> *enemys , int id , const float
 	}
 }
 
-void Entity::interactionWithMap(Field &field , listDestroyObjectsAndBlocks& listDestroy , const float deltaTime)
+void Entity::interactionWithMap(Field &field , listDestroyObjectsAndBlocks& listDestroy , const float &deltaTime)
 {
 	if (!wasCollision) {
 		Vector2f posEntity = getPosition();
@@ -201,7 +201,7 @@ void Entity::gravitateToGround(Field &field)
 
 void Entity::interactionWitnShoots(vector<shoot> &shoots ,
 																		vector<int> &listDelete , 
-																	 const float deltaTime)// »—œ–¿¬‹ for enity and mainPerson
+																	 const float &deltaTime)// »—œ–¿¬‹ for enity and mainPerson
 {
 
 	int levelEntity = getLevelWall();

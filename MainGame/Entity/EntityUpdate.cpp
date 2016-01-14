@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 
-void Entity::update(const float deltaTime)
+void Entity::update(const float &deltaTime)
 {
 
 	soundEntity.setPosition(getXPos() , getYPos() , 1.f);
@@ -117,7 +117,7 @@ void Entity::updateDirectionLook()
 
 }
 
-void entityMana::update(const float deltaTime)
+void entityMana::update(const float &deltaTime)
 {
 	timeForMana += deltaTime;
 
@@ -140,7 +140,7 @@ void entityMana::update(const float deltaTime)
 	}
 }
 
-void entityStamina::update(const float deltaTime , Direction directionWalk , Step &step)
+void entityStamina::update(const float &deltaTime , Direction directionWalk , Step &step)
 {
 	timeForStamina += deltaTime;
 
@@ -166,12 +166,12 @@ void entityStamina::update(const float deltaTime , Direction directionWalk , Ste
 
 };
 
-void entityHealth::update(const float deltaTime , bool &isDeath)
+void entityHealth::update(const float &deltaTime , bool &isDeath)
 {
-	timeForHealth += deltaTime;
+	timeHealth += deltaTime;
 
-	if (timeForHealth > timeUpdateHealth) {
-		timeForHealth = 0;
+	if (timeHealth > timeUpdateHealth) {
+		timeHealth = 0;
 
 		if (needMinusHealth) {
 			currentHealth -= delHealth;
@@ -191,7 +191,22 @@ void entityHealth::update(const float deltaTime , bool &isDeath)
 
 };
 
-void entityHungry::update(const float deltaTime , bool &needMinusHealth)
+void entityHungry::setCurrentValue(int value)
+{
+	currentHungry = value;
+}
+
+int entityHungry::getCurrentValue()
+{
+	return currentHungry;
+}
+
+int entityHungry::getMaxValue()
+{
+	return maxHungry;
+}
+
+void entityHungry::update(const float &deltaTime , bool &needMinusHealth)
 {
 	timeForHungry += deltaTime;
 

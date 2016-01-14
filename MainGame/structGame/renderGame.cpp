@@ -273,7 +273,7 @@ void Game::setPositionHelpTextAward(sf::Vector2f const & centerWindow, sf::Vecto
 
 	currentText->setPosition(posText);
 
-	if (updateDifficult) {
+	if (needUpdateDifficult) {
 		posText.x += middleText;
 		setPositionWaveText(posText);
 	}
@@ -352,7 +352,7 @@ void Game::drawEndGamepanel()
 	playGlobalSound(idSoundPaths::levelUpSound, world.databaseSound);
 
 	stateGame = endGameState;
-	updateDifficult = false;
+	needUpdateDifficult = false;
 }
 
 void Game::renderGui()
@@ -375,7 +375,7 @@ void Game::renderGui()
 			window.draw(textGame.texts[idText::panelTitleText]);		
 			window.draw(textGame.texts[idText::panelHelpText]);
 
-			if (updateDifficult) {
+			if (needUpdateDifficult) {
 				vector<Vector2i> award;
 
 				for (size_t i = 0; i < awardForWave.size(); i++) {

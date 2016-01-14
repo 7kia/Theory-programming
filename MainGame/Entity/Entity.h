@@ -9,7 +9,6 @@ struct Entity
 {
 
 public:
-	~Entity();
 	sf::Sprite *spriteEntity;
 
 	entityAnimation animation;
@@ -76,6 +75,8 @@ public:
 	bool getStateDeath();
 
 	entityHealth health;
+	void updateRegenerationHealth();
+
 	entityStamina stamina;
 	entityMana mana;
 	entityHungry hungry;
@@ -85,15 +86,15 @@ public:
 
 	// Передвижение. Его анимация и озвучка
 	// Entity.cpp
-	void update(const float deltaTime);
+	void update(const float &deltaTime);
 	void updateDirectionLook();
 
 	bool isInUseField(sf::Vector2f pos, bool under);
 	void playAtackSound(Item &currentItem);
 
 	// EntityAnimation.cpp
-	void playAnimationWalk(const float deltaTime);
-	void playAnimationAtack(const float deltaTime);
+	void playAnimationWalk(const float &deltaTime);
+	void playAnimationAtack(const float &deltaTime);
 	void playSoundAfterTime(float time, const int idSound);
 	void resetTimeAnimation(float &time, float reset);
 
@@ -108,19 +109,18 @@ public:
 	bool isUnlifeObject(sf::Vector3i& pos, world& world);
 
 	// EntityCollision.cpp
-	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float deltaTime);
+	void interactionWithMap(Field &field, listDestroyObjectsAndBlocks& listDestroy, const float &deltaTime);
 	void gravitateToGround(Field &field);
 	void interactionWitnShoots(std::vector<shoot>& unlifeObjects ,
 														 std::vector<int> &listDelete,
-														 const float deltaTime);
+														 const float &deltaTime);
 	void interactionWitnUnlifeObject(std::vector<UnlifeObject> &unlifeObjects, 
-																	 std::vector<int> &listDelete , const float deltaTime);
-	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float deltaTime);
+																	 std::vector<int> &listDelete , const float &deltaTime);
+	void interactionWithEntity(std::vector<Entity>* enemys , int id , const float &deltaTime);
 
-	//
 	bool isExitFromBorder(int x, int y);// Есть выход за границы карты
 	bool isExitFromBorder(float x, float y);
-	//Вспомагательные функции
+
 	float getXPos();
 	float getYPos();
 	sf::Vector2f getPosition();
@@ -138,8 +138,6 @@ public:
 	//////////////////////////////////////////////////////////////////////////////////////////vv
 	// ITEMS
 	// Использование предметов
-
-
 	void transferInInventory(std::vector<Item> &items);
 	void searchItem(std::vector<Item> &items, sf::Vector2f pos);
 	void takeItem(world &world, sf::Vector2f pos);
@@ -148,7 +146,7 @@ public:
 	void minusAmount(Item& currentItem);
 	void breakItem(Item &currentItem);
 
-	void run();
+	void switchStateRun();
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void actionMain(world &world, sf::Vector2f pos);
 	void actionAlternate(world &world, sf::Vector2f pos);
@@ -184,8 +182,6 @@ public:
 	//{                          Entity                                         }//
 	float rotation = -1.f;
 
-
-
 	const TypeEnemy* getType();
 	const sizeSprite& getSize();
 	int getWidth();
@@ -207,7 +203,7 @@ public:
 	void checkLevelHealth(Vector2f& movement);
 	void entityStandPanic(sf::Vector2f &movement);
 
-	void randomWalk(const float deltaTime);
+	void randomWalk(const float &deltaTime);
 
 	void takeDamage(DamageInputAndOutput damageEnemy , Item& currentItem);
 
@@ -228,10 +224,10 @@ public:
 	void updateView(sf::View &view , sf::Listener &listener , sf::RenderWindow &window);
 
 	void killFindEnemy(world &world);
-	void hurtEnemy(Item &currentItem , const float deltaTime);
-	void updateAtack(world &world , const float deltaTime);
+	void hurtEnemy(Item &currentItem , const float &deltaTime);
+	void updateAtack(world &world , const float &deltaTime);
 
-	void searchEnemy(Entity &enemy , world &world , const float deltaTime);
+	void searchEnemy(Entity &enemy , world &world , const float &deltaTime);
 	void searchNearCollision(world &world);
 	void getCoordinateForView(sf::Vector2f position, sf::View &view);
 
@@ -246,6 +242,8 @@ public:
 		TypeEnemy *type;
 
 	private:
+
+
 		Item *emptyItem;
 };
 

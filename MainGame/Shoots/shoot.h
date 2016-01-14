@@ -34,7 +34,7 @@ public:
 	void setDirection(sf::Vector2f dir);
 	sf::Vector2f getDirection();
 
-	void move(const float deltaTime);
+	void move(const float &deltaTime);
 
 	sf::Sprite& getSprite();
 	sf::FloatRect getGlobalBounds();

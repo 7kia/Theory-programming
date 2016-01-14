@@ -3,7 +3,7 @@
 
 #include "structGame/Game.h"
 
-const float TIME_PER_FRAME = 1.f / 60.f;
+const float &TIME_PER_FRAME = 1.f / 60.f;
 
 using namespace sf;
 using namespace std;

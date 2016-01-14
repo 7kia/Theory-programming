@@ -29,6 +29,7 @@ void Game::updatePlayer(const float &deltaTime)
 
 
 	mainPerson->update(deltaTime);
+	mainPerson->updateRegenerationHealth();
 	if(mainPerson->currenMode == idEntityMode::atack || mainPerson->getStateGiveDamage())
 	{
 		mainPerson->updateAtack(world, deltaTime);
@@ -46,7 +47,7 @@ void Game::updatePlayer(const float &deltaTime)
 	//printf("Angle %f \n", mainPerson.rotation);
 }
 
-void Game::updateBullets(const float deltaTime)
+void Game::updateBullets(const float &deltaTime)
 {
 	vector<shoot>& shoots = world.shoots;
 
@@ -64,7 +65,7 @@ void Game::updateBullets(const float deltaTime)
 	}
 }
 
-void Game::updateEntity(const float deltaTime)
+void Game::updateEntity(const float &deltaTime)
 {
 	vector<Entity>& Enemys = world.Enemys;
 	Entity *mainPerson = &world.Enemys[ID_PLAYER_IN_LIST];
@@ -98,7 +99,7 @@ void Game::updateEntity(const float deltaTime)
 void Game::updateUnlifeObjects(const float &deltaTime)
 {
 	vector<UnlifeObject> &objects = world.unlifeObjects;
-	size_t i = 0;
+	int i = 0;
 
 	while(i < objects.size()) {
 		objects[i].timeLife += deltaTime;
@@ -228,8 +229,8 @@ void Game::checkDifficult()
 {
 	int *config = world.enemyWaveVariables;
 
-	updateDifficult = countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT];
-	if (updateDifficult) {
+	needUpdateDifficult = (countWave == config[AMOUNT_WAVE_FOR_UPDATE_DIFFICULT]);
+	if (needUpdateDifficult) {
 		countWave = 0;
 		difficult++;
 	}

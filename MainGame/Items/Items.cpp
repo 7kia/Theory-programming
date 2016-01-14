@@ -154,7 +154,7 @@ int Item::getIdSoundShoot()
 
 ////////////////////////////////////////////////////////////////////
 // Анимация и озвучка предметов НЕРАБОТАЕТ пока
-void Item::update(const float deltaTime, dataSound &databaseSound)
+void Item::update(const float &deltaTime, dataSound &databaseSound)
 {
 	float pauseStep = 5, resetAnimation = 2;
 }

@@ -10,7 +10,7 @@ void entityAnimation::init(float input , float output)
 	currentTimeFightAnimation = 0.f;
 }
 
-void entityAnimation::updateFight(const float deltaTime , bool &giveDamage , idEntityMode &idMode)
+void entityAnimation::updateFight(const float &deltaTime , bool &giveDamage , idEntityMode &idMode)
 {
 	currentTimeFightAnimation += deltaTime;
 
@@ -21,7 +21,7 @@ void entityAnimation::updateFight(const float deltaTime , bool &giveDamage , idE
 	}
 };
 
-void Entity::playAnimationWalk(const float deltaTime)
+void Entity::playAnimationWalk(const float &deltaTime)
 {
 	if (directions.directionWalk) {
 		directions.directionLook = directions.directionWalk;
@@ -46,7 +46,7 @@ void Entity::playAnimationWalk(const float deltaTime)
 	spriteEntity->setTextureRect(IntRect(xPos , currentHeight , currentWidth , height));
 }
 
-void Entity::playAnimationAtack(const float deltaTime)
+void Entity::playAnimationAtack(const float &deltaTime)
 {
 	float &timeAnimation = animation.currentTimeFightAnimation;
 	sizeSprite &size = type->featuresSprite.size;

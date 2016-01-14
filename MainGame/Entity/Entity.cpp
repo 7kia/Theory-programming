@@ -27,7 +27,7 @@ void DamageInputAndOutput::init(int cut, int crush, float time, float mult)
 	timeInputDamage = 0.f;
 }
 
-void DamageInputAndOutput::updateInputDamage(const float deltaTime)
+void DamageInputAndOutput::updateInputDamage(const float &deltaTime)
 {
 	if (inputDamage) {
 		timeInputDamage += deltaTime;
@@ -170,11 +170,6 @@ void Entity::choiceDirectionLook(int& xShift, int& yShift)
 	default:
 		break;
 	}
-}
-
-Entity::~Entity()
-{
-	//assert(getType()->id != 0);
 }
 
 bool Entity::getStateGiveDamage()
@@ -387,7 +382,7 @@ void Entity::throwItem(Field &field, vector<Item> &items)
 	}
 }
 
-void Entity::run()
+void Entity::switchStateRun()
 {
 	float &stepCurrent = step.stepCurrent;
 	float &stepFirst = step.stepFirst;
@@ -448,6 +443,19 @@ void Entity::renderCurrentItem(sf::RenderWindow& window)
 bool Entity::getStateDeath()
 {
 	return isDeath;
+}
+
+void Entity::updateRegenerationHealth()
+{
+	int currentHungry = hungry.getCurrentValue();
+	int maxHungry = hungry.getMaxValue();
+	int halfMaxHungry = maxHungry / 2;
+	if (currentHungry < halfMaxHungry) {
+		health.addHealth = 0;
+	}
+	else {
+		health.addHealth = DEFAULT_ADD_HEALTH + (currentHungry - halfMaxHungry) / (maxHungry / 4);
+	}
 }
 
 void Entity::choceShiftUseItem(int& shiftX , int& shiftY , bool prickBlow)

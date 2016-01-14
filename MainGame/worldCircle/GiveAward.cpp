@@ -29,7 +29,7 @@ void Game::createListAward()
 
 void Game::giveAward()
 {
-	if (updateDifficult) {
+	if (needUpdateDifficult) {
 		dropAward(awardForLevel[difficult]);
 	}
 	drawAwardPanel();

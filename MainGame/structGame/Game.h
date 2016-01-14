@@ -77,7 +77,7 @@ struct Game
 
 	Keyboard::Key keys[hotKeys::amountKeys];
 
-	bool updateDifficult = false;
+	bool needUpdateDifficult = false;
 	int difficult = 1;
 	int countWave = 0;
 
@@ -104,7 +104,7 @@ struct Game
 	void inforAboutEntity(float x , float y);
 
 	// processEvents.cpp
-	void processEvents(const float deltaTime);
+	void processEvents(const float &deltaTime);
 	void processArrows();
 	void processInterface();
 	void processPersonAction(Vector2f pos);
@@ -115,8 +115,8 @@ struct Game
 	// updateGame.cpp
 	void update(const float& deltaTime);
 	void updatePlayer(const float& deltaTime);
-	void updateBullets(const float deltaTime);
-	void updateEntity(const float deltaTime);
+	void updateBullets(const float &deltaTime);
+	void updateEntity(const float &deltaTime);
 	void updateUnlifeObjects(const float& deltaTime);
 	void upgradeObject(UnlifeObject& object);
 

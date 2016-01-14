@@ -42,6 +42,8 @@ const float SHIFT_CIRCLE_LOOK = -EIGHTH_PART_CIRCLE / 2;
 const float BORDER_VALUE_FOR_DIRECTION = float(SIZE_BLOCK) / 3;
 const int DEFAULT_RADIUSE_USE = 1;
 
+const int DEFAULT_ADD_HEALTH = 1;
+
 enum idEntity
 {
 	playerEntity,
@@ -91,7 +93,7 @@ struct entityAnimation {
 	float currentTimeFightAnimation;
 
 	void init(float input, float output);
-	void updateFight(const float deltaTime, bool &giveDamage, idEntityMode &idMode);
+	void updateFight(const float &deltaTime, bool &giveDamage, idEntityMode &idMode);
 
 };
 
@@ -112,22 +114,23 @@ struct DamageInputAndOutput {
 	float timeInputDamage;// Показывает урон в течении ... секунд
 
 	void init(int cut, int crush, float time, float mult);
-	void updateInputDamage(const float deltaTime);
+	void updateInputDamage(const float &deltaTime);
 };
 
 struct entityHealth {
 	bool isMaxHealth = true;
 	bool needMinusHealth = false;
 
-	float timeForHealth = 0;
+	float timeHealth = 0;
 	float timeUpdateHealth = 0.5;
 
-	int addHealth = 1;
+	int addHealth = DEFAULT_ADD_HEALTH;
 	int delHealth = 2;
 
 	int currentHealth = 100;
 	int maxHealth = 100;
-	void update(const float deltaTime, bool& isDeath);
+
+	void update(const float &deltaTime, bool& isDeath);
 };
 
 struct entityStamina {
@@ -142,7 +145,7 @@ struct entityStamina {
 
 	int currentStamina = 100;
 	int maxStamina = 100;
-	void update(const float deltaTime, Direction directionWalk, Step& step);
+	void update(const float &deltaTime, Direction directionWalk, Step& step);
 };
 
 struct entityMana {
@@ -158,7 +161,7 @@ struct entityMana {
 	int currentMana = 100;
 	int maxMana = 100;
 
-	void update(const float deltaTime);
+	void update(const float &deltaTime);
 };
 
 struct entityHungry {
@@ -166,7 +169,12 @@ struct entityHungry {
 	float timeUpdateHungry = 100;
 	int currentHungry = 20;
 	int maxHungry = 20;
-	void update(const float deltaTime, bool& needMinusHealth);
+
+	void setCurrentValue(int value);
+	int getCurrentValue();
+	int getMaxValue();
+
+	void update(const float &deltaTime, bool& needMinusHealth);
 };
 
 struct entityProtection {
